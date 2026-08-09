@@ -530,8 +530,8 @@ print(soma)</code></pre></div><div><p><code>soma</code> começa no elemento neut
       id: 14,
       slug: "aula-14-while",
       title: "Repetição com while",
-      summary: "Repita enquanto uma condição for verdadeira e encerre ao encontrar um sentinela.",
-      duration: "65 min",
+      summary: "Repita enquanto uma condição for verdadeira, pule uma volta com continue e encerre o laço com break.",
+      duration: "80 min",
       activity: "while",
       content: `
         <section class="band">
@@ -554,15 +554,51 @@ while numero &lt;= 5:
         break
 
     print(numero)</code></pre></div>
-          <p><code>break</code> encerra o laço atual. Já <code>continue</code> ignora o restante daquela repetição e volta ao teste da condição.</p>
+          <p><code>break</code> encerra imediatamente o laço atual. Nenhuma repetição seguinte acontece, mesmo que ainda existam dados.</p>
+        </section>
+        <section class="band">
+          <h2>continue: pule somente a volta atual</h2>
+          <p><code>continue</code> não encerra o laço. Ele interrompe apenas a repetição atual e volta ao teste da condição. É útil quando um valor deve ser ignorado, mas os próximos ainda precisam ser processados.</p>
+          <div class="two-col">
+            <div class="code-shell"><div class="code-head">Ignorar valores negativos</div><pre><code>numero = 0
+
+while numero &lt; 5:
+    numero += 1
+
+    if numero == 3:
+        continue
+
+    print(numero)</code></pre></div>
+            <div>
+              <h3>Fluxo da execução</h3>
+              <div class="flow"><span class="flow-step">1 imprime</span><span class="flow-arrow">→</span><span class="flow-step">2 imprime</span><span class="flow-arrow">→</span><span class="flow-step active">3 pula</span><span class="flow-arrow">→</span><span class="flow-step">4 imprime</span><span class="flow-arrow">→</span><span class="flow-step">5 imprime</span></div>
+              <p>Quando <code>numero == 3</code>, Python encontra <code>continue</code> e não executa o <code>print</code> daquela volta. Depois testa novamente a condição do <code>while</code>.</p>
+            </div>
+          </div>
+          <div class="warning"><strong>Atualize antes de continuar:</strong> se a variável que controla o <code>while</code> for atualizada somente depois de <code>continue</code>, ela pode ficar presa no mesmo valor e criar um laço infinito.</div>
+        </section>
+        <section class="band">
+          <h2>break e continue não fazem a mesma coisa</h2>
+          <div class="table-wrap"><table><thead><tr><th>Comando</th><th>O que interrompe?</th><th>O laço continua?</th><th>Uso comum</th></tr></thead><tbody><tr><td><code>continue</code></td><td>Somente a volta atual</td><td>Sim, volta à condição</td><td>Ignorar um dado inválido</td></tr><tr><td><code>break</code></td><td>O laço inteiro</td><td>Não</td><td>Encontrar sentinela ou resposta</td></tr></tbody></table></div>
+          <div class="code-shell"><div class="code-head">Usando os dois comandos</div><pre><code>while True:
+    numero = int(input())
+
+    if numero == 0:
+        break
+
+    if numero &lt; 0:
+        continue
+
+    print(numero)</code></pre></div>
+          <p>Nesse exemplo, zero encerra tudo; um negativo é ignorado; um positivo chega ao <code>print</code>.</p>
         </section>
         <section class="band">
           <h2>for ou while?</h2>
           <div class="concept-grid"><article class="concept-card"><h3>Use for</h3><p>Quando o número de repetições é conhecido ou quando percorremos uma sequência.</p></article><article class="concept-card"><h3>Use while</h3><p>Quando a repetição depende de uma condição que muda durante o processo.</p></article></div>
           <div class="note"><strong>Os dois são repetição.</strong> A escolha comunica melhor a estrutura do problema; não existe busca DFS ou BFS envolvida aqui.</div>
         </section>`,
-      challenge: "Leia inteiros até aparecer -1 e some apenas os valores anteriores ao sentinela. O -1 entra na soma?",
-      solution: "Não. Ele só marca o fim.\nsoma = 0\nwhile True:\n    valor = int(input())\n    if valor == -1:\n        break\n    soma += valor\nprint(soma)",
+      challenge: "Leia inteiros até aparecer -1. Ignore valores negativos diferentes de -1 e some apenas os valores não negativos. Use break e continue.",
+      solution: "soma = 0\n\nwhile True:\n    valor = int(input())\n\n    if valor == -1:\n        break\n\n    if valor < 0:\n        continue\n\n    soma += valor\n\nprint(soma)",
       sources: [
         ["Laços em Python — GeeksforGeeks", "https://www.geeksforgeeks.org/python/loops-in-python/"],
         ["break e continue — documentação Python", "https://docs.python.org/3/tutorial/controlflow.html#break-and-continue-statements"]
@@ -645,9 +681,9 @@ for numero in numeros:
     {
       id: 17,
       slug: "aula-17-funcoes",
-      title: "Funções e revisão",
-      summary: "Dê nomes a etapas do algoritmo e organize soluções maiores sem esconder o raciocínio.",
-      duration: "75 min",
+      title: "Funções: parâmetros, retorno e organização",
+      summary: "Crie funções, passe argumentos, devolva resultados e divida o algoritmo em responsabilidades claras.",
+      duration: "95 min",
       activity: "function",
       content: `
         <section class="band">
@@ -660,6 +696,67 @@ print(resultado)</code></pre></div>
           <div class="trace"><div class="trace-row"><span class="trace-number">1</span><div class="trace-copy"><code>def</code> define a função chamada <code>soma</code>.</div></div><div class="trace-row"><span class="trace-number">2</span><div class="trace-copy"><code>a</code> e <code>b</code> são parâmetros: nomes usados dentro da função.</div></div><div class="trace-row"><span class="trace-number">3</span><div class="trace-copy"><code>soma(10, 20)</code> chama a função com dois argumentos.</div></div><div class="trace-row"><span class="trace-number">4</span><div class="trace-copy"><code>return</code> devolve 30 para a expressão da chamada.</div></div></div>
         </section>
         <section class="band">
+          <h2>Parâmetro e argumento</h2>
+          <div class="concept-grid">
+            <article class="concept-card"><h3>Parâmetro</h3><p>É o nome escrito na definição. Em <code>def dobro(numero)</code>, <code>numero</code> é o parâmetro usado dentro da função.</p></article>
+            <article class="concept-card"><h3>Argumento</h3><p>É o valor enviado na chamada. Em <code>dobro(7)</code>, o número 7 é o argumento recebido por <code>numero</code>.</p></article>
+          </div>
+          <div class="flow"><span class="flow-step">dobro(7)</span><span class="flow-arrow">→</span><span class="flow-step active">numero = 7</span><span class="flow-arrow">→</span><span class="flow-step">return 14</span></div>
+        </section>
+        <section class="band">
+          <h2>return não é print</h2>
+          <div class="two-col">
+            <div class="code-shell"><div class="code-head">Devolver para reutilizar</div><pre><code>def quadrado(numero):
+    return numero * numero
+
+resultado = quadrado(5)
+print(resultado + 10)</code></pre></div>
+            <div class="code-shell"><div class="code-head">Apenas mostrar na tela</div><pre><code>def mostrar_quadrado(numero):
+    print(numero * numero)
+
+resultado = mostrar_quadrado(5)
+print(resultado)</code></pre></div>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Comando</th><th>Efeito</th><th>Pode ser usado em outro cálculo?</th></tr></thead><tbody><tr><td><code>return</code></td><td>Encerra a função e entrega um valor à chamada</td><td>Sim</td></tr><tr><td><code>print</code></td><td>Escreve um valor na saída</td><td>Não; sozinho retorna <code>None</code></td></tr></tbody></table></div>
+        </section>
+        <section class="band">
+          <h2>Mais de um caminho pode retornar</h2>
+          <div class="code-shell"><div class="code-head">Função que responde True ou False</div><pre><code>def eh_par(numero):
+    if numero % 2 == 0:
+        return True
+
+    return False
+
+valor = int(input())
+
+if eh_par(valor):
+    print("par")
+else:
+    print("ímpar")</code></pre></div>
+          <p>Assim que um <code>return</code> é executado, a função termina. Se o número for par, o segundo <code>return</code> nem é alcançado.</p>
+        </section>
+        <section class="band">
+          <h2>Valores padrão e argumentos nomeados</h2>
+          <div class="code-shell"><div class="code-head">Um parâmetro opcional</div><pre><code>def saudacao(nome, mensagem="Olá"):
+    return f"{mensagem}, {nome}!"
+
+print(saudacao("Ana"))
+print(saudacao("Bia", "Bom dia"))
+print(saudacao(nome="Caio", mensagem="Bem-vindo"))</code></pre></div>
+          <ul class="clean-list"><li><strong>Valor padrão:</strong> permite omitir um argumento quando existe uma escolha comum.</li><li><strong>Argumento nomeado:</strong> deixa explícito qual parâmetro recebe cada valor.</li><li><strong>Ordem:</strong> parâmetros sem valor padrão devem aparecer antes dos parâmetros opcionais.</li></ul>
+        </section>
+        <section class="band">
+          <h2>Escopo: variáveis locais pertencem à chamada</h2>
+          <div class="code-shell"><div class="code-head">Variável local</div><pre><code>def calcular_total(preco, quantidade):
+    total = preco * quantidade
+    return total
+
+resposta = calcular_total(12.5, 4)
+print(resposta)</code></pre></div>
+          <p><code>total</code> existe dentro da função. Fora dela, usamos o valor devolvido e guardado em <code>resposta</code>. Essa separação reduz alterações acidentais em outras partes do programa.</p>
+          <div class="warning"><strong>Evite depender de variáveis globais sem necessidade.</strong> Prefira receber dados por parâmetros e devolver a resposta com <code>return</code>.</div>
+        </section>
+        <section class="band">
           <h2>Quando uma função ajuda</h2>
           <div class="concept-grid"><article class="concept-card"><h3>Reutilização</h3><p>A mesma regra é aplicada em vários pontos.</p></article><article class="concept-card"><h3>Leitura</h3><p>Um nome como <code>eh_par</code> comunica a intenção.</p></article><article class="concept-card"><h3>Teste</h3><p>Uma etapa pequena pode ser verificada isoladamente.</p></article><article class="concept-card"><h3>Organização</h3><p>Soluções maiores ganham blocos com responsabilidades claras.</p></article></div>
           <div class="warning"><strong>Função não é decoração:</strong> criar muitas funções minúsculas sem propósito pode tornar o fluxo mais difícil. Separe etapas que tenham uma ideia própria.</div>
@@ -667,13 +764,423 @@ print(resultado)</code></pre></div>
         <section class="band">
           <h2>O que você já consegue combinar</h2>
           <ul class="clean-list"><li>Ler números e textos no formato da entrada.</li><li>Calcular com variáveis e operadores.</li><li>Escolher caminhos com <code>if</code>.</li><li>Repetir com <code>for</code> e <code>while</code>.</li><li>Armazenar e percorrer listas e strings.</li><li>Organizar regras em funções.</li><li>Testar, interpretar vereditos e corrigir.</li></ul>
-          <p class="success"><strong>Próxima meta:</strong> resolver a Lista 05 sem olhar a categoria primeiro. Reconhecer a ferramenta faz parte do exercício.</p>
+          <p class="success"><strong>Próxima meta:</strong> antes de programar uma solução maior, escreva os nomes das etapas. As etapas com entrada, regra e resultado próprios podem se tornar funções.</p>
+        </section>
+        <section class="band">
+          <h2>Exercícios guiados</h2>
+          <div class="concept-grid">
+            <article class="concept-card"><h3>1. Dobro</h3><p>Crie <code>dobro(numero)</code> e devolva duas vezes o argumento.</p><details class="solution"><summary>Conferir</summary><div><pre><code>def dobro(numero):
+    return numero * 2</code></pre></div></details></article>
+            <article class="concept-card"><h3>2. Maior</h3><p>Crie <code>maior(a, b)</code> e devolva o maior valor.</p><details class="solution"><summary>Conferir</summary><div><pre><code>def maior(a, b):
+    if a &gt; b:
+        return a
+    return b</code></pre></div></details></article>
+            <article class="concept-card"><h3>3. Positivo</h3><p>Crie <code>eh_positivo(numero)</code> e devolva um booleano.</p><details class="solution"><summary>Conferir</summary><div><pre><code>def eh_positivo(numero):
+    return numero &gt; 0</code></pre></div></details></article>
+            <article class="concept-card"><h3>4. Média</h3><p>Crie <code>media(valores)</code> para uma lista não vazia.</p><details class="solution"><summary>Conferir</summary><div><pre><code>def media(valores):
+    return sum(valores) / len(valores)</code></pre></div></details></article>
+          </div>
         </section>`,
-      challenge: "Crie uma função maior(a, b) que devolva o maior dos dois valores. Depois leia dois inteiros e imprima o retorno.",
-      solution: "def maior(a, b):\n    if a > b:\n        return a\n    return b\n\na, b = map(int, input().split())\nprint(maior(a, b))",
+      challenge: "Crie uma função media(notas) que devolva a média da lista e uma função aprovado(media_final) que devolva True quando a média for pelo menos 6. Leia as notas de uma linha e mostre a média e a situação.",
+      solution: "def media(notas):\n    return sum(notas) / len(notas)\n\ndef aprovado(media_final):\n    return media_final >= 6\n\nnotas = list(map(float, input().split()))\nmedia_final = media(notas)\n\nprint(f\"{media_final:.2f}\")\n\nif aprovado(media_final):\n    print(\"APROVADO\")\nelse:\n    print(\"REPROVADO\")",
       sources: [
         ["Funções em Python — GeeksforGeeks", "https://www.geeksforgeeks.org/python/python-functions/"],
         ["Definindo funções — documentação Python", "https://docs.python.org/3/tutorial/controlflow.html#defining-functions"]
+      ]
+    },
+    {
+      id: 18,
+      slug: "aula-18-matematica-estatistica",
+      title: "Matemática e estatística com Python",
+      summary: "Transforme fórmulas e conjuntos de dados em algoritmos para calcular porcentagens, médias, mediana, moda e amplitude.",
+      duration: "90 min",
+      activity: "statistics",
+      content: `
+        <section class="band">
+          <div class="two-col">
+            <div>
+              <h2>Números também contam uma história</h2>
+              <p>Em muitos problemas, não basta guardar os valores: precisamos resumir o conjunto. Uma turma pode ter várias notas, uma loja pode registrar vários preços e uma competição pode produzir vários tempos. A estatística descritiva ajuda a responder perguntas como “qual é o centro?”, “qual valor mais aparece?” e “qual é a distância entre os extremos?”.</p>
+              <p>Nesta aula trabalharemos apenas com <strong>estatística descritiva introdutória</strong>. Não estamos tentando prever o futuro nem calcular probabilidades; estamos descrevendo os dados que já recebemos.</p>
+            </div>
+            <div class="concept-card">
+              <h3>Dados: 5, 6, 6, 7, 30</h3>
+              <div class="stats-grid compact">
+                <div class="stat-card"><span>Média</span><strong>10,8</strong></div>
+                <div class="stat-card"><span>Mediana</span><strong>6</strong></div>
+                <div class="stat-card"><span>Moda</span><strong>6</strong></div>
+                <div class="stat-card"><span>Amplitude</span><strong>25</strong></div>
+              </div>
+              <p>O valor 30 puxa a média para cima, mas não altera a posição central. Por isso, medidas diferentes podem contar partes diferentes da mesma história.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="band">
+          <h2>Ferramentas matemáticas frequentes</h2>
+          <div class="table-wrap"><table><thead><tr><th>Ideia</th><th>Fórmula</th><th>Em Python</th><th>Exemplo</th></tr></thead><tbody>
+            <tr><td>Porcentagem</td><td>valor × taxa / 100</td><td><code>valor * taxa / 100</code></td><td>20% de 150 = 30</td></tr>
+            <tr><td>Proporção</td><td>parte / total</td><td><code>parte / total</code></td><td>15 de 60 = 0,25</td></tr>
+            <tr><td>Variação percentual</td><td>(novo - antigo) / antigo × 100</td><td><code>(novo - antigo) / antigo * 100</code></td><td>80 para 100 = 25%</td></tr>
+            <tr><td>Quociente e resto</td><td>divisão inteira e sobra</td><td><code>a // b</code> e <code>a % b</code></td><td>17 = 3 × 5 + 2</td></tr>
+          </tbody></table></div>
+          <div class="warning"><strong>Divisão exige atenção:</strong> não existe divisão por zero. Em uma média, isso significa que a lista de dados não pode estar vazia. Na variação percentual, o valor antigo também precisa ser diferente de zero.</div>
+        </section>
+
+        <section class="band">
+          <h2>Média aritmética: soma dividida pela quantidade</h2>
+          <p>Para os valores 6, 7, 8 e 9, somamos 30 e dividimos pela quantidade 4. A média é 7,5.</p>
+          <div class="code-shell"><div class="code-head">Média de uma lista</div><pre><code>valores = list(map(float, input().split()))
+
+media = sum(valores) / len(valores)
+
+print(f"{media:.2f}")</code></pre></div>
+          <div class="trace"><div class="trace-row"><span class="trace-number">1</span><div class="trace-copy"><code>sum(valores)</code> acumula todos os dados.</div></div><div class="trace-row"><span class="trace-number">2</span><div class="trace-copy"><code>len(valores)</code> informa quantos dados participaram.</div></div><div class="trace-row"><span class="trace-number">3</span><div class="trace-copy">A divisão produz a média; <code>:.2f</code> controla somente a apresentação com duas casas.</div></div></div>
+        </section>
+
+        <section class="band">
+          <h2>Média ponderada: alguns valores têm mais importância</h2>
+          <p>Quando cada nota possui um peso, não podemos dividir apenas pela quantidade de notas. Multiplicamos cada valor por seu peso, somamos os produtos e dividimos pela soma dos pesos.</p>
+          <div class="two-col">
+            <div class="code-shell"><div class="code-head">Calculando passo a passo</div><pre><code>notas = [7.0, 8.0, 6.0]
+pesos = [2, 3, 5]
+
+soma_produtos = 0
+
+for i in range(len(notas)):
+    soma_produtos += notas[i] * pesos[i]
+
+media = soma_produtos / sum(pesos)
+print(f"{media:.2f}")</code></pre></div>
+            <div>
+              <h3>Teste de mesa</h3>
+              <div class="table-wrap"><table><thead><tr><th>Nota</th><th>Peso</th><th>Produto</th></tr></thead><tbody><tr><td>7</td><td>2</td><td>14</td></tr><tr><td>8</td><td>3</td><td>24</td></tr><tr><td>6</td><td>5</td><td>30</td></tr><tr><td colspan="2">68 / 10</td><td><strong>6,8</strong></td></tr></tbody></table></div>
+              <p class="note"><strong>Erro comum:</strong> dividir por 3 porque existem três notas. Na média ponderada, dividimos pela soma dos pesos: 2 + 3 + 5 = 10.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="band">
+          <h2>Mediana: primeiro coloque os dados em ordem</h2>
+          <div class="concept-grid">
+            <article class="concept-card"><h3>Quantidade ímpar</h3><p>Em <code>[2, 4, 7, 9, 12]</code>, há um único valor central. A mediana é 7.</p></article>
+            <article class="concept-card"><h3>Quantidade par</h3><p>Em <code>[2, 5, 7, 9]</code>, os centros são 5 e 7. A mediana é a média deles: 6.</p></article>
+          </div>
+          <div class="code-shell"><div class="code-head">Algoritmo da mediana</div><pre><code>dados = [9, 2, 7, 5]
+ordenados = sorted(dados)
+n = len(ordenados)
+meio = n // 2
+
+if n % 2 == 1:
+    mediana = ordenados[meio]
+else:
+    mediana = (ordenados[meio - 1] + ordenados[meio]) / 2
+
+print(mediana)</code></pre></div>
+          <div class="success"><strong>A ordem é indispensável.</strong> O elemento que está no meio da lista original não é necessariamente a mediana. Primeiro ordenamos; depois procuramos a posição central.</div>
+        </section>
+
+        <section class="band">
+          <h2>Moda: o valor que mais se repete</h2>
+          <p>A moda depende da frequência. Um conjunto pode ter uma moda, várias modas empatadas ou, na convenção usada nesta aula, ser chamado de “sem moda” quando nenhum valor se repete.</p>
+          <div class="concept-grid">
+            <article class="concept-card"><h3>Uma moda</h3><p><code>[1, 2, 2, 3]</code> tem moda 2, pois ele aparece duas vezes.</p></article>
+            <article class="concept-card"><h3>Mais de uma moda</h3><p><code>[1, 1, 2, 2, 3]</code> tem modas 1 e 2. As duas frequências máximas são iguais.</p></article>
+          </div>
+          <div class="code-shell"><div class="code-head">Usando a biblioteca padrão</div><pre><code>from statistics import multimode
+
+dados = [1, 1, 2, 2, 3]
+modas = multimode(dados)
+
+if len(modas) == len(dados):
+    print("sem moda")
+else:
+    print(*modas)</code></pre></div>
+          <p class="note"><strong>Por que multimode?</strong> <code>mode()</code> devolve apenas uma moda. <code>multimode()</code> preserva todos os valores empatados com a maior frequência.</p>
+        </section>
+
+        <section class="band">
+          <h2>Amplitude: a distância entre os extremos</h2>
+          <p>A amplitude é calculada por <code>max(dados) - min(dados)</code>. Ela mostra o tamanho do intervalo ocupado pelos valores, mas não explica como os dados estão distribuídos dentro dele.</p>
+          <div class="flow"><span class="flow-step">mínimo = 5</span><span class="flow-arrow">→</span><span class="flow-step">máximo = 30</span><span class="flow-arrow">→</span><span class="flow-step active">amplitude = 25</span></div>
+        </section>
+
+        <section class="band">
+          <h2>Quando usar cada medida?</h2>
+          <div class="concept-grid">
+            <article class="concept-card"><h3>Média</h3><p>Considera todos os valores. É útil quando os dados são comparáveis, mas pode ser bastante alterada por um valor extremo.</p></article>
+            <article class="concept-card"><h3>Mediana</h3><p>Representa a posição central. É menos afetada por valores muito altos ou muito baixos.</p></article>
+            <article class="concept-card"><h3>Moda</h3><p>Mostra o valor mais frequente e também pode ser usada com categorias, como cores ou respostas.</p></article>
+            <article class="concept-card"><h3>Amplitude</h3><p>Resume a distância entre mínimo e máximo. Ajuda a perceber a dispersão, mas observa apenas dois dados.</p></article>
+          </div>
+        </section>
+
+        <section class="band">
+          <h2>Python já conhece essas operações</h2>
+          <div class="code-shell"><div class="code-head">Módulo statistics</div><pre><code>from statistics import mean, median, multimode
+
+dados = [5, 6, 6, 7, 30]
+
+print(mean(dados))
+print(median(dados))
+print(multimode(dados))
+print(max(dados) - min(dados))</code></pre></div>
+          <p>A biblioteca é útil, mas compreender o algoritmo continua importante. Em uma prova, o enunciado pode pedir uma regra diferente, como média ponderada, mediana inferior ou um desempate específico para a moda.</p>
+          <div class="warning"><strong>Não arredonde etapas intermediárias.</strong> Mantenha o valor completo durante os cálculos e formate somente a saída, por exemplo com <code>print(f"{resultado:.2f}")</code>.</div>
+        </section>
+
+        <section class="band">
+          <h2>Exercícios guiados</h2>
+          <div class="concept-grid">
+            <article class="concept-card"><h3>1. Média simples</h3><p>Calcule a média de 6, 7, 8 e 9.</p><details class="solution"><summary>Conferir resposta</summary><div><p>Soma 30, quantidade 4: <strong>7,5</strong>.</p></div></details></article>
+            <article class="concept-card"><h3>2. Porcentagem</h3><p>Uma equipe resolveu 18 de 24 problemas de treino. Qual foi o percentual?</p><details class="solution"><summary>Conferir resposta</summary><div><p><code>18 / 24 * 100</code> resulta em <strong>75%</strong>.</p></div></details></article>
+            <article class="concept-card"><h3>3. Média ponderada</h3><p>As notas 7 e 8 têm pesos 2 e 3. Qual é a média?</p><details class="solution"><summary>Conferir resposta</summary><div><p><code>(7 × 2 + 8 × 3) / 5</code> resulta em <strong>7,6</strong>.</p></div></details></article>
+            <article class="concept-card"><h3>4. Mediana</h3><p>Encontre a mediana de 9, 2, 7 e 5.</p><details class="solution"><summary>Conferir resposta</summary><div><p>Ordenando: 2, 5, 7, 9. A média dos centros é <strong>6</strong>.</p></div></details></article>
+            <article class="concept-card"><h3>5. Moda</h3><p>Quais são as modas de 1, 2, 2, 3, 3 e 4?</p><details class="solution"><summary>Conferir resposta</summary><div><p>2 e 3 aparecem duas vezes. O conjunto é bimodal: <strong>2 e 3</strong>.</p></div></details></article>
+            <article class="concept-card"><h3>6. Amplitude</h3><p>Calcule a amplitude de 12, 5, 9, 20 e 8.</p><details class="solution"><summary>Conferir resposta</summary><div><p>Máximo 20 menos mínimo 5: <strong>15</strong>.</p></div></details></article>
+          </div>
+        </section>
+
+        <section class="band">
+          <h2>Pratique com problemas do beecrowd</h2>
+          <p>Os exercícios abaixo já possuem uma página explicativa no módulo. Tente resolver pelo enunciado oficial antes de abrir a explicação.</p>
+          <div class="problem-list">
+            <article class="problem-card"><span class="problem-id">1002</span><div><h3>Área do Círculo</h3><p>Fórmula, potência, constante e formatação decimal.</p><a class="btn" href="../../problemas/beecrowd/1002/index.html">Ver exercício explicado</a></div><span class="difficulty">fórmula</span></article>
+            <article class="problem-card"><span class="problem-id">1005</span><div><h3>Média 1</h3><p>Primeira aplicação de média ponderada.</p><a class="btn" href="../../problemas/beecrowd/1005/index.html">Ver exercício explicado</a></div><span class="difficulty">média</span></article>
+            <article class="problem-card"><span class="problem-id">1006</span><div><h3>Média 2</h3><p>Três valores com pesos diferentes.</p><a class="btn" href="../../problemas/beecrowd/1006/index.html">Ver exercício explicado</a></div><span class="difficulty">pesos</span></article>
+            <article class="problem-card"><span class="problem-id">1014</span><div><h3>Consumo</h3><p>Razão entre distância percorrida e combustível.</p><a class="btn" href="../../problemas/beecrowd/1014/index.html">Ver exercício explicado</a></div><span class="difficulty">proporção</span></article>
+            <article class="problem-card"><span class="problem-id">1040</span><div><h3>Média 3</h3><p>Média ponderada combinada com decisões.</p><a class="btn" href="../../problemas/beecrowd/1040/index.html">Ver exercício explicado</a></div><span class="difficulty">condicionais</span></article>
+            <article class="problem-card"><span class="problem-id">1064</span><div><h3>Positivos e Média</h3><p>Filtragem, contagem, soma e média.</p><a class="btn" href="../../problemas/beecrowd/1064/index.html">Ver exercício explicado</a></div><span class="difficulty">repetição</span></article>
+          </div>
+        </section>`,
+      challenge: "Leia uma linha com números inteiros e mostre: média com duas casas, mediana, todas as modas e amplitude. Se nenhum valor se repetir, escreva 'sem moda'.",
+      solution: "from statistics import median, multimode\n\ndados = list(map(int, input().split()))\nmedia = sum(dados) / len(dados)\nmodas = multimode(dados)\namplitude = max(dados) - min(dados)\n\nprint(f\"media: {media:.2f}\")\nprint(f\"mediana: {median(dados)}\")\n\nif len(modas) == len(dados):\n    print(\"moda: sem moda\")\nelse:\n    print(\"moda:\", *modas)\n\nprint(f\"amplitude: {amplitude}\")",
+      sources: [
+        ["Funções de estatística matemática — documentação Python", "https://docs.python.org/3/library/statistics.html"],
+        ["Média, mediana e moda — GeeksforGeeks", "https://www.geeksforgeeks.org/maths/mean-median-mode/"],
+        ["Média, mediana e moda em Python — GeeksforGeeks", "https://www.geeksforgeeks.org/python/finding-mean-median-mode-in-python-without-libraries/"]
+      ]
+    },
+    {
+      id: 19,
+      slug: "aula-19-match-case",
+      title: "Switch case em Python: match/case",
+      summary: "Escolha uma ação comparando um valor com padrões claros usando match, case e o caso padrão.",
+      duration: "80 min",
+      activity: "match-case",
+      content: `
+        <section class="band">
+          <div class="two-col">
+            <div>
+              <h2>O switch do Python se chama match/case</h2>
+              <p>Outras linguagens usam o nome <em>switch case</em> para escolher uma ação entre vários valores. Desde o Python 3.10, a linguagem oferece <code>match/case</code>. Ele começa com comparações simples e também consegue reconhecer a estrutura de listas, tuplas e dicionários.</p>
+              <p>Para esta aula, começaremos pelo uso mais parecido com switch: comparar uma opção com valores fixos.</p>
+            </div>
+            <div class="concept-card">
+              <h3>Mapa mental</h3>
+              <div class="flow"><span class="flow-step">match valor</span><span class="flow-arrow">→</span><span class="flow-step">testar cases</span><span class="flow-arrow">→</span><span class="flow-step active">executar o primeiro padrão</span></div>
+              <p>Se nenhum padrão específico combinar, <code>case _</code> funciona como o caso padrão.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="band">
+          <h2>Um menu com opções exatas</h2>
+          <div class="code-shell"><div class="code-head">match/case básico</div><pre><code>opcao = int(input())
+
+match opcao:
+    case 1:
+        print("Cadastrar")
+    case 2:
+        print("Consultar")
+    case 3:
+        print("Sair")
+    case _:
+        print("Opção inválida")</code></pre></div>
+          <div class="trace"><div class="trace-row"><span class="trace-number">1</span><div class="trace-copy"><code>match opcao</code> define o valor analisado.</div></div><div class="trace-row"><span class="trace-number">2</span><div class="trace-copy">Os padrões são testados de cima para baixo.</div></div><div class="trace-row"><span class="trace-number">3</span><div class="trace-copy">O primeiro <code>case</code> compatível é executado.</div></div><div class="trace-row"><span class="trace-number">4</span><div class="trace-copy"><code>case _</code> recebe qualquer valor que não combinou antes.</div></div></div>
+          <div class="success"><strong>Não existe queda automática.</strong> Depois de executar um caso, Python sai do <code>match</code>. Não precisamos escrever <code>break</code> ao final de cada caso.</div>
+        </section>
+
+        <section class="band">
+          <h2>Vários valores podem compartilhar a mesma ação</h2>
+          <p>O símbolo <code>|</code> cria um padrão OU. O exemplo agrupa sábado e domingo.</p>
+          <div class="code-shell"><div class="code-head">Padrão alternativo</div><pre><code>dia = int(input())
+
+match dia:
+    case 1 | 7:
+        print("fim de semana")
+    case 2 | 3 | 4 | 5 | 6:
+        print("dia útil")
+    case _:
+        print("dia inválido")</code></pre></div>
+          <p><code>case 1 | 7</code> não calcula “1 ou 7” como uma expressão comum. Ele declara dois padrões capazes de escolher o mesmo bloco.</p>
+        </section>
+
+        <section class="band">
+          <h2>Guardas adicionam uma condição</h2>
+          <p>Uma guarda usa <code>if</code> depois do padrão. O caso só é escolhido quando o padrão e a condição forem verdadeiros.</p>
+          <div class="code-shell"><div class="code-head">Padrão com guarda</div><pre><code>comando, nivel = input().split()
+nivel = int(nivel)
+
+match comando:
+    case "acessar" if nivel &gt;= 5:
+        print("acesso administrativo")
+    case "acessar":
+        print("acesso comum")
+    case "sair":
+        print("encerrando")
+    case _:
+        print("comando desconhecido")</code></pre></div>
+          <div class="warning"><strong>A ordem importa.</strong> O caso mais específico, com a guarda, deve aparecer antes do caso geral <code>case "acessar"</code>.</div>
+        </section>
+
+        <section class="band">
+          <h2>match reconhece estruturas</h2>
+          <div class="code-shell"><div class="code-head">Uma prévia de padrões em listas</div><pre><code>comando = input().split()
+
+match comando:
+    case ["somar", a, b]:
+        print(int(a) + int(b))
+    case ["dobrar", valor]:
+        print(int(valor) * 2)
+    case _:
+        print("formato inválido")</code></pre></div>
+          <p>O primeiro caso exige uma lista com exatamente três partes, começando por <code>"somar"</code>. Além de verificar o formato, o padrão guarda as outras partes em <code>a</code> e <code>b</code>.</p>
+        </section>
+
+        <section class="band">
+          <h2>Quando usar if e quando usar match?</h2>
+          <div class="table-wrap"><table><thead><tr><th>Situação</th><th>Escolha mais direta</th><th>Motivo</th></tr></thead><tbody><tr><td>Faixas como nota &gt;= 6</td><td><code>if/elif</code></td><td>A decisão depende de uma expressão booleana</td></tr><tr><td>Opções 1, 2, 3</td><td><code>match/case</code></td><td>Compara o mesmo valor com alternativas fixas</td></tr><tr><td>Condições muito diferentes</td><td><code>if/elif</code></td><td>Cada ramo testa uma pergunta própria</td></tr><tr><td>Formato de lista ou dicionário</td><td><code>match/case</code></td><td>O padrão descreve a estrutura esperada</td></tr></tbody></table></div>
+          <div class="note"><strong>match não substitui todo if.</strong> Ele é especialmente legível quando vários caminhos dependem do mesmo valor ou do mesmo formato.</div>
+        </section>
+
+        <section class="band">
+          <h2>Exercícios guiados</h2>
+          <div class="concept-grid">
+            <article class="concept-card"><h3>1. Semáforo</h3><p>Use <code>match</code> para vermelho, amarelo e verde.</p><details class="solution"><summary>Conferir ideia</summary><div><p>Crie um caso para cada string e <code>case _</code> para cor inválida.</p></div></details></article>
+            <article class="concept-card"><h3>2. Vogal</h3><p>Agrupe a, e, i, o e u em um único caso.</p><details class="solution"><summary>Conferir ideia</summary><div><p>Use <code>case "a" | "e" | "i" | "o" | "u":</code>.</p></div></details></article>
+            <article class="concept-card"><h3>3. Dia da semana</h3><p>Receba um número de 1 a 7 e imprima o nome correspondente.</p><details class="solution"><summary>Conferir ideia</summary><div><p>São sete casos literais e um caso padrão para valores inválidos.</p></div></details></article>
+            <article class="concept-card"><h3>4. Faixa de idade</h3><p>Devemos usar <code>match</code> ou <code>if</code> para testar idade &lt; 12, &lt; 18 e demais?</p><details class="solution"><summary>Conferir resposta</summary><div><p><code>if/elif</code> é mais direto porque trabalhamos com intervalos e comparações.</p></div></details></article>
+          </div>
+        </section>`,
+      challenge: "Leia uma operação (+, -, * ou /) e dois números. Use match/case para calcular o resultado. Trate divisão por zero e operação inválida.",
+      solution: "operacao = input().strip()\na = float(input())\nb = float(input())\n\nmatch operacao:\n    case \"+\":\n        print(a + b)\n    case \"-\":\n        print(a - b)\n    case \"*\":\n        print(a * b)\n    case \"/\" if b != 0:\n        print(a / b)\n    case \"/\":\n        print(\"divisão por zero\")\n    case _:\n        print(\"operação inválida\")",
+      sources: [
+        ["Instruções match — documentação Python", "https://docs.python.org/3/tutorial/controlflow.html#match-statements"],
+        ["Python match case — GeeksforGeeks", "https://www.geeksforgeeks.org/python/python-match-case-statement/"],
+        ["Especificação de pattern matching — PEP 634", "https://peps.python.org/pep-0634/"]
+      ]
+    },
+    {
+      id: 20,
+      slug: "aula-20-dicionarios-conjuntos",
+      title: "Dicionários e conjuntos",
+      summary: "Associe chaves a valores, conte frequências e elimine repetições com dict e set.",
+      duration: "95 min",
+      activity: "dictionary-set",
+      content: `
+        <section class="band">
+          <div class="two-col">
+            <div>
+              <h2>Nem todo dado deve ser procurado por posição</h2>
+              <p>Uma lista responde perguntas como “qual valor está no índice 2?”. Um dicionário responde “qual valor pertence à chave pontos?”. Um conjunto responde “este valor já apareceu?” e guarda apenas elementos únicos.</p>
+              <p>Essas estruturas aparecem com frequência em contagens, cadastros, consultas, remoção de duplicatas e comparação de grupos.</p>
+            </div>
+            <div class="table-wrap"><table><thead><tr><th>Estrutura</th><th>Organização</th><th>Uso comum</th></tr></thead><tbody><tr><td><code>list</code></td><td>posição → valor</td><td>sequência ordenada e repetida</td></tr><tr><td><code>dict</code></td><td>chave → valor</td><td>cadastro e frequência</td></tr><tr><td><code>set</code></td><td>valores únicos</td><td>pertencimento e duplicatas</td></tr></tbody></table></div>
+          </div>
+        </section>
+
+        <section class="band">
+          <h2>Dicionário: cada chave aponta para um valor</h2>
+          <div class="code-shell"><div class="code-head">Criar, consultar e atualizar</div><pre><code>aluno = {
+    "nome": "Ana",
+    "nota": 8.5,
+    "faltas": 2
+}
+
+print(aluno["nome"])
+
+aluno["nota"] = 9.0
+aluno["turma"] = "A"
+
+print(aluno)</code></pre></div>
+          <ul class="clean-list"><li><strong>Chave:</strong> identifica a informação, como <code>"nome"</code>.</li><li><strong>Valor:</strong> é o dado associado à chave, como <code>"Ana"</code>.</li><li><strong>Atualização:</strong> atribuir a uma chave existente troca o valor.</li><li><strong>Inserção:</strong> atribuir a uma chave nova cria um novo par.</li></ul>
+        </section>
+
+        <section class="band">
+          <h2>Acesso seguro com get</h2>
+          <div class="two-col">
+            <div class="code-shell"><div class="code-head">Acesso direto</div><pre><code>print(aluno["cidade"])</code></pre></div>
+            <div class="code-shell"><div class="code-head">Valor padrão</div><pre><code>cidade = aluno.get("cidade", "não informada")
+print(cidade)</code></pre></div>
+          </div>
+          <p>O acesso com colchetes causa <code>KeyError</code> quando a chave não existe. <code>get</code> permite escolher um valor padrão para esse caso.</p>
+        </section>
+
+        <section class="band">
+          <h2>Percorrendo chaves e valores</h2>
+          <div class="code-shell"><div class="code-head">items() produz os pares</div><pre><code>pontos = {
+    "Ada": 30,
+    "Bia": 25,
+    "Caio": 40
+}
+
+for nome, pontuacao in pontos.items():
+    print(nome, pontuacao)</code></pre></div>
+          <div class="concept-grid"><article class="concept-card"><h3>keys()</h3><p>Produz as chaves do dicionário.</p></article><article class="concept-card"><h3>values()</h3><p>Produz somente os valores.</p></article><article class="concept-card"><h3>items()</h3><p>Produz pares de chave e valor.</p></article><article class="concept-card"><h3>in</h3><p>Testa se uma chave existe no dicionário.</p></article></div>
+        </section>
+
+        <section class="band">
+          <h2>Contagem de frequências</h2>
+          <div class="code-shell"><div class="code-head">Quantas vezes cada palavra apareceu?</div><pre><code>palavras = input().lower().split()
+frequencias = {}
+
+for palavra in palavras:
+    frequencias[palavra] = frequencias.get(palavra, 0) + 1
+
+for palavra, quantidade in frequencias.items():
+    print(palavra, quantidade)</code></pre></div>
+          <div class="trace"><div class="trace-row"><span class="trace-number">1</span><div class="trace-copy">Na primeira ocorrência, <code>get(palavra, 0)</code> devolve zero.</div></div><div class="trace-row"><span class="trace-number">2</span><div class="trace-copy">Somamos 1 e criamos a chave.</div></div><div class="trace-row"><span class="trace-number">3</span><div class="trace-copy">Nas próximas ocorrências, recuperamos a contagem anterior e aumentamos novamente.</div></div></div>
+        </section>
+
+        <section class="band">
+          <h2>Conjunto: cada valor aparece uma única vez</h2>
+          <div class="code-shell"><div class="code-head">Remover duplicatas</div><pre><code>numeros = [4, 2, 4, 7, 2, 9]
+unicos = set(numeros)
+
+print(unicos)
+print(len(unicos))
+print(7 in unicos)</code></pre></div>
+          <div class="warning"><strong>Conjunto não possui índice.</strong> Não use <code>unicos[0]</code> e não dependa da ordem exibida. Se precisar ordenar, use <code>sorted(unicos)</code>.</div>
+          <p>Para criar um conjunto vazio, use <code>set()</code>. A escrita <code>{}</code> cria um dicionário vazio.</p>
+        </section>
+
+        <section class="band">
+          <h2>Operações entre conjuntos</h2>
+          <div class="table-wrap"><table><thead><tr><th>Operação</th><th>Python</th><th>Resultado para A={1,2,3} e B={3,4}</th></tr></thead><tbody><tr><td>União</td><td><code>A | B</code></td><td>{1, 2, 3, 4}</td></tr><tr><td>Interseção</td><td><code>A &amp; B</code></td><td>{3}</td></tr><tr><td>Diferença</td><td><code>A - B</code></td><td>{1, 2}</td></tr><tr><td>Diferença simétrica</td><td><code>A ^ B</code></td><td>{1, 2, 4}</td></tr></tbody></table></div>
+          <p class="note"><strong>Exemplo:</strong> a interseção encontra alunos presentes em duas listas; a diferença encontra quem está na primeira, mas não na segunda.</p>
+        </section>
+
+        <section class="band">
+          <h2>Escolha a estrutura pela pergunta</h2>
+          <div class="concept-grid"><article class="concept-card"><h3>Preciso da posição?</h3><p>Use lista quando a ordem e os índices fizerem parte do problema.</p></article><article class="concept-card"><h3>Preciso buscar pela chave?</h3><p>Use dicionário para associar nomes, códigos ou categorias a informações.</p></article><article class="concept-card"><h3>Preciso saber se já apareceu?</h3><p>Use conjunto para unicidade e testes de pertencimento.</p></article><article class="concept-card"><h3>Preciso contar?</h3><p>Use um dicionário em que a chave é o item e o valor é sua frequência.</p></article></div>
+        </section>
+
+        <section class="band">
+          <h2>Exercícios guiados</h2>
+          <div class="concept-grid">
+            <article class="concept-card"><h3>1. Cadastro</h3><p>Crie um dicionário com nome, idade e curso. Depois altere a idade.</p><details class="solution"><summary>Conferir ideia</summary><div><p>Use pares <code>"chave": valor</code> e depois atribua à chave <code>"idade"</code>.</p></div></details></article>
+            <article class="concept-card"><h3>2. Frequência</h3><p>Conte quantas vezes cada número aparece em uma lista.</p><details class="solution"><summary>Conferir ideia</summary><div><p>Use o número como chave e <code>frequencias.get(numero, 0) + 1</code>.</p></div></details></article>
+            <article class="concept-card"><h3>3. Distintos</h3><p>Descubra quantos valores diferentes existem em uma lista.</p><details class="solution"><summary>Conferir ideia</summary><div><p><code>len(set(valores))</code> devolve a quantidade de valores únicos.</p></div></details></article>
+            <article class="concept-card"><h3>4. Em comum</h3><p>Encontre os valores presentes em duas listas.</p><details class="solution"><summary>Conferir ideia</summary><div><p>Converta as listas para conjuntos e use a interseção <code>A &amp; B</code>.</p></div></details></article>
+          </div>
+        </section>`,
+      challenge: "Leia uma frase, normalize para minúsculas e mostre quantas palavras diferentes existem. Depois imprima cada palavra e sua frequência em ordem alfabética.",
+      solution: "palavras = input().lower().split()\nfrequencias = {}\n\nfor palavra in palavras:\n    frequencias[palavra] = frequencias.get(palavra, 0) + 1\n\nprint(len(set(palavras)))\n\nfor palavra in sorted(frequencias):\n    print(palavra, frequencias[palavra])",
+      sources: [
+        ["Dicionários e conjuntos — documentação Python", "https://docs.python.org/3/tutorial/datastructures.html"],
+        ["Dicionários em Python — GeeksforGeeks", "https://www.geeksforgeeks.org/python/python-dictionary/"],
+        ["Conjuntos em Python — GeeksforGeeks", "https://www.geeksforgeeks.org/python/sets-in-python/"]
       ]
     }
   ];

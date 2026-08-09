@@ -23,7 +23,7 @@ O portal funciona diretamente no navegador. Não é necessário instalar depend�
 
 | Ordem | Módulo | Conteúdo principal |
 |---|---|---|
-| 1 | [Maratona com Python](maratona-programacao-python/index.html) | Introdução à programação competitiva, Python, entrada e saída, decisões, repetição, listas e primeiros problemas. |
+| 1 | [Maratona com Python](maratona-programacao-python/index.html) | Introdução à programação competitiva, Python, decisões, repetição, funções, match/case, coleções, matemática, estatística e primeiros problemas. |
 | 2 | [Estruturas de dados](estrutura_de_dados/index.html) | Arrays, pilhas, filas, deques, listas encadeadas, filas de prioridade e ordenação. |
 | 3 | [Strings](strings/index.html) | Caracteres, índices, transformações, comparações, padrões e programação dinâmica aplicada a textos. |
 | 4 | [Grafos](grafos/index.html) | Representações, listas de adjacência, DFS, BFS, grafos ponderados e Dijkstra. |

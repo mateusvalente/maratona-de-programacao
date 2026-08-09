@@ -9,7 +9,7 @@
 .section-head { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin-bottom: 18px; }
 .section-head h2 { margin-bottom: 0; }
 .section-head p { max-width: 620px; margin-bottom: 0; }
-.track { display: grid; grid-template-columns: repeat(9, minmax(92px, 1fr)); gap: 7px; overflow-x: auto; padding-bottom: 6px; }
+.track { display: grid; grid-template-columns: repeat(12, minmax(92px, 1fr)); gap: 7px; overflow-x: auto; padding-bottom: 6px; }
 .track-step { min-width: 92px; padding: 11px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); text-align: center; color: var(--muted); font-size: .78rem; font-weight: 850; }
 .track-step strong { display: block; margin-bottom: 4px; color: var(--green); font: 900 .8rem/1 Consolas, monospace; }
 .lesson-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11px; }

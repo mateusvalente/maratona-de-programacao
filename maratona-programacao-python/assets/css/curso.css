@@ -282,6 +282,50 @@ tr:last-child td { border-bottom: 0; }
 .lab-message { min-height: 46px; margin-top: 14px; padding: 11px 13px; border-left: 3px solid var(--green); background: var(--surface-3); color: var(--muted); }
 .lab-message strong { color: var(--text); }
 
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.stats-grid.compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.stat-card {
+  display: flex;
+  min-width: 0;
+  min-height: 92px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface-2);
+}
+
+.stat-card span,
+.stat-card small { color: var(--muted); font-size: .72rem; }
+.stat-card strong { margin: 4px 0; color: var(--green); font-size: 1.2rem; overflow-wrap: anywhere; }
+
+.frequency-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 16px;
+}
+
+.frequency-row {
+  display: grid;
+  grid-template-columns: 62px minmax(90px, 1fr) 72px;
+  gap: 10px;
+  align-items: center;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.frequency-row strong { color: var(--text); font-family: Consolas, monospace; }
+.frequency-track { height: 10px; overflow: hidden; border-radius: 4px; background: var(--surface-3); }
+.frequency-track span { display: block; height: 100%; background: var(--blue); }
+
 .scoreboard { display: grid; gap: 7px; }
 .score-row { display: grid; grid-template-columns: 32px minmax(110px, 1fr) 75px 88px; gap: 8px; padding: 9px 10px; align-items: center; border: 1px solid var(--line); border-radius: 5px; color: var(--muted); }
 .score-row.current { border-color: var(--yellow); background: #292418; }
@@ -342,6 +386,7 @@ details.solution > div { padding-top: 12px; }
   .lab-body { min-height: 0; padding: 14px; }
   .field { flex-basis: 100%; }
   .lab-controls .btn { flex: 1 1 120px; }
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lesson-nav { grid-template-columns: 1fr; }
   .lesson-nav a:last-child { text-align: left; }
   .site-footer-inner { flex-direction: column; }

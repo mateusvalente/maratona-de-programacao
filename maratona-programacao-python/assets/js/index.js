@@ -2,7 +2,7 @@
   const lessons = window.COURSE_LESSONS || [];
   const lists = window.PROBLEM_LISTS || [];
   const esc = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-  const trackLabels = ["Introdução", "Competição", "Python", "Entrada e saída", "Condicionais", "Repetição", "Listas", "Strings", "Problemas"];
+  const trackLabels = ["Introdução", "Competição", "Python", "Entrada e saída", "Condicionais", "Repetição", "Listas", "Strings", "Problemas", "Matemática e dados", "match/case", "dict e set"];
 
   document.querySelector("#track").innerHTML = trackLabels.map((label, index) => `<div class="track-step"><strong>${String(index + 1).padStart(2, "0")}</strong>${label}</div>`).join("");
 

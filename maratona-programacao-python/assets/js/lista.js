@@ -38,7 +38,7 @@
     <section class="band"><div class="note"><strong>Ordem sugerida:</strong> a sequência aumenta a quantidade de conceitos combinados, mas você pode voltar a um exercício depois de revisar a aula correspondente.</div></section>
     <nav class="lesson-nav">
       ${previous ? `<a href="${ui.rootPath()}listas/${previous.slug}/index.html">← ${ui.esc(previous.title)}</a>` : `<a href="${ui.rootPath()}index.html#listas">← Todas as listas</a>`}
-      ${next ? `<a href="${ui.rootPath()}listas/${next.slug}/index.html">${ui.esc(next.title)} →</a>` : `<a href="${ui.rootPath()}aulas/aula-17-funcoes/index.html">Revisar funções →</a>`}
+      ${next ? `<a href="${ui.rootPath()}listas/${next.slug}/index.html">${ui.esc(next.title)} →</a>` : `<a href="${ui.rootPath()}aulas/aula-18-matematica-estatistica/index.html">Revisar matemática e estatística →</a>`}
     </nav>`;
 
   ui.shell(html, 0);

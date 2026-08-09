@@ -34,6 +34,13 @@
       title: "Revisão da primeira etapa",
       summary: "Misture leitura, matemática, decisões, repetição, listas e strings.",
       problems: [1007, 1009, 1038, 1044, 1072, 1078, 1180, 1120, 1168, 1234, 1235, 1238]
+    },
+    {
+      id: 6,
+      slug: "lista-06-matematica-estatistica",
+      title: "Matemática e estatística introdutória",
+      summary: "Pratique fórmulas, proporções, médias simples e ponderadas, filtragem e formatação decimal.",
+      problems: [1002, 1005, 1006, 1014, 1040, 1064]
     }
   ];
 

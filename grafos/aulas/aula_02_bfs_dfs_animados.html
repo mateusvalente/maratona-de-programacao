@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 02 — BFS e DFS Animados</title>
+<style>
+:root{
+  --bg:#07101c;
+  --panel:#0d1c2e;
+  --panel-2:#10253b;
+  --code:#06101b;
+  --text:#edf5ff;
+  --muted:#9eb0c7;
+  --line:rgba(255,255,255,.10);
+  --green:#65e6bd;
+  --blue:#75c7ff;
+  --purple:#b7a0ff;
+  --yellow:#ffd86b;
+  --red:#ff8d8d;
+  --shadow:0 20px 60px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 12% 0%,rgba(101,230,189,.08),transparent 28%),
+    radial-gradient(circle at 96% 12%,rgba(117,199,255,.07),transparent 25%),
+    var(--bg);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  line-height:1.55;
+}
+a{color:var(--blue)}
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr)}
+aside{
+  height:100vh;position:sticky;top:0;padding:26px 18px;
+  background:rgba(7,16,28,.91);backdrop-filter:blur(14px);
+  border-right:1px solid var(--line);overflow:auto;
+}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:25px}
+.brand-mark{
+  width:43px;height:43px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--green),var(--blue));
+  color:#05101a;font-weight:1000;font-size:1.1rem;
+}
+.brand strong{font-size:.95rem}.brand small{display:block;color:var(--muted);font-size:.7rem}
+nav{display:flex;flex-direction:column;gap:5px}
+nav a{
+  padding:9px 11px;border-radius:10px;text-decoration:none;color:var(--muted);
+  font-size:.85rem;transition:.2s;
+}
+nav a:hover{background:rgba(255,255,255,.05);color:#fff;transform:translateX(3px)}
+.side-note{
+  margin-top:24px;padding:13px;border-radius:13px;border:1px solid rgba(101,230,189,.18);
+  background:rgba(101,230,189,.045);color:var(--muted);font-size:.75rem;
+}
+main{width:min(1160px,100%);margin:0 auto;padding:32px 38px 72px}
+.hero{
+  min-height:385px;padding:46px;border-radius:30px;border:1px solid var(--line);
+  background:linear-gradient(135deg,rgba(16,37,59,.97),rgba(7,17,30,.98));
+  box-shadow:var(--shadow);display:flex;align-items:center;position:relative;overflow:hidden;
+}
+.hero:before,.hero:after{
+  content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.08);
+}
+.hero:before{width:390px;height:390px;right:-105px;top:-120px}
+.hero:after{width:255px;height:255px;right:25px;top:13px}
+.kicker{font-size:.74rem;font-weight:900;color:var(--green);letter-spacing:.15em;text-transform:uppercase}
+h1{max-width:800px;margin:10px 0 17px;font-size:clamp(2.5rem,6vw,5rem);line-height:.95;letter-spacing:-.055em}
+.hero p{max-width:720px;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.chip{
+  padding:7px 11px;border-radius:999px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);color:#c9d7e8;font-size:.78rem;
+}
+section{
+  margin-top:26px;padding:27px;border-radius:22px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(13,28,46,.92),rgba(9,21,35,.92));
+  box-shadow:0 12px 32px rgba(0,0,0,.13);scroll-margin-top:20px;
+}
+.section-head{display:flex;gap:13px;align-items:center;margin-bottom:14px}
+.num{
+  width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;
+  color:var(--green);background:rgba(101,230,189,.08);border:1px solid rgba(101,230,189,.20);font-weight:900;
+}
+h2{margin:0;font-size:1.55rem;letter-spacing:-.025em}
+h3{margin:0 0 8px;font-size:1rem}
+.lead{color:var(--muted);margin:0 0 16px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{
+  padding:17px;border-radius:15px;border:1px solid var(--line);
+  background:rgba(255,255,255,.028);
+}
+.card p{margin:0;color:var(--muted);font-size:.89rem}
+.tag{
+  display:inline-block;margin-bottom:9px;padding:4px 8px;border-radius:999px;
+  color:#06101b;background:var(--green);font-size:.69rem;font-weight:900;
+}
+.tag.blue{background:var(--blue)}
+.tag.purple{background:var(--purple)}
+.callout{
+  margin-top:15px;padding:13px 15px;border-radius:0 12px 12px 0;border-left:3px solid var(--green);
+  color:#d6e9e4;background:rgba(101,230,189,.05);font-size:.9rem;
+}
+.graph-stage{
+  margin-top:15px;border-radius:20px;padding:18px;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
+    #07131f;
+  background-size:28px 28px;border:1px dashed rgba(117,199,255,.25);
+}
+.graph-svg{display:block;width:min(640px,100%);height:auto;margin:0 auto}
+.edge{stroke:#4d657d;stroke-width:4;stroke-linecap:round;opacity:.62;transition:.3s}
+.edge.tree{stroke:var(--green);opacity:1;stroke-width:6}
+.edge.current{stroke:var(--yellow);opacity:1;stroke-width:7}
+.node{fill:#10273f;stroke:var(--blue);stroke-width:3;transition:.3s}
+.node.visited{fill:#163931;stroke:var(--green)}
+.node.frontier{fill:#2b2843;stroke:var(--purple)}
+.node.current{fill:#4a3d12;stroke:var(--yellow);stroke-width:5}
+.node-label{fill:#edf5ff;font:bold 18px Inter,Arial;pointer-events:none}
+.level-label{fill:#7f94aa;font:13px Inter,Arial}
+.legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:11px;color:var(--muted);font-size:.77rem}
+.legend span{display:flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.current{background:var(--yellow)}.dot.frontier{background:var(--purple)}.dot.visited{background:var(--green)}
+.anim-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:16px;align-items:start}
+.panel{
+  border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025);padding:16px;
+}
+.panel-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
+.panel-title strong{font-size:.95rem}
+.step-badge{
+  padding:5px 9px;border-radius:999px;background:rgba(117,199,255,.09);
+  border:1px solid rgba(117,199,255,.18);color:#cce8ff;font-size:.75rem;font-weight:800;
+}
+.state-box{display:grid;gap:10px;margin-top:12px}
+.state{
+  min-height:62px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#081624;
+}
+.state small{display:block;color:#74889d;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.state strong{font-family:"Cascadia Code",Consolas,monospace;font-size:.9rem}
+.explanation{
+  min-height:130px;padding:12px 13px;border-radius:12px;border:1px solid var(--line);
+  background:#081624;color:#d9e6f3;font-size:.88rem;white-space:pre-line;
+}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+button{
+  border:0;border-radius:10px;padding:9px 13px;font-weight:850;cursor:pointer;
+  background:var(--green);color:#06101b;transition:.15s;
+}
+button:hover{transform:translateY(-1px)}
+button.secondary{background:#172b43;color:#dcecff;border:1px solid var(--line)}
+button.warn{background:var(--yellow)}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.speed{
+  display:flex;align-items:center;gap:8px;margin-top:10px;color:var(--muted);font-size:.78rem;
+}
+.speed input{width:130px}
+pre{
+  margin:13px 0 0;padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
+  overflow:auto;background:var(--code);color:#dcecff;
+  font:13px/1.6 "Cascadia Code","Fira Code",Consolas,monospace;
+}
+.kw{color:#b7a0ff}.fn{color:#75c7ff}.cm{color:#70849a}.nu{color:#ffd86b}.str{color:#65e6bd}
+.code-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.code-tab{
+  background:#172b43;color:#dcecff;border:1px solid var(--line);
+}
+.code-tab.active{background:var(--blue);color:#06101b}
+.code-panel{display:none}.code-panel.active{display:block}
+.compare{width:100%;border-collapse:collapse;margin-top:13px;font-size:.88rem}
+.compare th,.compare td{padding:11px;border-bottom:1px solid var(--line);text-align:left}
+.compare th{color:#d6e4f4}.compare td{color:var(--muted)}
+.good{color:var(--green)!important;font-weight:800}
+.warn-text{color:var(--yellow)!important;font-weight:800}
+.sequence{
+  display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;
+}
+.seq-node{
+  min-width:34px;height:34px;padding:0 9px;display:grid;place-items:center;border-radius:10px;
+  background:#10273f;border:1px solid rgba(117,199,255,.25);font-weight:900;
+}
+.seq-node.on{background:rgba(101,230,189,.13);border-color:rgba(101,230,189,.35);color:#d5f7ed}
+.arrow-seq{display:grid;place-items:center;color:#6d8399}
+.footer-note{
+  margin-top:15px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;
+  background:rgba(255,255,255,.02);color:var(--muted);font-size:.78rem
+}
+footer{text-align:center;color:#718399;font-size:.76rem;padding:28px 10px 0}
+@media(max-width:950px){
+  .shell{display:block}
+  aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  nav{display:grid;grid-template-columns:repeat(2,1fr)}
+  main{padding:22px 16px 55px}
+  .hero{min-height:320px;padding:31px 23px}
+  .anim-layout,.grid2,.grid3{grid-template-columns:1fr}
+}
+@media print{
+  aside{display:none}.shell{display:block}main{width:100%;padding:0}
+  body{background:white}.hero,section{box-shadow:none;break-inside:avoid}
+  .controls,.speed{display:none}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<aside>
+  <div class="brand">
+    <div class="brand-mark">02</div>
+    <div>
+      <strong>BFS e DFS</strong>
+      <small>Aula 2 · Programação Competitiva</small>
+    </div>
+  </div>
+
+  <nav>
+    <a href="#relembrando">01 · Mesmo grafo</a>
+    <a href="#dfs">02 · DFS animada</a>
+    <a href="#dfs-code">03 · Código DFS</a>
+    <a href="#bfs">04 · BFS animada</a>
+    <a href="#bfs-code">05 · Código BFS</a>
+    <a href="#comparacao">06 · DFS × BFS</a>
+    <a href="#complexidade">07 · Complexidade</a>
+  </nav>
+
+  <div class="side-note">
+    Use os botões <strong>Próximo</strong> e <strong>Executar</strong> durante a aula para acompanhar o algoritmo.
+  </div>
+</aside>
+
+<main>
+
+<header class="hero">
+  <div>
+    <div class="kicker">Aula prática · Percurso em grafos</div>
+    <h1>DFS vai fundo. BFS espalha.</h1>
+    <p>
+      Vamos percorrer o mesmo grafo da aula anterior de duas maneiras diferentes
+      e observar, passo a passo, o que acontece com os vértices e com a estrutura auxiliar.
+    </p>
+    <div class="chips">
+      <span class="chip">DFS</span>
+      <span class="chip">BFS</span>
+      <span class="chip">Recursão / Pilha</span>
+      <span class="chip">Fila</span>
+      <span class="chip">Matriz</span>
+      <span class="chip">Lista de adjacência</span>
+    </div>
+  </div>
+</header>
+
+<section id="relembrando">
+  <div class="section-head">
+    <div class="num">01</div>
+    <h2>Uma árvore para enxergar DFS e BFS</h2>
+  </div>
+
+  <p class="lead">
+    Nesta aula, usaremos uma árvore com <strong>8 vértices</strong> e <strong>7 arestas</strong>.
+    Ela facilita a comparação: a DFS desce por um ramo; a BFS visita nível por nível.
+  </p>
+
+  <div class="graph-stage">
+    <svg class="graph-svg" viewBox="0 0 620 850" aria-label="Árvore da aula com oito vértices e sete arestas">
+      <text class="level-label" x="30" y="70">nível 1</text>
+      <text class="level-label" x="30" y="250">nível 2</text>
+      <text class="level-label" x="30" y="470">nível 3</text>
+      <text class="level-label" x="30" y="725">nível 4</text>
+
+      <line class="edge" x1="310" y1="110" x2="210" y2="260"/>
+      <line class="edge" x1="310" y1="110" x2="410" y2="260"/>
+      <line class="edge" x1="210" y1="260" x2="130" y2="500"/>
+      <line class="edge" x1="210" y1="260" x2="290" y2="500"/>
+      <line class="edge" x1="410" y1="260" x2="410" y2="500"/>
+      <line class="edge" x1="410" y1="260" x2="530" y2="500"/>
+      <line class="edge" x1="130" y1="500" x2="130" y2="745"/>
+
+      <circle class="node" cx="310" cy="90" r="36"/><text class="node-label" x="310" y="97" text-anchor="middle">A</text>
+      <circle class="node" cx="210" cy="270" r="36"/><text class="node-label" x="210" y="277" text-anchor="middle">B</text>
+      <circle class="node" cx="410" cy="270" r="36"/><text class="node-label" x="410" y="277" text-anchor="middle">C</text>
+      <circle class="node" cx="130" cy="510" r="36"/><text class="node-label" x="130" y="517" text-anchor="middle">D</text>
+      <circle class="node" cx="290" cy="510" r="36"/><text class="node-label" x="290" y="517" text-anchor="middle">E</text>
+      <circle class="node" cx="410" cy="510" r="36"/><text class="node-label" x="410" y="517" text-anchor="middle">F</text>
+      <circle class="node" cx="530" cy="510" r="36"/><text class="node-label" x="530" y="517" text-anchor="middle">G</text>
+      <circle class="node" cx="130" cy="755" r="36"/><text class="node-label" x="130" y="762" text-anchor="middle">H</text>
+    </svg>
+  </div>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="card">
+      <h3>Lista de adjacência</h3>
+      <pre>A: B, C
+B: A, D, E
+C: A, F, G
+D: B, H
+E: B
+F: C
+G: C
+H: D</pre>
+    </div>
+    <div class="card">
+      <h3>Regra da animação</h3>
+      <p>
+        Sempre que houver dois filhos, visitaremos da esquerda para a direita.
+        É por isso que B vem antes de C, D antes de E, e F antes de G.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section id="dfs">
+  <div class="section-head">
+    <div class="num">02</div>
+    <h2>DFS — Busca em Profundidade</h2>
+  </div>
+
+  <p class="lead">
+    A DFS escolhe um caminho e <strong>vai o mais fundo possível</strong>.
+    Quando não existe novo vizinho, ela retorna para a chamada anterior.
+  </p>
+
+  <div class="callout">
+    Estrutura mental: <strong>marcar → escolher vizinho → entrar nele → continuar → voltar quando necessário.</strong>
+  </div>
+
+  <div class="anim-layout">
+    <div class="graph-stage">
+      <svg id="dfsGraph" class="graph-svg" viewBox="0 0 620 850" aria-label="Animação vertical da busca DFS">
+        <text class="level-label" x="30" y="70">nível 1</text>
+        <text class="level-label" x="30" y="250">nível 2</text>
+        <text class="level-label" x="30" y="470">nível 3</text>
+        <text class="level-label" x="30" y="725">nível 4</text>
+
+        <line id="dfs-AB" class="edge" x1="310" y1="110" x2="210" y2="260"/>
+        <line id="dfs-AC" class="edge" x1="310" y1="110" x2="410" y2="260"/>
+        <line id="dfs-BD" class="edge" x1="210" y1="260" x2="130" y2="500"/>
+        <line id="dfs-BE" class="edge" x1="210" y1="260" x2="290" y2="500"/>
+        <line id="dfs-CF" class="edge" x1="410" y1="260" x2="410" y2="500"/>
+        <line id="dfs-CG" class="edge" x1="410" y1="260" x2="530" y2="500"/>
+        <line id="dfs-DH" class="edge" x1="130" y1="500" x2="130" y2="745"/>
+
+        <circle id="dfs-A" class="node" cx="310" cy="90" r="36"/><text class="node-label" x="310" y="97" text-anchor="middle">A</text>
+        <circle id="dfs-B" class="node" cx="210" cy="270" r="36"/><text class="node-label" x="210" y="277" text-anchor="middle">B</text>
+        <circle id="dfs-C" class="node" cx="410" cy="270" r="36"/><text class="node-label" x="410" y="277" text-anchor="middle">C</text>
+        <circle id="dfs-D" class="node" cx="130" cy="510" r="36"/><text class="node-label" x="130" y="517" text-anchor="middle">D</text>
+        <circle id="dfs-E" class="node" cx="290" cy="510" r="36"/><text class="node-label" x="290" y="517" text-anchor="middle">E</text>
+        <circle id="dfs-F" class="node" cx="410" cy="510" r="36"/><text class="node-label" x="410" y="517" text-anchor="middle">F</text>
+        <circle id="dfs-G" class="node" cx="530" cy="510" r="36"/><text class="node-label" x="530" y="517" text-anchor="middle">G</text>
+        <circle id="dfs-H" class="node" cx="130" cy="755" r="36"/><text class="node-label" x="130" y="762" text-anchor="middle">H</text>
+      </svg>
+
+      <div class="legend">
+        <span><i class="dot current"></i> atual</span>
+        <span><i class="dot frontier"></i> na pilha / caminho</span>
+        <span><i class="dot visited"></i> visitado</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">
+        <strong>Execução da DFS</strong>
+        <span id="dfsStepBadge" class="step-badge">passo 0/8</span>
+      </div>
+
+      <div id="dfsExplanation" class="explanation" aria-live="polite">
+        Clique em “Próximo” ou “Executar”.
+      </div>
+
+      <div class="state-box">
+        <div class="state">
+          <small>Visitados</small>
+          <strong id="dfsVisited">[]</strong>
+        </div>
+        <div class="state">
+          <small>Pilha de chamadas</small>
+          <strong id="dfsStack">[]</strong>
+        </div>
+        <div class="state">
+          <small>Ordem de visita</small>
+          <strong id="dfsOrder">—</strong>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="dfsPrev" class="secondary" type="button">Anterior</button>
+        <button id="dfsNext" type="button">Próximo</button>
+        <button id="dfsPlay" class="warn" type="button">Executar</button>
+        <button id="dfsReset" class="secondary" type="button">Reiniciar</button>
+      </div>
+
+      <label class="speed">
+        Velocidade
+        <input id="dfsSpeed" type="range" min="500" max="2200" step="100" value="1200">
+      </label>
+    </div>
+  </div>
+
+  <div class="callout">
+    Ordem desta DFS: <strong>A → B → D → H → E → C → F → G</strong>.
+    Ela não visita “por nível”; ela segue uma ramificação antes de voltar.
+  </div>
+</section>
+
+
+<section id="dfs-code">
+  <div class="section-head">
+    <div class="num">03</div>
+    <h2>DFS nas duas representações</h2>
+  </div>
+
+  <p class="lead">
+    A ideia da DFS é a mesma. O que muda é <strong>como encontramos os vizinhos</strong>.
+  </p>
+
+  <div class="code-tabs">
+    <button class="code-tab active" data-group="dfsCode" data-target="dfsMatrix" type="button">Matriz de adjacência</button>
+    <button class="code-tab" data-group="dfsCode" data-target="dfsList" type="button">Lista de adjacência</button>
+  </div>
+
+  <div id="dfsMatrix" class="code-panel active">
+<pre><span class="kw">def</span> <span class="fn">dfs</span>(v):
+    visitado[v] = <span class="kw">True</span>
+    print(v)
+
+    <span class="cm"># Na matriz, testamos TODOS os vértices</span>
+    <span class="kw">for</span> w <span class="kw">in</span> range(V):
+
+        <span class="cm"># Existe ligação v -- w?</span>
+        <span class="kw">if</span> adj[v][w] == <span class="nu">1</span>:
+
+            <span class="kw">if not</span> visitado[w]:
+                dfs(w)
+
+
+visitado = [<span class="kw">False</span>] * V
+dfs(origem)</pre>
+  </div>
+
+  <div id="dfsList" class="code-panel">
+<pre><span class="kw">def</span> <span class="fn">dfs</span>(v):
+    visitado[v] = <span class="kw">True</span>
+    print(v)
+
+    <span class="cm"># Na lista, já temos SOMENTE os vizinhos</span>
+    <span class="kw">for</span> w <span class="kw">in</span> grafo[v]:
+
+        <span class="kw">if not</span> visitado[w]:
+            dfs(w)
+
+
+visitado = [<span class="kw">False</span>] * V
+dfs(origem)</pre>
+  </div>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="card">
+      <span class="tag">Matriz</span>
+      <h3>Procura vizinhos</h3>
+      <p>Examina a linha inteira <code>adj[v]</code>, mesmo onde não existe aresta.</p>
+    </div>
+    <div class="card">
+      <span class="tag blue">Lista</span>
+      <h3>Já conhece os vizinhos</h3>
+      <p>O laço percorre diretamente <code>grafo[v]</code>.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="bfs">
+  <div class="section-head">
+    <div class="num">04</div>
+    <h2>BFS — Busca em Largura</h2>
+  </div>
+
+  <p class="lead">
+    A BFS explora o grafo <strong>por camadas</strong>. Primeiro os vizinhos do início,
+    depois os vizinhos deles, e assim por diante.
+  </p>
+
+  <div class="callout">
+    Estrutura mental: <strong>marcar → colocar na fila → retirar da frente → adicionar novos vizinhos ao final.</strong>
+  </div>
+
+  <div class="anim-layout">
+    <div class="graph-stage">
+      <svg id="bfsGraph" class="graph-svg" viewBox="0 0 620 850" aria-label="Animação vertical da busca BFS">
+        <text class="level-label" x="30" y="70">nível 1</text>
+        <text class="level-label" x="30" y="250">nível 2</text>
+        <text class="level-label" x="30" y="470">nível 3</text>
+        <text class="level-label" x="30" y="725">nível 4</text>
+
+        <line id="bfs-AB" class="edge" x1="310" y1="110" x2="210" y2="260"/>
+        <line id="bfs-AC" class="edge" x1="310" y1="110" x2="410" y2="260"/>
+        <line id="bfs-BD" class="edge" x1="210" y1="260" x2="130" y2="500"/>
+        <line id="bfs-BE" class="edge" x1="210" y1="260" x2="290" y2="500"/>
+        <line id="bfs-CF" class="edge" x1="410" y1="260" x2="410" y2="500"/>
+        <line id="bfs-CG" class="edge" x1="410" y1="260" x2="530" y2="500"/>
+        <line id="bfs-DH" class="edge" x1="130" y1="500" x2="130" y2="745"/>
+
+        <circle id="bfs-A" class="node" cx="310" cy="90" r="36"/><text class="node-label" x="310" y="97" text-anchor="middle">A</text>
+        <circle id="bfs-B" class="node" cx="210" cy="270" r="36"/><text class="node-label" x="210" y="277" text-anchor="middle">B</text>
+        <circle id="bfs-C" class="node" cx="410" cy="270" r="36"/><text class="node-label" x="410" y="277" text-anchor="middle">C</text>
+        <circle id="bfs-D" class="node" cx="130" cy="510" r="36"/><text class="node-label" x="130" y="517" text-anchor="middle">D</text>
+        <circle id="bfs-E" class="node" cx="290" cy="510" r="36"/><text class="node-label" x="290" y="517" text-anchor="middle">E</text>
+        <circle id="bfs-F" class="node" cx="410" cy="510" r="36"/><text class="node-label" x="410" y="517" text-anchor="middle">F</text>
+        <circle id="bfs-G" class="node" cx="530" cy="510" r="36"/><text class="node-label" x="530" y="517" text-anchor="middle">G</text>
+        <circle id="bfs-H" class="node" cx="130" cy="755" r="36"/><text class="node-label" x="130" y="762" text-anchor="middle">H</text>
+      </svg>
+
+      <div class="legend">
+        <span><i class="dot current"></i> retirado da fila</span>
+        <span><i class="dot frontier"></i> aguardando na fila</span>
+        <span><i class="dot visited"></i> processado</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">
+        <strong>Execução da BFS</strong>
+        <span id="bfsStepBadge" class="step-badge">passo 0/8</span>
+      </div>
+
+      <div id="bfsExplanation" class="explanation" aria-live="polite">
+        Clique em “Próximo” ou “Executar”.
+      </div>
+
+      <div class="state-box">
+        <div class="state">
+          <small>Processados</small>
+          <strong id="bfsVisited">[]</strong>
+        </div>
+        <div class="state">
+          <small>Fila</small>
+          <strong id="bfsQueue">[]</strong>
+        </div>
+        <div class="state">
+          <small>Ordem de visita</small>
+          <strong id="bfsOrder">—</strong>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="bfsPrev" class="secondary" type="button">Anterior</button>
+        <button id="bfsNext" type="button">Próximo</button>
+        <button id="bfsPlay" class="warn" type="button">Executar</button>
+        <button id="bfsReset" class="secondary" type="button">Reiniciar</button>
+      </div>
+
+      <label class="speed">
+        Velocidade
+        <input id="bfsSpeed" type="range" min="500" max="2200" step="100" value="1200">
+      </label>
+    </div>
+  </div>
+
+  <div class="callout">
+    Ordem desta BFS: <strong>A → B → C → D → E → F → G → H</strong>.
+    Repare que os vértices mais próximos de A aparecem antes.
+  </div>
+
+  <div class="callout">
+    Pela árvore usada nesta aula, a BFS fica bem visual:
+    primeiro vem o nível de <strong>A</strong>; depois <strong>B</strong> e <strong>C</strong>;
+    depois <strong>D, E, F e G</strong>; por último <strong>H</strong>.
+    É como ler a árvore linha por linha, de cima para baixo.
+  </div>
+</section>
+
+
+<section id="bfs-code">
+  <div class="section-head">
+    <div class="num">05</div>
+    <h2>BFS nas duas representações</h2>
+  </div>
+
+  <p class="lead">
+    A BFS precisa de uma <strong>fila</strong>. Novamente, matriz e lista mudam apenas a forma de encontrar vizinhos.
+  </p>
+
+  <div class="code-tabs">
+    <button class="code-tab active" data-group="bfsCode" data-target="bfsMatrix" type="button">Matriz de adjacência</button>
+    <button class="code-tab" data-group="bfsCode" data-target="bfsList" type="button">Lista de adjacência</button>
+  </div>
+
+  <div id="bfsMatrix" class="code-panel active">
+<pre><span class="kw">from</span> collections <span class="kw">import</span> deque
+
+<span class="kw">def</span> <span class="fn">bfs</span>(origem):
+    fila = deque([origem])
+    visitado[origem] = <span class="kw">True</span>
+
+    <span class="kw">while</span> fila:
+        v = fila.popleft()
+        print(v)
+
+        <span class="cm"># Na matriz, testamos TODOS os vértices</span>
+        <span class="kw">for</span> w <span class="kw">in</span> range(V):
+
+            <span class="kw">if</span> adj[v][w] == <span class="nu">1</span> <span class="kw">and not</span> visitado[w]:
+                visitado[w] = <span class="kw">True</span>
+                fila.append(w)
+
+
+visitado = [<span class="kw">False</span>] * V
+bfs(origem)</pre>
+  </div>
+
+  <div id="bfsList" class="code-panel">
+<pre><span class="kw">from</span> collections <span class="kw">import</span> deque
+
+<span class="kw">def</span> <span class="fn">bfs</span>(origem):
+    fila = deque([origem])
+    visitado[origem] = <span class="kw">True</span>
+
+    <span class="kw">while</span> fila:
+        v = fila.popleft()
+        print(v)
+
+        <span class="cm"># Na lista, percorremos diretamente os vizinhos</span>
+        <span class="kw">for</span> w <span class="kw">in</span> grafo[v]:
+
+            <span class="kw">if not</span> visitado[w]:
+                visitado[w] = <span class="kw">True</span>
+                fila.append(w)
+
+
+visitado = [<span class="kw">False</span>] * V
+bfs(origem)</pre>
+  </div>
+
+  <div class="callout">
+    Na BFS, normalmente marcamos o vértice como visitado <strong>quando ele entra na fila</strong>.
+    Assim evitamos colocar o mesmo vértice várias vezes.
+  </div>
+</section>
+
+
+<section id="comparacao">
+  <div class="section-head">
+    <div class="num">06</div>
+    <h2>DFS × BFS — lado a lado</h2>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">DFS</span>
+      <h3>Vai fundo</h3>
+      <div class="sequence">
+        <span class="seq-node on">A</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">B</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">C</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">E</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">D</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">G</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">H</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">F</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag blue">BFS</span>
+      <h3>Vai por camadas</h3>
+      <div class="sequence">
+        <span class="seq-node on">A</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">B</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">C</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">D</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">E</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">F</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">G</span><span class="arrow-seq">→</span>
+        <span class="seq-node on">H</span>
+      </div>
+    </div>
+  </div>
+
+  <table class="compare">
+    <tr><th>Característica</th><th>DFS</th><th>BFS</th></tr>
+    <tr><td>Estrutura típica</td><td>Recursão ou pilha</td><td>Fila</td></tr>
+    <tr><td>Comportamento</td><td>Aprofunda um caminho</td><td>Explora por níveis</td></tr>
+    <tr><td>Menor nº de arestas em grafo sem peso</td><td>Não garante</td><td class="good">Sim</td></tr>
+    <tr><td>Componentes / exploração</td><td class="good">Excelente</td><td class="good">Excelente</td></tr>
+    <tr><td>Detecção e exploração de estruturas</td><td class="good">Muito comum</td><td>Também possível</td></tr>
+  </table>
+</section>
+
+
+<section id="complexidade">
+  <div class="section-head">
+    <div class="num">07</div>
+    <h2>Complexidade: o algoritmo é igual, a representação pesa</h2>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="tag purple">Matriz</span>
+      <h3>DFS e BFS: O(V²)</h3>
+      <p>
+        Para cada vértice processado, examinamos V posições da matriz para descobrir os vizinhos.
+      </p>
+    </div>
+
+    <div class="card">
+      <span class="tag blue">Lista</span>
+      <h3>DFS e BFS: O(V + E)</h3>
+      <p>
+        Cada vértice é visitado e as arestas armazenadas são percorridas diretamente.
+      </p>
+    </div>
+  </div>
+
+  <div class="callout">
+    Para programação competitiva, <strong>lista de adjacência + DFS/BFS</strong> é uma combinação extremamente comum.
+  </div>
+</section>
+
+
+<section>
+  <div class="section-head">
+    <div class="num">✓</div>
+    <h2>Resumo da Aula 2</h2>
+  </div>
+
+  <div class="grid3">
+    <div class="card">
+      <h3>DFS</h3>
+      <p>Recursão/pilha. Segue uma ramificação até não conseguir avançar.</p>
+    </div>
+    <div class="card">
+      <h3>BFS</h3>
+      <p>Fila. Visita primeiro os vértices mais próximos do ponto inicial.</p>
+    </div>
+    <div class="card">
+      <h3>Representação</h3>
+      <p>Matriz funciona, mas a lista costuma ser mais eficiente para grafos esparsos.</p>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Continuidade natural para a Aula 3: aplicar DFS em um problema do beecrowd e acompanhar a execução com entrada real.
+  </div>
+</section>
+
+<footer>
+  Aula 02 · BFS e DFS · Programação Competitiva · Python
+</footer>
+
+</main>
+</div>
+
+<script>
+const vertices = ["A","B","C","D","E","F","G","H"];
+
+const dfsSteps = [
+  {
+    current:null, visited:[], frontier:[], treeEdges:[], currentEdge:null,
+    text:"Clique em “Próximo” ou “Executar”."
+  },
+  {
+    current:"A", visited:["A"], frontier:["A"], treeEdges:[], currentEdge:null,
+    text:"1. Começamos em A.\nMarcamos A como visitado e abrimos dfs(A)."
+  },
+  {
+    current:"B", visited:["A","B"], frontier:["A","B"], treeEdges:["AB"], currentEdge:"AB",
+    text:"2. A tem dois filhos: B e C.\nComeçamos pelo filho da esquerda, B. Chamamos dfs(B)."
+  },
+  {
+    current:"D", visited:["A","B","D"], frontier:["A","B","D"], treeEdges:["AB","BD"], currentEdge:"BD",
+    text:"3. Em B, ainda não voltamos para C.\nA DFS desce primeiro pelo filho da esquerda de B: D."
+  },
+  {
+    current:"H", visited:["A","B","D","H"], frontier:["A","B","D","H"], treeEdges:["AB","BD","DH"], currentEdge:"DH",
+    text:"4. Em D, existe o filho H.\nA DFS continua descendo e chama dfs(H)."
+  },
+  {
+    current:"E", visited:["A","B","D","H","E"], frontier:["A","B","E"], treeEdges:["AB","BD","DH","BE"], currentEdge:"BE",
+    text:"5. H não tem filhos, então voltamos.\nD terminou; voltamos para B e visitamos o outro filho: E."
+  },
+  {
+    current:"C", visited:["A","B","D","H","E","C"], frontier:["A","C"], treeEdges:["AB","BD","DH","BE","AC"], currentEdge:"AC",
+    text:"6. E também não tem filhos.\nAgora o ramo de B acabou; voltamos para A e seguimos para C."
+  },
+  {
+    current:"F", visited:["A","B","D","H","E","C","F"], frontier:["A","C","F"], treeEdges:["AB","BD","DH","BE","AC","CF"], currentEdge:"CF",
+    text:"7. Em C, seguimos pelo filho da esquerda: F.\nChamamos dfs(F)."
+  },
+  {
+    current:"G", visited:["A","B","D","H","E","C","F","G"], frontier:["A","C","G"], treeEdges:["AB","BD","DH","BE","AC","CF","CG"], currentEdge:"CG",
+    text:"8. F não tem filhos, então voltamos para C.\nVisitamos o outro filho: G.\n\nTodos os vértices foram alcançados.\nOrdem: A → B → D → H → E → C → F → G."
+  }
+];
+
+const bfsSteps = [
+  {
+    current:null, visited:[], frontier:[], treeEdges:[], currentEdge:null,
+    text:"Clique em “Próximo” ou “Executar”."
+  },
+  {
+    current:"A", visited:["A"], frontier:["B","C"], treeEdges:["AB","AC"], currentEdge:null,
+    text:"1. Começamos em A.\nA sai da fila. Descobrimos B e C e colocamos ambos no final da fila.\nFila: [B, C]"
+  },
+  {
+    current:"B", visited:["A","B"], frontier:["C","D","E"], treeEdges:["AB","AC","BD","BE"], currentEdge:"AB",
+    text:"2. B sai da frente da fila.\nDescobrimos seus filhos: D e E.\nFila: [C, D, E]"
+  },
+  {
+    current:"C", visited:["A","B","C"], frontier:["D","E","F","G"], treeEdges:["AB","AC","BD","BE","CF","CG"], currentEdge:"AC",
+    text:"3. C sai da fila.\nDescobrimos seus filhos: F e G.\nFila: [D, E, F, G]"
+  },
+  {
+    current:"D", visited:["A","B","C","D"], frontier:["E","F","G","H"], treeEdges:["AB","AC","BD","BE","CF","CG","DH"], currentEdge:"BD",
+    text:"4. D sai da fila.\nD tem o filho H, que entra no final.\nFila: [E, F, G, H]"
+  },
+  {
+    current:"E", visited:["A","B","C","D","E"], frontier:["F","G","H"], treeEdges:["AB","AC","BD","BE","CF","CG","DH"], currentEdge:"BE",
+    text:"5. E sai da fila.\nE não tem filhos, então nada novo entra.\nFila: [F, G, H]"
+  },
+  {
+    current:"F", visited:["A","B","C","D","E","F"], frontier:["G","H"], treeEdges:["AB","AC","BD","BE","CF","CG","DH"], currentEdge:"CF",
+    text:"6. F sai da fila.\nF não tem filhos.\nFila: [G, H]"
+  },
+  {
+    current:"G", visited:["A","B","C","D","E","F","G"], frontier:["H"], treeEdges:["AB","AC","BD","BE","CF","CG","DH"], currentEdge:"CG",
+    text:"7. G sai da fila.\nG também não tem filhos.\nFila: [H]"
+  },
+  {
+    current:"H", visited:["A","B","C","D","E","F","G","H"], frontier:[], treeEdges:["AB","AC","BD","BE","CF","CG","DH"], currentEdge:"DH",
+    text:"8. H sai da fila.\nH não tem filhos, então nada novo entra.\nFila vazia: a BFS terminou.\n\nOrdem: A → B → C → D → E → F → G → H."
+  }
+];
+
+function edgeId(prefix, edge){
+  return `${prefix}-${edge}`;
+}
+
+function resetGraph(prefix){
+  vertices.forEach(v=>{
+    const el = document.getElementById(`${prefix}-${v}`);
+    if(el) el.setAttribute("class","node");
+  });
+  ["AB","AC","BD","BE","CF","CG","DH"].forEach(e=>{
+    const el = document.getElementById(edgeId(prefix,e));
+    if(el) el.setAttribute("class","edge");
+  });
+}
+
+function renderTraversal(prefix, steps, index, ids, structureLabel){
+  resetGraph(prefix);
+  const s = steps[index];
+
+  s.treeEdges.forEach(e=>{
+    const el = document.getElementById(edgeId(prefix,e));
+    if(el) el.setAttribute("class","edge tree");
+  });
+
+  if(s.currentEdge){
+    const el = document.getElementById(edgeId(prefix,s.currentEdge));
+    if(el) el.setAttribute("class","edge current");
+  }
+
+  s.visited.forEach(v=>{
+    const el = document.getElementById(`${prefix}-${v}`);
+    if(el) el.setAttribute("class","node visited");
+  });
+
+  s.frontier.forEach(v=>{
+    const el = document.getElementById(`${prefix}-${v}`);
+    if(el) el.setAttribute("class","node frontier");
+  });
+
+  if(s.current){
+    const el = document.getElementById(`${prefix}-${s.current}`);
+    if(el) el.setAttribute("class","node current");
+  }
+
+  document.getElementById(ids.badge).textContent = `passo ${index}/${steps.length-1}`;
+  document.getElementById(ids.explanation).textContent = s.text;
+  document.getElementById(ids.visited).textContent = `[${s.visited.join(", ")}]`;
+  document.getElementById(ids.structure).textContent = `[${s.frontier.join(", ")}]`;
+  document.getElementById(ids.order).textContent = s.visited.length ? s.visited.join(" → ") : "—";
+}
+
+function makeController(prefix, steps, ids){
+  let index = 0;
+  let timer = null;
+
+  const speed = document.getElementById(ids.speed);
+  const playBtn = document.getElementById(ids.play);
+
+  function render(){
+    renderTraversal(prefix, steps, index, ids);
+    document.getElementById(ids.prev).disabled = index === 0;
+    document.getElementById(ids.next).disabled = index === steps.length - 1;
+  }
+
+  function stop(){
+    if(timer){
+      clearInterval(timer);
+      timer = null;
+    }
+    playBtn.textContent = "Executar";
+  }
+
+  function play(){
+    if(timer){
+      stop();
+      return;
+    }
+    if(index === steps.length - 1) index = 0;
+    playBtn.textContent = "Pausar";
+    timer = setInterval(()=>{
+      if(index < steps.length - 1){
+        index++;
+        render();
+      }else{
+        stop();
+      }
+    }, Number(speed.max) + Number(speed.min) - Number(speed.value));
+  }
+
+  document.getElementById(ids.next).addEventListener("click",()=>{
+    stop();
+    if(index < steps.length - 1) index++;
+    render();
+  });
+
+  document.getElementById(ids.prev).addEventListener("click",()=>{
+    stop();
+    if(index > 0) index--;
+    render();
+  });
+
+  document.getElementById(ids.reset).addEventListener("click",()=>{
+    stop();
+    index = 0;
+    render();
+  });
+
+  playBtn.addEventListener("click",play);
+  speed.addEventListener("input",()=>{
+    if(timer){
+      stop();
+      play();
+    }
+  });
+
+  render();
+}
+
+makeController("dfs", dfsSteps, {
+  badge:"dfsStepBadge",
+  explanation:"dfsExplanation",
+  visited:"dfsVisited",
+  structure:"dfsStack",
+  order:"dfsOrder",
+  prev:"dfsPrev",
+  next:"dfsNext",
+  play:"dfsPlay",
+  reset:"dfsReset",
+  speed:"dfsSpeed"
+});
+
+makeController("bfs", bfsSteps, {
+  badge:"bfsStepBadge",
+  explanation:"bfsExplanation",
+  visited:"bfsVisited",
+  structure:"bfsQueue",
+  order:"bfsOrder",
+  prev:"bfsPrev",
+  next:"bfsNext",
+  play:"bfsPlay",
+  reset:"bfsReset",
+  speed:"bfsSpeed"
+});
+
+document.querySelectorAll(".code-tab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const group = btn.dataset.group;
+    const target = btn.dataset.target;
+
+    document.querySelectorAll(`.code-tab[data-group="${group}"]`).forEach(b=>b.classList.remove("active"));
+
+    const panels = group === "dfsCode"
+      ? ["dfsMatrix","dfsList"]
+      : ["bfsMatrix","bfsList"];
+
+    panels.forEach(id=>document.getElementById(id).classList.remove("active"));
+
+    btn.classList.add("active");
+    document.getElementById(target).classList.add("active");
+  });
+});
+</script>
+</body>
+</html>

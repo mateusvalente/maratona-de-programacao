@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 06 — Algoritmo de Dijkstra</title>
+<style>
+:root{
+  --bg:#07101c;
+  --panel:#0d1c2e;
+  --panel2:#10253b;
+  --code:#06101b;
+  --text:#edf5ff;
+  --muted:#9eb0c7;
+  --line:rgba(255,255,255,.10);
+  --green:#65e6bd;
+  --blue:#75c7ff;
+  --purple:#b7a0ff;
+  --yellow:#ffd86b;
+  --red:#ff8d8d;
+  --shadow:0 20px 60px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--text);
+  background:
+    radial-gradient(circle at 12% 0%,rgba(101,230,189,.08),transparent 28%),
+    radial-gradient(circle at 96% 12%,rgba(117,199,255,.07),transparent 25%),
+    var(--bg);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  line-height:1.55
+}
+.shell{display:grid;grid-template-columns:260px minmax(0,1fr)}
+aside{
+  height:100vh;position:sticky;top:0;padding:26px 18px;
+  background:rgba(7,16,28,.91);backdrop-filter:blur(14px);
+  border-right:1px solid var(--line);overflow:auto
+}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:25px}
+.brand-mark{
+  width:43px;height:43px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--green),var(--blue));
+  color:#05101a;font-weight:1000
+}
+.brand strong{font-size:.95rem}
+.brand small{display:block;color:var(--muted);font-size:.7rem}
+nav{display:flex;flex-direction:column;gap:5px}
+nav a{
+  padding:9px 11px;border-radius:10px;text-decoration:none;color:var(--muted);
+  font-size:.84rem;transition:.2s
+}
+nav a:hover{background:rgba(255,255,255,.05);color:#fff;transform:translateX(3px)}
+.side-note{
+  margin-top:24px;padding:13px;border-radius:13px;border:1px solid rgba(101,230,189,.18);
+  background:rgba(101,230,189,.045);color:var(--muted);font-size:.75rem
+}
+main{width:min(1180px,100%);margin:0 auto;padding:32px 38px 72px}
+.hero{
+  min-height:390px;padding:46px;border-radius:30px;border:1px solid var(--line);
+  background:linear-gradient(135deg,rgba(16,37,59,.97),rgba(7,17,30,.98));
+  box-shadow:var(--shadow);display:flex;align-items:center;position:relative;overflow:hidden
+}
+.hero:before,.hero:after{
+  content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.08)
+}
+.hero:before{width:390px;height:390px;right:-105px;top:-120px}
+.hero:after{width:255px;height:255px;right:25px;top:13px}
+.kicker{font-size:.74rem;font-weight:900;color:var(--green);letter-spacing:.15em;text-transform:uppercase}
+h1{max-width:850px;margin:10px 0 17px;font-size:clamp(2.5rem,6vw,5rem);line-height:.95;letter-spacing:-.055em}
+.hero p{max-width:760px;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.chip{
+  padding:7px 11px;border-radius:999px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);color:#c9d7e8;font-size:.78rem
+}
+section{
+  margin-top:26px;padding:27px;border-radius:22px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(13,28,46,.92),rgba(9,21,35,.92));
+  box-shadow:0 12px 32px rgba(0,0,0,.13);scroll-margin-top:20px
+}
+.section-head{display:flex;gap:13px;align-items:center;margin-bottom:14px}
+.num{
+  width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;
+  color:var(--green);background:rgba(101,230,189,.08);
+  border:1px solid rgba(101,230,189,.20);font-weight:900
+}
+h2{margin:0;font-size:1.55rem;letter-spacing:-.025em}
+h3{margin:0 0 8px;font-size:1rem}
+.lead{color:var(--muted);margin:0 0 16px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{
+  padding:17px;border-radius:15px;border:1px solid var(--line);
+  background:rgba(255,255,255,.028)
+}
+.card p{margin:0;color:var(--muted);font-size:.89rem}
+.tag{
+  display:inline-block;margin-bottom:9px;padding:4px 8px;border-radius:999px;
+  color:#06101b;background:var(--green);font-size:.69rem;font-weight:900
+}
+.tag.blue{background:var(--blue)}.tag.yellow{background:var(--yellow)}.tag.purple{background:var(--purple)}
+.callout{
+  margin-top:15px;padding:13px 15px;border-radius:0 12px 12px 0;border-left:3px solid var(--green);
+  color:#d6e9e4;background:rgba(101,230,189,.05);font-size:.9rem
+}
+.graph-stage{
+  margin-top:15px;border-radius:20px;padding:20px;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
+    #07131f;
+  background-size:28px 28px;border:1px dashed rgba(117,199,255,.25)
+}
+.graph-svg{display:block;width:min(650px,100%);height:auto;margin:0 auto}
+.edge{stroke:#556d84;stroke-width:4;stroke-linecap:round;transition:.25s}
+.edge.relaxed{stroke:var(--purple);stroke-width:6}
+.edge.best{stroke:var(--green);stroke-width:7}
+.edge.current{stroke:var(--yellow);stroke-width:7}
+.node{fill:#10273f;stroke:var(--blue);stroke-width:3;transition:.25s}
+.node.visited{fill:#163931;stroke:var(--green)}
+.node.current{fill:#4a3d12;stroke:var(--yellow);stroke-width:5}
+.node.frontier{fill:#2b2843;stroke:var(--purple)}
+.node-label{fill:#edf5ff;font:bold 18px Inter,Arial}
+.weight-bg{fill:#07131f;stroke:var(--yellow);stroke-width:2}
+.weight-text{fill:var(--yellow);font:bold 15px Inter,Arial}
+.flow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:15px}
+.flow-box{
+  padding:10px 13px;border-radius:11px;border:1px solid rgba(117,199,255,.20);
+  background:#0a1928;color:#d9eaff;font-weight:800;font-size:.82rem
+}
+.flow-arrow{color:#6f8398;font-size:1.2rem}
+pre{
+  margin:13px 0 0;padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
+  overflow:auto;background:var(--code);color:#dcecff;
+  font:13px/1.62 "Cascadia Code","Fira Code",Consolas,monospace
+}
+.kw{color:#b7a0ff}.fn{color:#75c7ff}.cm{color:#70849a}.nu{color:#ffd86b}.str{color:#65e6bd}
+.priority-box{
+  display:flex;gap:7px;flex-wrap:wrap;min-height:56px;padding:10px;
+  border:1px solid var(--line);border-radius:12px;background:#081624;align-items:center
+}
+.pq-item{
+  display:grid;grid-template-columns:auto auto;gap:4px 7px;align-items:center;
+  padding:7px 10px;border-radius:9px;background:rgba(183,160,255,.10);
+  border:1px solid rgba(183,160,255,.24);
+  font:700 .78rem "Cascadia Code",Consolas,monospace;color:#e0d8ff
+}
+.pq-item.next{
+  background:rgba(255,216,107,.14);border-color:rgba(255,216,107,.45);color:#fff4c7
+}
+.pq-item.old{opacity:.62;border-style:dashed}
+.pq-cost{color:var(--yellow);font-weight:1000}
+.pq-node{color:#edf5ff}
+.pq-label{
+  grid-column:1/-1;color:var(--muted);font:700 .64rem Inter,Arial;text-transform:uppercase;letter-spacing:.08em
+}
+.priority-note{margin-top:8px;color:var(--muted);font-size:.78rem}
+.priority-note strong{color:var(--yellow)}
+.priority-area{
+  margin-top:14px;padding:13px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025)
+}
+.priority-area .state{margin-top:0}
+.popped-box{
+  display:flex;gap:7px;flex-wrap:wrap;min-height:44px;padding:10px;
+  border:1px solid var(--line);border-radius:12px;background:#081624;align-items:center
+}
+.popped-item{
+  display:grid;grid-template-columns:auto auto;gap:4px 7px;align-items:center;
+  padding:7px 10px;border-radius:9px;background:rgba(255,255,255,.045);
+  border:1px dashed rgba(255,255,255,.15);font:700 .78rem "Cascadia Code",Consolas,monospace;
+  color:#8fa3b8;opacity:.72
+}
+.popped-item.current-pop{
+  opacity:1;background:rgba(255,216,107,.10);border-color:rgba(255,216,107,.32);color:#fff1be
+}
+.concept-strip{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:15px
+}
+.concept{
+  padding:13px;border-radius:13px;border:1px solid var(--line);background:#081624
+}
+.concept strong{display:block;color:#e6f1fc;margin-bottom:4px}
+.concept span{color:var(--muted);font-size:.85rem}
+.concept.good{border-color:rgba(101,230,189,.24);background:rgba(101,230,189,.045)}
+.dist-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px
+}
+.dist{
+  padding:10px;border:1px solid var(--line);border-radius:11px;background:#081624;text-align:center
+}
+.dist small{display:block;color:#74889d;font-size:.68rem}
+.dist strong{display:block;margin-top:3px;font:800 1rem "Cascadia Code",Consolas,monospace}
+.anim-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(310px,.85fr);gap:16px;align-items:start}
+.panel{
+  border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025);padding:16px
+}
+.panel-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
+.step-badge{
+  padding:5px 9px;border-radius:999px;background:rgba(117,199,255,.09);
+  border:1px solid rgba(117,199,255,.18);color:#cce8ff;font-size:.75rem;font-weight:800
+}
+.explanation{
+  min-height:155px;padding:12px 13px;border-radius:12px;border:1px solid var(--line);
+  background:#081624;color:#d9e6f3;font-size:.88rem;white-space:pre-line
+}
+.state{
+  min-height:58px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#081624;margin-top:9px
+}
+.state small{display:block;color:#74889d;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.state strong{font-family:"Cascadia Code",Consolas,monospace;font-size:.86rem}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+button{
+  border:0;border-radius:10px;padding:9px 13px;font-weight:850;cursor:pointer;background:var(--green);color:#06101b
+}
+button.secondary{background:#172b43;color:#dcecff;border:1px solid var(--line)}
+button.warn{background:var(--yellow)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.relax{
+  padding:13px;border-radius:12px;border:1px solid var(--line);background:#081624;
+  font-family:"Cascadia Code",Consolas,monospace;font-size:.85rem;color:#dcecff
+}
+.relax strong{color:var(--yellow)}
+.compare{width:100%;border-collapse:collapse;margin-top:13px;font-size:.88rem}
+.compare th,.compare td{padding:11px;border-bottom:1px solid var(--line);text-align:left}
+.compare th{color:#d6e4f4}.compare td{color:var(--muted)}
+.good{color:var(--green)!important;font-weight:800}
+.path{
+  display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:15px
+}
+.pnode{
+  width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+  background:#102b45;border:2px solid var(--blue);font-weight:900
+}
+.pedge{display:flex;flex-direction:column;align-items:center;color:var(--muted);font-size:.7rem}
+.pedge strong{color:var(--yellow);font-size:.95rem}
+.result{
+  display:flex;align-items:center;justify-content:center;min-height:120px;
+  border:1px solid rgba(101,230,189,.20);border-radius:16px;background:rgba(101,230,189,.045);
+  text-align:center
+}
+.result strong{display:block;font-size:2.2rem;color:var(--green)}
+.result span{display:block;color:var(--muted);font-size:.82rem}
+footer{text-align:center;color:#718399;font-size:.76rem;padding:28px 10px 0}
+@media(max-width:960px){
+  .shell{display:block}
+  aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  nav{display:grid;grid-template-columns:repeat(2,1fr)}
+  main{padding:22px 16px 55px}.hero{min-height:320px;padding:31px 23px}
+  .grid2,.grid3,.anim-layout,.concept-strip{grid-template-columns:1fr}
+  .dist-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media print{
+  aside{display:none}.shell{display:block}main{width:100%;padding:0}
+  body{background:#fff}.hero,section{box-shadow:none;break-inside:avoid}.controls{display:none}
+}
+</style>
+</head>
+
+<body>
+<div class="shell">
+
+<aside>
+  <div class="brand">
+    <div class="brand-mark">06</div>
+    <div><strong>Dijkstra</strong><small>Aula 6 · Menor caminho com pesos</small></div>
+  </div>
+
+  <nav>
+    <a href="#problema">01 · Problema</a>
+    <a href="#ideia">02 · Ideia do Dijkstra</a>
+    <a href="#grafo">03 · Mesmo grafo</a>
+    <a href="#relaxamento">04 · Relaxamento</a>
+    <a href="#animacao">05 · Execução animada</a>
+    <a href="#caminho">06 · Caminho final</a>
+    <a href="#codigo">07 · Python</a>
+    <a href="#comparacao">08 · BFS × Dijkstra</a>
+  </nav>
+
+  <div class="side-note">
+    Regra importante: Dijkstra funciona com <strong>pesos não negativos</strong>.
+  </div>
+</aside>
+
+<main>
+
+<header class="hero">
+  <div>
+    <div class="kicker">Programação competitiva · Menor caminho ponderado</div>
+    <h1>Não queremos menos passos. Queremos menor custo.</h1>
+    <p>
+      Dijkstra mantém a melhor distância conhecida até cada vértice e sempre escolhe,
+      entre os candidatos, aquele com o menor custo acumulado.
+    </p>
+    <div class="chips">
+      <span class="chip">Dijkstra</span>
+      <span class="chip">Fila de prioridade</span>
+      <span class="chip">Relaxamento</span>
+      <span class="chip">heapq</span>
+      <span class="chip">Pesos não negativos</span>
+    </div>
+  </div>
+</header>
+
+<section id="problema">
+  <div class="section-head"><div class="num">01</div><h2>Qual problema vamos resolver?</h2></div>
+
+  <p class="lead">
+    Usando o mesmo grafo da aula anterior, queremos sair de <strong>A</strong> e chegar em <strong>G</strong>
+    pagando o menor custo possível.
+  </p>
+
+  <div class="grid3">
+    <div class="card">
+      <span class="tag">Origem</span>
+      <h3>A</h3>
+      <p>A distância de A para ele mesmo começa em 0.</p>
+    </div>
+    <div class="card">
+      <span class="tag blue">Destino</span>
+      <h3>G</h3>
+      <p>Queremos descobrir o menor custo acumulado até G.</p>
+    </div>
+    <div class="card">
+      <span class="tag yellow">Pesos</span>
+      <h3>Diferentes</h3>
+      <p>Cada aresta possui seu próprio custo.</p>
+    </div>
+  </div>
+</section>
+
+<section id="ideia">
+  <div class="section-head"><div class="num">02</div><h2>A ideia do Dijkstra</h2></div>
+
+  <p class="lead">O algoritmo repete três ideias simples:</p>
+
+  <div class="flow">
+    <div class="flow-box">Pegue o menor custo disponível</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">Examine seus vizinhos</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">Tente melhorar as distâncias</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">Repita</div>
+  </div>
+
+  <div class="callout">
+    A expressão “tentar melhorar a distância” recebe um nome importante:
+    <strong>relaxamento da aresta</strong>.
+  </div>
+
+  <div class="concept-strip">
+    <div class="concept">
+      <strong>Não é DFS</strong>
+      <span>DFS mergulha em um caminho até não conseguir continuar. Dijkstra não faz isso.</span>
+    </div>
+    <div class="concept">
+      <strong>Não é BFS pura</strong>
+      <span>BFS usa fila comum e escolhe por ordem de chegada, boa quando todo peso vale 1.</span>
+    </div>
+    <div class="concept good">
+      <strong>É busca por menor custo</strong>
+      <span>Dijkstra usa fila de prioridade: sai primeiro quem tem o menor custo acumulado.</span>
+    </div>
+  </div>
+
+  <div class="callout">
+    Uma forma útil de pensar: Dijkstra parece uma BFS adaptada para grafos com pesos.
+    Em vez de processar por camada, ele processa pelo <strong>menor valor de distância conhecido</strong>.
+  </div>
+</section>
+
+<section id="grafo">
+  <div class="section-head"><div class="num">03</div><h2>O mesmo grafo ponderado da Aula 5</h2></div>
+
+  <div class="graph-stage">
+    <svg class="graph-svg" viewBox="0 0 650 760" aria-label="Grafo ponderado usado na aula de Dijkstra">
+      <line id="eAB" class="edge" x1="325" y1="80" x2="205" y2="230"/>
+      <line id="eAC" class="edge" x1="325" y1="80" x2="445" y2="230"/>
+      <line id="eBD" class="edge" x1="205" y1="230" x2="145" y2="430"/>
+      <line id="eBE" class="edge" x1="205" y1="230" x2="325" y2="430"/>
+      <line id="eCE" class="edge" x1="445" y1="230" x2="325" y2="430"/>
+      <line id="eCF" class="edge" x1="445" y1="230" x2="505" y2="430"/>
+      <line id="eDG" class="edge" x1="145" y1="430" x2="325" y2="620"/>
+      <line id="eEG" class="edge" x1="325" y1="430" x2="325" y2="620"/>
+      <line id="eFG" class="edge" x1="505" y1="430" x2="325" y2="620"/>
+
+      <g><rect class="weight-bg" x="244" y="137" width="32" height="27" rx="8"/><text class="weight-text" x="260" y="156" text-anchor="middle">4</text></g>
+      <g><rect class="weight-bg" x="374" y="137" width="32" height="27" rx="8"/><text class="weight-text" x="390" y="156" text-anchor="middle">2</text></g>
+      <g><rect class="weight-bg" x="154" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="170" y="334" text-anchor="middle">5</text></g>
+      <g><rect class="weight-bg" x="247" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="263" y="334" text-anchor="middle">1</text></g>
+      <g><rect class="weight-bg" x="371" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="387" y="334" text-anchor="middle">7</text></g>
+      <g><rect class="weight-bg" x="464" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="480" y="334" text-anchor="middle">3</text></g>
+      <g><rect class="weight-bg" x="212" y="520" width="32" height="27" rx="8"/><text class="weight-text" x="228" y="539" text-anchor="middle">6</text></g>
+      <g><rect class="weight-bg" x="309" y="520" width="32" height="27" rx="8"/><text class="weight-text" x="325" y="539" text-anchor="middle">2</text></g>
+      <g><rect class="weight-bg" x="405" y="520" width="32" height="27" rx="8"/><text class="weight-text" x="421" y="539" text-anchor="middle">4</text></g>
+
+      <circle id="nA" class="node" cx="325" cy="70" r="34"/><text class="node-label" x="325" y="77" text-anchor="middle">A</text>
+      <circle id="nB" class="node" cx="205" cy="240" r="34"/><text class="node-label" x="205" y="247" text-anchor="middle">B</text>
+      <circle id="nC" class="node" cx="445" cy="240" r="34"/><text class="node-label" x="445" y="247" text-anchor="middle">C</text>
+      <circle id="nD" class="node" cx="145" cy="440" r="34"/><text class="node-label" x="145" y="447" text-anchor="middle">D</text>
+      <circle id="nE" class="node" cx="325" cy="440" r="34"/><text class="node-label" x="325" y="447" text-anchor="middle">E</text>
+      <circle id="nF" class="node" cx="505" cy="440" r="34"/><text class="node-label" x="505" y="447" text-anchor="middle">F</text>
+      <circle id="nG" class="node" cx="325" cy="630" r="34"/><text class="node-label" x="325" y="637" text-anchor="middle">G</text>
+    </svg>
+  </div>
+
+  <div class="callout">
+    Observe que o caminho visualmente mais “direto” não é necessariamente o mais barato.
+  </div>
+</section>
+
+<section id="relaxamento">
+  <div class="section-head"><div class="num">04</div><h2>Relaxamento: o coração do Dijkstra</h2></div>
+
+  <p class="lead">Suponha que já sabemos que o custo para chegar em B é 4.</p>
+
+  <div class="grid2">
+    <div class="relax">
+      distancia[B] = <strong>4</strong><br>
+      peso(B,E) = <strong>1</strong><br><br>
+      novo_custo = 4 + 1 = <strong>5</strong>
+    </div>
+
+    <div class="relax">
+      distancia[E] = <strong>∞</strong><br><br>
+      5 &lt; ∞ ? <strong>SIM</strong><br><br>
+      distancia[E] = <strong>5</strong>
+    </div>
+  </div>
+
+  <div class="callout">
+    Relaxar uma aresta significa perguntar:
+    <strong>“Chegar ao vizinho passando por mim fica mais barato do que o melhor valor conhecido?”</strong>
+  </div>
+</section>
+
+<section id="animacao">
+  <div class="section-head"><div class="num">05</div><h2>Dijkstra animado: A → G</h2></div>
+
+  <div class="anim-layout">
+    <div class="graph-stage">
+      <svg id="animGraph" class="graph-svg" viewBox="0 0 650 760" aria-label="Execução animada do algoritmo de Dijkstra">
+        <line id="a-eAB" class="edge" x1="325" y1="80" x2="205" y2="230"/>
+        <line id="a-eAC" class="edge" x1="325" y1="80" x2="445" y2="230"/>
+        <line id="a-eBD" class="edge" x1="205" y1="230" x2="145" y2="430"/>
+        <line id="a-eBE" class="edge" x1="205" y1="230" x2="325" y2="430"/>
+        <line id="a-eCE" class="edge" x1="445" y1="230" x2="325" y2="430"/>
+        <line id="a-eCF" class="edge" x1="445" y1="230" x2="505" y2="430"/>
+        <line id="a-eDG" class="edge" x1="145" y1="430" x2="325" y2="620"/>
+        <line id="a-eEG" class="edge" x1="325" y1="430" x2="325" y2="620"/>
+        <line id="a-eFG" class="edge" x1="505" y1="430" x2="325" y2="620"/>
+
+        <g><rect class="weight-bg" x="244" y="137" width="32" height="27" rx="8"/><text class="weight-text" x="260" y="156" text-anchor="middle">4</text></g>
+        <g><rect class="weight-bg" x="374" y="137" width="32" height="27" rx="8"/><text class="weight-text" x="390" y="156" text-anchor="middle">2</text></g>
+        <g><rect class="weight-bg" x="154" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="170" y="334" text-anchor="middle">5</text></g>
+        <g><rect class="weight-bg" x="247" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="263" y="334" text-anchor="middle">1</text></g>
+        <g><rect class="weight-bg" x="371" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="387" y="334" text-anchor="middle">7</text></g>
+        <g><rect class="weight-bg" x="464" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="480" y="334" text-anchor="middle">3</text></g>
+        <g><rect class="weight-bg" x="212" y="520" width="32" height="27" rx="8"/><text class="weight-text" x="228" y="539" text-anchor="middle">6</text></g>
+        <g><rect class="weight-bg" x="309" y="520" width="32" height="27" rx="8"/><text class="weight-text" x="325" y="539" text-anchor="middle">2</text></g>
+        <g><rect class="weight-bg" x="405" y="520" width="32" height="27" rx="8"/><text class="weight-text" x="421" y="539" text-anchor="middle">4</text></g>
+
+        <circle id="a-nA" class="node" cx="325" cy="70" r="34"/><text class="node-label" x="325" y="77" text-anchor="middle">A</text>
+        <circle id="a-nB" class="node" cx="205" cy="240" r="34"/><text class="node-label" x="205" y="247" text-anchor="middle">B</text>
+        <circle id="a-nC" class="node" cx="445" cy="240" r="34"/><text class="node-label" x="445" y="247" text-anchor="middle">C</text>
+        <circle id="a-nD" class="node" cx="145" cy="440" r="34"/><text class="node-label" x="145" y="447" text-anchor="middle">D</text>
+        <circle id="a-nE" class="node" cx="325" cy="440" r="34"/><text class="node-label" x="325" y="447" text-anchor="middle">E</text>
+        <circle id="a-nF" class="node" cx="505" cy="440" r="34"/><text class="node-label" x="505" y="447" text-anchor="middle">F</text>
+        <circle id="a-nG" class="node" cx="325" cy="630" r="34"/><text class="node-label" x="325" y="637" text-anchor="middle">G</text>
+      </svg>
+
+      <div class="priority-area">
+        <div class="state">
+          <small>Fila de prioridade</small>
+          <div id="priority" class="priority-box"></div>
+          <div class="priority-note">
+            <strong>Regra:</strong> o item destacado tem o menor custo e será retirado primeiro.
+            Itens “antigos” podem ficar na fila, mas são ignorados se já existe custo melhor.
+          </div>
+        </div>
+
+        <div class="state">
+          <small>Já saiu da fila</small>
+          <div id="poppedQueue" class="popped-box"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">
+        <strong>Execução</strong>
+        <span id="stepBadge" class="step-badge">passo 0</span>
+      </div>
+
+      <div id="explanation" class="explanation" aria-live="polite">
+        Clique em “Próximo” ou “Executar”.
+      </div>
+
+      <div class="state">
+        <small>Vértice escolhido</small>
+        <strong id="currentState">—</strong>
+      </div>
+
+      <div class="dist-grid">
+        <div class="dist"><small>A</small><strong id="dA">∞</strong></div>
+        <div class="dist"><small>B</small><strong id="dB">∞</strong></div>
+        <div class="dist"><small>C</small><strong id="dC">∞</strong></div>
+        <div class="dist"><small>D</small><strong id="dD">∞</strong></div>
+        <div class="dist"><small>E</small><strong id="dE">∞</strong></div>
+        <div class="dist"><small>F</small><strong id="dF">∞</strong></div>
+        <div class="dist"><small>G</small><strong id="dG">∞</strong></div>
+      </div>
+
+      <div class="controls">
+        <button id="prevBtn" class="secondary" type="button">Anterior</button>
+        <button id="nextBtn" type="button">Próximo</button>
+        <button id="playBtn" class="warn" type="button">Executar</button>
+        <button id="resetBtn" class="secondary" type="button">Reiniciar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="caminho">
+  <div class="section-head"><div class="num">06</div><h2>Qual caminho venceu?</h2></div>
+
+  <div class="path">
+    <div class="pnode">A</div>
+    <div class="pedge"><strong>4</strong><span>→</span></div>
+    <div class="pnode">B</div>
+    <div class="pedge"><strong>1</strong><span>→</span></div>
+    <div class="pnode">E</div>
+    <div class="pedge"><strong>2</strong><span>→</span></div>
+    <div class="pnode">G</div>
+  </div>
+
+  <div class="result" style="margin-top:16px">
+    <div>
+      <strong>7</strong>
+      <span>custo mínimo de A até G</span>
+    </div>
+  </div>
+
+  <div class="callout">
+    O caminho A → C → F → G possui o mesmo número de arestas, mas custa 9.
+    Dijkstra escolhe pelo <strong>custo acumulado</strong>, não pela quantidade de passos.
+  </div>
+</section>
+
+<section id="codigo">
+  <div class="section-head"><div class="num">07</div><h2>Dijkstra em Python 3.11</h2></div>
+
+<pre><span class="kw">import</span> heapq
+
+
+grafo = {
+    <span class="str">'A'</span>: [(<span class="str">'B'</span>, <span class="nu">4</span>), (<span class="str">'C'</span>, <span class="nu">2</span>)],
+    <span class="str">'B'</span>: [(<span class="str">'A'</span>, <span class="nu">4</span>), (<span class="str">'D'</span>, <span class="nu">5</span>), (<span class="str">'E'</span>, <span class="nu">1</span>)],
+    <span class="str">'C'</span>: [(<span class="str">'A'</span>, <span class="nu">2</span>), (<span class="str">'E'</span>, <span class="nu">7</span>), (<span class="str">'F'</span>, <span class="nu">3</span>)],
+    <span class="str">'D'</span>: [(<span class="str">'B'</span>, <span class="nu">5</span>), (<span class="str">'G'</span>, <span class="nu">6</span>)],
+    <span class="str">'E'</span>: [(<span class="str">'B'</span>, <span class="nu">1</span>), (<span class="str">'C'</span>, <span class="nu">7</span>), (<span class="str">'G'</span>, <span class="nu">2</span>)],
+    <span class="str">'F'</span>: [(<span class="str">'C'</span>, <span class="nu">3</span>), (<span class="str">'G'</span>, <span class="nu">4</span>)],
+    <span class="str">'G'</span>: [(<span class="str">'D'</span>, <span class="nu">6</span>), (<span class="str">'E'</span>, <span class="nu">2</span>), (<span class="str">'F'</span>, <span class="nu">4</span>)]
+}
+
+
+<span class="kw">def</span> <span class="fn">dijkstra</span>(grafo, origem):
+
+    dist = {
+        vertice: float(<span class="str">'inf'</span>)
+        <span class="kw">for</span> vertice <span class="kw">in</span> grafo
+    }
+
+    anterior = {
+        vertice: <span class="kw">None</span>
+        <span class="kw">for</span> vertice <span class="kw">in</span> grafo
+    }
+
+    dist[origem] = <span class="nu">0</span>
+
+    <span class="cm"># (distância, vértice)</span>
+    fila = [(<span class="nu">0</span>, origem)]
+
+    <span class="kw">while</span> fila:
+
+        distancia_atual, v = heapq.heappop(fila)
+
+        <span class="cm"># Entrada antiga da fila?</span>
+        <span class="kw">if</span> distancia_atual > dist[v]:
+            <span class="kw">continue</span>
+
+        <span class="kw">for</span> vizinho, peso <span class="kw">in</span> grafo[v]:
+
+            novo_custo = distancia_atual + peso
+
+            <span class="cm"># Relaxamento</span>
+            <span class="kw">if</span> novo_custo < dist[vizinho]:
+
+                dist[vizinho] = novo_custo
+                anterior[vizinho] = v
+
+                heapq.heappush(
+                    fila,
+                    (novo_custo, vizinho)
+                )
+
+    <span class="kw">return</span> dist, anterior
+
+
+dist, anterior = dijkstra(grafo, <span class="str">'A'</span>)
+
+print(dist[<span class="str">'G'</span>])</pre>
+
+  <div class="callout">
+    <code>heapq</code> funciona como uma fila de prioridade:
+    o menor valor de distância fica disponível primeiro.
+  </div>
+</section>
+
+<section id="comparacao">
+  <div class="section-head"><div class="num">08</div><h2>BFS × Dijkstra</h2></div>
+
+  <table class="compare">
+    <tr><th>Característica</th><th>BFS</th><th>Dijkstra</th></tr>
+    <tr><td>Estrutura principal</td><td>Fila</td><td>Fila de prioridade</td></tr>
+    <tr><td>Pesos das arestas</td><td>Iguais</td><td>Podem ser diferentes</td></tr>
+    <tr><td>Critério</td><td>Menor nº de arestas</td><td>Menor custo acumulado</td></tr>
+    <tr><td>Python</td><td><code>deque</code></td><td><code>heapq</code></td></tr>
+    <tr><td>Exemplo</td><td>Movimentos do cavalo</td><td class="good">Rotas com distâncias/custos</td></tr>
+  </table>
+
+  <div class="callout">
+    Frase para memorizar:
+    <strong>“BFS escolhe por camada. Dijkstra escolhe pelo menor custo conhecido.”</strong>
+    DFS não entra nessa escolha porque ela não garante menor caminho: ela apenas aprofunda em um caminho.
+  </div>
+</section>
+
+<footer>
+  Aula 06 · Dijkstra · Menor Caminho em Grafos Ponderados · Python 3.11
+</footer>
+
+</main>
+</div>
+
+<script>
+const vertices = ['A','B','C','D','E','F','G'];
+const edges = ['AB','AC','BD','BE','CE','CF','DG','EG','FG'];
+
+const steps = [
+  {
+    current:null,
+    visited:[],
+    frontier:['A'],
+    edgesBest:[],
+    edgeCurrent:null,
+    dist:{A:0,B:'∞',C:'∞',D:'∞',E:'∞',F:'∞',G:'∞'},
+    pq:['(0, A)'],
+    text:'Inicialização.\nA origem recebe distância 0.\nTodos os outros vértices começam com ∞.'
+  },
+  {
+    current:'A',
+    visited:['A'],
+    frontier:['B','C'],
+    edgesBest:['AB','AC'],
+    edgeCurrent:null,
+    dist:{A:0,B:4,C:2,D:'∞',E:'∞',F:'∞',G:'∞'},
+    pq:['(2, C)','(4, B)'],
+    text:'Retiramos A da fila.\nRelaxamos A–B: 0 + 4 = 4.\nRelaxamos A–C: 0 + 2 = 2.\n\nAgora C é o candidato mais barato.'
+  },
+  {
+    current:'C',
+    visited:['A','C'],
+    frontier:['B','E','F'],
+    edgesBest:['AB','AC','CE','CF'],
+    edgeCurrent:'AC',
+    dist:{A:0,B:4,C:2,D:'∞',E:9,F:5,G:'∞'},
+    pq:['(4, B)','(5, F)','(9, E)'],
+    text:'C possui custo 2.\nC→E custa 7: 2 + 7 = 9.\nC→F custa 3: 2 + 3 = 5.\n\nA melhor distância conhecida para E vira 9 e para F vira 5.'
+  },
+  {
+    current:'B',
+    visited:['A','C','B'],
+    frontier:['D','E','F'],
+    edgesBest:['AB','AC','BD','BE','CF'],
+    edgeCurrent:'AB',
+    dist:{A:0,B:4,C:2,D:9,E:5,F:5,G:'∞'},
+    pq:['(5, E)','(5, F)','(9, D)','(9, E antigo)'],
+    text:'B possui custo 4.\nB→D: 4 + 5 = 9.\nB→E: 4 + 1 = 5.\n\nE já tinha custo 9, mas encontramos um caminho melhor: 5.\nIsso é relaxamento.'
+  },
+  {
+    current:'E',
+    visited:['A','C','B','E'],
+    frontier:['D','F','G'],
+    edgesBest:['AB','AC','BD','BE','CF','EG'],
+    edgeCurrent:'BE',
+    dist:{A:0,B:4,C:2,D:9,E:5,F:5,G:7},
+    pq:['(5, F)','(7, G)','(9, D)','(9, E antigo)'],
+    text:'E possui custo 5.\nE→G custa 2.\n5 + 2 = 7.\n\nA melhor distância conhecida para G passa a ser 7.'
+  },
+  {
+    current:'F',
+    visited:['A','C','B','E','F'],
+    frontier:['D','G'],
+    edgesBest:['AB','AC','BD','BE','CF','EG'],
+    edgeCurrent:'CF',
+    dist:{A:0,B:4,C:2,D:9,E:5,F:5,G:7},
+    pq:['(7, G)','(9, D)','(9, E antigo)'],
+    text:'F também possui custo 5.\nF→G custaria 5 + 4 = 9.\n\nMas G já possui custo 7.\nComo 9 não melhora 7, não alteramos nada.'
+  },
+  {
+    current:'G',
+    visited:['A','C','B','E','F','G'],
+    frontier:['D'],
+    edgesBest:['AB','BE','EG','AC','CF','BD'],
+    edgeCurrent:'EG',
+    dist:{A:0,B:4,C:2,D:9,E:5,F:5,G:7},
+    pq:['(9, D)','(9, E antigo)'],
+    text:'O menor item da fila agora é G com custo 7.\nComo G é o destino, já conhecemos o menor custo possível.\n\nResultado: 7.'
+  }
+];
+
+let index=0;
+let timer=null;
+
+function resetGraph(){
+  vertices.forEach(v=>{
+    const n=document.getElementById('a-n'+v);
+    if(n) n.setAttribute('class','node');
+  });
+  edges.forEach(e=>{
+    const el=document.getElementById('a-e'+e);
+    if(el) el.setAttribute('class','edge');
+  });
+}
+
+function parsePriorityItem(item){
+  const old = item.includes('antigo');
+  const clean = item.replace(' antigo','');
+  const match = clean.match(/^\(([^,]+),\s*([^)]+)\)$/);
+  if(!match) return {cost:item,node:'',old};
+  return {cost:match[1],node:match[2],old};
+}
+
+function render(){
+  resetGraph();
+  const s=steps[index];
+
+  s.edgesBest.forEach(e=>{
+    const el=document.getElementById('a-e'+e);
+    if(el) el.setAttribute('class','edge relaxed');
+  });
+
+  if(index===steps.length-1){
+    ['AB','BE','EG'].forEach(e=>{
+      const el=document.getElementById('a-e'+e);
+      if(el) el.setAttribute('class','edge best');
+    });
+  }
+
+  if(s.edgeCurrent){
+    const el=document.getElementById('a-e'+s.edgeCurrent);
+    if(el && index!==steps.length-1) el.setAttribute('class','edge current');
+  }
+
+  s.visited.forEach(v=>{
+    const n=document.getElementById('a-n'+v);
+    if(n) n.setAttribute('class','node visited');
+  });
+
+  s.frontier.forEach(v=>{
+    const n=document.getElementById('a-n'+v);
+    if(n && !s.visited.includes(v)) n.setAttribute('class','node frontier');
+  });
+
+  if(s.current){
+    const n=document.getElementById('a-n'+s.current);
+    if(n) n.setAttribute('class','node current');
+  }
+
+  document.getElementById('stepBadge').textContent=`passo ${index}/${steps.length-1}`;
+  document.getElementById('explanation').textContent=s.text;
+  document.getElementById('currentState').textContent=s.current || '—';
+
+  const pq=document.getElementById('priority');
+  pq.innerHTML='';
+  if(s.pq.length===0){
+    pq.innerHTML='<span style="color:#718399;font-size:.8rem">fila vazia</span>';
+  }
+  s.pq.forEach((item,i)=>{
+    const parsed=parsePriorityItem(item);
+    const el=document.createElement('span');
+    el.className='pq-item'+(i===0 ? ' next' : '')+(parsed.old ? ' old' : '');
+    el.innerHTML=`
+      <span class="pq-label">${i===0 ? 'sai primeiro' : (parsed.old ? 'registro antigo' : 'aguardando')}</span>
+      <span class="pq-cost">custo ${parsed.cost}</span>
+      <span class="pq-node">vértice ${parsed.node}</span>
+    `;
+    pq.appendChild(el);
+  });
+
+  const popped=document.getElementById('poppedQueue');
+  popped.innerHTML='';
+  if(s.visited.length===0){
+    popped.innerHTML='<span style="color:#718399;font-size:.8rem">ninguém saiu ainda</span>';
+  }else{
+    s.visited.forEach(v=>{
+      const el=document.createElement('span');
+      el.className='popped-item'+(v===s.current ? ' current-pop' : '');
+      el.innerHTML=`
+        <span class="pq-label">${v===s.current ? 'acabou de sair' : 'finalizado'}</span>
+        <span class="pq-node">vértice ${v}</span>
+        <span class="pq-cost">dist ${s.dist[v]}</span>
+      `;
+      popped.appendChild(el);
+    });
+  }
+
+  vertices.forEach(v=>{
+    document.getElementById('d'+v).textContent=s.dist[v];
+  });
+
+  document.getElementById('prevBtn').disabled=index===0;
+  document.getElementById('nextBtn').disabled=index===steps.length-1;
+}
+
+function stop(){
+  if(timer){clearInterval(timer);timer=null;}
+  document.getElementById('playBtn').textContent='Executar';
+}
+
+document.getElementById('nextBtn').addEventListener('click',()=>{
+  stop();
+  if(index<steps.length-1) index++;
+  render();
+});
+
+document.getElementById('prevBtn').addEventListener('click',()=>{
+  stop();
+  if(index>0) index--;
+  render();
+});
+
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  stop();
+  index=0;
+  render();
+});
+
+document.getElementById('playBtn').addEventListener('click',()=>{
+  if(timer){stop();return;}
+  if(index===steps.length-1) index=0;
+  document.getElementById('playBtn').textContent='Pausar';
+  timer=setInterval(()=>{
+    if(index<steps.length-1){
+      index++;
+      render();
+    }else{
+      stop();
+    }
+  },1350);
+});
+
+render();
+</script>
+
+</body>
+</html>

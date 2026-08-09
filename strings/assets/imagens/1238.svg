@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="title desc">
+  <title id="title">Intercalacao de duas strings</title>
+  <desc id="desc">Um caractere e retirado alternadamente de cada string e a sobra e anexada.</desc>
+  <rect width="800" height="420" fill="#10161a"/>
+  <text x="48" y="58" fill="#f5f7f8" font-family="Arial, sans-serif" font-size="27" font-weight="700">Leia em pares; depois anexe a sobra</text>
+  <g font-family="Consolas, monospace" font-size="27" text-anchor="middle">
+    <text x="60" y="131" text-anchor="start" fill="#5ee0a0" font-family="Arial, sans-serif" font-size="15">STRING A</text>
+    <text x="60" y="207" text-anchor="start" fill="#68b9ff" font-family="Arial, sans-serif" font-size="15">STRING B</text>
+    <g transform="translate(168 94)">
+      <g fill="#15251e" stroke="#456a5a"><rect width="62" height="58" rx="6"/><rect x="72" width="62" height="58" rx="6"/><rect x="144" width="62" height="58" rx="6"/><rect x="216" width="62" height="58" rx="6"/></g>
+      <g fill="#5ee0a0"><text x="31" y="38">a</text><text x="103" y="38">b</text><text x="175" y="38">c</text><text x="247" y="38">d</text></g>
+    </g>
+    <g transform="translate(168 170)">
+      <g fill="#162432" stroke="#41647e"><rect width="62" height="58" rx="6"/><rect x="72" width="62" height="58" rx="6"/><rect x="144" width="62" height="58" rx="6"/><rect x="216" width="62" height="58" rx="6"/><rect x="288" width="62" height="58" rx="6"/><rect x="360" width="62" height="58" rx="6"/></g>
+      <g fill="#68b9ff"><text x="31" y="38">1</text><text x="103" y="38">2</text><text x="175" y="38">3</text><text x="247" y="38">4</text><text x="319" y="38">5</text><text x="391" y="38">6</text></g>
+    </g>
+    <g stroke="#ffd166" stroke-width="3" fill="none"><path d="M199 154v98"/><path d="M271 154v98"/><path d="M343 154v98"/><path d="M415 154v98"/></g>
+    <text x="60" y="326" text-anchor="start" fill="#aeb8c1" font-family="Arial, sans-serif" font-size="15">SAIDA</text>
+    <text x="168" y="332" text-anchor="start" fill="#f5f7f8">a1b2c3d4</text>
+    <rect x="425" y="292" width="87" height="55" rx="6" fill="#2a2416" stroke="#ffd166"/>
+    <text x="468" y="328" fill="#ffd166">56</text>
+    <text x="535" y="325" text-anchor="start" fill="#ffd166" font-family="Arial, sans-serif" font-size="15">sobra de B</text>
+  </g>
+  <text x="48" y="390" fill="#aeb8c1" font-family="Arial, sans-serif" font-size="17">Nenhum caractere e perdido, mesmo quando os tamanhos sao diferentes.</text>
+</svg>

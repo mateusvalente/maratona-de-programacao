@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 1 - Flores de Fogo</title>
+  <link rel="stylesheet" href="../assets/curso.css">
+  <script src="../assets/aulas.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <nav class="topbar"><a href="../index.html">← Geometria computacional</a><span>Aula 1 de 6</span></nav>
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">beecrowd 1039 · contenção de círculos</p>
+        <h1>Flores de Fogo</h1>
+        <p class="lead">Decidir se toda a área da flor permanece dentro do alcance circular do caçador.</p>
+      </div>
+      <span class="badge">O(1) por caso</span>
+    </header>
+
+    <section class="band two-col">
+      <div>
+        <h2>Do desenho para a condição</h2>
+        <p>
+          O círculo de raio <strong>R₂</strong> só está protegido quando seu ponto mais distante do
+          centro do caçador ainda pertence ao círculo maior. Esse percurso é a distância entre os
+          centros, <strong>d</strong>, somada ao raio da flor.
+        </p>
+        <div class="formula">d + R₂ ≤ R₁ &nbsp;⇔&nbsp; d ≤ R₁ - R₂</div>
+        <p>
+          Também precisamos de <strong>R₂ ≤ R₁</strong>. Se o raio menor for maior, elevar
+          <code>R₁ - R₂</code> ao quadrado esconderia o sinal negativo e poderia produzir uma resposta falsa.
+        </p>
+      </div>
+      <figure class="source-figure">
+        <img src="../assets/imagens/1039.png" alt="Raio maior r1, raio da flor r2 e distância d entre os centros">
+        <figcaption>Figura original: a distância entre os centros e o raio da flor precisam caber em R₁.</figcaption>
+      </figure>
+    </section>
+
+    <section class="band">
+      <h2>Por que comparar quadrados?</h2>
+      <p>
+        A distância euclidiana usa raiz quadrada, mas os dois lados da desigualdade são não negativos.
+        Podemos comparar os quadrados e trabalhar apenas com inteiros.
+      </p>
+      <div class="formula">(x₁ - x₂)² + (y₁ - y₂)² ≤ (R₁ - R₂)²</div>
+      <div class="fact-check"><strong>Tangência conta.</strong> O sinal é <code>≤</code>: se a flor tocar a borda em um ponto, ela continua completamente dentro do alcance.</div>
+    </section>
+
+    <section class="band">
+      <div class="geometry-lab" data-lab="1039">
+        <div class="lab-head"><h2>Laboratório de contenção</h2><output id="result-1039" class="lab-result"></output></div>
+        <div class="controls">
+          <label class="field"><span>R₁ caçador</span><input id="r1-1039" type="number" min="0" value="10"></label>
+          <label class="field"><span>x₁</span><input id="x1-1039" type="number" value="0"></label>
+          <label class="field"><span>y₁</span><input id="y1-1039" type="number" value="0"></label>
+          <label class="field"><span>R₂ flor</span><input id="r2-1039" type="number" min="0" value="3"></label>
+          <label class="field"><span>x₂</span><input id="x2-1039" type="number" value="4"></label>
+          <label class="field"><span>y₂</span><input id="y2-1039" type="number" value="0"></label>
+          <button id="calculate-1039" class="primary" type="button">Calcular</button>
+        </div>
+        <div class="geometry-stage">
+          <svg id="svg-1039" role="img" aria-label="Círculos do caçador e da flor">
+            <circle id="hunter-1039" class="shape-primary"></circle>
+            <line id="centers-1039" class="guide"></line>
+            <circle id="flower-1039" class="shape-secondary"></circle>
+          </svg>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><span>Distância²</span><strong id="distance2-1039"></strong></div>
+          <div class="metric"><span>(R₁ - R₂)²</span><strong id="limit2-1039"></strong></div>
+          <div class="metric"><span>Teste executado</span><strong id="test-1039"></strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>Tradução para Python</h2>
+        <ul class="concept-list">
+          <li><strong>Leia seis inteiros</strong> para cada caso até o fim do arquivo.</li>
+          <li><strong>Recuse primeiro</strong> quando <code>R₂ &gt; R₁</code>.</li>
+          <li><strong>Compare os quadrados</strong> e imprima <code>RICO</code> ou <code>MORTO</code>.</li>
+        </ul>
+      </div>
+      <div class="code-panel">
+        <div class="code-title"><span>Teste central</span><a href="../resolucoes/1039.py">Abrir 1039.py</a></div>
+        <pre><code>dx = x_cacador - x_flor
+dy = y_cacador - y_flor
+limite = r_cacador - r_flor
+
+protegida = (
+    r_flor &lt;= r_cacador
+    and dx * dx + dy * dy &lt;= limite * limite
+)</code></pre>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Fontes e validação</h2>
+      <ul class="sources">
+        <li><a href="https://github.com/xTecna/solucoes-da-beecrowd/tree/main/problemas/geometria-computacional/1039" target="_blank" rel="noopener">Explicação e soluções originais</a> — figura e condição geométrica de referência.</li>
+        <li><a href="https://judge.beecrowd.com/pt/problems/view/1039" target="_blank" rel="noopener">Enunciado no beecrowd</a> — formato oficial do problema.</li>
+        <li><a href="https://docs.python.org/3/library/math.html#math.hypot" target="_blank" rel="noopener">Documentação do módulo math</a> — norma euclidiana; a solução evita a raiz comparando quadrados.</li>
+      </ul>
+    </section>
+
+    <nav class="lesson-nav"><a href="../index.html">← Índice</a><a href="aula_02_1124.html">Aula 2: Elevador →</a></nav>
+  </main>
+</body>
+</html>

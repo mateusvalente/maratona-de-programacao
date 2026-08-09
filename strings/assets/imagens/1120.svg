@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="title desc">
+  <title id="title">Filtro de digitos da revisao de contrato</title>
+  <desc id="desc">Os digitos proibidos sao retirados e os zeros da esquerda sao descartados.</desc>
+  <rect width="800" height="420" fill="#10161a"/>
+  <text x="48" y="58" fill="#f5f7f8" font-family="Arial, sans-serif" font-size="27" font-weight="700">Filtrar primeiro, normalizar depois</text>
+  <g font-family="Consolas, monospace" font-size="28" text-anchor="middle">
+    <text x="52" y="120" text-anchor="start" fill="#aeb8c1" font-family="Arial, sans-serif" font-size="16">numero lido como texto</text>
+    <g transform="translate(52 140)">
+      <g fill="#192126" stroke="#41515c"><rect x="0" width="72" height="68" rx="6"/><rect x="82" width="72" height="68" rx="6"/><rect x="164" width="72" height="68" rx="6"/><rect x="246" width="72" height="68" rx="6"/><rect x="328" width="72" height="68" rx="6"/><rect x="410" width="72" height="68" rx="6"/><rect x="492" width="72" height="68" rx="6"/></g>
+      <g fill="#f5f7f8"><text x="36" y="44">5</text><text x="118" y="44">0</text><text x="200" y="44">0</text><text x="282" y="44">5</text><text x="364" y="44">0</text><text x="446" y="44">4</text><text x="528" y="44">2</text></g>
+      <g stroke="#ff7474" stroke-width="4"><path d="M12 12l48 44M60 12L12 56"/><path d="M258 12l48 44M306 12l-48 44"/></g>
+    </g>
+    <path d="M628 170h82m0 0-13-10m13 10-13 10" stroke="#68b9ff" stroke-width="4" fill="none"/>
+    <text x="675" y="225" fill="#ff7474" font-family="Arial, sans-serif" font-size="14">remova o 5</text>
+    <g transform="translate(176 278)">
+      <rect x="0" width="72" height="68" rx="6" fill="#20262c" stroke="#ff7474" stroke-dasharray="6 5"/>
+      <rect x="82" width="72" height="68" rx="6" fill="#20262c" stroke="#ff7474" stroke-dasharray="6 5"/>
+      <rect x="164" width="72" height="68" rx="6" fill="#192126" stroke="#41515c"/>
+      <rect x="246" width="72" height="68" rx="6" fill="#192126" stroke="#41515c"/>
+      <rect x="328" width="72" height="68" rx="6" fill="#192126" stroke="#41515c"/>
+      <g fill="#aeb8c1"><text x="36" y="44">0</text><text x="118" y="44">0</text></g>
+      <g fill="#5ee0a0"><text x="200" y="44">0</text><text x="282" y="44">4</text><text x="364" y="44">2</text></g>
+      <path d="M12 12l48 44M60 12L12 56M94 12l48 44M142 12L94 56" stroke="#ff7474" stroke-width="3"/>
+    </g>
+  </g>
+  <text x="52" y="392" fill="#ffd166" font-family="Arial, sans-serif" font-size="17">Resultado: 42. Se tudo sumir, a resposta e 0.</text>
+</svg>

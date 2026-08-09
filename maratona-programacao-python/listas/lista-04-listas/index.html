@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lista 04 — Listas e vetores — Maratona de Programação com Python 3">
+  <title>Lista 04 — Listas e vetores | Maratona com Python</title>
+  <link rel="stylesheet" href="../../assets/css/curso.css">
+</head>
+<body data-root="../../" data-list="4">
+  <main id="app"><p>Carregando aula...</p></main>
+  <script src="../../assets/js/dados.js"></script>
+  <script src="../../assets/js/problemas.js"></script>
+  <script src="../../assets/js/listas.js"></script>
+  <script src="../../assets/js/comum.js"></script>
+  <script src="../../assets/js/lista.js"></script>
+  <script>
+    document.querySelectorAll(".problem-card").forEach((card) => {
+      const titleLink = card.querySelector("h3 a");
+      const content = titleLink.closest("div");
+      const button = document.createElement("a");
+
+      button.className = "btn";
+      button.href = titleLink.getAttribute("href");
+      button.textContent = "Ver exercício explicado";
+      button.style.marginTop = "10px";
+      content.appendChild(button);
+    });
+  </script>
+</body>
+</html>

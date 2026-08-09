@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resolução 1 - beecrowd 1068</title>
+  <link rel="stylesheet" href="../assets/exercicios.css">
+</head>
+<body>
+  <main class="page">
+    <nav class="topbar"><a href="../index.html">← Estruturas de Dados</a><span>Resolução 1 de 5</span></nav>
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">beecrowd 1068 · Pilha</p>
+        <h1>Balanço de Parênteses I</h1>
+        <p>Precisamos verificar se toda abertura possui um fechamento posterior e se nenhum fechamento aparece antes da abertura correspondente.</p>
+      </div>
+      <div class="problem-links">
+        <a href="https://judge.beecrowd.com/pt/problems/view/1068" target="_blank" rel="noopener">Enunciado</a>
+        <a href="../resolucoes/1068.py">Código .py</a>
+      </div>
+    </header>
+
+    <section class="band">
+      <div class="problem-brief">
+        <div class="brief-item"><h3>Entrada</h3><p>Expressões lidas até o fim do arquivo.</p></div>
+        <div class="brief-item"><h3>Saída</h3><p><code>correct</code> ou <code>incorrect</code> para cada expressão.</p></div>
+        <div class="brief-item"><h3>Estrutura</h3><p>Uma pilha contendo apenas aberturas ainda não fechadas.</p></div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>O raciocínio</h2>
+        <p>A pilha guarda pendências. Quando aparece <code>(</code>, surge uma nova abertura pendente. Quando aparece <code>)</code>, precisamos retirar a abertura mais recente.</p>
+      </div>
+      <div class="fact-check"><strong>Duas condições são necessárias:</strong> a pilha nunca pode estar vazia ao encontrar <code>)</code> e precisa terminar vazia depois do último caractere.</div>
+    </section>
+
+    <section class="band">
+      <h2>Mapa da solução</h2>
+      <div class="solution-map">
+        <div class="solution-step"><div><h3>Crie uma pilha vazia</h3><p>Ela representa quantos parênteses de abertura ainda aguardam fechamento.</p></div></div>
+        <div class="solution-step"><div><h3>Faça push ao encontrar abertura</h3><p>O <code>append('(')</code> registra uma nova pendência.</p></div></div>
+        <div class="solution-step"><div><h3>Faça pop ao encontrar fechamento</h3><p>Se a pilha estiver vazia, a ordem já é inválida; caso contrário, o par é consumido.</p></div></div>
+        <div class="solution-step"><div><h3>Confira o estado final</h3><p>Pilha vazia e nenhuma falha significam <code>correct</code>.</p></div></div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Execução interativa</h2>
+      <div class="exercise-lab" data-exercise-lab="1068">
+        <div class="lab-head"><h2>Percurso da expressão</h2><output class="step-badge" data-player-badge></output></div>
+        <div class="exercise-config">
+          <input type="text" value="a+(b*c)-((d/e))" aria-label="Expressão para testar" data-expression-input>
+          <button type="button" data-config-action="expression">Carregar expressão</button>
+          <button type="button" class="active" data-expression-example="a+(b*c)-((d/e))">Exemplo válido</button>
+          <button type="button" data-expression-example="(a+b))+(c">Exemplo inválido</button>
+        </div>
+        <div class="player-controls">
+          <button type="button" data-player="previous">Anterior</button>
+          <button type="button" class="next-button" data-player="next">Próximo</button>
+          <button type="button" class="play-button" data-player="play">Executar</button>
+          <button type="button" data-player="reset">Reiniciar</button>
+          <label class="speed-control">Velocidade <input type="range" min="150" max="1300" value="750" data-player-speed></label>
+        </div>
+        <div class="step-copy"><span class="step-badge">decisão</span><p data-player-explanation></p></div>
+        <div class="exercise-stage">
+          <section class="stage-section">
+            <div class="stage-title"><h3>Expressão</h3><span>caractere atual em vermelho</span></div>
+            <div class="token-row" data-expression-tape></div>
+          </section>
+          <section class="stage-section state-grid">
+            <div class="state-pane">
+              <h3>Pilha de aberturas</h3>
+              <div class="mini-stack" data-parenthesis-stack></div>
+            </div>
+            <div class="state-pane">
+              <h3>Estado da decisão</h3>
+              <dl class="decision-list">
+                <dt>Caractere</dt><dd data-expression-character></dd>
+                <dt>Operação</dt><dd data-expression-operation></dd>
+                <dt>Expressão</dt><dd data-expression-valid></dd>
+              </dl>
+              <div class="result-banner" data-expression-result hidden></div>
+            </div>
+          </section>
+        </div>
+        <div class="movement-summary">
+          <div><strong>Quem entrou</strong><span data-movement-entered></span></div>
+          <div><strong>Quem saiu</strong><span data-movement-removed></span></div>
+          <div><strong>Quem permaneceu</strong><span data-movement-remaining></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>Ligação com o código</h2>
+        <p><code>valida</code> memoriza um fechamento antecipado. A pilha memoriza aberturas que ainda sobraram. A resposta só pode ser correta quando as duas verificações aprovam a expressão.</p>
+        <p class="note">Os demais caracteres não entram na pilha. Eles fazem parte da expressão, mas não interferem no balanceamento.</p>
+      </div>
+      <details class="code-details" open>
+        <summary>Solução Python analisada</summary>
+<pre><code>import sys
+
+for palavra in sys.stdin.read().split():
+    pilha = []
+    valida = True
+
+    for caractere in palavra:
+        if caractere == '(':
+            pilha.append(caractere)
+
+        elif caractere == ')':
+            if len(pilha) == 0:
+                valida = False
+            else:
+                pilha.pop()
+
+    if len(pilha) != 0 or valida == False:
+        print("incorrect")
+    else:
+        print("correct")</code></pre>
+      </details>
+    </section>
+
+    <section class="band">
+      <h2>Complexidade</h2>
+      <p>Cada caractere é examinado uma vez: tempo <strong>O(n)</strong>. No pior caso, todos os caracteres relevantes são aberturas e permanecem empilhados: espaço <strong>O(n)</strong>.</p>
+    </section>
+
+    <nav class="lesson-nav"><a href="../index.html">← Voltar ao índice</a><a href="resolucao_02_beecrowd_1110.html">Próxima: 1110 →</a></nav>
+  </main>
+  <script src="../assets/exercicios.js"></script>
+</body>
+</html>

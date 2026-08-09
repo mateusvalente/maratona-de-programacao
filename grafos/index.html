@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grafos - Aulas, Exercícios e Resoluções</title>
+<style>
+:root{
+  --bg:#07101c;
+  --panel:#0d1c2e;
+  --panel2:#10253b;
+  --text:#edf5ff;
+  --muted:#9eb0c7;
+  --line:rgba(255,255,255,.11);
+  --green:#65e6bd;
+  --blue:#75c7ff;
+  --yellow:#ffd86b;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  line-height:1.55;
+}
+main{width:min(1120px,100%);margin:0 auto;padding:34px 20px 60px}
+header{
+  padding:34px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:linear-gradient(135deg,var(--panel2),var(--panel));
+}
+h1{margin:0 0 10px;font-size:clamp(2.2rem,5vw,4.6rem);line-height:.98}
+p{color:var(--muted)}
+section{
+  margin-top:22px;
+  padding:22px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(255,255,255,.026);
+}
+h2{margin:0 0 14px;font-size:1.35rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{
+  display:block;
+  padding:14px 15px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#081624;
+  text-decoration:none;
+  color:var(--text);
+}
+.card:hover{border-color:rgba(117,199,255,.45);transform:translateY(-1px)}
+.card strong{display:block;margin-bottom:4px}
+.card span{display:block;color:var(--muted);font-size:.88rem}
+.tag{
+  display:inline-block;
+  margin-bottom:8px;
+  padding:4px 8px;
+  border-radius:999px;
+  background:var(--green);
+  color:#06101b;
+  font-size:.7rem;
+  font-weight:900;
+}
+.tag.blue{background:var(--blue)}
+.tag.yellow{background:var(--yellow)}
+.list{display:grid;gap:9px}
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#081624;
+}
+.row a{color:var(--blue);font-weight:800;text-decoration:none}
+.row small{color:var(--muted)}
+footer{padding-top:22px;color:var(--muted);font-size:.82rem;text-align:center}
+@media(max-width:760px){
+  .grid{grid-template-columns:1fr}
+  header{padding:24px}
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="tag">Curso de Grafos</span>
+    <h1>Aulas, exercícios e resoluções</h1>
+    <p>
+      Índice organizado para estudar grafos em programação competitiva:
+      teoria, DFS, BFS, grafos ponderados, Dijkstra, PDFs dos exercícios e códigos de resolução.
+    </p>
+  </header>
+
+  <section>
+    <h2>Aulas</h2>
+    <div class="grid">
+      <a class="card" href="aulas/aula_01_teoria_grafos_matriz_lista.html"><strong>Aula 1 - Teoria, matriz e lista</strong><span>Conceitos básicos, matriz de adjacência, lista de adjacência e Python.</span></a>
+      <a class="card" href="aulas/aula_02_bfs_dfs_animados.html"><strong>Aula 2 - DFS e BFS</strong><span>Travessias em grafos com animação e comparação.</span></a>
+      <a class="card" href="aulas/aula_03_dfs_exemplo_beecrowd_1076.html"><strong>Aula 3 - beecrowd 1076</strong><span>DFS aplicada ao problema Design Labirints.</span></a>
+      <a class="card" href="aulas/aula_04_bfs_movimento_cavalo.html"><strong>Aula 4 - BFS e cavalo</strong><span>Menor caminho em tabuleiro usando BFS.</span></a>
+      <a class="card" href="aulas/aula_05_grafos_ponderados.html"><strong>Aula 5 - Grafos ponderados</strong><span>Pesos em arestas e preparação para Dijkstra.</span></a>
+      <a class="card" href="aulas/aula_06_dijkstra.html"><strong>Aula 6 - Dijkstra</strong><span>Menor caminho com pesos não negativos e fila de prioridade.</span></a>
+      <a class="card" href="aulas/aula_07_beecrowd_1148_casos_completos%20(1).html"><strong>Aula 7 - beecrowd 1148</strong><span>Countries at War com casos completos.</span></a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Exercícios em PDF</h2>
+    <div class="list">
+      <div class="row"><div><strong>1076 - Design Labirints</strong><small>DFS</small></div><a href="exercicios/1076.pdf">Abrir PDF</a></div>
+      <div class="row"><div><strong>1100 - Knight Moves</strong><small>BFS</small></div><a href="exercicios/1100.pdf">Abrir PDF</a></div>
+      <div class="row"><div><strong>1148 - Countries at War</strong><small>Menor caminho</small></div><a href="exercicios/1148.pdf">Abrir PDF</a></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Resoluções em Python</h2>
+    <div class="list">
+      <div class="row"><div><strong>1076.py</strong><small>DFS contando arestas da busca</small></div><a href="resolucoes/1076.py">Abrir código</a></div>
+      <div class="row"><div><strong>1100.py</strong><small>BFS no tabuleiro de xadrez</small></div><a href="resolucoes/1100.py">Abrir código</a></div>
+      <div class="row"><div><strong>1148.py</strong><small>Floyd-Warshall para múltiplas consultas</small></div><a href="resolucoes/1148.py">Abrir código</a></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Links de estudo</h2>
+    <div class="grid">
+      <a class="card" href="https://www.geeksforgeeks.org/dsa/graph-theory-tutorial/" target="_blank"><span class="tag blue">GeeksforGeeks</span><strong>Graph Theory Tutorial</strong><span>Base teórica de grafos, representações e algoritmos.</span></a>
+      <a class="card" href="https://www.geeksforgeeks.org/dsa/graph-data-structure-and-algorithms/" target="_blank"><span class="tag blue">GeeksforGeeks</span><strong>Graph Algorithms</strong><span>DFS, BFS, ciclos, caminhos mínimos e MST.</span></a>
+      <a class="card" href="https://www.geeksforgeeks.org/dsa/depth-first-search-or-dfs-for-a-graph/" target="_blank"><span class="tag blue">GeeksforGeeks</span><strong>DFS for a Graph</strong><span>Busca em profundidade com exemplos.</span></a>
+      <a class="card" href="https://www.geeksforgeeks.org/dsa/when-to-use-dfs-or-bfs-to-solve-a-graph-problem/" target="_blank"><span class="tag blue">GeeksforGeeks</span><strong>When to use DFS or BFS?</strong><span>Como escolher entre DFS e BFS.</span></a>
+      <a class="card" href="https://www.geeksforgeeks.org/dsa/shortest-path-algorithms-a-complete-guide/" target="_blank"><span class="tag blue">GeeksforGeeks</span><strong>Shortest Path Algorithms</strong><span>BFS, Dijkstra, Bellman-Ford e Floyd-Warshall.</span></a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Mais exercícios no beecrowd</h2>
+    <div class="list">
+      <div class="row"><div><strong>1081 - DFSr - Hierarquia de Profundidade</strong><small>DFS</small></div><a href="https://judge.beecrowd.com/en/problems/view/1081" target="_blank">Abrir</a></div>
+      <div class="row"><div><strong>1082 - Componentes Conectados</strong><small>DFS/BFS</small></div><a href="https://judge.beecrowd.com/en/problems/view/1082" target="_blank">Abrir</a></div>
+      <div class="row"><div><strong>1128 - Come and Go</strong><small>Conectividade forte</small></div><a href="https://judge.beecrowd.com/en/problems/view/1128" target="_blank">Abrir</a></div>
+      <div class="row"><div><strong>1152 - Dark Roads</strong><small>Árvore geradora mínima</small></div><a href="https://judge.beecrowd.com/en/problems/view/1152" target="_blank">Abrir</a></div>
+      <div class="row"><div><strong>1194 - Pre, in and Post</strong><small>Árvores</small></div><a href="https://judge.beecrowd.com/en/problems/view/1194" target="_blank">Abrir</a></div>
+      <div class="row"><div><strong>1550 - Inversion</strong><small>BFS em estados</small></div><a href="https://judge.beecrowd.com/en/problems/view/1550" target="_blank">Abrir</a></div>
+      <div class="row"><div><strong>1610 - Dudu Faz Serviço</strong><small>Ciclo em grafo direcionado</small></div><a href="https://judge.beecrowd.com/en/problems/view/1610" target="_blank">Abrir</a></div>
+      <div class="row"><div><strong>1907 - Coloração de Cenários de Jogos</strong><small>Flood fill / componentes</small></div><a href="https://judge.beecrowd.com/en/problems/view/1907" target="_blank">Abrir</a></div>
+    </div>
+  </section>
+
+  <footer>
+    Pasta organizada em aulas, exercícios e resoluções.
+  </footer>
+</main>
+</body>
+</html>

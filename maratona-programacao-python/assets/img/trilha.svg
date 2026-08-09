@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Trilha da maratona de programação</title>
+  <desc id="desc">Um caminho visual entre enunciado, algoritmo, código e resposta aceita.</desc>
+  <rect width="800" height="600" fill="#10181c"/>
+  <g stroke="#263740" stroke-width="1" opacity=".65">
+    <path d="M0 100H800M0 200H800M0 300H800M0 400H800M0 500H800"/>
+    <path d="M100 0V600M200 0V600M300 0V600M400 0V600M500 0V600M600 0V600M700 0V600"/>
+  </g>
+  <path d="M125 460 C210 460 206 340 300 340 S390 215 490 215 S580 110 675 110" fill="none" stroke="#61e3a5" stroke-width="12" stroke-linecap="round"/>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <g transform="translate(125 460)"><rect x="-72" y="-40" width="144" height="80" rx="7" fill="#182329" stroke="#6bbcff" stroke-width="3"/><text y="-5" fill="#f4f7f8" font-size="20" font-weight="700">ENUNCIADO</text><text y="21" fill="#aab7be" font-size="14">entender</text></g>
+    <g transform="translate(300 340)"><rect x="-66" y="-40" width="132" height="80" rx="7" fill="#182329" stroke="#ffd166" stroke-width="3"/><text y="-5" fill="#f4f7f8" font-size="20" font-weight="700">IDEIA</text><text y="21" fill="#aab7be" font-size="14">planejar</text></g>
+    <g transform="translate(490 215)"><rect x="-66" y="-40" width="132" height="80" rx="7" fill="#182329" stroke="#b8a1ff" stroke-width="3"/><text y="-5" fill="#f4f7f8" font-size="20" font-weight="700">PYTHON</text><text y="21" fill="#aab7be" font-size="14">programar</text></g>
+    <g transform="translate(675 110)"><circle r="62" fill="#153426" stroke="#61e3a5" stroke-width="5"/><text y="-4" fill="#61e3a5" font-size="23" font-weight="800">AC</text><text y="23" fill="#f4f7f8" font-size="14">Accepted</text></g>
+  </g>
+  <text x="52" y="67" fill="#f4f7f8" font-family="Arial, sans-serif" font-size="29" font-weight="800">Do problema ao Accepted</text>
+  <text x="52" y="94" fill="#aab7be" font-family="Arial, sans-serif" font-size="16">Cada etapa pode ser treinada.</text>
+</svg>

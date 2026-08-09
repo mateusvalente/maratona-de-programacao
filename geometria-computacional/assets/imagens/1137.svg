@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="img" aria-labelledby="title desc">
+  <title id="title">Pontos cocirculares e circuncentro</title>
+  <desc id="desc">Cinco pontos sobre uma circunferência, três deles formando um triângulo e duas mediatrizes encontrando-se no centro.</desc>
+  <rect width="900" height="560" fill="#f8fafc"/>
+  <circle cx="450" cy="286" r="210" fill="none" stroke="#1769aa" stroke-width="5"/>
+  <path d="M450 76 L630 394 L245 365 Z" fill="#68b9ff" fill-opacity=".14" stroke="#202833" stroke-width="4"/>
+  <path d="M450 286 L450 76 M450 286 L630 394 M450 286 L245 365" stroke="#dd3b43" stroke-width="3" stroke-dasharray="10 8"/>
+  <path d="M330 126 L565 330 M538 175 L335 430" fill="none" stroke="#159768" stroke-width="4" stroke-dasharray="12 8"/>
+  <g fill="#202833" stroke="#ffffff" stroke-width="4">
+    <circle cx="450" cy="76" r="11"/>
+    <circle cx="630" cy="394" r="11"/>
+    <circle cx="245" cy="365" r="11"/>
+    <circle cx="264" cy="172" r="11"/>
+    <circle cx="659" cy="205" r="11"/>
+  </g>
+  <circle cx="450" cy="286" r="12" fill="#dd3b43" stroke="#ffffff" stroke-width="4"/>
+  <g fill="#202833" font-family="Arial, sans-serif" font-size="25" font-weight="700">
+    <text x="468" y="280">centro O</text>
+    <text x="585" y="68">mesmo raio</text>
+    <text x="80" y="506">As mediatrizes de dois lados encontram-se no circuncentro.</text>
+  </g>
+</svg>

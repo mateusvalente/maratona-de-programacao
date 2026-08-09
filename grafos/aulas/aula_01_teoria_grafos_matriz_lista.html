@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grafos — Teoria, Matriz e Lista de Adjacência</title>
+<style>
+:root{
+  --bg:#07101c;
+  --panel:#0d1c2e;
+  --panel2:#10253b;
+  --code:#06101b;
+  --text:#edf5ff;
+  --muted:#9eb0c7;
+  --line:rgba(255,255,255,.10);
+  --green:#65e6bd;
+  --blue:#75c7ff;
+  --purple:#b7a0ff;
+  --yellow:#ffd86b;
+  --danger:#ff8d8d;
+  --shadow:0 20px 60px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 20% 0%,rgba(101,230,189,.08),transparent 27%),
+    radial-gradient(circle at 95% 10%,rgba(117,199,255,.07),transparent 24%),
+    var(--bg);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  line-height:1.55;
+}
+a{color:var(--blue)}
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr)}
+aside{
+  height:100vh;position:sticky;top:0;
+  padding:26px 18px;
+  background:rgba(7,16,28,.90);
+  backdrop-filter:blur(14px);
+  border-right:1px solid var(--line);
+  overflow:auto;
+}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:25px}
+.brand-mark{
+  width:43px;height:43px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--green),var(--blue));
+  color:#05101a;font-weight:1000;font-size:1.15rem;
+}
+.brand strong{font-size:.95rem}
+.brand small{display:block;color:var(--muted);font-size:.7rem}
+nav{display:flex;flex-direction:column;gap:5px}
+nav a{
+  padding:9px 11px;border-radius:10px;text-decoration:none;
+  color:var(--muted);font-size:.85rem;transition:.2s;
+}
+nav a:hover{background:rgba(255,255,255,.05);color:#fff;transform:translateX(3px)}
+.side-note{
+  margin-top:24px;padding:13px;border-radius:13px;
+  border:1px solid rgba(101,230,189,.18);
+  background:rgba(101,230,189,.045);color:var(--muted);font-size:.75rem;
+}
+main{width:min(1120px,100%);margin:0 auto;padding:32px 38px 72px}
+.hero{
+  min-height:390px;padding:46px;border-radius:30px;border:1px solid var(--line);
+  background:linear-gradient(135deg,rgba(16,37,59,.97),rgba(7,17,30,.98));
+  box-shadow:var(--shadow);display:flex;align-items:center;position:relative;overflow:hidden;
+}
+.hero:before,.hero:after{
+  content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.08)
+}
+.hero:before{width:390px;height:390px;right:-105px;top:-120px}
+.hero:after{width:260px;height:260px;right:22px;top:10px}
+.kicker{font-size:.74rem;font-weight:900;color:var(--green);letter-spacing:.15em;text-transform:uppercase}
+h1{
+  max-width:760px;margin:10px 0 17px;
+  font-size:clamp(2.5rem,6vw,5rem);line-height:.95;letter-spacing:-.055em;
+}
+.hero p{max-width:690px;color:var(--muted);font-size:1rem}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.chip{
+  padding:7px 11px;border-radius:999px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);color:#c9d7e8;font-size:.78rem
+}
+section{
+  margin-top:26px;padding:27px;border-radius:22px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(13,28,46,.92),rgba(9,21,35,.92));
+  box-shadow:0 12px 32px rgba(0,0,0,.13);
+  scroll-margin-top:20px;
+}
+.section-head{display:flex;gap:13px;align-items:center;margin-bottom:14px}
+.num{
+  width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;
+  color:var(--green);background:rgba(101,230,189,.08);border:1px solid rgba(101,230,189,.20);font-weight:900
+}
+h2{margin:0;font-size:1.55rem;letter-spacing:-.025em}
+.lead{color:var(--muted);margin:0 0 16px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{
+  padding:17px;border-radius:15px;border:1px solid var(--line);
+  background:rgba(255,255,255,.028)
+}
+.card h3{margin:0 0 7px;font-size:1rem}
+.card p{margin:0;color:var(--muted);font-size:.89rem}
+.tag{
+  display:inline-block;margin-bottom:9px;padding:4px 8px;border-radius:999px;
+  color:#06101b;background:var(--green);font-size:.69rem;font-weight:900
+}
+.callout{
+  margin-top:15px;padding:13px 15px;border-radius:0 12px 12px 0;border-left:3px solid var(--green);
+  color:#d6e9e4;background:rgba(101,230,189,.05);font-size:.9rem
+}
+.graph-stage{
+  margin-top:15px;border-radius:20px;padding:20px;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
+    #07131f;
+  background-size:28px 28px;
+  border:1px dashed rgba(117,199,255,.25);
+}
+.graph-stage svg{display:block;width:min(620px,100%);height:auto;margin:0 auto}
+.edge{stroke:#566f88;stroke-width:4;stroke-linecap:round;opacity:.95}
+.edge.secondary{stroke:#455d74;stroke-width:3}
+.node{fill:#10273f;stroke:var(--blue);stroke-width:3}
+.node text{fill:white}
+.node-label{fill:#edf5ff;font:bold 18px Inter,Arial}
+.level-label{fill:#7f94aa;font:13px Inter,Arial}
+.arrow{fill:#566f88}
+.legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:10px;color:var(--muted);font-size:.77rem}
+.legend span{display:flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--blue)}
+.line-icon{width:20px;height:3px;border-radius:2px;background:#566f88}
+.formula{
+  display:inline-block;padding:9px 13px;border-radius:11px;
+  background:#07131f;border:1px solid var(--line);font-family:"Cascadia Code",Consolas,monospace;
+  color:#dcecff;font-weight:700
+}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px}
+.stat{padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.026)}
+.stat strong{display:block;color:var(--blue);font-size:1.35rem}
+.stat span{color:var(--muted);font-size:.76rem}
+.matrix-scroll{overflow:auto;margin-top:16px}
+.matrix{
+  border-collapse:separate;border-spacing:5px;margin:auto;
+  font-size:.84rem;font-family:"Cascadia Code",Consolas,monospace
+}
+.matrix th{color:#9eb0c7;font-weight:800;min-width:38px;height:38px;text-align:center}
+.matrix td{
+  width:38px;height:38px;text-align:center;border-radius:9px;
+  border:1px solid rgba(255,255,255,.07);background:#091624;color:#657b91;
+  transition:.15s;
+}
+.matrix td.one{
+  color:#06101b;background:var(--green);font-weight:1000;border-color:transparent
+}
+.matrix td.diag{background:#111d2b;color:#44576b}
+.matrix tr:hover td{outline:1px solid rgba(117,199,255,.18)}
+.list-wrap{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:15px
+}
+.adj-row{
+  display:flex;align-items:center;gap:11px;min-height:54px;padding:9px 12px;
+  background:#081624;border:1px solid var(--line);border-radius:13px
+}
+.vertex{
+  width:34px;height:34px;display:grid;place-items:center;flex:0 0 auto;
+  border-radius:50%;background:#102b45;border:2px solid var(--blue);font-weight:900
+}
+.arrow-list{color:#6d849b;font-weight:900}
+.neighbors{display:flex;gap:6px;flex-wrap:wrap}
+.neighbor{
+  min-width:30px;height:30px;padding:0 8px;display:grid;place-items:center;border-radius:9px;
+  background:rgba(101,230,189,.08);border:1px solid rgba(101,230,189,.18);color:#cceee4;font-size:.8rem;font-weight:800
+}
+.array-demo{
+  margin-top:15px;padding:15px;border-radius:14px;border:1px solid rgba(117,199,255,.22);
+  background:rgba(117,199,255,.045)
+}
+.array-demo h3{margin:0 0 8px;font-size:1rem}
+.array-demo p{margin:0 0 12px;color:#c8d8e8;font-size:.9rem}
+.index-map,.array-lines{display:grid;gap:8px}
+.index-map{
+  grid-template-columns:repeat(8,minmax(56px,1fr));margin-bottom:13px
+}
+.map-item{
+  min-height:58px;border-radius:11px;border:1px solid var(--line);
+  background:#081624;display:grid;place-items:center;padding:8px
+}
+.map-item strong{color:var(--yellow);font-size:.85rem}
+.map-item span{color:var(--muted);font-size:.72rem}
+.array-line{
+  display:grid;grid-template-columns:80px 58px minmax(0,1fr);align-items:center;gap:9px;
+  padding:9px 10px;border-radius:11px;background:#07131f;border:1px solid var(--line)
+}
+.array-line .idx{
+  color:var(--yellow);font-family:"Cascadia Code",Consolas,monospace;font-weight:900
+}
+.array-line .means{color:#6d849b;text-align:center;font-weight:900}
+.array-line .values{display:flex;gap:6px;flex-wrap:wrap}
+.value-group{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.value-group + .value-group{margin-top:6px}
+.value-label{
+  min-width:62px;color:var(--muted);font-size:.72rem;font-weight:800;text-transform:uppercase
+}
+.array-line.is-focus{border-color:rgba(101,230,189,.4);background:rgba(101,230,189,.055)}
+.array-line.is-focus .idx{color:var(--green)}
+.read-it{
+  margin-top:12px;padding:11px 12px;border-radius:11px;background:rgba(101,230,189,.06);
+  border:1px solid rgba(101,230,189,.18);color:#d6e9e4;font-size:.88rem
+}
+pre{
+  margin:13px 0 0;padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
+  overflow:auto;background:var(--code);color:#dcecff;
+  font:13px/1.6 "Cascadia Code","Fira Code",Consolas,monospace
+}
+.kw{color:#b7a0ff}.fn{color:#75c7ff}.cm{color:#70849a}.str{color:#65e6bd}.nu{color:#ffd86b}
+.compare{width:100%;border-collapse:collapse;margin-top:13px;font-size:.88rem}
+.compare th,.compare td{padding:11px;border-bottom:1px solid var(--line);text-align:left}
+.compare th{color:#d6e4f4}.compare td{color:var(--muted)}
+.good{color:var(--green)!important;font-weight:800}
+.warn{color:var(--yellow)!important;font-weight:800}
+.vertical-demo{
+  margin-top:15px;display:grid;grid-template-columns:1fr;gap:13px
+}
+.mini-graph{
+  border-radius:16px;border:1px solid var(--line);background:#07131f;padding:15px
+}
+.mini-graph svg{width:100%;max-width:280px;height:auto;display:block;margin:auto}
+.path{stroke:#566f88;stroke-width:4}
+.arrow-head{fill:#566f88}
+.footer-source{
+  margin-top:15px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;
+  background:rgba(255,255,255,.02);color:var(--muted);font-size:.77rem
+}
+footer{text-align:center;color:#718399;font-size:.76rem;padding:28px 10px 0}
+@media(max-width:880px){
+  .shell{display:block}
+  aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  nav{display:grid;grid-template-columns:repeat(2,1fr)}
+  main{padding:22px 16px 55px}
+  .hero{min-height:320px;padding:31px 23px}
+  .grid2,.grid3,.list-wrap{grid-template-columns:1fr}
+  .index-map{grid-template-columns:repeat(4,1fr)}
+  .array-line{grid-template-columns:1fr}
+  .array-line .means{text-align:left}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media print{
+  aside{display:none}.shell{display:block}main{width:100%;padding:0}
+  body{background:white}.hero,section{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+
+<body>
+<div class="shell">
+
+<aside>
+  <div class="brand">
+    <div class="brand-mark">G</div>
+    <div>
+      <strong>Teoria dos Grafos</strong>
+      <small>Aula 1 · Programação Competitiva</small>
+    </div>
+  </div>
+
+  <nav>
+    <a href="#conceito">01 · O que é um grafo?</a>
+    <a href="#tipos">02 · Direcionamento</a>
+    <a href="#termos">03 · Vocabulário</a>
+    <a href="#grafo">04 · Grafo da aula</a>
+    <a href="#matriz">05 · Matriz de adjacência</a>
+    <a href="#lista">06 · Lista de adjacência</a>
+    <a href="#comparacao">07 · Matriz × Lista</a>
+    <a href="#python">08 · Em Python</a>
+  </nav>
+
+  <div class="side-note">
+    Ideia central: o desenho, a matriz e a lista representam <strong>o mesmo grafo</strong>.
+  </div>
+</aside>
+
+<main>
+
+<header class="hero">
+  <div>
+    <div class="kicker">Programação competitiva · Grafos</div>
+    <h1>Um grafo, três formas de enxergar.</h1>
+    <p>
+      Antes de DFS e BFS, precisamos saber identificar vértices, arestas e representar
+      essas conexões de uma forma que o computador consiga usar.
+    </p>
+    <div class="chips">
+      <span class="chip">Vértices</span>
+      <span class="chip">Arestas</span>
+      <span class="chip">Matriz de adjacência</span>
+      <span class="chip">Lista de adjacência</span>
+      <span class="chip">Python</span>
+    </div>
+  </div>
+</header>
+
+
+<section id="conceito">
+  <div class="section-head">
+    <div class="num">01</div>
+    <h2>O que é um grafo?</h2>
+  </div>
+
+  <p class="lead">
+    Um grafo é uma estrutura usada para representar <strong>elementos</strong> e as
+    <strong>relações</strong> existentes entre eles.
+  </p>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">Vértice / Nó</span>
+      <h3>O elemento</h3>
+      <p>Pode representar uma cidade, pessoa, página, computador, posição ou qualquer objeto.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag">Aresta</span>
+      <h3>A relação</h3>
+      <p>Pode representar uma estrada, amizade, conexão, link, passagem ou outra ligação.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    Formalmente, podemos escrever <span class="formula">G = (V, E)</span>,
+    onde <strong>V</strong> é o conjunto de vértices e <strong>E</strong> é o conjunto de arestas.
+  </div>
+</section>
+
+
+<section id="tipos">
+  <div class="section-head">
+    <div class="num">02</div>
+    <h2>Direcionado ou não direcionado?</h2>
+  </div>
+
+  <p class="lead">A direção da aresta muda o significado da relação.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">Não direcionado</span>
+      <h3>A ligação vale nos dois sentidos</h3>
+      <p>Se A está ligado a B, podemos considerar B ligado a A.</p>
+
+      <div class="vertical-demo">
+        <div class="mini-graph">
+          <svg viewBox="0 0 240 310" aria-label="Grafo não direcionado vertical">
+            <line class="path" x1="120" y1="75" x2="120" y2="225"/>
+            <circle class="node" cx="120" cy="65" r="30"/>
+            <circle class="node" cx="120" cy="235" r="30"/>
+            <text class="node-label" x="120" y="72" text-anchor="middle">A</text>
+            <text class="node-label" x="120" y="242" text-anchor="middle">B</text>
+            <text class="level-label" x="120" y="155" text-anchor="middle">A ↔ B</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag">Direcionado</span>
+      <h3>A seta define o sentido</h3>
+      <p>A → B não implica que exista uma ligação B → A.</p>
+
+      <div class="vertical-demo">
+        <div class="mini-graph">
+          <svg viewBox="0 0 240 310" aria-label="Grafo direcionado vertical">
+            <defs>
+              <marker id="arrowMini" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L9,3 z" class="arrow-head"/>
+              </marker>
+            </defs>
+            <line class="path" x1="120" y1="95" x2="120" y2="195" marker-end="url(#arrowMini)"/>
+            <circle class="node" cx="120" cy="65" r="30"/>
+            <circle class="node" cx="120" cy="235" r="30"/>
+            <text class="node-label" x="120" y="72" text-anchor="middle">A</text>
+            <text class="node-label" x="120" y="242" text-anchor="middle">B</text>
+            <text class="level-label" x="120" y="155" text-anchor="middle">A → B</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="termos">
+  <div class="section-head">
+    <div class="num">03</div>
+    <h2>Vocabulário essencial</h2>
+  </div>
+
+  <div class="grid3">
+    <div class="card">
+      <h3>Adjacência</h3>
+      <p>Dois vértices são adjacentes quando existe uma aresta ligando-os.</p>
+    </div>
+    <div class="card">
+      <h3>Grau</h3>
+      <p>Quantidade de arestas que chegam a um vértice em um grafo não direcionado.</p>
+    </div>
+    <div class="card">
+      <h3>Ordem</h3>
+      <p>Quantidade total de vértices do grafo.</p>
+    </div>
+    <div class="card">
+      <h3>Caminho</h3>
+      <p>Sequência de vértices conectados por arestas.</p>
+    </div>
+    <div class="card">
+      <h3>Ciclo</h3>
+      <p>Um caminho que retorna ao vértice de onde começou.</p>
+    </div>
+    <div class="card">
+      <h3>Conexo</h3>
+      <p>É possível chegar de um vértice a qualquer outro por algum caminho.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="grafo">
+  <div class="section-head">
+    <div class="num">04</div>
+    <h2>O grafo que usaremos na aula</h2>
+  </div>
+
+  <p class="lead">
+    A partir daqui, <strong>matriz e lista representarão exatamente este mesmo grafo</strong>.
+    Ele possui 8 vértices e 13 arestas.
+  </p>
+
+  <div class="graph-stage">
+    <svg viewBox="0 0 620 850" role="img" aria-label="Grafo vertical com 8 vértices e 13 arestas">
+      <!-- níveis -->
+      <text class="level-label" x="30" y="70">nível 1</text>
+      <text class="level-label" x="30" y="250">nível 2</text>
+      <text class="level-label" x="30" y="470">nível 3</text>
+      <text class="level-label" x="30" y="725">nível 4</text>
+
+      <!-- arestas principais -->
+      <line class="edge" x1="310" y1="110" x2="210" y2="260"/>
+      <line class="edge" x1="310" y1="110" x2="410" y2="260"/>
+
+      <line class="edge" x1="210" y1="260" x2="130" y2="500"/>
+      <line class="edge" x1="210" y1="260" x2="310" y2="500"/>
+      <line class="edge" x1="410" y1="260" x2="310" y2="500"/>
+      <line class="edge" x1="410" y1="260" x2="490" y2="500"/>
+
+      <line class="edge" x1="130" y1="500" x2="230" y2="745"/>
+      <line class="edge" x1="310" y1="500" x2="230" y2="745"/>
+      <line class="edge" x1="310" y1="500" x2="390" y2="745"/>
+      <line class="edge" x1="490" y1="500" x2="390" y2="745"/>
+      <line class="edge" x1="230" y1="745" x2="390" y2="745"/>
+
+      <!-- arestas extras para completar 13 -->
+      <path class="edge secondary" d="M235 255 Q310 330 385 265" fill="none"/>
+      <path class="edge secondary" d="M155 500 Q220 565 285 505" fill="none"/>
+
+      <!-- nós -->
+      <circle class="node" cx="310" cy="90" r="36"/>
+      <text class="node-label" x="310" y="97" text-anchor="middle">A</text>
+
+      <circle class="node" cx="210" cy="270" r="36"/>
+      <text class="node-label" x="210" y="277" text-anchor="middle">B</text>
+
+      <circle class="node" cx="410" cy="270" r="36"/>
+      <text class="node-label" x="410" y="277" text-anchor="middle">C</text>
+
+      <circle class="node" cx="130" cy="510" r="36"/>
+      <text class="node-label" x="130" y="517" text-anchor="middle">D</text>
+
+      <circle class="node" cx="310" cy="510" r="36"/>
+      <text class="node-label" x="310" y="517" text-anchor="middle">E</text>
+
+      <circle class="node" cx="490" cy="510" r="36"/>
+      <text class="node-label" x="490" y="517" text-anchor="middle">F</text>
+
+      <circle class="node" cx="230" cy="755" r="36"/>
+      <text class="node-label" x="230" y="762" text-anchor="middle">G</text>
+
+      <circle class="node" cx="390" cy="755" r="36"/>
+      <text class="node-label" x="390" y="762" text-anchor="middle">H</text>
+    </svg>
+
+    <div class="legend">
+      <span><i class="dot"></i> vértice</span>
+      <span><i class="line-icon"></i> aresta</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><strong>8</strong><span>vértices</span></div>
+    <div class="stat"><strong>13</strong><span>arestas</span></div>
+    <div class="stat"><strong>5</strong><span>grau do vértice E</span></div>
+    <div class="stat"><strong>Conexo</strong><span>há caminho entre todos</span></div>
+  </div>
+
+  <div class="callout">
+    Exemplo: <strong>A e B são adjacentes</strong>. Já A e H não possuem uma aresta direta,
+    mas existe um caminho entre eles, como A → B → E → H.
+  </div>
+</section>
+
+
+<section id="matriz">
+  <div class="section-head">
+    <div class="num">05</div>
+    <h2>Matriz de adjacência</h2>
+  </div>
+
+  <p class="lead">
+    Criamos uma matriz <strong>V × V</strong>. Cada linha representa a origem e cada coluna representa o destino.
+  </p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Como interpretar?</h3>
+      <p>
+        Se existe uma aresta entre dois vértices, guardamos <strong>1</strong>.
+        Caso contrário, guardamos <strong>0</strong>.
+      </p>
+      <pre>adj[A][B] = 1   <span class="cm"># A está ligado a B</span>
+adj[A][H] = 0   <span class="cm"># não há ligação direta</span></pre>
+    </div>
+
+    <div class="card">
+      <h3>Como o grafo é não direcionado…</h3>
+      <p>A matriz é simétrica: se A–B existe, então as duas posições recebem 1.</p>
+      <pre>adj[A][B] = <span class="nu">1</span>
+adj[B][A] = <span class="nu">1</span></pre>
+    </div>
+  </div>
+
+  <div class="matrix-scroll">
+    <table class="matrix" aria-label="Matriz de adjacência do grafo">
+      <tr>
+        <th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th>
+      </tr>
+      <tr><th>A</th><td class="diag">0</td><td class="one">1</td><td class="one">1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      <tr><th>B</th><td class="one">1</td><td class="diag">0</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td>0</td><td>0</td><td>0</td></tr>
+      <tr><th>C</th><td class="one">1</td><td class="one">1</td><td class="diag">0</td><td>0</td><td class="one">1</td><td class="one">1</td><td>0</td><td>0</td></tr>
+      <tr><th>D</th><td>0</td><td class="one">1</td><td>0</td><td class="diag">0</td><td class="one">1</td><td>0</td><td class="one">1</td><td>0</td></tr>
+      <tr><th>E</th><td>0</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td class="diag">0</td><td>0</td><td class="one">1</td><td class="one">1</td></tr>
+      <tr><th>F</th><td>0</td><td>0</td><td class="one">1</td><td>0</td><td>0</td><td class="diag">0</td><td>0</td><td class="one">1</td></tr>
+      <tr><th>G</th><td>0</td><td>0</td><td>0</td><td class="one">1</td><td class="one">1</td><td>0</td><td class="diag">0</td><td class="one">1</td></tr>
+      <tr><th>H</th><td>0</td><td>0</td><td>0</td><td>0</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td class="diag">0</td></tr>
+    </table>
+  </div>
+
+  <div class="callout">
+    A grande vantagem é perguntar rapidamente: <strong>“Existe uma aresta entre X e Y?”</strong>.
+    Basta consultar uma posição da matriz.
+  </div>
+</section>
+
+
+<section id="lista">
+  <div class="section-head">
+    <div class="num">06</div>
+    <h2>Lista de adjacência</h2>
+  </div>
+
+  <p class="lead">
+    Em vez de guardar todas as combinações possíveis, cada vértice guarda apenas seus <strong>vizinhos</strong>.
+  </p>
+
+  <div class="list-wrap">
+    <div class="adj-row"><div class="vertex">A</div><div class="arrow-list">→</div><div class="neighbors"><span class="neighbor">B</span><span class="neighbor">C</span></div></div>
+    <div class="adj-row"><div class="vertex">B</div><div class="arrow-list">→</div><div class="neighbors"><span class="neighbor">A</span><span class="neighbor">C</span><span class="neighbor">D</span><span class="neighbor">E</span></div></div>
+    <div class="adj-row"><div class="vertex">C</div><div class="arrow-list">→</div><div class="neighbors"><span class="neighbor">A</span><span class="neighbor">B</span><span class="neighbor">E</span><span class="neighbor">F</span></div></div>
+    <div class="adj-row"><div class="vertex">D</div><div class="arrow-list">→</div><div class="neighbors"><span class="neighbor">B</span><span class="neighbor">E</span><span class="neighbor">G</span></div></div>
+    <div class="adj-row"><div class="vertex">E</div><div class="arrow-list">→</div><div class="neighbors"><span class="neighbor">B</span><span class="neighbor">C</span><span class="neighbor">D</span><span class="neighbor">G</span><span class="neighbor">H</span></div></div>
+    <div class="adj-row"><div class="vertex">F</div><div class="arrow-list">→</div><div class="neighbors"><span class="neighbor">C</span><span class="neighbor">H</span></div></div>
+    <div class="adj-row"><div class="vertex">G</div><div class="arrow-list">→</div><div class="neighbors"><span class="neighbor">D</span><span class="neighbor">E</span><span class="neighbor">H</span></div></div>
+    <div class="adj-row"><div class="vertex">H</div><div class="arrow-list">→</div><div class="neighbors"><span class="neighbor">E</span><span class="neighbor">F</span><span class="neighbor">G</span></div></div>
+  </div>
+
+  <div class="callout">
+    Observe o vértice <strong>E</strong>: visualmente ele possui cinco ligações.
+    Na lista isso aparece imediatamente: <strong>[B, C, D, G, H]</strong>.
+  </div>
+
+  <div class="array-demo">
+    <h3>Como isso vira um array?</h3>
+    <p>Primeiro damos um número para cada vértice. Esse número será a posição dele na lista principal.</p>
+
+    <div class="index-map">
+      <div class="map-item"><strong>0</strong><span>A</span></div>
+      <div class="map-item"><strong>1</strong><span>B</span></div>
+      <div class="map-item"><strong>2</strong><span>C</span></div>
+      <div class="map-item"><strong>3</strong><span>D</span></div>
+      <div class="map-item"><strong>4</strong><span>E</span></div>
+      <div class="map-item"><strong>5</strong><span>F</span></div>
+      <div class="map-item"><strong>6</strong><span>G</span></div>
+      <div class="map-item"><strong>7</strong><span>H</span></div>
+    </div>
+
+    <p>Depois, cada posição guarda somente os vizinhos daquele vértice:</p>
+
+    <div class="array-lines">
+      <div class="array-line"><div class="idx">adj[0]</div><div class="means">=</div><div class="values"><div class="value-group"><span class="value-label">índices</span><span class="neighbor">1</span><span class="neighbor">2</span></div><div class="value-group"><span class="value-label">vértices</span><span class="neighbor">B</span><span class="neighbor">C</span></div></div></div>
+      <div class="array-line"><div class="idx">adj[1]</div><div class="means">=</div><div class="values"><div class="value-group"><span class="value-label">índices</span><span class="neighbor">0</span><span class="neighbor">2</span><span class="neighbor">3</span><span class="neighbor">4</span></div><div class="value-group"><span class="value-label">vértices</span><span class="neighbor">A</span><span class="neighbor">C</span><span class="neighbor">D</span><span class="neighbor">E</span></div></div></div>
+      <div class="array-line"><div class="idx">adj[2]</div><div class="means">=</div><div class="values"><div class="value-group"><span class="value-label">índices</span><span class="neighbor">0</span><span class="neighbor">1</span><span class="neighbor">4</span><span class="neighbor">5</span></div><div class="value-group"><span class="value-label">vértices</span><span class="neighbor">A</span><span class="neighbor">B</span><span class="neighbor">E</span><span class="neighbor">F</span></div></div></div>
+      <div class="array-line"><div class="idx">adj[3]</div><div class="means">=</div><div class="values"><div class="value-group"><span class="value-label">índices</span><span class="neighbor">1</span><span class="neighbor">4</span><span class="neighbor">6</span></div><div class="value-group"><span class="value-label">vértices</span><span class="neighbor">B</span><span class="neighbor">E</span><span class="neighbor">G</span></div></div></div>
+      <div class="array-line is-focus"><div class="idx">adj[4]</div><div class="means">=</div><div class="values"><div class="value-group"><span class="value-label">índices</span><span class="neighbor">1</span><span class="neighbor">2</span><span class="neighbor">3</span><span class="neighbor">6</span><span class="neighbor">7</span></div><div class="value-group"><span class="value-label">vértices</span><span class="neighbor">B</span><span class="neighbor">C</span><span class="neighbor">D</span><span class="neighbor">G</span><span class="neighbor">H</span></div></div></div>
+      <div class="array-line"><div class="idx">adj[5]</div><div class="means">=</div><div class="values"><div class="value-group"><span class="value-label">índices</span><span class="neighbor">2</span><span class="neighbor">7</span></div><div class="value-group"><span class="value-label">vértices</span><span class="neighbor">C</span><span class="neighbor">H</span></div></div></div>
+      <div class="array-line"><div class="idx">adj[6]</div><div class="means">=</div><div class="values"><div class="value-group"><span class="value-label">índices</span><span class="neighbor">3</span><span class="neighbor">4</span><span class="neighbor">7</span></div><div class="value-group"><span class="value-label">vértices</span><span class="neighbor">D</span><span class="neighbor">E</span><span class="neighbor">H</span></div></div></div>
+      <div class="array-line"><div class="idx">adj[7]</div><div class="means">=</div><div class="values"><div class="value-group"><span class="value-label">índices</span><span class="neighbor">4</span><span class="neighbor">5</span><span class="neighbor">6</span></div><div class="value-group"><span class="value-label">vértices</span><span class="neighbor">E</span><span class="neighbor">F</span><span class="neighbor">G</span></div></div></div>
+    </div>
+
+    <div class="read-it">
+      Leia a linha destacada assim: <strong>adj[4]</strong> é o vértice E.
+      Dentro dela aparecem <strong>1, 2, 3, 6 e 7</strong>, ou seja:
+      E tem ligação com <strong>B, C, D, G e H</strong>.
+    </div>
+  </div>
+</section>
+
+
+<section id="comparacao">
+  <div class="section-head">
+    <div class="num">07</div>
+    <h2>Matriz × Lista</h2>
+  </div>
+
+  <p class="lead">Nenhuma representação é sempre “a melhor”. A escolha depende do problema.</p>
+
+  <table class="compare">
+    <tr>
+      <th>Característica</th>
+      <th>Matriz de adjacência</th>
+      <th>Lista de adjacência</th>
+    </tr>
+    <tr>
+      <td>Memória</td>
+      <td class="warn">O(V²)</td>
+      <td class="good">O(V + E)</td>
+    </tr>
+    <tr>
+      <td>Testar se X–Y existe</td>
+      <td class="good">O(1)</td>
+      <td>depende do nº de vizinhos</td>
+    </tr>
+    <tr>
+      <td>Percorrer vizinhos</td>
+      <td>precisa examinar uma linha</td>
+      <td class="good">acesso direto aos vizinhos</td>
+    </tr>
+    <tr>
+      <td>Grafos com poucas arestas</td>
+      <td>muitos zeros</td>
+      <td class="good">normalmente mais econômica</td>
+    </tr>
+    <tr>
+      <td>Programação competitiva</td>
+      <td>útil em casos específicos</td>
+      <td class="good">muito frequente</td>
+    </tr>
+  </table>
+
+  <div class="callout">
+    <strong>Regra prática:</strong> quando o grafo possui muitos vértices e relativamente poucas arestas,
+    a lista de adjacência costuma ser a representação mais conveniente.
+  </div>
+</section>
+
+
+<section id="python">
+  <div class="section-head">
+    <div class="num">08</div>
+    <h2>As duas representações em Python</h2>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">Matriz</span>
+      <h3>Criar V × V</h3>
+      <pre>V = <span class="nu">8</span>
+
+adj = [
+    [<span class="nu">0</span>] * V
+    <span class="kw">for</span> _ <span class="kw">in</span> range(V)
+]
+
+<span class="cm"># aresta entre 2 e 3</span>
+adj[<span class="nu">2</span>][<span class="nu">3</span>] = <span class="nu">1</span>
+adj[<span class="nu">3</span>][<span class="nu">2</span>] = <span class="nu">1</span>
+
+<span class="cm"># outro exemplo: aresta entre 2 e 4</span>
+adj[<span class="nu">2</span>][<span class="nu">4</span>] = <span class="nu">1</span>
+adj[<span class="nu">4</span>][<span class="nu">2</span>] = <span class="nu">1</span></pre>
+    </div>
+
+    <div class="card">
+      <span class="tag">Lista</span>
+      <h3>Uma lista por vértice</h3>
+      <pre>V = <span class="nu">8</span>
+
+grafo = [
+    [] <span class="kw">for</span> _ <span class="kw">in</span> range(V)
+]
+
+<span class="cm"># aresta entre 2 e 3</span>
+grafo[<span class="nu">2</span>].append(<span class="nu">3</span>)
+grafo[<span class="nu">3</span>].append(<span class="nu">2</span>)
+
+<span class="cm"># outro exemplo: aresta entre 3 e 4</span>
+grafo[<span class="nu">3</span>].append(<span class="nu">4</span>)
+grafo[<span class="nu">4</span>].append(<span class="nu">3</span>)</pre>
+    </div>
+  </div>
+
+  <div class="callout">
+    Em Python, os vértices normalmente são usados como índices. Com <strong>V = 8</strong>,
+    as posições válidas vão de <strong>0</strong> até <strong>7</strong>. Assim,
+    <strong>grafo[3]</strong> guarda a lista de vizinhos do vértice 3, e
+    <strong>grafo[4]</strong> guarda a lista de vizinhos do vértice 4. Quando fazemos
+    <strong>grafo[3].append(4)</strong>, estamos dizendo que 4 é vizinho de 3; como o
+    grafo desta aula não é direcionado, também adicionamos o caminho de volta com
+    <strong>grafo[4].append(3)</strong>.
+  </div>
+
+  <div class="callout">
+    No próximo conteúdo, a lista de adjacência ficará especialmente importante:
+    algoritmos como <strong>DFS e BFS</strong> precisam descobrir rapidamente os vizinhos de cada vértice.
+  </div>
+
+  <div class="footer-source">
+    Referência de apoio para os conceitos desta aula: Anwar Hermuche,
+    <em>Teoria dos Grafos — Introdução, Definições, Matriz e Lista de Adjacência</em>,
+    publicado no Medium em 2 abr. 2024.
+    <a href="https://medium.com/@anwarhermuche/teoria-dos-grafos-introdu%C3%A7%C3%A3o-defini%C3%A7%C3%B5es-matriz-e-lista-de-adjac%C3%AAncia-2252d4800a44" target="_blank">Consultar referência</a>.
+    O texto desta aula foi sintetizado e reescrito; os diagramas são próprios.
+  </div>
+</section>
+
+<footer>
+  Aula 1 · Teoria dos Grafos · Programação Competitiva
+</footer>
+
+</main>
+</div>
+</body>
+</html>

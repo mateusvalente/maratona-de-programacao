@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 5 - Será Isso Integração?</title>
+  <link rel="stylesheet" href="../assets/curso.css">
+  <script src="../assets/aulas.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <nav class="topbar"><a href="../index.html">← Geometria computacional</a><span>Aula 5 de 6</span></nav>
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">beecrowd 1291 · áreas de setores</p>
+        <h1>Será Isso Integração?</h1>
+        <p class="lead">Calcular três tipos de região formados por quatro arcos dentro de um quadrado, sem usar integração numérica.</p>
+      </div>
+      <span class="badge">álgebra + geometria</span>
+    </header>
+
+    <section class="band two-col">
+      <div>
+        <h2>As três incógnitas</h2>
+        <p>
+          Chamaremos a parte listrada de <strong>A₁</strong>, a soma das regiões pontilhadas de
+          <strong>A₂</strong> e a soma dos cantos quadriculados de <strong>A₃</strong>. O lado do
+          quadrado é <strong>a</strong>.
+        </p>
+        <ul class="concept-list">
+          <li><strong>Quadrado:</strong> <code>Aq = a²</code>.</li>
+          <li><strong>Quarto de círculo:</strong> <code>Ac = πa²/4</code>.</li>
+          <li><strong>Complementar:</strong> <code>Ap = a² - Ac = (4-π)a²/4</code>.</li>
+        </ul>
+      </div>
+      <figure class="source-figure">
+        <img src="../assets/imagens/1291.png" alt="Quadrado com arcos, triângulo de 30 e 60 graus e segmento circular em destaque">
+        <figcaption>Figura original: o setor verde fornece a quarta relação necessária para separar as áreas.</figcaption>
+      </figure>
+    </section>
+
+    <section class="band">
+      <h2>O segmento circular fecha o sistema</h2>
+      <p>
+        O triângulo destacado tem hipotenusa <code>a</code>, base <code>a/2</code> e altura
+        <code>a√3/2</code>. O setor possui 60°, isto é, dois terços de um quarto de círculo.
+      </p>
+      <div class="formula">Asegmento = πa²/6 - a²√3/8 = a²(4π - 3√3)/24</div>
+      <p>As relações geométricas completas são:</p>
+      <div class="formula">Aq = A₁ + A₂ + A₃<br>Ac = A₁ + 3A₂/4 + A₃/2<br>Ap = A₂/4 + A₃/2<br>Asegmento = A₁/2 + A₂/4 + A₃/8</div>
+      <p>Isolando as três áreas:</p>
+      <div class="formula">A₃ = 8Asegmento + 8Ap - 4Aq<br>A₂ = 4Ap - 2A₃<br>A₁ = Aq - A₂ - A₃</div>
+    </section>
+
+    <section class="band">
+      <div class="geometry-lab" data-lab="1291">
+        <div class="lab-head"><h2>Como as áreas escalam</h2><output id="result-1291" class="lab-result"></output></div>
+        <div class="controls">
+          <label class="range-field"><span>Lado a</span><input id="range-1291" type="range" min="1" max="30" step="0.5" value="10"><input id="side-1291" type="number" min="0.1" step="0.5" value="10"></label>
+        </div>
+        <div class="geometry-stage">
+          <div class="area-strip" aria-label="Proporção entre as três áreas">
+            <div id="area-1-1291" class="area-part area-1"><span>A₁<small>listrada</small></span><strong></strong></div>
+            <div id="area-2-1291" class="area-part area-2"><span>A₂<small>pontilhada</small></span><strong></strong></div>
+            <div id="area-3-1291" class="area-part area-3"><span>A₃<small>quadriculada</small></span><strong></strong></div>
+          </div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><span>Área do quadrado</span><strong id="square-1291"></strong></div>
+          <div class="metric"><span>Segmento circular</span><strong id="segment-1291"></strong></div>
+          <div class="metric"><span>A₁ + A₂ + A₃</span><strong id="sum-1291"></strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>O ponto-chave</h2>
+        <p>
+          Todas as áreas são uma constante multiplicada por <code>a²</code>. Ao dobrar o lado,
+          cada resultado quadruplica, mas a proporção mostrada na faixa permanece igual.
+        </p>
+        <div class="complexity">
+          <div><strong>Tempo</strong><span>O(1)</span></div>
+          <div><strong>Memória</strong><span>O(1)</span></div>
+          <div><strong>Saída</strong><span>3 casas</span></div>
+        </div>
+      </div>
+      <div class="code-panel">
+        <div class="code-title"><span>Sistema resolvido</span><a href="../resolucoes/1291.py">Abrir 1291.py</a></div>
+        <pre><code>quadriculada = (
+    8 * segmento + 8 * complementar - 4 * quadrado
+)
+pontilhada = 4 * complementar - 2 * quadriculada
+listrada = quadrado - pontilhada - quadriculada</code></pre>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Fontes e validação</h2>
+      <ul class="sources">
+        <li><a href="https://github.com/xTecna/solucoes-da-beecrowd/tree/main/problemas/geometria-computacional/1291" target="_blank" rel="noopener">Explicação e solução C++ originais</a> — decomposição das regiões e sistema de áreas.</li>
+        <li><a href="https://judge.beecrowd.com/pt/problems/view/1291" target="_blank" rel="noopener">Enunciado no beecrowd</a> — ordem das três áreas na saída.</li>
+        <li><a href="https://docs.python.org/3/library/math.html#constants" target="_blank" rel="noopener">Python: constantes matemáticas</a> — valores de <code>pi</code> e funções do módulo <code>math</code>.</li>
+      </ul>
+    </section>
+
+    <nav class="lesson-nav"><a href="aula_04_1223.html">← Aula 4</a><a href="aula_06_1292.html">Aula 6: Pentágono →</a></nav>
+  </main>
+</body>
+</html>

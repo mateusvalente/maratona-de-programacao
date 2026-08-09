@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resolução 2 - beecrowd 1110</title>
+  <link rel="stylesheet" href="../assets/exercicios.css">
+</head>
+<body>
+  <main class="page">
+    <nav class="topbar"><a href="../index.html">← Estruturas de Dados</a><span>Resolução 2 de 5</span></nav>
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">beecrowd 1110 · Fila / deque</p>
+        <h1>Jogando Cartas Fora</h1>
+        <p>Em cada rodada, descartamos a carta do topo e movemos a nova carta do topo para o fundo. O processo termina quando sobra uma carta.</p>
+      </div>
+      <div class="problem-links">
+        <a href="https://judge.beecrowd.com/pt/problems/view/1110" target="_blank" rel="noopener">Enunciado</a>
+        <a href="../resolucoes/1110.py">Código .py</a>
+      </div>
+    </header>
+
+    <section class="band">
+      <div class="problem-brief">
+        <div class="brief-item"><h3>Entrada</h3><p>Valores de <code>n</code> até aparecer <code>0</code>.</p></div>
+        <div class="brief-item"><h3>Saída</h3><p>Ordem das cartas descartadas e a carta restante.</p></div>
+        <div class="brief-item"><h3>Estrutura</h3><p>Fila com topo no front e fundo no back.</p></div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>Por que é uma fila?</h2>
+        <p>A carta do topo é sempre a primeira da sequência. Remover do topo equivale a <code>pop front</code>; mover para o fundo combina outro <code>pop front</code> com <code>push back</code>.</p>
+      </div>
+      <div class="fact-check"><strong>Uma rodada possui duas operações diferentes:</strong> primeiro uma carta sai definitivamente; depois outra apenas muda de posição.</div>
+    </section>
+
+    <section class="band">
+      <h2>Mapa da solução</h2>
+      <div class="solution-map">
+        <div class="solution-step"><div><h3>Monte as cartas de 1 até n</h3><p>A carta 1 ocupa o topo e a carta n ocupa o fundo.</p></div></div>
+        <div class="solution-step"><div><h3>Descarte o front</h3><p>O primeiro <code>pop(0)</code> vai para a lista <code>resultado</code>.</p></div></div>
+        <div class="solution-step"><div><h3>Mova o novo front</h3><p>O segundo <code>pop(0)</code> retira a próxima carta e o <code>insert</code> a coloca no fundo.</p></div></div>
+        <div class="solution-step"><div><h3>Pare quando o tamanho for 1</h3><p>Essa única carta é impressa como <code>Remaining card</code>.</p></div></div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Execução interativa</h2>
+      <div class="exercise-lab" data-exercise-lab="1110">
+        <div class="lab-head"><h2>Fila de cartas</h2><output class="step-badge" data-player-badge></output></div>
+        <div class="exercise-config">
+          <label for="card-count">Quantidade de cartas</label>
+          <input id="card-count" type="number" min="1" max="50" value="7" data-card-count>
+          <button type="button" data-config-action="cards">Montar fila</button>
+        </div>
+        <div class="player-controls">
+          <button type="button" data-player="previous">Anterior</button>
+          <button type="button" class="next-button" data-player="next">Próximo</button>
+          <button type="button" class="play-button" data-player="play">Executar</button>
+          <button type="button" data-player="reset">Reiniciar</button>
+          <label class="speed-control">Velocidade <input type="range" min="150" max="1300" value="750" data-player-speed></label>
+        </div>
+        <div class="step-copy"><span class="step-badge">operação</span><p data-player-explanation></p></div>
+        <div class="exercise-stage">
+          <section class="stage-section">
+            <div class="stage-title"><h3>Cartas ainda na fila</h3><span>topo à esquerda · fundo à direita</span></div>
+            <div class="card-track" data-card-track></div>
+            <div class="queue-arrow"><span>front / topo</span><span>back / fundo</span></div>
+          </section>
+          <section class="stage-section">
+            <div class="stage-title"><h3>Cartas descartadas</h3><span>ordem de saída</span></div>
+            <div class="discard-track" data-discard-track></div>
+          </section>
+          <section class="stage-section state-grid">
+            <div class="state-pane"><h3>Próxima carta</h3><dl class="decision-list"><dt>Topo</dt><dd data-card-top></dd><dt>Movida</dt><dd data-card-moved></dd></dl></div>
+            <div class="state-pane"><h3>Saída parcial</h3><div class="result-banner" data-card-result hidden></div><p>O texto final mantém exatamente os rótulos exigidos pelo exercício.</p></div>
+          </section>
+        </div>
+        <div class="movement-summary">
+          <div><strong>Quem entrou no fundo</strong><span data-movement-entered></span></div>
+          <div><strong>Quem saiu</strong><span data-movement-removed></span></div>
+          <div><strong>Quem permaneceu</strong><span data-movement-remaining></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>O detalhe do <code>insert</code></h2>
+        <p>Em <code>inicial.insert(len(inicial)-1, inicial.pop(0))</code>, os argumentos são avaliados da esquerda para a direita. O índice é calculado antes do <code>pop(0)</code>; depois da remoção, esse índice corresponde ao final da lista.</p>
+        <p class="note">Uma escrita mais direta para a mesma ideia seria <code>inicial.append(inicial.pop(0))</code>. Com <code>collections.deque</code>, usaríamos <code>append(popleft())</code>.</p>
+      </div>
+      <details class="code-details" open>
+        <summary>Solução Python analisada</summary>
+<pre><code>while True:
+    n = int(input())
+
+    if n == 0:
+        break
+
+    inicial = []
+    for i in range(1, n + 1):
+        inicial.append(i)
+
+    resultado = []
+    while len(inicial) &gt; 1:
+        resultado.append(inicial.pop(0))
+        inicial.insert(
+            len(inicial) - 1,
+            inicial.pop(0)
+        )
+
+    print("Discarded cards: " +
+          str(resultado).replace("[", "").replace("]", ""))
+    print("Remaining card: " + str(inicial[0]))</code></pre>
+      </details>
+    </section>
+
+    <section class="band">
+      <h2>Complexidade da implementação</h2>
+      <p>Em uma lista Python, <code>pop(0)</code> desloca os elementos restantes e custa O(n). Repetido durante a simulação, produz tempo O(n²). O limite pequeno do problema torna a solução viável. Com <code>deque</code>, as operações nas pontas seriam O(1), levando a simulação para O(n).</p>
+    </section>
+
+    <nav class="lesson-nav"><a href="resolucao_01_beecrowd_1068.html">← Anterior: 1068</a><a href="resolucao_03_beecrowd_1258.html">Próxima: 1258 →</a></nav>
+  </main>
+  <script src="../assets/exercicios.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 2 - Elevador</title>
+  <link rel="stylesheet" href="../assets/curso.css">
+  <script src="../assets/aulas.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <nav class="topbar"><a href="../index.html">← Geometria computacional</a><span>Aula 2 de 6</span></nav>
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">beecrowd 1124 · encaixe de círculos</p>
+        <h1>Elevador</h1>
+        <p class="lead">Verificar se duas pessoas, modeladas como círculos, cabem simultaneamente no piso retangular do elevador.</p>
+      </div>
+      <span class="badge">3 condições</span>
+    </header>
+
+    <section class="band two-col">
+      <div>
+        <h2>A melhor disposição</h2>
+        <p>
+          Para maximizar o espaço entre os centros, colocamos os círculos em cantos opostos.
+          Os centros ficam em <code>(R₁, R₁)</code> e <code>(L - R₂, C - R₂)</code>.
+        </p>
+        <ul class="concept-list">
+          <li><strong>O primeiro círculo cabe:</strong> <code>2R₁ ≤ L</code> e <code>2R₁ ≤ C</code>.</li>
+          <li><strong>O segundo círculo cabe:</strong> <code>2R₂ ≤ L</code> e <code>2R₂ ≤ C</code>.</li>
+          <li><strong>Eles não se sobrepõem:</strong> a distância entre centros é pelo menos <code>R₁ + R₂</code>.</li>
+        </ul>
+      </div>
+      <figure class="source-figure">
+        <img src="../assets/imagens/1124.png" alt="Dois círculos em cantos opostos de um retângulo L por C">
+        <figcaption>Figura original: cantos opostos fornecem a maior separação possível entre os centros.</figcaption>
+      </figure>
+    </section>
+
+    <section class="band">
+      <h2>Um detalhe importante</h2>
+      <div class="fact-check">
+        <strong>As condições usam ≤, não &lt;.</strong> Um círculo cujo diâmetro é exatamente igual à largura
+        ou ao comprimento cabe por tangência. O código original já implementava isso corretamente ao rejeitar apenas quando <code>L &lt; 2R</code> ou <code>C &lt; 2R</code>.
+      </div>
+      <div class="formula">(L - R₁ - R₂)² + (C - R₁ - R₂)² ≥ (R₁ + R₂)²</div>
+    </section>
+
+    <section class="band">
+      <div class="geometry-lab" data-lab="1124">
+        <div class="lab-head"><h2>Teste das três condições</h2><output id="result-1124" class="lab-result"></output></div>
+        <div class="controls">
+          <label class="field"><span>Largura L</span><input id="width-1124" type="number" min="1" value="10"></label>
+          <label class="field"><span>Comprimento C</span><input id="height-1124" type="number" min="1" value="8"></label>
+          <label class="field"><span>Raio R₁</span><input id="r1-1124" type="number" min="0" value="2"></label>
+          <label class="field"><span>Raio R₂</span><input id="r2-1124" type="number" min="0" value="2"></label>
+          <button id="calculate-1124" class="primary" type="button">Calcular</button>
+        </div>
+        <div class="geometry-stage">
+          <svg id="svg-1124" role="img" aria-label="Retângulo do elevador com dois círculos">
+            <rect id="elevator-1124" x="0" y="0" class="shape-primary"></rect>
+            <circle id="circle1-1124" class="shape-secondary"></circle>
+            <circle id="circle2-1124" class="shape-secondary"></circle>
+            <line id="centers-1124" class="guide"></line>
+          </svg>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><span>Distância²</span><strong id="distance2-1124"></strong></div>
+          <div class="metric"><span>(R₁ + R₂)²</span><strong id="required2-1124"></strong></div>
+          <div class="metric"><span>Saída</span><strong>todos os testes precisam passar</strong></div>
+        </div>
+        <div class="check-list">
+          <div id="check-r1-1124" class="check-row"><span class="check-icon"></span><span>O círculo R₁ cabe sozinho</span><code></code></div>
+          <div id="check-r2-1124" class="check-row"><span class="check-icon"></span><span>O círculo R₂ cabe sozinho</span><code></code></div>
+          <div id="check-distance-1124" class="check-row"><span class="check-icon"></span><span>Os círculos não se sobrepõem</span><code></code></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>Ordem do algoritmo</h2>
+        <p>
+          Primeiro verificamos os diâmetros. Só depois comparamos a separação dos centros.
+          A comparação ao quadrado evita <code>sqrt</code> e mantém todos os cálculos inteiros.
+        </p>
+      </div>
+      <div class="code-panel">
+        <div class="code-title"><span>Teste central</span><a href="../resolucoes/1124.py">Abrir 1124.py</a></div>
+        <pre><code>dx = largura - raio_1 - raio_2
+dy = comprimento - raio_1 - raio_2
+
+distancia_ao_quadrado = dx * dx + dy * dy
+raios_ao_quadrado = (raio_1 + raio_2) ** 2
+
+cabem = distancia_ao_quadrado &gt;= raios_ao_quadrado</code></pre>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Fontes e validação</h2>
+      <ul class="sources">
+        <li><a href="https://github.com/xTecna/solucoes-da-beecrowd/tree/main/problemas/geometria-computacional/1124" target="_blank" rel="noopener">Explicação e soluções originais</a> — disposição em cantos opostos e implementação de referência.</li>
+        <li><a href="https://judge.beecrowd.com/pt/problems/view/1124" target="_blank" rel="noopener">Enunciado no beecrowd</a> — formato oficial do problema.</li>
+        <li><a href="https://docs.python.org/3/library/math.html#math.hypot" target="_blank" rel="noopener">Documentação do módulo math</a> — definição da norma euclidiana usada na distância.</li>
+      </ul>
+    </section>
+
+    <nav class="lesson-nav"><a href="aula_01_1039.html">← Aula 1</a><a href="aula_03_1137.html">Aula 3: Pontos Cocirculares →</a></nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aulas interativas de paradigmas algorítmicos para Maratona de Programação com Python 3.">
+  <title>Paradigmas Algorítmicos | Maratona com Python</title>
+  <link rel="stylesheet" href="assets/css/curso.css">
+</head>
+<body data-root="">
+  <header class="site-header">
+    <div class="topbar">
+      <a class="brand" href="index.html"><span class="brand-mark">PA</span><span>Paradigmas Algorítmicos</span></a>
+      <nav class="topnav" aria-label="Navegação principal"><a href="#aulas">Aulas</a><a href="exercicios/index.html">Exercícios</a><a href="#estudos">Estudo</a></nav>
+    </div>
+  </header>
+
+  <main class="home">
+    <section class="home-intro">
+      <div>
+        <p class="eyebrow">Maratona de Programação · Python 3</p>
+        <h1>Paradigmas e técnicas de resolução</h1>
+        <p class="lead">Aprenda a reconhecer espaços de busca, chamadas recursivas, escolhas locais, subproblemas repetidos e limites que permitem podar. A estratégia vem antes do código.</p>
+        <div class="home-actions"><a class="btn primary" href="aulas/01-introducao-paradigmas/index.html">Começar a Aula 01 →</a><a class="btn" href="exercicios/index.html">Ver exercícios</a></div>
+        <div class="lesson-meta"><span class="badge green">10 aulas teóricas</span><span class="badge">10 laboratórios</span><span class="badge yellow">respostas sob validação</span></div>
+      </div>
+      <figure class="hero-visual"><img src="assets/img/mapa-paradigmas.svg" alt="Mapa conceitual dos paradigmas algorítmicos"></figure>
+    </section>
+
+    <section class="home-section" aria-labelledby="progressao-title">
+      <div class="section-head"><div><p class="eyebrow">Progressão</p><h2 id="progressao-title">Do espaço de busca à escolha da estratégia</h2></div><p>Primeiro estimamos o trabalho. Depois estudamos como explorar, dividir, escolher, guardar resultados e podar.</p></div>
+      <div class="flow"><span class="flow-step">complexidade</span><span class="flow-arrow">→</span><span class="flow-step">força bruta</span><span class="flow-arrow">→</span><span class="flow-step">recursão</span><span class="flow-arrow">→</span><span class="flow-step">backtracking</span><span class="flow-arrow">→</span><span class="flow-step">D&amp;C</span><span class="flow-arrow">→</span><span class="flow-step">guloso</span><span class="flow-arrow">→</span><span class="flow-step">DP</span><span class="flow-arrow">→</span><span class="flow-step">limites e poda</span></div>
+    </section>
+
+    <section class="home-section" id="aulas" aria-labelledby="aulas-title">
+      <div class="section-head"><div><p class="eyebrow">Trilha teórica</p><h2 id="aulas-title">Aulas interativas</h2></div><p>Cada aula tem pré-requisitos, explicação progressiva, exemplos didáticos próprios, laboratório, perguntas e fontes.</p></div>
+      <div class="lesson-grid" id="lesson-grid"></div>
+    </section>
+
+    <section class="home-section" id="pratica" aria-labelledby="pratica-title">
+      <div class="section-head"><div><p class="eyebrow">Prática sem spoiler</p><h2 id="pratica-title">Exercícios por paradigma</h2></div><p>As recomendações explicam por que o problema foi selecionado, mas nenhuma solução é criada antes da validação.</p></div>
+      <div class="paradigm-grid" id="paradigm-grid"></div>
+      <div class="home-actions"><a class="btn primary" href="exercicios/index.html">Abrir catálogo com filtros →</a><a class="btn" href="questoes/index.html">Abrir arquivos de tentativa</a></div>
+    </section>
+
+    <section class="home-section" aria-labelledby="fluxo-title">
+      <div class="section-head"><div><p class="eyebrow">Regra do material</p><h2 id="fluxo-title">Fluxo de validação</h2></div><p>A pasta <code>respostas/</code> é a única autorização para criar uma resolução detalhada.</p></div>
+      <div class="validation-flow">
+        <div class="validation-step"><strong>1 · Problema sugerido</strong>O catálogo apresenta plataforma, dificuldade e pré-requisitos.</div>
+        <div class="validation-step"><strong>2 · Tentativa</strong>O código pode ser escrito no arquivo preparado em <code>questoes/</code>.</div>
+        <div class="validation-step"><strong>3 · Validação</strong>Depois de conferido, o arquivo vai para <code>respostas/</code>.</div>
+        <div class="validation-step"><strong>4 · Aula da resposta</strong>Só então o código validado recebe explicação completa.</div>
+      </div>
+    </section>
+
+    <section class="home-section" id="estudos" aria-labelledby="estudos-title">
+      <div class="section-head"><div><p class="eyebrow">Aprofundamento</p><h2 id="estudos-title">Material de estudo</h2></div><p>Referências teóricas abertas e documentação da linguagem para continuar depois das aulas.</p></div>
+      <div class="study-grid">
+        <a class="study-link" href="https://www.geeksforgeeks.org/dsa/algorithms-design-techniques/" target="_blank" rel="noreferrer"><strong>Técnicas de projeto de algoritmos</strong><span>GeeksforGeeks · visão geral dos paradigmas</span></a>
+        <a class="study-link" href="https://www.geeksforgeeks.org/dsa/short-notes-on-recursion-and-backtracking/" target="_blank" rel="noreferrer"><strong>Recursão e backtracking</strong><span>GeeksforGeeks · casos base, árvore e poda</span></a>
+        <a class="study-link" href="https://www.geeksforgeeks.org/dsa/greedy-algorithms/" target="_blank" rel="noreferrer"><strong>Algoritmos gulosos</strong><span>GeeksforGeeks · escolha local e corretude</span></a>
+        <a class="study-link" href="https://www.geeksforgeeks.org/dsa/how-does-dynamic-programming-work/" target="_blank" rel="noreferrer"><strong>Programação dinâmica</strong><span>GeeksforGeeks · estados e subproblemas</span></a>
+        <a class="study-link" href="https://cp-algorithms.com/" target="_blank" rel="noreferrer"><strong>CP-Algorithms</strong><span>Referência de algoritmos para competição</span></a>
+        <a class="study-link" href="https://docs.python.org/3/" target="_blank" rel="noreferrer"><strong>Documentação do Python 3</strong><span>Referência oficial da linguagem</span></a>
+        <a class="study-link" href="https://ifce-cp.github.io/" target="_blank" rel="noreferrer"><strong>IFCE Competitive Programming</strong><span>Listas, roteiros e material em português</span></a>
+        <a class="study-link" href="https://www.ime.usp.br/~pf/analise_de_algoritmos/aulas/guloso.html" target="_blank" rel="noreferrer"><strong>Algoritmos gulosos — IME-USP</strong><span>Corretude e exemplos em português</span></a>
+      </div>
+    </section>
+
+    <section class="home-section" aria-labelledby="plataformas-title">
+      <div class="section-head"><div><p class="eyebrow">Enunciados oficiais</p><h2 id="plataformas-title">Plataformas usadas</h2></div><p>Os links dos exercícios apontam diretamente para o juiz correspondente.</p></div>
+      <div class="source-strip"><a href="https://judge.beecrowd.com/pt/problems/index/1" target="_blank" rel="noreferrer">beecrowd</a><a href="https://codeforces.com/problemset" target="_blank" rel="noreferrer">Codeforces</a><a href="https://cses.fi/problemset/" target="_blank" rel="noreferrer">CSES</a><a href="https://www.hackerrank.com/domains/algorithms" target="_blank" rel="noreferrer">HackerRank</a></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer-inner"><span>Maratona de Programação com Python 3</span><span>Paradigmas algorítmicos · material introdutório</span></div></footer>
+  <script src="assets/js/conteudo.js"></script>
+  <script src="assets/js/exercicios.js"></script>
+  <script src="assets/js/status-respostas.js"></script>
+  <script src="assets/js/index.js"></script>
+</body>
+</html>

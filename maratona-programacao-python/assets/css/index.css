@@ -1,0 +1,32 @@
+.home { width: min(1160px, 100%); margin: 0 auto; padding: 30px 20px 70px; }
+.home-intro { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, .75fr); gap: 42px; min-height: 500px; padding: 38px 0; align-items: center; border-bottom: 1px solid var(--line); }
+.home-intro h1 { margin-bottom: 18px; font-size: clamp(2.6rem, 6vw, 5.4rem); line-height: .98; }
+.home-intro .lead { max-width: 680px; font-size: 1.15rem; }
+.home-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 23px; }
+.hero-visual { margin: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #10181c; }
+.hero-visual img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.home-section { padding: 34px 0; border-bottom: 1px solid var(--line); }
+.section-head { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin-bottom: 18px; }
+.section-head h2 { margin-bottom: 0; }
+.section-head p { max-width: 620px; margin-bottom: 0; }
+.track { display: grid; grid-template-columns: repeat(9, minmax(92px, 1fr)); gap: 7px; overflow-x: auto; padding-bottom: 6px; }
+.track-step { min-width: 92px; padding: 11px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); text-align: center; color: var(--muted); font-size: .78rem; font-weight: 850; }
+.track-step strong { display: block; margin-bottom: 4px; color: var(--green); font: 900 .8rem/1 Consolas, monospace; }
+.lesson-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11px; }
+.lesson-card { display: grid; min-height: 190px; padding: 16px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); grid-template-rows: auto auto 1fr auto; text-decoration: none; }
+.lesson-card:hover { border-color: var(--blue); transform: translateY(-2px); }
+.lesson-card .number { color: var(--green); font: 900 .78rem/1 Consolas, monospace; }
+.lesson-card h3 { margin: 10px 0 7px; color: var(--text); font-size: 1.02rem; }
+.lesson-card p { font-size: .87rem; }
+.lesson-card .open { color: var(--blue); font-size: .8rem; font-weight: 850; }
+.list-grid, .study-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.list-card, .study-link { padding: 15px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); text-decoration: none; }
+.list-card:hover, .study-link:hover { border-color: var(--blue); }
+.list-card strong, .study-link strong { display: block; color: var(--text); }
+.list-card span, .study-link span { color: var(--muted); font-size: .84rem; }
+.source-strip { display: flex; flex-wrap: wrap; gap: 9px; }
+.source-strip a { padding: 8px 10px; border: 1px solid var(--line); border-radius: 5px; color: var(--muted); text-decoration: none; font-size: .8rem; font-weight: 800; }
+.source-strip a:hover { color: var(--text); border-color: var(--green); }
+
+@media (max-width: 860px) { .home-intro { grid-template-columns: 1fr; min-height: 0; } .hero-visual { max-width: 620px; } .lesson-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 580px) { .home { padding: 18px 14px 50px; } .home-intro { gap: 25px; padding: 28px 0; } .home-intro h1 { font-size: 2.75rem; } .lesson-grid { grid-template-columns: 1fr; } .section-head { display: block; } .section-head h2 { margin-bottom: 8px; } }

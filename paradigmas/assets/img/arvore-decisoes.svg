@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" role="img" aria-labelledby="title desc">
+  <title id="title">Árvore de decisões com poda</title>
+  <desc id="desc">Uma escolha gera ramos; alguns continuam e outros são podados quando não podem servir.</desc>
+  <defs>
+    <style>.bg{fill:#10171b}.edge{stroke:#53646d;stroke-width:3}.edgep{stroke:#ff8585;stroke-width:3;stroke-dasharray:8 6}.n{fill:#1c252a;stroke:#6bbcff;stroke-width:2}.ok{fill:#143426;stroke:#61e3a5;stroke-width:3}.bad{fill:#2b1a1e;stroke:#ff8585;stroke-width:2}.t{fill:#f4f7f8;font:700 15px system-ui,sans-serif;text-anchor:middle}.s{fill:#acbac1;font:600 12px system-ui,sans-serif;text-anchor:middle}.x{fill:#ff8585;font:900 30px system-ui,sans-serif;text-anchor:middle}</style>
+  </defs>
+  <rect class="bg" width="760" height="430" rx="8"/>
+  <line class="edge" x1="380" y1="72" x2="205" y2="150"/><line class="edge" x1="380" y1="72" x2="555" y2="150"/>
+  <line class="edge" x1="205" y1="195" x2="110" y2="285"/><line class="edge" x1="205" y1="195" x2="300" y2="285"/>
+  <line class="edge" x1="555" y1="195" x2="465" y2="285"/><line class="edgep" x1="555" y1="195" x2="650" y2="285"/>
+  <rect class="n" x="300" y="30" width="160" height="52" rx="6"/><text class="t" x="380" y="61">início</text>
+  <rect class="n" x="135" y="145" width="140" height="52" rx="6"/><text class="t" x="205" y="176">escolher A</text>
+  <rect class="n" x="485" y="145" width="140" height="52" rx="6"/><text class="t" x="555" y="176">escolher B</text>
+  <rect class="ok" x="40" y="280" width="140" height="58" rx="6"/><text class="t" x="110" y="306">continuar</text><text class="s" x="110" y="326">ramo possível</text>
+  <rect class="n" x="230" y="280" width="140" height="58" rx="6"/><text class="t" x="300" y="306">explorar</text><text class="s" x="300" y="326">outra escolha</text>
+  <rect class="ok" x="395" y="280" width="140" height="58" rx="6"/><text class="t" x="465" y="306">solução</text><text class="s" x="465" y="326">candidata</text>
+  <rect class="bad" x="580" y="280" width="140" height="58" rx="6"/><text class="t" x="650" y="306">podar</text><text class="s" x="650" y="326">não serve</text>
+  <text class="x" x="650" y="388">×</text><text class="s" x="650" y="411">o ramo termina aqui</text>
+</svg>

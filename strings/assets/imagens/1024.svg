@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="title desc">
+  <title id="title">As tres fases da criptografia</title>
+  <desc id="desc">A mensagem passa por deslocamento de letras, inversao e ajuste da segunda metade.</desc>
+  <rect width="800" height="420" fill="#10161a"/>
+  <text x="48" y="58" fill="#f5f7f8" font-family="Arial, sans-serif" font-size="27" font-weight="700">Uma mensagem, tres transformacoes</text>
+  <g font-family="Consolas, monospace">
+    <g transform="translate(48 105)">
+      <rect width="164" height="200" rx="7" fill="#192126" stroke="#41515c"/>
+      <text x="18" y="32" fill="#68b9ff" font-size="15" font-weight="700">1. DESLOCAR</text>
+      <text x="18" y="76" fill="#aeb8c1" font-size="17">A  B  c  #</text>
+      <text x="18" y="108" fill="#5ee0a0" font-size="17">D  E  f  #</text>
+      <path d="M26 128v35m0 0-8-10m8 10 8-10" stroke="#ffd166" stroke-width="3" fill="none"/>
+      <text x="48" y="160" fill="#ffd166" font-size="14">letras +3</text>
+    </g>
+    <path d="M226 205h46m0 0-12-9m12 9-12 9" stroke="#68b9ff" stroke-width="4" fill="none"/>
+    <g transform="translate(286 105)">
+      <rect width="164" height="200" rx="7" fill="#192126" stroke="#41515c"/>
+      <text x="18" y="32" fill="#68b9ff" font-size="15" font-weight="700">2. INVERTER</text>
+      <text x="18" y="76" fill="#aeb8c1" font-size="17">D  E  f  #</text>
+      <path d="M25 112c20 32 92 32 114 0" stroke="#ffd166" stroke-width="3" fill="none"/>
+      <path d="M139 112l-12 2 8 9" stroke="#ffd166" stroke-width="3" fill="none"/>
+      <text x="18" y="165" fill="#5ee0a0" font-size="17">#  f  E  D</text>
+    </g>
+    <path d="M464 205h46m0 0-12-9m12 9-12 9" stroke="#68b9ff" stroke-width="4" fill="none"/>
+    <g transform="translate(524 105)">
+      <rect width="228" height="200" rx="7" fill="#192126" stroke="#41515c"/>
+      <text x="18" y="32" fill="#68b9ff" font-size="15" font-weight="700">3. METADE FINAL -1</text>
+      <text x="18" y="76" fill="#aeb8c1" font-size="17">#  f | E  D</text>
+      <line x1="79" y1="54" x2="79" y2="96" stroke="#ff7474" stroke-width="2"/>
+      <text x="18" y="124" fill="#5ee0a0" font-size="17">#  f | D  C</text>
+      <text x="18" y="164" fill="#ffd166" font-size="14">saida pronta</text>
+    </g>
+  </g>
+  <text x="48" y="362" fill="#aeb8c1" font-family="Arial, sans-serif" font-size="17">Cada fase percorre a string; nenhum caractere desaparece.</text>
+</svg>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 6 - Problema com um Pentágono</title>
+  <link rel="stylesheet" href="../assets/curso.css">
+  <script src="../assets/aulas.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <nav class="topbar"><a href="../index.html">← Geometria computacional</a><span>Aula 6 de 6</span></nav>
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">beecrowd 1292 · lei dos senos</p>
+        <h1>Problema com um Pentágono</h1>
+        <p class="lead">Relacionar o lado do pentágono regular ao lado do quadrado interno por meio de um triângulo.</p>
+      </div>
+      <span class="badge">razão constante</span>
+    </header>
+
+    <section class="band two-col">
+      <div>
+        <h2>Primeiro, descubra os ângulos</h2>
+        <p>O ângulo interno de um pentágono regular mede <strong>108°</strong>. A construção do quadrado cria dois ângulos iguais ao redor do ângulo reto:</p>
+        <div class="formula">9° = (108° - 90°) / 2</div>
+        <p>O terceiro ângulo do triângulo completa 180°:</p>
+        <div class="formula">63° = 180° - 108° - 9°</div>
+      </div>
+      <figure class="source-figure">
+        <img src="../assets/imagens/1292.png" alt="Pentágono com quadrado interno e triângulo de lados F e L com ângulos 108 e 63 graus">
+        <figcaption>Figura original: F e L ficam opostos, respectivamente, aos ângulos de 63° e 108°.</figcaption>
+      </figure>
+    </section>
+
+    <section class="band">
+      <h2>Lei dos senos</h2>
+      <p>
+        Na lei dos senos, cada lado é dividido pelo seno do ângulo oposto. O lado <code>L</code>
+        do quadrado fica oposto a 108°, enquanto o lado <code>F</code> do pentágono fica oposto a 63°.
+      </p>
+      <div class="formula">L / sen(108°) = F / sen(63°) &nbsp;⇒&nbsp; L = F · sen(108°) / sen(63°)</div>
+      <div class="fact-check"><strong>Conversão obrigatória:</strong> <code>math.sin</code> recebe radianos. Use <code>math.radians(108)</code> e <code>math.radians(63)</code>.</div>
+    </section>
+
+    <section class="band">
+      <div class="geometry-lab" data-lab="1292">
+        <div class="lab-head"><h2>Triângulo da construção</h2><output id="result-1292" class="lab-result"></output></div>
+        <div class="controls">
+          <label class="range-field"><span>Lado F</span><input id="range-1292" type="range" min="1" max="100" step="1" value="25"><input id="side-1292" type="number" min="0.1" step="1" value="25"></label>
+        </div>
+        <div class="geometry-stage">
+          <svg viewBox="0 0 640 360" role="img" aria-label="Triângulo com lados F e L e ângulos 108, 63 e 9 graus">
+            <path d="M135 295 L490 295 L315 70 Z" fill="rgba(104,185,255,.12)" stroke="#68b9ff" stroke-width="4"></path>
+            <path d="M135 295 A58 58 0 0 1 170 240" class="measure"></path>
+            <path d="M490 295 A66 66 0 0 0 449 236" fill="none" stroke="#5ee0a0" stroke-width="4"></path>
+            <text x="105" y="330" class="geometry-label">108°</text>
+            <text x="480" y="330" class="geometry-label">63°</text>
+            <text x="303" y="55" class="geometry-label">9°</text>
+            <text id="f-label-1292" x="370" y="165" class="geometry-label"></text>
+            <text id="l-label-1292" x="175" y="170" class="geometry-label"></text>
+          </svg>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><span>sen(108°)</span><strong id="sin108-1292"></strong></div>
+          <div class="metric"><span>sen(63°)</span><strong id="sin63-1292"></strong></div>
+          <div class="metric"><span>L / F</span><strong id="ratio-1292"></strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>A proporção não muda</h2>
+        <p>
+          Os ângulos são fixos, então <code>sen(108°)/sen(63°)</code> é uma constante. Se F dobrar,
+          L também dobra. Cada caso requer apenas duas funções trigonométricas e uma multiplicação.
+        </p>
+        <div class="complexity">
+          <div><strong>Tempo</strong><span>O(1)</span></div>
+          <div><strong>Memória</strong><span>O(1)</span></div>
+          <div><strong>Saída</strong><span>10 casas</span></div>
+        </div>
+      </div>
+      <div class="code-panel">
+        <div class="code-title"><span>Lei dos senos em Python</span><a href="../resolucoes/1292.py">Abrir 1292.py</a></div>
+        <pre><code>lado = (
+    F
+    * math.sin(math.radians(108.0))
+    / math.sin(math.radians(63.0))
+)
+print(f"{lado:.10f}")</code></pre>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Fontes e validação</h2>
+      <ul class="sources">
+        <li><a href="https://github.com/xTecna/solucoes-da-beecrowd/tree/main/problemas/geometria-computacional/1292" target="_blank" rel="noopener">Explicação e soluções originais</a> — construção dos ângulos e lei dos senos.</li>
+        <li><a href="https://judge.beecrowd.com/pt/problems/view/1292" target="_blank" rel="noopener">Enunciado no beecrowd</a> — precisão esperada na saída.</li>
+        <li><a href="https://docs.python.org/3/library/math.html#math.radians" target="_blank" rel="noopener">Python: math.radians</a> — conversão oficial de graus para radianos.</li>
+        <li><a href="https://docs.python.org/3/library/math.html#math.sin" target="_blank" rel="noopener">Python: math.sin</a> — seno com argumento em radianos.</li>
+      </ul>
+    </section>
+
+    <nav class="lesson-nav"><a href="aula_05_1291.html">← Aula 5</a><a href="../index.html">Voltar ao índice →</a></nav>
+  </main>
+</body>
+</html>

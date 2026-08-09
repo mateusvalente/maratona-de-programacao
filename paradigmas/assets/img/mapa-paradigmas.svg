@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 500" role="img" aria-labelledby="title desc">
+  <title id="title">Mapa dos paradigmas algorítmicos</title>
+  <desc id="desc">Resolução de problemas se divide em exploração, decomposição, decisões locais e reutilização.</desc>
+  <defs>
+    <style>
+      .bg{fill:#10171b;stroke:#34434b;stroke-width:2}.line{fill:none;stroke:#53646d;stroke-width:3}.root{fill:#143426;stroke:#61e3a5;stroke-width:3}.blue{fill:#142633;stroke:#6bbcff;stroke-width:2}.yellow{fill:#332c16;stroke:#ffd166;stroke-width:2}.red{fill:#2b1a1e;stroke:#ff8585;stroke-width:2}.txt{fill:#f4f7f8;font:700 16px system-ui,sans-serif;text-anchor:middle}.small{fill:#acbac1;font:600 13px system-ui,sans-serif;text-anchor:middle}.accent{fill:#61e3a5;font:800 18px system-ui,sans-serif;text-anchor:middle}
+    </style>
+  </defs>
+  <rect class="bg" x="8" y="8" width="744" height="484" rx="8"/>
+  <path class="line" d="M380 98V140M380 140H130V182M380 140H360V182M380 140H590V182M130 250V292M360 250V292M590 250V292M130 360V397M590 360V397"/>
+  <rect class="root" x="235" y="35" width="290" height="63" rx="7"/>
+  <text class="accent" x="380" y="63">RESOLUÇÃO DE PROBLEMAS</text>
+  <text class="small" x="380" y="83">a estratégia organiza as decisões</text>
+  <rect class="blue" x="40" y="182" width="180" height="68" rx="7"/>
+  <text class="txt" x="130" y="211">Exploração</text><text class="small" x="130" y="232">testar possibilidades</text>
+  <rect class="blue" x="270" y="182" width="180" height="68" rx="7"/>
+  <text class="txt" x="360" y="211">Decomposição</text><text class="small" x="360" y="232">quebrar o problema</text>
+  <rect class="blue" x="500" y="182" width="180" height="68" rx="7"/>
+  <text class="txt" x="590" y="211">Otimização</text><text class="small" x="590" y="232">buscar uma boa resposta</text>
+  <rect class="yellow" x="40" y="292" width="180" height="68" rx="7"/>
+  <text class="txt" x="130" y="321">Força bruta</text><text class="small" x="130" y="342">Backtracking</text>
+  <rect class="yellow" x="270" y="292" width="180" height="68" rx="7"/>
+  <text class="txt" x="360" y="321">Divisão e conquista</text><text class="small" x="360" y="342">subproblemas independentes</text>
+  <rect class="yellow" x="500" y="292" width="180" height="68" rx="7"/>
+  <text class="txt" x="590" y="321">Guloso e DP</text><text class="small" x="590" y="342">escolher ou reutilizar</text>
+  <rect class="red" x="40" y="397" width="180" height="58" rx="7"/>
+  <text class="txt" x="130" y="423">Branch and Bound</text><text class="small" x="130" y="443">limites e poda</text>
+  <rect class="red" x="500" y="397" width="180" height="58" rx="7"/>
+  <text class="txt" x="590" y="423">Memoização</text><text class="small" x="590" y="443">cache top-down</text>
+</svg>

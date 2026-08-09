@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="title desc">
+  <title id="title">Contagem de LEDs por digito</title>
+  <desc id="desc">Cada digito consulta uma tabela de segmentos e contribui para a soma.</desc>
+  <rect width="800" height="420" fill="#10161a"/>
+  <text x="48" y="58" fill="#f5f7f8" font-family="Arial, sans-serif" font-size="27" font-weight="700">Cada digito tem um custo fixo</text>
+  <g transform="translate(54 100)" fill="none" stroke-linecap="round" stroke-width="12">
+    <g transform="translate(0 0)" stroke="#ffd166"><path d="M18 8h55M80 16v66M80 94v66M18 168h55M10 94v66M10 16v66M18 88h55"/></g>
+    <g transform="translate(125 0)" stroke="#5ee0a0"><path d="M80 16v66M80 94v66"/><g stroke="#2c373e"><path d="M18 8h55M18 168h55M10 94v66M10 16v66M18 88h55"/></g></g>
+    <g transform="translate(250 0)" stroke="#68b9ff"><path d="M18 8h55M80 16v66M18 168h55M10 94v66M18 88h55"/><g stroke="#2c373e"><path d="M80 94v66M10 16v66"/></g></g>
+    <g transform="translate(375 0)" stroke="#ff7474"><path d="M18 8h55M80 16v66M80 94v66M18 168h55M18 88h55"/><g stroke="#2c373e"><path d="M10 94v66M10 16v66"/></g></g>
+  </g>
+  <g font-family="Consolas, monospace" font-size="22" text-anchor="middle">
+    <text x="99" y="310" fill="#ffd166">8 = 7</text>
+    <text x="224" y="310" fill="#5ee0a0">1 = 2</text>
+    <text x="349" y="310" fill="#68b9ff">2 = 5</text>
+    <text x="474" y="310" fill="#ff7474">3 = 5</text>
+    <text x="567" y="193" fill="#aeb8c1" font-size="30">...</text>
+    <text x="660" y="175" fill="#f5f7f8" font-size="26">somar</text>
+    <text x="660" y="215" fill="#5ee0a0" font-size="32">7+2+5+5</text>
+    <text x="660" y="258" fill="#ffd166" font-size="36">= 19</text>
+  </g>
+  <text x="48" y="378" fill="#aeb8c1" font-family="Arial, sans-serif" font-size="17">A string pode ser enorme: nao converta o numero inteiro, percorra seus caracteres.</text>
+</svg>

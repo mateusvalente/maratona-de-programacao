@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 04 — BFS e Movimentos do Cavalo</title>
+<style>
+:root{
+  --bg:#07101c; --panel:#0d1c2e; --panel2:#10253b; --code:#06101b;
+  --text:#edf5ff; --muted:#9eb0c7; --line:rgba(255,255,255,.10);
+  --green:#65e6bd; --blue:#75c7ff; --purple:#b7a0ff; --yellow:#ffd86b;
+  --red:#ff8d8d; --shadow:0 20px 60px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--text);
+  background:
+    radial-gradient(circle at 12% 0%,rgba(101,230,189,.08),transparent 28%),
+    radial-gradient(circle at 96% 12%,rgba(117,199,255,.07),transparent 25%),
+    var(--bg);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  line-height:1.55
+}
+a{color:var(--blue)}
+.shell{display:grid;grid-template-columns:260px minmax(0,1fr)}
+aside{
+  height:100vh;position:sticky;top:0;padding:26px 18px;
+  background:rgba(7,16,28,.91);backdrop-filter:blur(14px);
+  border-right:1px solid var(--line);overflow:auto
+}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:25px}
+.brand-mark{
+  width:43px;height:43px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--green),var(--blue));
+  color:#05101a;font-weight:1000
+}
+.brand strong{font-size:.95rem}.brand small{display:block;color:var(--muted);font-size:.7rem}
+nav{display:flex;flex-direction:column;gap:5px}
+nav a{
+  padding:9px 11px;border-radius:10px;text-decoration:none;color:var(--muted);
+  font-size:.84rem;transition:.2s
+}
+nav a:hover{background:rgba(255,255,255,.05);color:#fff;transform:translateX(3px)}
+.side-note{
+  margin-top:24px;padding:13px;border-radius:13px;border:1px solid rgba(101,230,189,.18);
+  background:rgba(101,230,189,.045);color:var(--muted);font-size:.75rem
+}
+main{width:min(1200px,100%);margin:0 auto;padding:32px 38px 72px}
+.hero{
+  min-height:380px;padding:46px;border-radius:30px;border:1px solid var(--line);
+  background:linear-gradient(135deg,rgba(16,37,59,.97),rgba(7,17,30,.98));
+  box-shadow:var(--shadow);display:flex;align-items:center;position:relative;overflow:hidden
+}
+.hero:before,.hero:after{
+  content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.08)
+}
+.hero:before{width:390px;height:390px;right:-105px;top:-120px}
+.hero:after{width:255px;height:255px;right:25px;top:13px}
+.kicker{font-size:.74rem;font-weight:900;color:var(--green);letter-spacing:.15em;text-transform:uppercase}
+h1{max-width:860px;margin:10px 0 17px;font-size:clamp(2.5rem,6vw,5rem);line-height:.95;letter-spacing:-.055em}
+.hero p{max-width:760px;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.chip{
+  padding:7px 11px;border-radius:999px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);color:#c9d7e8;font-size:.78rem
+}
+section{
+  margin-top:26px;padding:27px;border-radius:22px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(13,28,46,.92),rgba(9,21,35,.92));
+  box-shadow:0 12px 32px rgba(0,0,0,.13);scroll-margin-top:20px
+}
+.section-head{display:flex;gap:13px;align-items:center;margin-bottom:14px}
+.num{
+  width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;
+  color:var(--green);background:rgba(101,230,189,.08);border:1px solid rgba(101,230,189,.20);font-weight:900
+}
+h2{margin:0;font-size:1.55rem;letter-spacing:-.025em}
+h3{margin:0 0 8px;font-size:1rem}
+.lead{color:var(--muted);margin:0 0 16px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{
+  padding:17px;border-radius:15px;border:1px solid var(--line);
+  background:rgba(255,255,255,.028)
+}
+.card p{margin:0;color:var(--muted);font-size:.89rem}
+.tag{
+  display:inline-block;margin-bottom:9px;padding:4px 8px;border-radius:999px;
+  color:#06101b;background:var(--green);font-size:.69rem;font-weight:900
+}
+.tag.blue{background:var(--blue)}.tag.yellow{background:var(--yellow)}.tag.purple{background:var(--purple)}
+.callout{
+  margin-top:15px;padding:13px 15px;border-radius:0 12px 12px 0;border-left:3px solid var(--green);
+  color:#d6e9e4;background:rgba(101,230,189,.05);font-size:.9rem
+}
+.flow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:15px}
+.flow-box{
+  padding:10px 13px;border-radius:11px;border:1px solid rgba(117,199,255,.20);
+  background:#0a1928;color:#d9eaff;font-weight:800;font-size:.82rem
+}
+.flow-arrow{color:#6f8398;font-size:1.2rem}
+pre{
+  margin:13px 0 0;padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
+  overflow:auto;background:var(--code);color:#dcecff;
+  font:13px/1.62 "Cascadia Code","Fira Code",Consolas,monospace
+}
+.kw{color:#b7a0ff}.fn{color:#75c7ff}.cm{color:#70849a}.nu{color:#ffd86b}.str{color:#65e6bd}
+.input-box{
+  white-space:pre;font:13px/1.65 "Cascadia Code",Consolas,monospace;
+  padding:16px;border:1px solid var(--line);border-radius:14px;background:#06101b;color:#dcecff;overflow:auto
+}
+.output-box{
+  white-space:pre-wrap;font:13px/1.75 "Cascadia Code",Consolas,monospace;
+  padding:16px;border:1px solid rgba(101,230,189,.22);border-radius:14px;
+  background:rgba(101,230,189,.05);color:#d7f7ed;overflow:auto
+}
+.board-wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:16px;align-items:start}
+.board{
+  width:min(640px,100%);aspect-ratio:1/1;display:grid;grid-template-columns:repeat(8,1fr);
+  border:1px solid var(--line);border-radius:18px;overflow:hidden;margin:auto;
+  box-shadow:0 16px 35px rgba(0,0,0,.18)
+}
+.square{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;color:rgba(255,255,255,.62);transition:.25s
+}
+.square.light{background:#dbe5ef;color:#243242}
+.square.dark{background:#536c82}
+.square.start{outline:4px solid var(--green);outline-offset:-4px}
+.square.target{outline:4px solid var(--yellow);outline-offset:-4px}
+.square.frontier::after{
+  content:"";width:14px;height:14px;border-radius:50%;background:var(--purple);
+  box-shadow:0 0 0 4px rgba(183,160,255,.18)
+}
+.square.visited{box-shadow:inset 0 0 0 999px rgba(101,230,189,.22)}
+.square.current{box-shadow:inset 0 0 0 999px rgba(255,216,107,.35)}
+.coord{
+  position:absolute;left:4px;bottom:2px;font-size:.62rem;font-weight:700;opacity:.62
+}
+.knight{font-size:1.55rem;line-height:1}
+.graph-panel{
+  margin-top:15px;padding:14px;border:1px solid var(--line);border-radius:16px;background:#07131f
+}
+.graph-panel h3{margin:0 0 4px}
+.graph-panel p{margin:0 0 10px;color:var(--muted);font-size:.84rem}
+.mini-graph{display:block;width:100%;height:auto;min-height:330px}
+.graph-edge{
+  stroke:#4d657d;stroke-width:3;stroke-linecap:round;opacity:.45;transition:.25s
+}
+.graph-edge.discovered{stroke:var(--green);opacity:.9;stroke-width:4}
+.graph-edge.current{stroke:var(--yellow);opacity:1;stroke-width:6}
+.graph-node circle{
+  fill:#10273f;stroke:var(--blue);stroke-width:2.5;transition:.25s
+}
+.graph-node text{
+  fill:#edf5ff;font:800 13px Inter,Arial;text-anchor:middle;dominant-baseline:middle;pointer-events:none
+}
+.graph-node.visited circle{fill:#163931;stroke:var(--green)}
+.graph-node.frontier circle{fill:#302854;stroke:var(--purple)}
+.graph-node.current circle{fill:#4a3d12;stroke:var(--yellow);stroke-width:4}
+.graph-node.target circle{stroke:var(--yellow)}
+.graph-node.start circle{stroke:var(--green)}
+.move-diagram{
+  margin-top:14px;display:grid;grid-template-columns:repeat(5,48px);grid-template-rows:repeat(5,48px);
+  justify-content:center;gap:3px
+}
+.md-cell{
+  border-radius:8px;background:#0a1928;border:1px solid var(--line);
+  display:grid;place-items:center;color:#7f94aa;font-size:.72rem
+}
+.md-cell.center{background:rgba(101,230,189,.12);border-color:rgba(101,230,189,.3);color:var(--green);font-size:1.25rem}
+.md-cell.hit{background:rgba(183,160,255,.12);border-color:rgba(183,160,255,.3);color:#d9ccff;font-weight:900}
+.queue{
+  min-height:54px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+  padding:10px;border:1px solid var(--line);border-radius:12px;background:#081624
+}
+.qitem{
+  padding:6px 9px;border-radius:9px;background:rgba(183,160,255,.10);
+  border:1px solid rgba(183,160,255,.24);font:700 .78rem "Cascadia Code",Consolas,monospace;color:#e0d8ff
+}
+.state{
+  min-height:58px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#081624;margin-top:9px
+}
+.state small{display:block;color:#74889d;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.state strong{font-family:"Cascadia Code",Consolas,monospace;font-size:.86rem}
+.explanation{
+  min-height:150px;padding:12px 13px;border-radius:12px;border:1px solid var(--line);
+  background:#081624;color:#d9e6f3;font-size:.88rem;white-space:pre-line
+}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+button{
+  border:0;border-radius:10px;padding:9px 13px;font-weight:850;cursor:pointer;
+  background:var(--green);color:#06101b
+}
+button.secondary{background:#172b43;color:#dcecff;border:1px solid var(--line)}
+button.warn{background:var(--yellow)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.step-badge{
+  padding:5px 9px;border-radius:999px;background:rgba(117,199,255,.09);
+  border:1px solid rgba(117,199,255,.18);color:#cce8ff;font-size:.75rem;font-weight:800
+}
+.panel-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
+.explain-code{display:grid;gap:10px}
+.explain-row{
+  display:grid;grid-template-columns:minmax(260px,.95fr) minmax(0,1.05fr);gap:12px;align-items:stretch
+}
+.snippet,.plain{
+  padding:13px;border-radius:13px;border:1px solid var(--line);background:#081624
+}
+.snippet{font:12.5px/1.55 "Cascadia Code",Consolas,monospace;color:#dcecff}
+.plain{color:var(--muted);font-size:.87rem}
+.plain strong{color:#e6f1fc}
+.compare{width:100%;border-collapse:collapse;margin-top:13px;font-size:.88rem}
+.compare th,.compare td{padding:11px;border-bottom:1px solid var(--line);text-align:left}
+.compare th{color:#d6e4f4}.compare td{color:var(--muted)}
+.good{color:var(--green)!important;font-weight:800}
+.result{
+  display:flex;align-items:center;justify-content:center;min-height:120px;
+  border:1px solid rgba(101,230,189,.20);border-radius:16px;background:rgba(101,230,189,.045);
+  text-align:center
+}
+.result strong{display:block;font-size:2.2rem;color:var(--green)}
+.result span{display:block;color:var(--muted);font-size:.82rem}
+footer{text-align:center;color:#718399;font-size:.76rem;padding:28px 10px 0}
+@media(max-width:960px){
+  .shell{display:block}
+  aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  nav{display:grid;grid-template-columns:repeat(2,1fr)}
+  main{padding:22px 16px 55px}.hero{min-height:320px;padding:31px 23px}
+  .grid2,.grid3,.board-wrap,.explain-row{grid-template-columns:1fr}
+}
+@media print{
+  aside{display:none}.shell{display:block}main{width:100%;padding:0}
+  body{background:#fff}.hero,section{box-shadow:none;break-inside:avoid}.controls{display:none}
+}
+</style>
+</head>
+
+<body>
+<div class="shell">
+
+<aside>
+  <div class="brand">
+    <div class="brand-mark">04</div>
+    <div><strong>BFS + Cavalo</strong><small>Aula 4 · Menor caminho</small></div>
+  </div>
+
+  <nav>
+    <a href="#problema">01 · Contexto</a>
+    <a href="#grafo">02 · Tabuleiro como grafo</a>
+    <a href="#movimentos">03 · 8 movimentos</a>
+    <a href="#bfs">04 · Por que BFS?</a>
+    <a href="#animacao">05 · BFS animada</a>
+    <a href="#codigo">06 · Algoritmo</a>
+    <a href="#entrada">07 · Entrada e saída</a>
+    <a href="#resumo">08 · Resumo</a>
+  </nav>
+
+  <div class="side-note">
+    Objetivo: entender por que <strong>BFS encontra o menor número de movimentos</strong> quando todas as arestas têm o mesmo custo.
+  </div>
+</aside>
+
+<main>
+
+<header class="hero">
+  <div>
+    <div class="kicker">Aula prática · Busca em largura</div>
+    <h1>O cavalo quer o menor caminho.</h1>
+    <p>
+      Cada casa do tabuleiro vira um vértice. Cada movimento possível do cavalo vira uma aresta.
+      A BFS explora o tabuleiro por distâncias crescentes até encontrar o destino.
+    </p>
+    <div class="chips">
+      <span class="chip">BFS</span>
+      <span class="chip">Fila</span>
+      <span class="chip">Menor caminho</span>
+      <span class="chip">Tabuleiro 8×8</span>
+      <span class="chip">Python 3.11</span>
+    </div>
+  </div>
+</header>
+
+<section id="problema">
+  <div class="section-head"><div class="num">01</div><h2>Contexto do problema</h2></div>
+
+  <p class="lead">
+    Dados dois quadrados do tabuleiro, precisamos descobrir o <strong>menor número de movimentos do cavalo</strong>
+    necessário para sair da origem e alcançar o destino.
+  </p>
+
+  <div class="grid3">
+    <div class="card">
+      <span class="tag">Entrada</span>
+      <h3>Dois quadrados</h3>
+      <p>Exemplo: <code>e2 e4</code>. O primeiro é a origem e o segundo é o destino.</p>
+    </div>
+    <div class="card">
+      <span class="tag blue">Objetivo</span>
+      <h3>Menor quantidade</h3>
+      <p>Não basta encontrar um caminho. Precisamos garantir que seja o caminho com menos movimentos.</p>
+    </div>
+    <div class="card">
+      <span class="tag yellow">Saída</span>
+      <h3>Número de movimentos</h3>
+      <p>Imprimimos a frase pedida pelo problema com a distância encontrada.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    Mesmo que origem e destino sejam iguais, o algoritmo funciona: a resposta é <strong>0</strong>.
+    Isso aparece no exemplo <code>f6 f6</code>.
+  </div>
+</section>
+
+<section id="grafo">
+  <div class="section-head"><div class="num">02</div><h2>O tabuleiro é um grafo</h2></div>
+
+  <p class="lead">
+    Para resolver com grafos, basta reinterpretar o tabuleiro.
+  </p>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">Vértices</span>
+      <h3>64 casas</h3>
+      <p>Cada quadrado do tabuleiro representa um vértice.</p>
+      <pre>a1, a2, ..., h8</pre>
+    </div>
+    <div class="card">
+      <span class="tag blue">Arestas</span>
+      <h3>Movimentos válidos</h3>
+      <p>Existe uma aresta entre duas casas quando o cavalo pode ir de uma para a outra em um único movimento.</p>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-box">Casa do tabuleiro</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">Vértice</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">Movimento do cavalo</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">Aresta</div>
+  </div>
+
+  <div class="callout">
+    Como cada movimento custa exatamente <strong>1</strong>, o grafo é não ponderado para este problema.
+  </div>
+</section>
+
+<section id="movimentos">
+  <div class="section-head"><div class="num">03</div><h2>Os 8 movimentos possíveis do cavalo</h2></div>
+
+  <p class="lead">
+    O cavalo sempre faz um deslocamento em “L”: duas casas em um eixo e uma no outro.
+  </p>
+
+  <div class="grid2">
+    <div>
+      <div class="move-diagram">
+        <div class="md-cell"></div><div class="md-cell hit">•</div><div class="md-cell"></div><div class="md-cell hit">•</div><div class="md-cell"></div>
+        <div class="md-cell hit">•</div><div class="md-cell"></div><div class="md-cell"></div><div class="md-cell"></div><div class="md-cell hit">•</div>
+        <div class="md-cell"></div><div class="md-cell"></div><div class="md-cell center">♞</div><div class="md-cell"></div><div class="md-cell"></div>
+        <div class="md-cell hit">•</div><div class="md-cell"></div><div class="md-cell"></div><div class="md-cell"></div><div class="md-cell hit">•</div>
+        <div class="md-cell"></div><div class="md-cell hit">•</div><div class="md-cell"></div><div class="md-cell hit">•</div><div class="md-cell"></div>
+      </div>
+    </div>
+
+    <div>
+<pre>movimentos = [
+    (<span class="nu">2</span>, <span class="nu">1</span>),
+    (<span class="nu">2</span>, -<span class="nu">1</span>),
+    (-<span class="nu">2</span>, <span class="nu">1</span>),
+    (-<span class="nu">2</span>, -<span class="nu">1</span>),
+    (<span class="nu">1</span>, <span class="nu">2</span>),
+    (<span class="nu">1</span>, -<span class="nu">2</span>),
+    (-<span class="nu">1</span>, <span class="nu">2</span>),
+    (-<span class="nu">1</span>, -<span class="nu">2</span>)
+]</pre>
+    </div>
+  </div>
+
+  <div class="callout">
+    Alguns desses movimentos podem cair fora do tabuleiro. Por isso sempre testamos:
+    <code>0 &lt;= nx &lt; 8</code> e <code>0 &lt;= ny &lt; 8</code>.
+  </div>
+</section>
+
+<section id="bfs">
+  <div class="section-head"><div class="num">04</div><h2>Por que BFS?</h2></div>
+
+  <p class="lead">
+    A BFS percorre o grafo por <strong>camadas de distância</strong>.
+  </p>
+
+  <div class="flow">
+    <div class="flow-box">distância 0</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">distância 1</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">distância 2</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">distância 3...</div>
+  </div>
+
+  <div class="grid3" style="margin-top:15px">
+    <div class="card">
+      <span class="tag">1</span>
+      <h3>Começa na origem</h3>
+      <p>Origem entra na fila com distância 0.</p>
+    </div>
+    <div class="card">
+      <span class="tag blue">2</span>
+      <h3>Explora vizinhos</h3>
+      <p>Todos os movimentos possíveis recebem distância +1.</p>
+    </div>
+    <div class="card">
+      <span class="tag purple">3</span>
+      <h3>Primeiro encontro</h3>
+      <p>Quando o destino é retirado da fila, aquela distância é mínima.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    A BFS garante o menor número de arestas em um grafo não ponderado.
+    Aqui, uma aresta equivale a um movimento do cavalo.
+  </div>
+</section>
+
+<section id="animacao">
+  <div class="section-head"><div class="num">05</div><h2>BFS animada — e2 até e4</h2></div>
+
+  <p class="lead">
+    Este exemplo precisa de <strong>2 movimentos</strong>. A animação mostra a expansão por camadas.
+  </p>
+
+  <div class="board-wrap">
+    <div>
+      <div id="board" class="board" aria-label="Tabuleiro de xadrez animado"></div>
+      <div class="graph-panel">
+        <h3>O mesmo exemplo como grafo</h3>
+        <p>
+          Cada bolinha é uma casa do tabuleiro. Cada linha é um movimento válido do cavalo
+          que a BFS está considerando neste trecho.
+        </p>
+        <svg id="bfsGraph" class="mini-graph" viewBox="0 0 430 360" role="img" aria-label="Grafo parcial da BFS do cavalo de e2 até e4"></svg>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel-title">
+        <strong>Execução</strong>
+        <span id="stepBadge" class="step-badge">passo 0</span>
+      </div>
+
+      <div id="explanation" class="explanation" aria-live="polite">
+        Clique em “Próximo” ou “Executar”.
+      </div>
+
+      <div class="state">
+        <small>Fila</small>
+        <div id="queue" class="queue"></div>
+      </div>
+
+      <div class="state">
+        <small>Posição atual</small>
+        <strong id="currentState">—</strong>
+      </div>
+
+      <div class="state">
+        <small>Distância atual</small>
+        <strong id="distanceState">0</strong>
+      </div>
+
+      <div class="controls">
+        <button id="prevBtn" class="secondary" type="button">Anterior</button>
+        <button id="nextBtn" type="button">Próximo</button>
+        <button id="playBtn" class="warn" type="button">Executar</button>
+        <button id="resetBtn" class="secondary" type="button">Reiniciar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    A BFS não “adivinha” o caminho. Ela explora primeiro todas as casas a 1 movimento.
+    Só depois começa a processar as casas a 2 movimentos.
+  </div>
+</section>
+
+<section id="codigo">
+  <div class="section-head"><div class="num">06</div><h2>Algoritmo em Python 3.11</h2></div>
+
+<pre><span class="kw">from</span> collections <span class="kw">import</span> deque
+
+
+<span class="kw">def</span> <span class="fn">bfs</span>(posA, posB):
+
+    <span class="cm"># Converte a posição do xadrez para índices 0..7</span>
+    x = int(posA[<span class="nu">1</span>]) - <span class="nu">1</span>
+    y = ord(posA[<span class="nu">0</span>]) - ord(<span class="str">'a'</span>)
+
+    a = int(posB[<span class="nu">1</span>]) - <span class="nu">1</span>
+    b = ord(posB[<span class="nu">0</span>]) - ord(<span class="str">'a'</span>)
+
+    visited = [
+        [<span class="kw">False</span>] * <span class="nu">8</span>
+        <span class="kw">for</span> _ <span class="kw">in</span> range(<span class="nu">8</span>)
+    ]
+
+    fila = deque()
+
+    <span class="cm"># (linha, coluna, distância)</span>
+    fila.append((x, y, <span class="nu">0</span>))
+    visited[x][y] = <span class="kw">True</span>
+
+    movimentos = [
+        (<span class="nu">2</span>, <span class="nu">1</span>),
+        (<span class="nu">2</span>, -<span class="nu">1</span>),
+        (-<span class="nu">2</span>, <span class="nu">1</span>),
+        (-<span class="nu">2</span>, -<span class="nu">1</span>),
+        (<span class="nu">1</span>, <span class="nu">2</span>),
+        (<span class="nu">1</span>, -<span class="nu">2</span>),
+        (-<span class="nu">1</span>, <span class="nu">2</span>),
+        (-<span class="nu">1</span>, -<span class="nu">2</span>)
+    ]
+
+    <span class="kw">while</span> fila:
+
+        linha, coluna, distancia = fila.popleft()
+
+        <span class="cm"># Primeiro momento em que o destino sai da fila:</span>
+        <span class="cm"># encontramos a menor distância.</span>
+        <span class="kw">if</span> linha == a <span class="kw">and</span> coluna == b:
+            <span class="kw">return</span> distancia
+
+        <span class="kw">for</span> dx, dy <span class="kw">in</span> movimentos:
+
+            nx = linha + dx
+            ny = coluna + dy
+
+            <span class="cm"># Movimento continua dentro do tabuleiro?</span>
+            <span class="kw">if</span> <span class="nu">0</span> &lt;= nx &lt; <span class="nu">8</span> <span class="kw">and</span> <span class="nu">0</span> &lt;= ny &lt; <span class="nu">8</span>:
+
+                <span class="cm"># Ainda não visitamos esta casa?</span>
+                <span class="kw">if not</span> visited[nx][ny]:
+
+                    visited[nx][ny] = <span class="kw">True</span>
+
+                    fila.append(
+                        (nx, ny, distancia + <span class="nu">1</span>)
+                    )
+
+
+<span class="kw">while True</span>:
+
+    <span class="kw">try</span>:
+        posA, posB = input().split()
+
+    <span class="kw">except</span> EOFError:
+        <span class="kw">break</span>
+
+    resposta = bfs(posA, posB)
+
+    print(
+        <span class="str">f"To get from {posA} to {posB} takes "</span>
+        <span class="str">f"{resposta} knight moves."</span>
+    )</pre>
+
+  <div class="explain-code" style="margin-top:15px">
+    <div class="explain-row">
+      <div class="snippet">fila = deque()</div>
+      <div class="plain"><strong>BFS precisa de uma fila.</strong> Entramos no final e retiramos da frente.</div>
+    </div>
+
+    <div class="explain-row">
+      <div class="snippet">linha, coluna, distancia = fila.popleft()</div>
+      <div class="plain"><strong>Processamos o elemento mais antigo.</strong> Isso preserva a ordem por camadas.</div>
+    </div>
+
+    <div class="explain-row">
+      <div class="snippet">fila.append((nx, ny, distancia + 1))</div>
+      <div class="plain"><strong>Todo vizinho está uma aresta mais distante.</strong> Portanto recebe distância +1.</div>
+    </div>
+
+    <div class="explain-row">
+      <div class="snippet">visited[nx][ny] = True</div>
+      <div class="plain"><strong>Marcamos ao colocar na fila.</strong> Assim a mesma casa não entra várias vezes.</div>
+    </div>
+  </div>
+</section>
+
+<section id="entrada">
+  <div class="section-head"><div class="num">07</div><h2>Entrada e saída do exemplo</h2></div>
+
+  <div class="grid2">
+    <div>
+      <h3>Exemplo de entrada</h3>
+      <div class="input-box">e2 e4
+a1 b2
+b2 c3
+a1 h8
+a1 h7
+h8 a1
+b1 c3
+f6 f6</div>
+    </div>
+
+    <div>
+      <h3>Exemplo de saída</h3>
+      <div class="output-box">To get from e2 to e4 takes 2 knight moves.
+To get from a1 to b2 takes 4 knight moves.
+To get from b2 to c3 takes 2 knight moves.
+To get from a1 to h8 takes 6 knight moves.
+To get from a1 to h7 takes 5 knight moves.
+To get from h8 to a1 takes 6 knight moves.
+To get from b1 to c3 takes 1 knight moves.
+To get from f6 to f6 takes 0 knight moves.</div>
+    </div>
+  </div>
+
+  <div class="grid3" style="margin-top:14px">
+    <div class="card">
+      <span class="tag">b1 → c3</span>
+      <h3>1 movimento</h3>
+      <p>c3 é diretamente alcançável pelo cavalo a partir de b1.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag blue">a1 → h8</span>
+      <h3>6 movimentos</h3>
+      <p>A BFS expande várias camadas até alcançar o destino.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag yellow">f6 → f6</span>
+      <h3>0 movimentos</h3>
+      <p>A origem já é o destino; a primeira posição retirada da fila resolve o caso.</p>
+    </div>
+  </div>
+</section>
+
+<section id="resumo">
+  <div class="section-head"><div class="num">08</div><h2>O que o aluno precisa guardar</h2></div>
+
+  <div class="grid3">
+    <div class="card">
+      <h3>Modelagem</h3>
+      <p>Casa = vértice. Movimento válido = aresta.</p>
+    </div>
+    <div class="card">
+      <h3>BFS</h3>
+      <p>Explora por níveis usando uma fila.</p>
+    </div>
+    <div class="card">
+      <h3>Menor caminho</h3>
+      <p>Em grafo não ponderado, a primeira distância encontrada pela BFS é mínima.</p>
+    </div>
+  </div>
+
+  <table class="compare">
+    <tr><th>Elemento do problema</th><th>Interpretação em grafos</th></tr>
+    <tr><td>Casa do tabuleiro</td><td>Vértice</td></tr>
+    <tr><td>Movimento do cavalo</td><td>Aresta</td></tr>
+    <tr><td>Quantidade de movimentos</td><td>Distância</td></tr>
+    <tr><td>Estrutura auxiliar</td><td>Fila</td></tr>
+    <tr><td>Algoritmo</td><td class="good">BFS</td></tr>
+  </table>
+
+  <div class="callout">
+    Frase para memorizar: <strong>“Se todas as arestas custam 1 e quero a menor quantidade de passos, pense em BFS.”</strong>
+  </div>
+</section>
+
+<footer>
+  Aula 04 · BFS · Movimento do Cavalo · Python 3.11
+</footer>
+
+</main>
+</div>
+
+<script>
+const files = ['a','b','c','d','e','f','g','h'];
+const board = document.getElementById('board');
+const graph = document.getElementById('bfsGraph');
+
+function makeBoard(){
+  for(let rank=8; rank>=1; rank--){
+    for(let file=0; file<8; file++){
+      const sq=document.createElement('div');
+      sq.className='square '+(((rank+file)%2===0)?'light':'dark');
+      const name=files[file]+rank;
+      sq.dataset.square=name;
+      sq.innerHTML=`<span class="coord">${name}</span>`;
+      board.appendChild(sq);
+    }
+  }
+}
+makeBoard();
+
+const graphNodes = {
+  e2:{x:52,y:180},
+  f4:{x:165,y:50},
+  g3:{x:165,y:115},
+  c3:{x:165,y:180},
+  c1:{x:165,y:245},
+  g1:{x:165,y:310},
+  h5:{x:310,y:25},
+  h3:{x:310,y:65},
+  g6:{x:310,y:105},
+  g2:{x:310,y:145},
+  d5:{x:310,y:185},
+  d3:{x:310,y:225},
+  e6:{x:310,y:265},
+  e4:{x:310,y:320}
+};
+
+const graphEdges = [
+  ['e2','f4'], ['e2','g3'], ['e2','c3'], ['e2','c1'], ['e2','g1'],
+  ['f4','h5'], ['f4','h3'], ['f4','g6'], ['f4','g2'], ['f4','d5'], ['f4','d3'], ['f4','e6'],
+  ['g3','e4']
+];
+
+function edgeKey(a,b){
+  return `${a}-${b}`;
+}
+
+function makeGraph(){
+  const edgeLayer=document.createElementNS('http://www.w3.org/2000/svg','g');
+  const nodeLayer=document.createElementNS('http://www.w3.org/2000/svg','g');
+
+  graphEdges.forEach(([a,b])=>{
+    const pa=graphNodes[a], pb=graphNodes[b];
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',pa.x);
+    line.setAttribute('y1',pa.y);
+    line.setAttribute('x2',pb.x);
+    line.setAttribute('y2',pb.y);
+    line.setAttribute('class','graph-edge');
+    line.dataset.edge=edgeKey(a,b);
+    edgeLayer.appendChild(line);
+  });
+
+  Object.entries(graphNodes).forEach(([name,pos])=>{
+    const group=document.createElementNS('http://www.w3.org/2000/svg','g');
+    group.setAttribute('class','graph-node');
+    group.dataset.node=name;
+    group.setAttribute('transform',`translate(${pos.x} ${pos.y})`);
+
+    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('r','21');
+
+    const text=document.createElementNS('http://www.w3.org/2000/svg','text');
+    text.textContent=name;
+
+    group.appendChild(circle);
+    group.appendChild(text);
+    nodeLayer.appendChild(group);
+  });
+
+  graph.appendChild(edgeLayer);
+  graph.appendChild(nodeLayer);
+}
+makeGraph();
+
+const steps = [
+  {
+    current:null, distance:0, queue:["e2 (0)"], visited:["e2"], frontier:["e2"],
+    graphEdges:[], currentEdges:[],
+    text:"A BFS começa em e2.\nColocamos e2 na fila com distância 0."
+  },
+  {
+    current:"e2", distance:0,
+    queue:["f4 (1)","g3 (1)","c3 (1)","c1 (1)","g1 (1)"],
+    visited:["e2"],
+    frontier:["f4","g3","c3","c1","g1"],
+    graphEdges:["e2-f4","e2-g3","e2-c3","e2-c1","e2-g1"],
+    currentEdges:["e2-f4","e2-g3","e2-c3","e2-c1","e2-g1"],
+    text:"Retiramos e2 da fila.\nGeramos todos os movimentos válidos do cavalo.\nTodos entram com distância 1."
+  },
+  {
+    current:"f4", distance:1,
+    queue:["g3 (1)","c3 (1)","c1 (1)","g1 (1)","h5 (2)","h3 (2)","g6 (2)","g2 (2)","d5 (2)","d3 (2)","e6 (2)"],
+    visited:["e2","f4"],
+    frontier:["g3","c3","c1","g1","h5","h3","g6","g2","d5","d3","e6"],
+    graphEdges:["e2-f4","e2-g3","e2-c3","e2-c1","e2-g1","f4-h5","f4-h3","f4-g6","f4-g2","f4-d5","f4-d3","f4-e6"],
+    currentEdges:["f4-h5","f4-h3","f4-g6","f4-g2","f4-d5","f4-d3","f4-e6"],
+    text:"Agora processamos f4, que está a 1 movimento da origem.\nSeus novos vizinhos entram no final da fila com distância 2."
+  },
+  {
+    current:"g3", distance:1,
+    queue:["c3 (1)","c1 (1)","g1 (1)","h5 (2)","h3 (2)","g6 (2)","g2 (2)","d5 (2)","d3 (2)","e6 (2)","e4 (2)"],
+    visited:["e2","f4","g3"],
+    frontier:["c3","c1","g1","h5","h3","g6","g2","d5","d3","e6","e4"],
+    graphEdges:["e2-f4","e2-g3","e2-c3","e2-c1","e2-g1","f4-h5","f4-h3","f4-g6","f4-g2","f4-d5","f4-d3","f4-e6","g3-e4"],
+    currentEdges:["g3-e4"],
+    text:"Processamos g3, ainda na camada de distância 1.\nEntre os novos vizinhos aparece e4, com distância 2.\nEle entra na fila."
+  },
+  {
+    current:"c3", distance:1,
+    queue:["c1 (1)","g1 (1)","h5 (2)","h3 (2)","g6 (2)","g2 (2)","d5 (2)","d3 (2)","e6 (2)","e4 (2)"],
+    visited:["e2","f4","g3","c3"],
+    frontier:["c1","g1","h5","h3","g6","g2","d5","d3","e6","e4"],
+    graphEdges:["e2-f4","e2-g3","e2-c3","e2-c1","e2-g1","f4-h5","f4-h3","f4-g6","f4-g2","f4-d5","f4-d3","f4-e6","g3-e4"],
+    currentEdges:["e2-c3"],
+    text:"A BFS continua processando todas as casas de distância 1 antes de chegar às de distância 2."
+  },
+  {
+    current:"e4", distance:2,
+    queue:[],
+    visited:["e2","f4","g3","c3","c1","g1","h5","h3","g6","g2","d5","d3","e6","e4"],
+    frontier:[],
+    graphEdges:["e2-f4","e2-g3","e2-c3","e2-c1","e2-g1","f4-h5","f4-h3","f4-g6","f4-g2","f4-d5","f4-d3","f4-e6","g3-e4"],
+    currentEdges:["g3-e4"],
+    text:"Quando e4 é retirado da fila, sua distância é 2.\nComo a BFS processa por camadas, não existe caminho com menos movimentos.\n\nResposta: 2 knight moves."
+  }
+];
+
+let index=0, timer=null;
+
+function clearBoard(){
+  document.querySelectorAll('.square').forEach(sq=>{
+    sq.classList.remove('start','target','frontier','visited','current');
+    const knight=sq.querySelector('.knight');
+    if(knight) knight.remove();
+  });
+  document.querySelector('[data-square="e2"]').classList.add('start');
+  document.querySelector('[data-square="e4"]').classList.add('target');
+}
+
+function render(){
+  clearBoard();
+  const s=steps[index];
+
+  s.visited.forEach(name=>{
+    const el=document.querySelector(`[data-square="${name}"]`);
+    if(el) el.classList.add('visited');
+  });
+
+  s.frontier.forEach(name=>{
+    const el=document.querySelector(`[data-square="${name}"]`);
+    if(el) el.classList.add('frontier');
+  });
+
+  if(s.current){
+    const el=document.querySelector(`[data-square="${s.current}"]`);
+    if(el){
+      el.classList.add('current');
+      const k=document.createElement('span');
+      k.className='knight';
+      k.textContent='♞';
+      el.appendChild(k);
+    }
+  }
+
+  document.querySelectorAll('.graph-edge').forEach(edge=>{
+    edge.setAttribute('class','graph-edge');
+  });
+  document.querySelectorAll('.graph-node').forEach(node=>{
+    node.setAttribute('class','graph-node');
+  });
+
+  s.graphEdges.forEach(edgeName=>{
+    const edge=document.querySelector(`[data-edge="${edgeName}"]`);
+    if(edge) edge.setAttribute('class','graph-edge discovered');
+  });
+
+  const activeEdges = s.currentEdges || (s.currentEdge ? [s.currentEdge] : []);
+  activeEdges.forEach(edgeName=>{
+    const edge=document.querySelector(`[data-edge="${edgeName}"]`);
+    if(edge) edge.setAttribute('class','graph-edge current');
+  });
+
+  s.visited.forEach(name=>{
+    const node=document.querySelector(`[data-node="${name}"]`);
+    if(node) node.setAttribute('class','graph-node visited');
+  });
+
+  s.frontier.forEach(name=>{
+    const node=document.querySelector(`[data-node="${name}"]`);
+    if(node) node.setAttribute('class','graph-node frontier');
+  });
+
+  const startNode=document.querySelector('[data-node="e2"]');
+  const targetNode=document.querySelector('[data-node="e4"]');
+  if(startNode) startNode.classList.add('start');
+  if(targetNode) targetNode.classList.add('target');
+
+  if(s.current){
+    const node=document.querySelector(`[data-node="${s.current}"]`);
+    if(node) node.setAttribute('class',`${node.getAttribute('class')} current`);
+  }
+
+  document.getElementById('stepBadge').textContent=`passo ${index}/${steps.length-1}`;
+  document.getElementById('explanation').textContent=s.text;
+  document.getElementById('currentState').textContent=s.current || '—';
+  document.getElementById('distanceState').textContent=s.distance;
+
+  const q=document.getElementById('queue');
+  q.innerHTML='';
+  if(s.queue.length===0){
+    q.innerHTML='<span style="color:#718399;font-size:.8rem">fila vazia</span>';
+  }else{
+    s.queue.forEach(item=>{
+      const el=document.createElement('span');
+      el.className='qitem';
+      el.textContent=item;
+      q.appendChild(el);
+    });
+  }
+
+  document.getElementById('prevBtn').disabled=index===0;
+  document.getElementById('nextBtn').disabled=index===steps.length-1;
+}
+
+function stop(){
+  if(timer){ clearInterval(timer); timer=null; }
+  document.getElementById('playBtn').textContent='Executar';
+}
+
+document.getElementById('nextBtn').addEventListener('click',()=>{
+  stop();
+  if(index<steps.length-1) index++;
+  render();
+});
+document.getElementById('prevBtn').addEventListener('click',()=>{
+  stop();
+  if(index>0) index--;
+  render();
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  stop();
+  index=0;
+  render();
+});
+document.getElementById('playBtn').addEventListener('click',()=>{
+  if(timer){ stop(); return; }
+  if(index===steps.length-1) index=0;
+  document.getElementById('playBtn').textContent='Pausar';
+  timer=setInterval(()=>{
+    if(index<steps.length-1){ index++; render(); }
+    else stop();
+  },1300);
+});
+
+render();
+</script>
+
+</body>
+</html>

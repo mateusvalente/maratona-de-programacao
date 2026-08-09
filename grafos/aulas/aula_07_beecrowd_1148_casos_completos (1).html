@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 07 — beecrowd 1148: Países em Guerra</title>
+<style>
+:root{
+  --bg:#07101c; --panel:#0d1c2e; --code:#06101b;
+  --text:#edf5ff; --muted:#9eb0c7; --line:rgba(255,255,255,.10);
+  --green:#65e6bd; --blue:#75c7ff; --purple:#b7a0ff;
+  --yellow:#ffd86b; --red:#ff9696;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--text);background:
+  radial-gradient(circle at 10% 0%,rgba(101,230,189,.08),transparent 30%),
+  radial-gradient(circle at 100% 15%,rgba(117,199,255,.07),transparent 28%),
+  var(--bg);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.55
+}
+.shell{display:grid;grid-template-columns:275px minmax(0,1fr)}
+aside{
+  height:100vh;position:sticky;top:0;padding:25px 18px;background:rgba(7,16,28,.93);
+  border-right:1px solid var(--line);overflow:auto
+}
+.brand{display:flex;gap:11px;align-items:center;margin-bottom:24px}
+.logo{
+  width:43px;height:43px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--green),var(--blue));color:#041019;font-weight:1000
+}
+.brand b{font-size:.95rem}.brand small{display:block;color:var(--muted);font-size:.7rem}
+nav{display:flex;flex-direction:column;gap:5px}
+nav a{color:var(--muted);text-decoration:none;padding:9px 11px;border-radius:10px;font-size:.82rem}
+nav a:hover{color:white;background:rgba(255,255,255,.05)}
+.tip{
+  margin-top:22px;padding:13px;border:1px solid rgba(101,230,189,.18);
+  background:rgba(101,230,189,.045);border-radius:13px;color:var(--muted);font-size:.75rem
+}
+main{width:min(1240px,100%);margin:auto;padding:32px 38px 70px}
+.hero{
+  padding:46px;min-height:390px;border:1px solid var(--line);border-radius:30px;
+  background:linear-gradient(135deg,#10253b,#081421);display:flex;align-items:center
+}
+.kicker{color:var(--green);text-transform:uppercase;font-size:.73rem;font-weight:900;letter-spacing:.15em}
+h1{font-size:clamp(2.5rem,6vw,5rem);line-height:.95;letter-spacing:-.055em;margin:10px 0 18px;max-width:940px}
+.hero p{max-width:800px;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:7px 11px;color:#cbd8e7;font-size:.78rem}
+section{
+  margin-top:26px;padding:27px;border:1px solid var(--line);border-radius:22px;
+  background:linear-gradient(180deg,rgba(13,28,46,.94),rgba(9,21,35,.94));scroll-margin-top:18px
+}
+.case{
+  margin-top:34px;border-color:rgba(117,199,255,.20);
+  box-shadow:inset 0 1px rgba(255,255,255,.02)
+}
+.head{display:flex;gap:13px;align-items:center;margin-bottom:14px}
+.num{
+  width:40px;height:40px;display:grid;place-items:center;border-radius:12px;
+  border:1px solid rgba(101,230,189,.2);background:rgba(101,230,189,.08);
+  color:var(--green);font-weight:900;flex:0 0 auto
+}
+.case .num{color:var(--blue);border-color:rgba(117,199,255,.24);background:rgba(117,199,255,.08)}
+h2{margin:0;font-size:1.55rem} h3{margin:0 0 8px;font-size:1rem}
+.lead{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{padding:17px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.027)}
+.card p{color:var(--muted);font-size:.88rem;margin:0}
+.tag{
+  display:inline-block;padding:4px 8px;margin-bottom:9px;border-radius:999px;
+  background:var(--green);color:#041019;font-size:.68rem;font-weight:900
+}
+.tag.blue{background:var(--blue)} .tag.yellow{background:var(--yellow)} .tag.purple{background:var(--purple)}
+.callout{
+  margin-top:15px;padding:13px 15px;border-left:3px solid var(--green);
+  border-radius:0 12px 12px 0;background:rgba(101,230,189,.05);color:#d6e9e4;font-size:.89rem
+}
+.callout.warn{border-color:var(--yellow);background:rgba(255,216,107,.05)}
+pre,.codebox{
+  background:var(--code);border:1px solid rgba(255,255,255,.08);border-radius:14px;
+  padding:16px;overflow:auto;font:13px/1.62 "Cascadia Code",Consolas,monospace;color:#dcecff
+}
+.kw{color:var(--purple)} .cm{color:#70849a}.nu{color:var(--yellow)}.str{color:var(--green)}.fn{color:var(--blue)}
+.inputline{
+  display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center;
+  padding:11px 12px;border-bottom:1px solid var(--line)
+}
+.inputline:last-child{border-bottom:0}
+.raw{font:800 .9rem "Cascadia Code",Consolas,monospace;color:var(--yellow)}
+.meaning{color:var(--muted);font-size:.88rem}
+.meaning strong{color:white}
+.graph-stage{
+  margin-top:14px;border:1px dashed rgba(117,199,255,.24);border-radius:20px;padding:18px;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),#07131f;
+  background-size:28px 28px
+}
+svg{display:block;width:min(680px,100%);height:auto;margin:auto}
+.edge{stroke:#5d7185;stroke-width:4;fill:none}
+.edge.zero{stroke:var(--green);stroke-width:6}
+.node{fill:#10273f;stroke:var(--blue);stroke-width:3}
+.node-label{fill:white;font:bold 18px Inter,Arial}
+.weight{fill:#07131f;stroke:var(--yellow);stroke-width:2}
+.weight.zero{stroke:var(--green)}
+.wtxt{fill:var(--yellow);font:bold 14px Inter,Arial}
+.wtxt.zero{fill:var(--green)}
+.smalltxt{fill:#91a6ba;font:13px Inter,Arial}
+.matrix-wrap{overflow:auto}
+.matrix{border-collapse:separate;border-spacing:5px;margin:auto;font:13px "Cascadia Code",Consolas,monospace}
+.matrix th{color:#9eb0c7;width:46px;height:42px;text-align:center}
+.matrix td{
+  width:46px;height:42px;text-align:center;border:1px solid rgba(255,255,255,.07);
+  border-radius:9px;background:#091624;color:#63788c
+}
+.matrix td.z{background:rgba(101,230,189,.1);color:var(--green);font-weight:900}
+.matrix td.w{background:rgba(255,216,107,.1);color:var(--yellow);font-weight:900}
+.matrix td.diag{background:#111d2b}
+.query-card{
+  padding:16px;border:1px solid var(--line);border-radius:15px;background:#081624;
+  display:grid;gap:8px
+}
+.query-card .route{font:800 .95rem "Cascadia Code",Consolas,monospace;color:white}
+.query-card .calc{font:900 1rem "Cascadia Code",Consolas,monospace;color:var(--yellow)}
+.query-card .out{padding:10px;border-radius:10px;background:rgba(101,230,189,.07);color:var(--green);font-weight:900}
+.query-card .out.bad{background:rgba(255,150,150,.07);color:var(--red)}
+.query-card p{margin:0;color:var(--muted);font-size:.86rem}
+.table{width:100%;border-collapse:collapse;font-size:.87rem}
+.table th,.table td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
+.table th{color:#dce8f5}.table td{color:var(--muted)}
+.good{color:var(--green)!important;font-weight:900}.bad{color:var(--red)!important;font-weight:900}
+.steps{display:grid;gap:8px}
+.step{
+  display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:start;
+  padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#081624
+}
+.step .bubble{
+  width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(117,199,255,.10);border:1px solid rgba(117,199,255,.22);color:var(--blue);font-weight:900
+}
+.step p{margin:0;color:var(--muted);font-size:.87rem}.step strong{color:white}
+.full-example{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:15px
+}
+.output{white-space:pre-wrap;color:#d7f7ed}
+@media(max-width:980px){
+  .shell{display:block}aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  nav{display:grid;grid-template-columns:repeat(2,1fr)}
+  main{padding:22px 16px 55px}.hero{padding:30px 23px;min-height:330px}
+  .grid2,.grid3,.full-example{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside>
+  <div class="brand"><div class="logo">07</div><div><b>Países em Guerra</b><small>beecrowd 1148 · Dijkstra</small></div></div>
+  <nav>
+    <a href="#visao">01 · Como ler a entrada</a>
+    <a href="#caso1">02 · Caso 1 completo</a>
+    <a href="#caso1grafo">03 · Grafo do caso 1</a>
+    <a href="#caso1consultas">04 · Consultas do caso 1</a>
+    <a href="#caso2">05 · Caso 2 completo</a>
+    <a href="#caso2grafo">06 · Grafo do caso 2</a>
+    <a href="#caso2consultas">07 · Consultas do caso 2</a>
+    <a href="#dijkstra">08 · Dijkstra no exercício</a>
+    <a href="#codigo">09 · Código completo</a>
+  </nav>
+  <div class="tip">Nesta versão, os <strong>dois casos de teste são separados</strong>. Cada um tem sua própria entrada, grafo, consultas e saída.</div>
+</aside>
+
+<main>
+<header class="hero">
+  <div>
+    <div class="kicker">Aula prática · exemplo completo caso por caso</div>
+    <h1>beecrowd 1148 — entendendo cada caso de entrada.</h1>
+    <p>O exemplo oficial possui dois casos de teste antes do <code>0 0</code>. Vamos tratar cada um como um exercício independente para não misturar arestas, consultas e respostas.</p>
+    <div class="chips"><span class="chip">Caso 1 completo</span><span class="chip">Caso 2 completo</span><span class="chip">Grafo original</span><span class="chip">Grafo após custo zero</span><span class="chip">Consultas</span></div>
+  </div>
+</header>
+
+<section id="visao">
+  <div class="head"><div class="num">01</div><h2>Como a entrada é organizada?</h2></div>
+  <div class="steps">
+    <div class="step"><div class="bubble">1</div><p><strong>N E</strong>: quantidade de cidades e quantidade de acordos.</p></div>
+    <div class="step"><div class="bubble">2</div><p>As próximas <strong>E linhas</strong> são arestas <code>X Y H</code>.</p></div>
+    <div class="step"><div class="bubble">3</div><p>Depois vem <strong>K</strong>: quantidade de consultas.</p></div>
+    <div class="step"><div class="bubble">4</div><p>As próximas <strong>K linhas</strong> são pares <code>origem destino</code>.</p></div>
+    <div class="step"><div class="bubble">5</div><p>Quando aparecer <strong>0 0</strong>, a entrada terminou.</p></div>
+  </div>
+
+  <div class="callout">
+    Portanto, o exemplo fornecido contém <strong>2 casos de teste completos</strong>:
+    o primeiro começa em <code>4 5</code> e o segundo começa em <code>3 3</code>.
+  </div>
+</section>
+
+<section id="caso1" class="case">
+  <div class="head"><div class="num">C1</div><h2>Caso de teste 1 — entrada completa</h2></div>
+
+  <div class="full-example">
+    <div>
+      <h3>Entrada somente do caso 1</h3>
+      <pre>4 5
+1 2 5
+2 1 10
+3 4 8
+4 3 7
+2 3 6
+5
+1 2
+1 3
+1 4
+4 3
+4 1</pre>
+    </div>
+
+    <div>
+      <h3>Saída somente do caso 1</h3>
+      <pre class="output">0
+6
+6
+0
+Nao e possivel entregar a carta</pre>
+    </div>
+  </div>
+
+  <h3 style="margin-top:20px">Interpretação linha por linha</h3>
+  <div class="codebox" style="padding:0">
+    <div class="inputline"><div class="raw">4 5</div><div class="meaning"><strong>4 cidades</strong>: 1, 2, 3 e 4. <strong>5 acordos</strong>: leremos exatamente 5 arestas.</div></div>
+    <div class="inputline"><div class="raw">1 2 5</div><div class="meaning">Existe <strong>1 → 2</strong> com tempo 5.</div></div>
+    <div class="inputline"><div class="raw">2 1 10</div><div class="meaning">Existe <strong>2 → 1</strong> com tempo 10.</div></div>
+    <div class="inputline"><div class="raw">3 4 8</div><div class="meaning">Existe <strong>3 → 4</strong> com tempo 8.</div></div>
+    <div class="inputline"><div class="raw">4 3 7</div><div class="meaning">Existe <strong>4 → 3</strong> com tempo 7.</div></div>
+    <div class="inputline"><div class="raw">2 3 6</div><div class="meaning">Existe <strong>2 → 3</strong> com tempo 6.</div></div>
+    <div class="inputline"><div class="raw">5</div><div class="meaning">Existem <strong>5 consultas</strong>.</div></div>
+    <div class="inputline"><div class="raw">1 2</div><div class="meaning">Consulta 1: menor tempo de 1 até 2.</div></div>
+    <div class="inputline"><div class="raw">1 3</div><div class="meaning">Consulta 2: menor tempo de 1 até 3.</div></div>
+    <div class="inputline"><div class="raw">1 4</div><div class="meaning">Consulta 3: menor tempo de 1 até 4.</div></div>
+    <div class="inputline"><div class="raw">4 3</div><div class="meaning">Consulta 4: menor tempo de 4 até 3.</div></div>
+    <div class="inputline"><div class="raw">4 1</div><div class="meaning">Consulta 5: menor tempo de 4 até 1.</div></div>
+  </div>
+</section>
+
+<section id="caso1grafo">
+  <div class="head"><div class="num">02</div><h2>Caso 1 — do grafo original ao grafo usado</h2></div>
+
+  <div class="grid2">
+    <div>
+      <h3>Antes da regra especial</h3>
+      <pre>1 → 2 = 5
+2 → 1 = 10
+
+2 → 3 = 6
+
+3 → 4 = 8
+4 → 3 = 7</pre>
+    </div>
+    <div>
+      <h3>Depois da regra especial</h3>
+      <pre>1 → 2 = 0
+2 → 1 = 0
+
+2 → 3 = 6
+
+3 → 4 = 0
+4 → 3 = 0</pre>
+    </div>
+  </div>
+
+  <div class="callout">
+    Como 1→2 e 2→1 existem, esse par vira custo zero.
+    Como 3→4 e 4→3 existem, esse par também vira custo zero.
+    O acordo 2→3 continua custando 6 porque não existe 3→2.
+  </div>
+
+  <div class="graph-stage">
+    <svg viewBox="0 0 650 700" role="img" aria-label="Grafo final do caso 1">
+      <defs>
+        <marker id="a0" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#65e6bd"/>
+        </marker>
+        <marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#5d7185"/>
+        </marker>
+      </defs>
+
+      <path class="edge zero" d="M300 105 C220 145 220 215 300 245" marker-end="url(#a0)"/>
+      <path class="edge zero" d="M350 245 C430 215 430 145 350 105" marker-end="url(#a0)"/>
+      <rect class="weight zero" x="220" y="155" width="31" height="27" rx="8"/><text class="wtxt zero" x="235" y="174" text-anchor="middle">0</text>
+      <rect class="weight zero" x="400" y="155" width="31" height="27" rx="8"/><text class="wtxt zero" x="415" y="174" text-anchor="middle">0</text>
+
+      <line class="edge" x1="325" y1="295" x2="325" y2="410" marker-end="url(#a1)"/>
+      <rect class="weight" x="344" y="343" width="31" height="27" rx="8"/><text class="wtxt" x="359" y="362" text-anchor="middle">6</text>
+      <text class="smalltxt" x="383" y="362">somente 2 → 3</text>
+
+      <path class="edge zero" d="M300 480 C220 520 220 590 300 620" marker-end="url(#a0)"/>
+      <path class="edge zero" d="M350 620 C430 590 430 520 350 480" marker-end="url(#a0)"/>
+      <rect class="weight zero" x="220" y="530" width="31" height="27" rx="8"/><text class="wtxt zero" x="235" y="549" text-anchor="middle">0</text>
+      <rect class="weight zero" x="400" y="530" width="31" height="27" rx="8"/><text class="wtxt zero" x="415" y="549" text-anchor="middle">0</text>
+
+      <circle class="node" cx="325" cy="75" r="35"/><text class="node-label" x="325" y="82" text-anchor="middle">1</text>
+      <circle class="node" cx="325" cy="260" r="35"/><text class="node-label" x="325" y="267" text-anchor="middle">2</text>
+      <circle class="node" cx="325" cy="445" r="35"/><text class="node-label" x="325" y="452" text-anchor="middle">3</text>
+      <circle class="node" cx="325" cy="630" r="35"/><text class="node-label" x="325" y="637" text-anchor="middle">4</text>
+    </svg>
+  </div>
+
+  <div class="matrix-wrap" style="margin-top:15px">
+    <table class="matrix">
+      <tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+      <tr><th>1</th><td class="diag">0</td><td class="z">0</td><td>∞</td><td>∞</td></tr>
+      <tr><th>2</th><td class="z">0</td><td class="diag">0</td><td class="w">6</td><td>∞</td></tr>
+      <tr><th>3</th><td>∞</td><td>∞</td><td class="diag">0</td><td class="z">0</td></tr>
+      <tr><th>4</th><td>∞</td><td>∞</td><td class="z">0</td><td class="diag">0</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="caso1consultas">
+  <div class="head"><div class="num">03</div><h2>Caso 1 — resolvendo todas as 5 consultas</h2></div>
+
+  <div class="grid2">
+    <div class="query-card">
+      <span class="tag">Consulta 1</span>
+      <div class="route">1 → 2</div>
+      <div class="calc">0</div>
+      <p>O par 1 e 2 possui comunicação instantânea após a regra especial.</p>
+      <div class="out">Saída: 0</div>
+    </div>
+
+    <div class="query-card">
+      <span class="tag">Consulta 2</span>
+      <div class="route">1 → 2 → 3</div>
+      <div class="calc">0 + 6 = 6</div>
+      <p>Chegamos em 2 sem custo e depois seguimos pela aresta 2→3 de custo 6.</p>
+      <div class="out">Saída: 6</div>
+    </div>
+
+    <div class="query-card">
+      <span class="tag">Consulta 3</span>
+      <div class="route">1 → 2 → 3 → 4</div>
+      <div class="calc">0 + 6 + 0 = 6</div>
+      <p>Depois de chegar em 3, a comunicação 3→4 custa zero.</p>
+      <div class="out">Saída: 6</div>
+    </div>
+
+    <div class="query-card">
+      <span class="tag">Consulta 4</span>
+      <div class="route">4 → 3</div>
+      <div class="calc">0</div>
+      <p>O par 3 e 4 também foi transformado em comunicação instantânea.</p>
+      <div class="out">Saída: 0</div>
+    </div>
+
+    <div class="query-card">
+      <span class="tag">Consulta 5</span>
+      <div class="route">4 → 3 ✕ 2 → 1</div>
+      <div class="calc">não existe 3 → 2</div>
+      <p>4 chega em 3, mas a aresta entre 2 e 3 existe apenas no sentido 2→3. Portanto não conseguimos voltar para 2 e depois para 1.</p>
+      <div class="out bad">Saída: Nao e possivel entregar a carta</div>
+    </div>
+  </div>
+</section>
+
+<section id="caso2" class="case">
+  <div class="head"><div class="num">C2</div><h2>Caso de teste 2 — entrada completa</h2></div>
+
+  <div class="full-example">
+    <div>
+      <h3>Entrada somente do caso 2</h3>
+      <pre>3 3
+1 2 10
+2 3 1
+3 2 1
+3
+1 3
+3 1
+3 2</pre>
+    </div>
+
+    <div>
+      <h3>Saída somente do caso 2</h3>
+      <pre class="output">10
+Nao e possivel entregar a carta
+0</pre>
+    </div>
+  </div>
+
+  <h3 style="margin-top:20px">Interpretação linha por linha</h3>
+  <div class="codebox" style="padding:0">
+    <div class="inputline"><div class="raw">3 3</div><div class="meaning"><strong>3 cidades</strong> e <strong>3 acordos</strong>.</div></div>
+    <div class="inputline"><div class="raw">1 2 10</div><div class="meaning">Existe <strong>1 → 2</strong> com tempo 10.</div></div>
+    <div class="inputline"><div class="raw">2 3 1</div><div class="meaning">Existe <strong>2 → 3</strong> com tempo 1.</div></div>
+    <div class="inputline"><div class="raw">3 2 1</div><div class="meaning">Existe <strong>3 → 2</strong> com tempo 1.</div></div>
+    <div class="inputline"><div class="raw">3</div><div class="meaning">Existem <strong>3 consultas</strong>.</div></div>
+    <div class="inputline"><div class="raw">1 3</div><div class="meaning">Consulta 1: menor tempo de 1 até 3.</div></div>
+    <div class="inputline"><div class="raw">3 1</div><div class="meaning">Consulta 2: menor tempo de 3 até 1.</div></div>
+    <div class="inputline"><div class="raw">3 2</div><div class="meaning">Consulta 3: menor tempo de 3 até 2.</div></div>
+  </div>
+</section>
+
+<section id="caso2grafo">
+  <div class="head"><div class="num">04</div><h2>Caso 2 — montando o grafo completo</h2></div>
+
+  <div class="grid2">
+    <div>
+      <h3>Antes da regra</h3>
+      <pre>1 → 2 = 10
+
+2 → 3 = 1
+3 → 2 = 1</pre>
+    </div>
+    <div>
+      <h3>Depois da regra</h3>
+      <pre>1 → 2 = 10
+
+2 → 3 = 0
+3 → 2 = 0</pre>
+    </div>
+  </div>
+
+  <div class="callout">
+    Somente o par 2 e 3 possui acordo nos dois sentidos. Por isso apenas 2↔3 vira custo zero.
+    Não existe 2→1, então 1→2 continua custando 10.
+  </div>
+
+  <div class="graph-stage">
+    <svg viewBox="0 0 540 540" role="img" aria-label="Grafo final do caso 2">
+      <defs>
+        <marker id="b0" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#65e6bd"/>
+        </marker>
+        <marker id="b1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#5d7185"/>
+        </marker>
+      </defs>
+
+      <line class="edge" x1="270" y1="105" x2="270" y2="230" marker-end="url(#b1)"/>
+      <rect class="weight" x="289" y="155" width="39" height="27" rx="8"/><text class="wtxt" x="308" y="174" text-anchor="middle">10</text>
+      <text class="smalltxt" x="335" y="174">somente 1 → 2</text>
+
+      <path class="edge zero" d="M245 300 C175 335 175 405 245 435" marker-end="url(#b0)"/>
+      <path class="edge zero" d="M295 435 C365 405 365 335 295 300" marker-end="url(#b0)"/>
+      <rect class="weight zero" x="180" y="352" width="31" height="27" rx="8"/><text class="wtxt zero" x="195" y="371" text-anchor="middle">0</text>
+      <rect class="weight zero" x="329" y="352" width="31" height="27" rx="8"/><text class="wtxt zero" x="344" y="371" text-anchor="middle">0</text>
+
+      <circle class="node" cx="270" cy="70" r="35"/><text class="node-label" x="270" y="77" text-anchor="middle">1</text>
+      <circle class="node" cx="270" cy="265" r="35"/><text class="node-label" x="270" y="272" text-anchor="middle">2</text>
+      <circle class="node" cx="270" cy="465" r="35"/><text class="node-label" x="270" y="472" text-anchor="middle">3</text>
+    </svg>
+  </div>
+
+  <div class="matrix-wrap" style="margin-top:15px">
+    <table class="matrix">
+      <tr><th></th><th>1</th><th>2</th><th>3</th></tr>
+      <tr><th>1</th><td class="diag">0</td><td class="w">10</td><td>∞</td></tr>
+      <tr><th>2</th><td>∞</td><td class="diag">0</td><td class="z">0</td></tr>
+      <tr><th>3</th><td>∞</td><td class="z">0</td><td class="diag">0</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="caso2consultas">
+  <div class="head"><div class="num">05</div><h2>Caso 2 — resolvendo todas as 3 consultas</h2></div>
+
+  <div class="grid3">
+    <div class="query-card">
+      <span class="tag">Consulta 1</span>
+      <div class="route">1 → 2 → 3</div>
+      <div class="calc">10 + 0 = 10</div>
+      <p>1→2 ainda custa 10. Depois 2→3 custa zero.</p>
+      <div class="out">Saída: 10</div>
+    </div>
+
+    <div class="query-card">
+      <span class="tag">Consulta 2</span>
+      <div class="route">3 → 2 ✕ 1</div>
+      <div class="calc">não existe 2 → 1</div>
+      <p>3 chega em 2 por custo zero, mas não existe uma aresta de 2 para 1.</p>
+      <div class="out bad">Saída: Nao e possivel entregar a carta</div>
+    </div>
+
+    <div class="query-card">
+      <span class="tag">Consulta 3</span>
+      <div class="route">3 → 2</div>
+      <div class="calc">0</div>
+      <p>2 e 3 possuem acordos recíprocos, então o envio é instantâneo.</p>
+      <div class="out">Saída: 0</div>
+    </div>
+  </div>
+</section>
+
+<section id="dijkstra">
+  <div class="head"><div class="num">06</div><h2>Agora fica claro onde o Dijkstra entra</h2></div>
+
+  <p class="lead">Nos exemplos pequenos conseguimos enxergar os caminhos. O programa precisa fazer a mesma coisa automaticamente.</p>
+
+  <div class="steps">
+    <div class="step"><div class="bubble">1</div><p><strong>Monte o grafo</strong> lendo as E linhas.</p></div>
+    <div class="step"><div class="bubble">2</div><p><strong>Aplique a regra de custo zero</strong> quando existir ligação direta nos dois sentidos.</p></div>
+    <div class="step"><div class="bubble">3</div><p>Para cada consulta, inicialize <strong>dist[origem] = 0</strong> e as demais como infinito.</p></div>
+    <div class="step"><div class="bubble">4</div><p>Escolha sempre o vértice não visitado com a <strong>menor distância acumulada</strong>.</p></div>
+    <div class="step"><div class="bubble">5</div><p><strong>Relaxe as arestas</strong>: tente melhorar o custo dos vizinhos.</p></div>
+    <div class="step"><div class="bubble">6</div><p>Se o destino continuar infinito, imprima <strong>Nao e possivel entregar a carta</strong>.</p></div>
+  </div>
+
+  <h3 style="margin-top:20px">Exemplo de Dijkstra: Caso 1, consulta 1 → 4</h3>
+  <table class="table">
+    <tr><th>Passo</th><th>Escolhido</th><th>dist[1]</th><th>dist[2]</th><th>dist[3]</th><th>dist[4]</th><th>Atualização</th></tr>
+    <tr><td>Inicial</td><td>—</td><td class="good">0</td><td>∞</td><td>∞</td><td>∞</td><td>Origem = 0</td></tr>
+    <tr><td>1</td><td>1</td><td>0</td><td class="good">0</td><td>∞</td><td>∞</td><td>1→2 custa 0</td></tr>
+    <tr><td>2</td><td>2</td><td>0</td><td>0</td><td class="good">6</td><td>∞</td><td>0 + 6 = 6</td></tr>
+    <tr><td>3</td><td>3</td><td>0</td><td>0</td><td>6</td><td class="good">6</td><td>6 + 0 = 6</td></tr>
+    <tr><td>4</td><td>4</td><td>0</td><td>0</td><td>6</td><td class="good">6</td><td>Resposta = 6</td></tr>
+  </table>
+</section>
+
+<section id="codigo">
+  <div class="head"><div class="num">07</div><h2>Código completo em Python 3.11</h2></div>
+
+<pre>INF = <span class="nu">2</span> ** <span class="nu">25</span>
+
+
+<span class="kw">def</span> <span class="fn">dijkstra</span>(origem, destino, n):
+
+    dist = [INF] * (n + <span class="nu">1</span>)
+    visitado = [<span class="kw">False</span>] * (n + <span class="nu">1</span>)
+
+    dist[origem] = <span class="nu">0</span>
+
+    <span class="kw">for</span> _ <span class="kw">in</span> range(n):
+
+        menor = INF
+        atual = -<span class="nu">1</span>
+
+        <span class="cm"># Escolhe o não visitado com menor distância.</span>
+        <span class="kw">for</span> cidade <span class="kw">in</span> range(<span class="nu">1</span>, n + <span class="nu">1</span>):
+            <span class="kw">if not</span> visitado[cidade] <span class="kw">and</span> dist[cidade] &lt; menor:
+                menor = dist[cidade]
+                atual = cidade
+
+        <span class="kw">if</span> atual == -<span class="nu">1</span>:
+            <span class="kw">break</span>
+
+        visitado[atual] = <span class="kw">True</span>
+
+        <span class="kw">if</span> atual == destino:
+            <span class="kw">break</span>
+
+        <span class="cm"># Relaxamento.</span>
+        <span class="kw">for</span> vizinho <span class="kw">in</span> range(<span class="nu">1</span>, n + <span class="nu">1</span>):
+
+            peso = grafo[atual][vizinho]
+
+            <span class="kw">if</span> peso != INF:
+
+                novo_custo = dist[atual] + peso
+
+                <span class="kw">if</span> novo_custo &lt; dist[vizinho]:
+                    dist[vizinho] = novo_custo
+
+    <span class="kw">return</span> dist[destino]
+
+
+<span class="kw">while True</span>:
+
+    n, e = map(int, input().split())
+
+    <span class="kw">if</span> n == <span class="nu">0</span> <span class="kw">and</span> e == <span class="nu">0</span>:
+        <span class="kw">break</span>
+
+    grafo = [
+        [INF] * (n + <span class="nu">1</span>)
+        <span class="kw">for</span> _ <span class="kw">in</span> range(n + <span class="nu">1</span>)
+    ]
+
+    <span class="kw">for</span> cidade <span class="kw">in</span> range(<span class="nu">1</span>, n + <span class="nu">1</span>):
+        grafo[cidade][cidade] = <span class="nu">0</span>
+
+    <span class="kw">for</span> _ <span class="kw">in</span> range(e):
+
+        x, y, h = map(int, input().split())
+
+        grafo[x][y] = h
+
+        <span class="cm"># Se o acordo inverso já existe, os dois custos viram zero.</span>
+        <span class="kw">if</span> grafo[y][x] != INF:
+            grafo[x][y] = <span class="nu">0</span>
+            grafo[y][x] = <span class="nu">0</span>
+
+    k = int(input())
+
+    <span class="kw">for</span> _ <span class="kw">in</span> range(k):
+
+        origem, destino = map(int, input().split())
+
+        resposta = dijkstra(origem, destino, n)
+
+        <span class="kw">if</span> resposta == INF:
+            print(<span class="str">"Nao e possivel entregar a carta"</span>)
+        <span class="kw">else</span>:
+            print(resposta)
+
+    print()</pre>
+
+  <div class="callout">
+    Ordem mental para resolver o 1148:
+    <strong>ler um caso → montar seu grafo → ajustar reciprocidades → responder suas K consultas → imprimir linha vazia → ler o próximo caso.</strong>
+  </div>
+</section>
+
+<section>
+  <div class="head"><div class="num">✓</div><h2>Entrada oficial completa, agora separada mentalmente</h2></div>
+  <pre>CASO 1
+4 5
+1 2 5
+2 1 10
+3 4 8
+4 3 7
+2 3 6
+5
+1 2
+1 3
+1 4
+4 3
+4 1
+
+CASO 2
+3 3
+1 2 10
+2 3 1
+3 2 1
+3
+1 3
+3 1
+3 2
+
+FIM
+0 0</pre>
+
+  <div class="callout">
+    Os textos “CASO 1”, “CASO 2” e “FIM” acima são apenas marcações didáticas.
+    <strong>Eles não fazem parte da entrada enviada ao beecrowd.</strong>
+  </div>
+</section>
+
+<footer style="text-align:center;color:#718399;font-size:.76rem;padding:28px 10px 0">
+Aula 07 · beecrowd 1148 — Países em Guerra · exemplos completos separados por caso
+</footer>
+</main>
+</div>
+</body>
+</html>

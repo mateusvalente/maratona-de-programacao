@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 3 - Pontos Cocirculares</title>
+  <link rel="stylesheet" href="../assets/curso.css">
+  <script src="../assets/aulas.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <nav class="topbar"><a href="../index.html">← Geometria computacional</a><span>Aula 3 de 6</span></nav>
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">beecrowd 1137 · circuncentro</p>
+        <h1>Pontos Cocirculares</h1>
+        <p class="lead">Encontrar a maior quantidade de pontos que pode pertencer à mesma circunferência.</p>
+      </div>
+      <span class="badge">triplas + verificação</span>
+    </header>
+
+    <section class="band two-col">
+      <div>
+        <h2>Três pontos determinam o candidato</h2>
+        <p>
+          Três pontos <strong>não colineares</strong> determinam uma única circunferência. Portanto,
+          testamos cada combinação de três pontos, construímos seu circuncírculo e contamos quantos
+          dos outros pontos têm o mesmo raio em relação ao centro encontrado.
+        </p>
+        <p>
+          Geometricamente, o centro é a interseção de duas mediatrizes. No código, a fórmula em
+          coordenadas evita representar retas verticais e horizontais como casos especiais.
+        </p>
+      </div>
+      <figure class="source-figure">
+        <img src="../assets/imagens/1137.svg" alt="Triângulo inscrito, suas mediatrizes e cinco pontos cocirculares">
+        <figcaption>Diagrama criado para a aula: o circuncentro é equidistante dos pontos da circunferência.</figcaption>
+      </figure>
+    </section>
+
+    <section class="band">
+      <h2>O determinante detecta degeneração</h2>
+      <div class="formula">D = 2[x₁(y₂-y₃) + x₂(y₃-y₁) + x₃(y₁-y₂)]</div>
+      <p>
+        Quando <code>D = 0</code>, a área orientada do triângulo também é zero: os três pontos são
+        colineares e não existe um círculo finito único passando por eles. Esse trio deve ser ignorado.
+      </p>
+      <div class="warning">
+        Como o centro e o raio usam ponto flutuante, não compare distâncias com <code>==</code>.
+        A solução usa <code>math.isclose</code> com tolerâncias relativa e absoluta.
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="geometry-lab" data-lab="1137">
+        <div class="lab-head"><h2>Busca por circunferências</h2><output id="result-1137" class="lab-result"></output></div>
+        <div class="controls">
+          <label class="field wide"><span>Conjunto de pontos</span>
+            <select id="set-1137">
+              <option value="five">Cinco cocirculares e um externo</option>
+              <option value="mixed">Conjunto misto</option>
+              <option value="collinear">Quatro colineares</option>
+            </select>
+          </label>
+          <button id="previous-1137" type="button" title="Trio anterior">← Anterior</button>
+          <button id="next-1137" class="primary" type="button" title="Próximo trio">Próximo →</button>
+        </div>
+        <div class="geometry-stage"><svg id="svg-1137" viewBox="0 0 640 360" role="img" aria-label="Pontos e circunferência candidata"></svg></div>
+        <div class="metric-grid">
+          <div class="metric"><span>Trio selecionado</span><strong id="triple-1137"></strong></div>
+          <div class="metric"><span>Neste círculo</span><strong id="count-1137"></strong></div>
+          <div class="metric"><span>Melhor resposta</span><strong id="best-1137"></strong></div>
+        </div>
+        <div class="check-list"><div class="check-row ok"><span class="check-icon">i</span><span>Combinação em análise</span><code id="step-1137"></code></div></div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>Complexidade e contagem</h2>
+        <p>
+          Existem <code>O(N³)</code> trios e, para cada um, podemos examinar até <code>O(N)</code>
+          pontos. Com no máximo 100 pontos e o limite generoso citado no material, a abordagem direta é suficiente.
+        </p>
+        <div class="fact-check"><strong>Por que o laço pode começar em k + 1?</strong> Para qualquer círculo ótimo, o trio formado pelos seus três menores índices será testado; todos os outros pontos desse círculo aparecem depois de k.</div>
+      </div>
+      <div class="code-panel">
+        <div class="code-title"><span>Construção do candidato</span><a href="../resolucoes/1137.py">Abrir 1137.py</a></div>
+        <pre><code>circulo = circuncirculo(
+    pontos[i], pontos[j], pontos[k]
+)
+if circulo is None:
+    continue
+
+atual = 3
+for m in range(k + 1, quantidade):
+    if esta_no_circulo(pontos[m], circulo):
+        atual += 1</code></pre>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Fontes e validação</h2>
+      <ul class="sources">
+        <li><a href="https://github.com/xTecna/solucoes-da-beecrowd/tree/main/problemas/geometria-computacional/1137" target="_blank" rel="noopener">Explicação e solução C++ originais</a> — estratégia de enumerar trios.</li>
+        <li><a href="https://doc.cgal.org/Manual/3.8/doc_html/cgal_manual/Kernel_23_ref/Function_circumcenter.html" target="_blank" rel="noopener">CGAL: circumcenter</a> — três pontos não colineares como pré-condição do circuncentro.</li>
+        <li><a href="https://doc.cgal.org/latest/Kernel_23/group__orientation__grp.html" target="_blank" rel="noopener">CGAL: orientation</a> — classificação de três pontos como giro ou colinearidade.</li>
+        <li><a href="https://docs.python.org/3/library/math.html#math.isclose" target="_blank" rel="noopener">Python: math.isclose</a> — comparação numérica com tolerância.</li>
+      </ul>
+    </section>
+
+    <nav class="lesson-nav"><a href="aula_02_1124.html">← Aula 2</a><a href="aula_04_1223.html">Aula 4: Tobogan →</a></nav>
+  </main>
+</body>
+</html>

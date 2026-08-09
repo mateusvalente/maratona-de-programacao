@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 4 - Tobogan de Bolinhas</title>
+  <link rel="stylesheet" href="../assets/curso.css">
+  <script src="../assets/aulas.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <nav class="topbar"><a href="../index.html">← Geometria computacional</a><span>Aula 4 de 6</span></nav>
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">beecrowd 1223 · distância a segmento</p>
+        <h1>Tobogan de Bolinhas</h1>
+        <p class="lead">Descobrir o maior diâmetro que atravessa todas as aberturas formadas pelas aletas.</p>
+      </div>
+      <span class="badge">mínimo global</span>
+    </header>
+
+    <section class="band two-col">
+      <div>
+        <h2>Duas medições por aleta</h2>
+        <p>
+          Cada aleta nasce em uma haste lateral e termina dentro do tobogã. As hastes alternam:
+          esquerda, direita, esquerda, direita. A ponta da aleta cria até dois gargalos.
+        </p>
+        <ul class="concept-list">
+          <li><strong>Ponta → haste oposta:</strong> uma distância horizontal.</li>
+          <li><strong>Ponta → próxima aleta:</strong> a menor distância entre a ponta atual e o segmento seguinte.</li>
+          <li><strong>Resposta:</strong> o menor valor entre todos os gargalos, pois a bolinha precisa passar por todos.</li>
+        </ul>
+      </div>
+      <figure class="source-figure">
+        <img src="../assets/imagens/1223.png" alt="Aleta, haste oposta e próxima aleta com as duas distâncias candidatas">
+        <figcaption>Figura original: a passagem pode ser limitada pela haste ou pela aleta seguinte.</figcaption>
+      </figure>
+    </section>
+
+    <section class="band">
+      <h2>Distância ao segmento, não à reta infinita</h2>
+      <p>
+        Projetamos a ponta <code>P</code> sobre a direção do segmento <code>AB</code>. O parâmetro
+        <code>t</code> indica onde a projeção cairia. Limitá-lo ao intervalo <code>[0, 1]</code>
+        transforma a reta infinita no segmento real da aleta.
+      </p>
+      <div class="formula">t = ((P-A) · (B-A)) / |B-A|² &nbsp;&nbsp; e &nbsp;&nbsp; Q = A + clamp(t, 0, 1)(B-A)</div>
+      <div class="fact-check"><strong>Três possibilidades:</strong> se <code>t &lt; 0</code>, Q=A; se <code>t &gt; 1</code>, Q=B; caso contrário, Q é o pé da perpendicular dentro da aleta.</div>
+    </section>
+
+    <section class="band">
+      <div class="geometry-lab" data-lab="1223">
+        <div class="lab-head"><h2>Varredura dos gargalos</h2><output id="result-1223" class="lab-result"></output></div>
+        <div class="controls">
+          <button id="previous-1223" type="button" title="Medição anterior">← Anterior</button>
+          <button id="next-1223" class="primary" type="button" title="Próxima medição">Próxima →</button>
+        </div>
+        <div class="geometry-stage"><svg id="svg-1223" viewBox="-20 0 640 360" role="img" aria-label="Aletas alternadas e distância atualmente medida"></svg></div>
+        <div class="metric-grid">
+          <div class="metric"><span>Candidato</span><strong id="candidate-1223"></strong></div>
+          <div class="metric"><span>Distância atual</span><strong id="distance-1223"></strong></div>
+          <div class="metric"><span>Menor até agora</span><strong id="minimum-1223"></strong></div>
+        </div>
+        <div class="check-list"><div class="check-row ok"><span class="check-icon">i</span><span>Medição em análise</span><code id="step-1223"></code></div></div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>Uma passada é suficiente</h2>
+        <p>
+          Depois de ler as aletas, visitamos cada uma uma única vez. Calculamos sua abertura até a
+          haste e, quando existir uma próxima aleta, a distância da ponta ao próximo segmento.
+        </p>
+        <div class="complexity">
+          <div><strong>Tempo</strong><span>O(N)</span></div>
+          <div><strong>Memória</strong><span>O(N)</span></div>
+          <div><strong>Saída</strong><span>2 casas</span></div>
+        </div>
+      </div>
+      <div class="code-panel">
+        <div class="code-title"><span>Projeção limitada</span><a href="../resolucoes/1223.py">Abrir 1223.py</a></div>
+        <pre><code>t = ((px - ax) * vx + (py - ay) * vy) / comprimento_2
+t = max(0.0, min(1.0, t))
+
+projecao = (ax + t * vx, ay + t * vy)
+distancia = math.hypot(
+    px - projecao[0], py - projecao[1]
+)</code></pre>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Fontes e validação</h2>
+      <ul class="sources">
+        <li><a href="https://github.com/xTecna/solucoes-da-beecrowd/tree/main/problemas/geometria-computacional/1223" target="_blank" rel="noopener">Explicação e solução C++ originais</a> — duas distâncias por aleta e mínimo global.</li>
+        <li><a href="https://doc.cgal.org/latest/Kernel_23/index.html" target="_blank" rel="noopener">CGAL Linear Geometry Kernel</a> — pontos, segmentos e distância quadrática entre objetos geométricos.</li>
+        <li><a href="https://docs.python.org/3/library/math.html#math.hypot" target="_blank" rel="noopener">Python: math.hypot</a> — norma euclidiana usada após a projeção.</li>
+      </ul>
+    </section>
+
+    <nav class="lesson-nav"><a href="aula_03_1137.html">← Aula 3</a><a href="aula_05_1291.html">Aula 5: Será Isso Integração? →</a></nav>
+  </main>
+</body>
+</html>

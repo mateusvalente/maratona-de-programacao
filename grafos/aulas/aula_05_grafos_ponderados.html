@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 05 — Grafos Ponderados</title>
+<style>
+:root{
+  --bg:#07101c;
+  --panel:#0d1c2e;
+  --panel2:#10253b;
+  --code:#06101b;
+  --text:#edf5ff;
+  --muted:#9eb0c7;
+  --line:rgba(255,255,255,.10);
+  --green:#65e6bd;
+  --blue:#75c7ff;
+  --purple:#b7a0ff;
+  --yellow:#ffd86b;
+  --red:#ff8d8d;
+  --shadow:0 20px 60px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 12% 0%,rgba(101,230,189,.08),transparent 28%),
+    radial-gradient(circle at 96% 12%,rgba(117,199,255,.07),transparent 25%),
+    var(--bg);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  line-height:1.55;
+}
+.shell{display:grid;grid-template-columns:260px minmax(0,1fr)}
+aside{
+  height:100vh;position:sticky;top:0;padding:26px 18px;
+  background:rgba(7,16,28,.91);backdrop-filter:blur(14px);
+  border-right:1px solid var(--line);overflow:auto;
+}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:25px}
+.brand-mark{
+  width:43px;height:43px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--green),var(--blue));
+  color:#05101a;font-weight:1000;
+}
+.brand strong{font-size:.95rem}
+.brand small{display:block;color:var(--muted);font-size:.7rem}
+nav{display:flex;flex-direction:column;gap:5px}
+nav a{
+  padding:9px 11px;border-radius:10px;text-decoration:none;color:var(--muted);
+  font-size:.84rem;transition:.2s;
+}
+nav a:hover{background:rgba(255,255,255,.05);color:#fff;transform:translateX(3px)}
+.side-note{
+  margin-top:24px;padding:13px;border-radius:13px;border:1px solid rgba(101,230,189,.18);
+  background:rgba(101,230,189,.045);color:var(--muted);font-size:.75rem;
+}
+main{width:min(1160px,100%);margin:0 auto;padding:32px 38px 72px}
+.hero{
+  min-height:380px;padding:46px;border-radius:30px;border:1px solid var(--line);
+  background:linear-gradient(135deg,rgba(16,37,59,.97),rgba(7,17,30,.98));
+  box-shadow:var(--shadow);display:flex;align-items:center;position:relative;overflow:hidden;
+}
+.hero:before,.hero:after{
+  content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.08)
+}
+.hero:before{width:390px;height:390px;right:-105px;top:-120px}
+.hero:after{width:255px;height:255px;right:25px;top:13px}
+.kicker{font-size:.74rem;font-weight:900;color:var(--green);letter-spacing:.15em;text-transform:uppercase}
+h1{max-width:850px;margin:10px 0 17px;font-size:clamp(2.5rem,6vw,5rem);line-height:.95;letter-spacing:-.055em}
+.hero p{max-width:760px;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.chip{
+  padding:7px 11px;border-radius:999px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);color:#c9d7e8;font-size:.78rem;
+}
+section{
+  margin-top:26px;padding:27px;border-radius:22px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(13,28,46,.92),rgba(9,21,35,.92));
+  box-shadow:0 12px 32px rgba(0,0,0,.13);scroll-margin-top:20px;
+}
+.section-head{display:flex;gap:13px;align-items:center;margin-bottom:14px}
+.num{
+  width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;
+  color:var(--green);background:rgba(101,230,189,.08);
+  border:1px solid rgba(101,230,189,.20);font-weight:900;
+}
+h2{margin:0;font-size:1.55rem;letter-spacing:-.025em}
+h3{margin:0 0 8px;font-size:1rem}
+.lead{color:var(--muted);margin:0 0 16px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{
+  padding:17px;border-radius:15px;border:1px solid var(--line);
+  background:rgba(255,255,255,.028);
+}
+.card p{margin:0;color:var(--muted);font-size:.89rem}
+.tag{
+  display:inline-block;margin-bottom:9px;padding:4px 8px;border-radius:999px;
+  color:#06101b;background:var(--green);font-size:.69rem;font-weight:900;
+}
+.tag.blue{background:var(--blue)} .tag.yellow{background:var(--yellow)} .tag.purple{background:var(--purple)}
+.callout{
+  margin-top:15px;padding:13px 15px;border-radius:0 12px 12px 0;border-left:3px solid var(--green);
+  color:#d6e9e4;background:rgba(101,230,189,.05);font-size:.9rem;
+}
+.graph-stage{
+  margin-top:15px;border-radius:20px;padding:20px;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
+    #07131f;
+  background-size:28px 28px;border:1px dashed rgba(117,199,255,.25);
+}
+.graph-svg{display:block;width:min(650px,100%);height:auto;margin:0 auto}
+.edge{stroke:#556d84;stroke-width:4;stroke-linecap:round}
+.node{fill:#10273f;stroke:var(--blue);stroke-width:3}
+.node-label{fill:#edf5ff;font:bold 18px Inter,Arial}
+.weight-bg{fill:#07131f;stroke:var(--yellow);stroke-width:2}
+.weight-text{fill:var(--yellow);font:bold 15px Inter,Arial}
+.flow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:15px}
+.flow-box{
+  padding:10px 13px;border-radius:11px;border:1px solid rgba(117,199,255,.20);
+  background:#0a1928;color:#d9eaff;font-weight:800;font-size:.82rem;
+}
+.flow-arrow{color:#6f8398;font-size:1.2rem}
+pre{
+  margin:13px 0 0;padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
+  overflow:auto;background:var(--code);color:#dcecff;
+  font:13px/1.62 "Cascadia Code","Fira Code",Consolas,monospace;
+}
+.kw{color:#b7a0ff}.fn{color:#75c7ff}.cm{color:#70849a}.nu{color:#ffd86b}.str{color:#65e6bd}
+.matrix-scroll{overflow:auto;margin-top:15px}
+.matrix{
+  border-collapse:separate;border-spacing:5px;margin:auto;
+  font-size:.84rem;font-family:"Cascadia Code",Consolas,monospace;
+}
+.matrix th{color:#9eb0c7;min-width:40px;height:40px;text-align:center}
+.matrix td{
+  width:40px;height:40px;text-align:center;border-radius:9px;
+  border:1px solid rgba(255,255,255,.07);background:#091624;color:#657b91;
+}
+.matrix td.weight{background:rgba(255,216,107,.10);color:var(--yellow);font-weight:900;border-color:rgba(255,216,107,.24)}
+.matrix td.diag{background:#111d2b;color:#44576b}
+.list{display:grid;gap:10px;margin-top:15px}
+.adj-row{
+  display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 12px;
+  border:1px solid var(--line);border-radius:13px;background:#081624;
+}
+.vertex{
+  width:36px;height:36px;display:grid;place-items:center;border-radius:50%;
+  background:#102b45;border:2px solid var(--blue);font-weight:900;flex:0 0 auto;
+}
+.arrow{color:#71869a}
+.neighbors{display:flex;gap:7px;flex-wrap:wrap}
+.neighbor{
+  padding:6px 9px;border-radius:9px;background:rgba(101,230,189,.07);
+  border:1px solid rgba(101,230,189,.18);font:700 .78rem "Cascadia Code",Consolas,monospace;
+}
+.compare{width:100%;border-collapse:collapse;margin-top:13px;font-size:.88rem}
+.compare th,.compare td{padding:11px;border-bottom:1px solid var(--line);text-align:left}
+.compare th{color:#d6e4f4}.compare td{color:var(--muted)}
+.good{color:var(--green)!important;font-weight:800}
+.example-path{
+  display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:15px;
+}
+.pnode{
+  width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+  background:#102b45;border:2px solid var(--blue);font-weight:900;
+}
+.pedge{display:flex;flex-direction:column;align-items:center;color:var(--muted);font-size:.7rem}
+.pedge strong{color:var(--yellow);font-size:.95rem}
+.math{
+  display:inline-block;padding:7px 10px;border-radius:10px;background:#07131f;
+  border:1px solid var(--line);font-family:"Cascadia Code",Consolas,monospace;color:#e5f0fb;
+}
+footer{text-align:center;color:#718399;font-size:.76rem;padding:28px 10px 0}
+@media(max-width:900px){
+  .shell{display:block}
+  aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  nav{display:grid;grid-template-columns:repeat(2,1fr)}
+  main{padding:22px 16px 55px}.hero{min-height:320px;padding:31px 23px}
+  .grid2,.grid3{grid-template-columns:1fr}
+}
+@media print{
+  aside{display:none}.shell{display:block}main{width:100%;padding:0}
+  body{background:#fff}.hero,section{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+
+<body>
+<div class="shell">
+
+<aside>
+  <div class="brand">
+    <div class="brand-mark">05</div>
+    <div><strong>Grafos Ponderados</strong><small>Aula 5 · Preparação para Dijkstra</small></div>
+  </div>
+
+  <nav>
+    <a href="#conceito">01 · O que é peso?</a>
+    <a href="#grafo">02 · Grafo ponderado</a>
+    <a href="#matriz">03 · Matriz ponderada</a>
+    <a href="#lista">04 · Lista ponderada</a>
+    <a href="#python">05 · Python</a>
+    <a href="#custo">06 · Custo de caminho</a>
+    <a href="#bfs">07 · BFS × pesos</a>
+    <a href="#resumo">08 · Resumo</a>
+  </nav>
+
+  <div class="side-note">
+    Antes de Dijkstra, precisamos responder: <strong>como armazenar o custo de cada aresta?</strong>
+  </div>
+</aside>
+
+<main>
+
+<header class="hero">
+  <div>
+    <div class="kicker">Programação competitiva · Grafos ponderados</div>
+    <h1>Agora cada aresta pode ter um custo diferente.</h1>
+    <p>
+      Uma ligação deixa de significar apenas “existe ou não existe”.
+      Ela pode carregar distância, tempo, preço, consumo ou qualquer outro valor.
+    </p>
+    <div class="chips">
+      <span class="chip">Pesos</span>
+      <span class="chip">Matriz ponderada</span>
+      <span class="chip">Lista ponderada</span>
+      <span class="chip">Menor custo</span>
+      <span class="chip">Preparação para Dijkstra</span>
+    </div>
+  </div>
+</header>
+
+<section id="conceito">
+  <div class="section-head"><div class="num">01</div><h2>O que é o peso de uma aresta?</h2></div>
+
+  <p class="lead">
+    Em um grafo ponderado, cada aresta possui um valor associado.
+  </p>
+
+  <div class="grid3">
+    <div class="card">
+      <span class="tag">Distância</span>
+      <h3>Estradas</h3>
+      <p>Aresta A–B pode representar uma estrada de 12 km.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag blue">Tempo</span>
+      <h3>Rotas</h3>
+      <p>Aresta A–B pode representar 20 minutos de viagem.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag yellow">Custo</span>
+      <h3>Transporte</h3>
+      <p>Aresta A–B pode custar R$ 8,00.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    Em um grafo sem pesos, normalmente pensamos: <strong>“quantas arestas?”</strong>.
+    Em um grafo ponderado, pensamos: <strong>“qual é a soma dos pesos?”</strong>.
+  </div>
+</section>
+
+<section id="grafo">
+  <div class="section-head"><div class="num">02</div><h2>Exemplo de grafo ponderado</h2></div>
+
+  <p class="lead">
+    Usaremos o mesmo grafo em toda a aula. Os números amarelos são os pesos das arestas.
+  </p>
+
+  <div class="graph-stage">
+    <svg class="graph-svg" viewBox="0 0 650 760" aria-label="Grafo ponderado vertical com seis vértices">
+      <!-- edges -->
+      <line class="edge" x1="325" y1="80" x2="205" y2="230"/>
+      <line class="edge" x1="325" y1="80" x2="445" y2="230"/>
+      <line class="edge" x1="205" y1="230" x2="145" y2="430"/>
+      <line class="edge" x1="205" y1="230" x2="325" y2="430"/>
+      <line class="edge" x1="445" y1="230" x2="325" y2="430"/>
+      <line class="edge" x1="445" y1="230" x2="505" y2="430"/>
+      <line class="edge" x1="145" y1="430" x2="325" y2="620"/>
+      <line class="edge" x1="325" y1="430" x2="325" y2="620"/>
+      <line class="edge" x1="505" y1="430" x2="325" y2="620"/>
+
+      <!-- weights -->
+      <g><rect class="weight-bg" x="244" y="137" width="32" height="27" rx="8"/><text class="weight-text" x="260" y="156" text-anchor="middle">4</text></g>
+      <g><rect class="weight-bg" x="374" y="137" width="32" height="27" rx="8"/><text class="weight-text" x="390" y="156" text-anchor="middle">2</text></g>
+      <g><rect class="weight-bg" x="154" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="170" y="334" text-anchor="middle">5</text></g>
+      <g><rect class="weight-bg" x="247" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="263" y="334" text-anchor="middle">1</text></g>
+      <g><rect class="weight-bg" x="371" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="387" y="334" text-anchor="middle">7</text></g>
+      <g><rect class="weight-bg" x="464" y="315" width="32" height="27" rx="8"/><text class="weight-text" x="480" y="334" text-anchor="middle">3</text></g>
+      <g><rect class="weight-bg" x="212" y="520" width="32" height="27" rx="8"/><text class="weight-text" x="228" y="539" text-anchor="middle">6</text></g>
+      <g><rect class="weight-bg" x="309" y="520" width="32" height="27" rx="8"/><text class="weight-text" x="325" y="539" text-anchor="middle">2</text></g>
+      <g><rect class="weight-bg" x="405" y="520" width="32" height="27" rx="8"/><text class="weight-text" x="421" y="539" text-anchor="middle">4</text></g>
+
+      <!-- nodes -->
+      <circle class="node" cx="325" cy="70" r="34"/><text class="node-label" x="325" y="77" text-anchor="middle">A</text>
+      <circle class="node" cx="205" cy="240" r="34"/><text class="node-label" x="205" y="247" text-anchor="middle">B</text>
+      <circle class="node" cx="445" cy="240" r="34"/><text class="node-label" x="445" y="247" text-anchor="middle">C</text>
+      <circle class="node" cx="145" cy="440" r="34"/><text class="node-label" x="145" y="447" text-anchor="middle">D</text>
+      <circle class="node" cx="325" cy="440" r="34"/><text class="node-label" x="325" y="447" text-anchor="middle">E</text>
+      <circle class="node" cx="505" cy="440" r="34"/><text class="node-label" x="505" y="447" text-anchor="middle">F</text>
+      <circle class="node" cx="325" cy="630" r="34"/><text class="node-label" x="325" y="637" text-anchor="middle">G</text>
+    </svg>
+  </div>
+
+  <div class="callout">
+    Por exemplo, a aresta <strong>A–B possui peso 4</strong>, enquanto A–C possui peso 2.
+    As duas ligações existem, mas têm custos diferentes.
+  </div>
+</section>
+
+<section id="matriz">
+  <div class="section-head"><div class="num">03</div><h2>Matriz de adjacência com pesos</h2></div>
+
+  <p class="lead">
+    Antes, a matriz guardava apenas <strong>0 ou 1</strong>. Agora ela pode guardar o próprio peso.
+  </p>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">Sem peso</span>
+      <h3>Existe ou não existe</h3>
+      <pre>adj[A][B] = 1</pre>
+      <p>O valor 1 apenas dizia que havia uma ligação.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag yellow">Com peso</span>
+      <h3>Guardamos o custo</h3>
+      <pre>adj[A][B] = 4</pre>
+      <p>Agora sabemos que a ligação existe e custa 4.</p>
+    </div>
+  </div>
+
+  <div class="matrix-scroll">
+    <table class="matrix">
+      <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th></tr>
+      <tr><th>A</th><td class="diag">0</td><td class="weight">4</td><td class="weight">2</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+      <tr><th>B</th><td class="weight">4</td><td class="diag">0</td><td>∞</td><td class="weight">5</td><td class="weight">1</td><td>∞</td><td>∞</td></tr>
+      <tr><th>C</th><td class="weight">2</td><td>∞</td><td class="diag">0</td><td>∞</td><td class="weight">7</td><td class="weight">3</td><td>∞</td></tr>
+      <tr><th>D</th><td>∞</td><td class="weight">5</td><td>∞</td><td class="diag">0</td><td>∞</td><td>∞</td><td class="weight">6</td></tr>
+      <tr><th>E</th><td>∞</td><td class="weight">1</td><td class="weight">7</td><td>∞</td><td class="diag">0</td><td>∞</td><td class="weight">2</td></tr>
+      <tr><th>F</th><td>∞</td><td>∞</td><td class="weight">3</td><td>∞</td><td>∞</td><td class="diag">0</td><td class="weight">4</td></tr>
+      <tr><th>G</th><td>∞</td><td>∞</td><td>∞</td><td class="weight">6</td><td class="weight">2</td><td class="weight">4</td><td class="diag">0</td></tr>
+    </table>
+  </div>
+
+  <div class="callout">
+    Aqui usamos <strong>∞</strong> para representar “não existe aresta”.
+    Em código, também é comum usar <code>float("inf")</code>.
+  </div>
+</section>
+
+<section id="lista">
+  <div class="section-head"><div class="num">04</div><h2>Lista de adjacência com pesos</h2></div>
+
+  <p class="lead">
+    Na lista, cada vizinho precisa vir acompanhado do peso da aresta.
+  </p>
+
+  <div class="list">
+    <div class="adj-row"><div class="vertex">A</div><div class="arrow">→</div><div class="neighbors"><span class="neighbor">(B, 4)</span><span class="neighbor">(C, 2)</span></div></div>
+    <div class="adj-row"><div class="vertex">B</div><div class="arrow">→</div><div class="neighbors"><span class="neighbor">(A, 4)</span><span class="neighbor">(D, 5)</span><span class="neighbor">(E, 1)</span></div></div>
+    <div class="adj-row"><div class="vertex">C</div><div class="arrow">→</div><div class="neighbors"><span class="neighbor">(A, 2)</span><span class="neighbor">(E, 7)</span><span class="neighbor">(F, 3)</span></div></div>
+    <div class="adj-row"><div class="vertex">D</div><div class="arrow">→</div><div class="neighbors"><span class="neighbor">(B, 5)</span><span class="neighbor">(G, 6)</span></div></div>
+    <div class="adj-row"><div class="vertex">E</div><div class="arrow">→</div><div class="neighbors"><span class="neighbor">(B, 1)</span><span class="neighbor">(C, 7)</span><span class="neighbor">(G, 2)</span></div></div>
+    <div class="adj-row"><div class="vertex">F</div><div class="arrow">→</div><div class="neighbors"><span class="neighbor">(C, 3)</span><span class="neighbor">(G, 4)</span></div></div>
+    <div class="adj-row"><div class="vertex">G</div><div class="arrow">→</div><div class="neighbors"><span class="neighbor">(D, 6)</span><span class="neighbor">(E, 2)</span><span class="neighbor">(F, 4)</span></div></div>
+  </div>
+
+  <div class="callout">
+    O par <code>(B, 4)</code> significa: “B é vizinho e o custo para chegar até B por esta aresta é 4”.
+  </div>
+</section>
+
+<section id="python">
+  <div class="section-head"><div class="num">05</div><h2>Como representar em Python</h2></div>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="tag yellow">Matriz ponderada</span>
+      <pre>V = <span class="nu">7</span>
+
+INF = float(<span class="str">"inf"</span>)
+
+adj = [
+    [INF] * V
+    <span class="kw">for</span> _ <span class="kw">in</span> range(V)
+]
+
+<span class="kw">for</span> i <span class="kw">in</span> range(V):
+    adj[i][i] = <span class="nu">0</span>
+
+<span class="cm"># A --4-- B</span>
+adj[<span class="nu">0</span>][<span class="nu">1</span>] = <span class="nu">4</span>
+adj[<span class="nu">1</span>][<span class="nu">0</span>] = <span class="nu">4</span></pre>
+    </div>
+
+    <div class="card">
+      <span class="tag blue">Lista ponderada</span>
+      <pre>V = <span class="nu">7</span>
+
+grafo = [
+    [] <span class="kw">for</span> _ <span class="kw">in</span> range(V)
+]
+
+<span class="cm"># A --4-- B</span>
+grafo[<span class="nu">0</span>].append((<span class="nu">1</span>, <span class="nu">4</span>))
+grafo[<span class="nu">1</span>].append((<span class="nu">0</span>, <span class="nu">4</span>))</pre>
+    </div>
+  </div>
+
+  <div class="callout">
+    Em programação competitiva, a lista ponderada costuma aparecer assim:
+    <span class="math">grafo[v] = [(vizinho, peso), ...]</span>
+  </div>
+</section>
+
+<section id="custo">
+  <div class="section-head"><div class="num">06</div><h2>Agora o caminho tem custo total</h2></div>
+
+  <p class="lead">
+    O melhor caminho não é necessariamente aquele que usa menos arestas.
+  </p>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">Caminho 1</span>
+      <div class="example-path">
+        <div class="pnode">A</div>
+        <div class="pedge"><strong>4</strong><span>→</span></div>
+        <div class="pnode">B</div>
+        <div class="pedge"><strong>1</strong><span>→</span></div>
+        <div class="pnode">E</div>
+        <div class="pedge"><strong>2</strong><span>→</span></div>
+        <div class="pnode">G</div>
+      </div>
+      <p style="margin-top:14px">Custo: <strong>4 + 1 + 2 = 7</strong></p>
+    </div>
+
+    <div class="card">
+      <span class="tag yellow">Caminho 2</span>
+      <div class="example-path">
+        <div class="pnode">A</div>
+        <div class="pedge"><strong>2</strong><span>→</span></div>
+        <div class="pnode">C</div>
+        <div class="pedge"><strong>3</strong><span>→</span></div>
+        <div class="pnode">F</div>
+        <div class="pedge"><strong>4</strong><span>→</span></div>
+        <div class="pnode">G</div>
+      </div>
+      <p style="margin-top:14px">Custo: <strong>2 + 3 + 4 = 9</strong></p>
+    </div>
+  </div>
+
+  <div class="callout">
+    Os dois caminhos possuem <strong>3 arestas</strong>, mas seus custos são diferentes:
+    7 contra 9. Em grafos ponderados, precisamos comparar a <strong>soma dos pesos</strong>.
+  </div>
+</section>
+
+<section id="bfs">
+  <div class="section-head"><div class="num">07</div><h2>Por que BFS deixa de ser suficiente?</h2></div>
+
+  <p class="lead">
+    BFS considera que cada passo tem o mesmo custo. Com pesos diferentes, isso pode levar à escolha errada.
+  </p>
+
+  <div class="graph-stage">
+    <svg class="graph-svg" viewBox="0 0 600 380" aria-label="Exemplo em que o caminho com menos arestas é mais caro">
+      <line class="edge" x1="100" y1="190" x2="500" y2="190"/>
+      <line class="edge" x1="100" y1="190" x2="300" y2="310"/>
+      <line class="edge" x1="300" y1="310" x2="500" y2="190"/>
+
+      <g><rect class="weight-bg" x="282" y="163" width="38" height="28" rx="8"/><text class="weight-text" x="301" y="183" text-anchor="middle">10</text></g>
+      <g><rect class="weight-bg" x="186" y="242" width="32" height="27" rx="8"/><text class="weight-text" x="202" y="261" text-anchor="middle">2</text></g>
+      <g><rect class="weight-bg" x="382" y="242" width="32" height="27" rx="8"/><text class="weight-text" x="398" y="261" text-anchor="middle">1</text></g>
+
+      <circle class="node" cx="100" cy="190" r="34"/><text class="node-label" x="100" y="197" text-anchor="middle">A</text>
+      <circle class="node" cx="300" cy="310" r="34"/><text class="node-label" x="300" y="317" text-anchor="middle">C</text>
+      <circle class="node" cx="500" cy="190" r="34"/><text class="node-label" x="500" y="197" text-anchor="middle">B</text>
+    </svg>
+  </div>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="card">
+      <span class="tag">Menos arestas</span>
+      <h3>A → B</h3>
+      <p>1 aresta, mas custo total = <strong>10</strong>.</p>
+    </div>
+    <div class="card">
+      <span class="tag yellow">Menor custo</span>
+      <h3>A → C → B</h3>
+      <p>2 arestas, mas custo total = <strong>3</strong>.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    BFS tenderia a preferir chegar a B em uma aresta.
+    Para pesos não negativos diferentes, o algoritmo clássico é <strong>Dijkstra</strong>.
+  </div>
+</section>
+
+<section id="resumo">
+  <div class="section-head"><div class="num">08</div><h2>Resumo</h2></div>
+
+  <table class="compare">
+    <tr><th>Conceito</th><th>Grafo não ponderado</th><th>Grafo ponderado</th></tr>
+    <tr><td>Aresta</td><td>apenas ligação</td><td>ligação + peso</td></tr>
+    <tr><td>Matriz</td><td>0 ou 1</td><td>peso ou ∞</td></tr>
+    <tr><td>Lista</td><td>vizinho</td><td>(vizinho, peso)</td></tr>
+    <tr><td>Objetivo comum</td><td>menor nº de passos</td><td>menor custo acumulado</td></tr>
+    <tr><td>Algoritmo típico</td><td>BFS</td><td class="good">Dijkstra</td></tr>
+  </table>
+
+  <div class="callout">
+    Frase para memorizar:
+    <strong>“O peso pertence à aresta. O custo de um caminho é a soma dos pesos das arestas percorridas.”</strong>
+  </div>
+</section>
+
+<footer>
+  Aula 05 · Grafos Ponderados · Matriz e Lista de Adjacência · Preparação para Dijkstra
+</footer>
+
+</main>
+</div>
+</body>
+</html>

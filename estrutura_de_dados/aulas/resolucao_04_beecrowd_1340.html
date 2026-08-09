@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resolução 4 - beecrowd 1340</title>
+  <link rel="stylesheet" href="../assets/exercicios.css">
+</head>
+<body>
+  <main class="page">
+    <nav class="topbar"><a href="../index.html">← Estruturas de Dados</a><span>Resolução 4 de 5</span></nav>
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">beecrowd 1340 · Simulação paralela</p>
+        <h1>Eu Posso Adivinhar a Estrutura de Dados!</h1>
+        <p>Recebemos operações de inserção e remoção, mas não sabemos qual estrutura as executou. A solução testa todas as candidatas ao mesmo tempo.</p>
+      </div>
+      <div class="problem-links">
+        <a href="https://judge.beecrowd.com/pt/problems/view/1340" target="_blank" rel="noopener">Enunciado</a>
+        <a href="../resolucoes/1340.py">Código .py</a>
+      </div>
+    </header>
+
+    <section class="band">
+      <div class="problem-brief">
+        <div class="brief-item"><h3>Operação 1 x</h3><p>Insere o valor <code>x</code> na estrutura desconhecida.</p></div>
+        <div class="brief-item"><h3>Operação 2 x</h3><p>Informa que a remoção deveria devolver <code>x</code>.</p></div>
+        <div class="brief-item"><h3>Resposta</h3><p>Uma estrutura, <code>not sure</code> ou <code>impossible</code>.</p></div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>Não é DFS nem BFS</h2>
+        <p>Não estamos percorrendo um grafo. Este é um problema de <strong>simulação e eliminação de hipóteses</strong>: pilha, fila e fila de prioridade recebem a mesma sequência enquanto ainda puderem explicar as saídas.</p>
+      </div>
+      <div class="fact-check"><strong>Fila de prioridade:</strong> ela não preserva a ordem de chegada. A próxima remoção devolve o maior valor disponível neste exercício.</div>
+    </section>
+
+    <section class="band">
+      <h2>Mapa da solução</h2>
+      <div class="solution-map">
+        <div class="solution-step"><div><h3>Comece com três hipóteses verdadeiras</h3><p><code>p</code>, <code>f</code> e <code>fp</code> indicam quais estruturas continuam possíveis.</p></div></div>
+        <div class="solution-step"><div><h3>Repita toda inserção nas candidatas</h3><p>Enquanto uma candidata está ativa, ela recebe o mesmo valor.</p></div></div>
+        <div class="solution-step"><div><h3>Compare cada remoção</h3><p>Se uma candidata está vazia ou devolve outro valor, seu booleano passa para falso.</p></div></div>
+        <div class="solution-step"><div><h3>Conte as sobreviventes</h3><p>Uma define a resposta; várias geram <code>not sure</code>; nenhuma gera <code>impossible</code>.</p></div></div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Execução interativa</h2>
+      <div class="exercise-lab" data-exercise-lab="1340">
+        <div class="lab-head"><h2>Três estruturas em paralelo</h2><output class="step-badge" data-player-badge></output></div>
+        <div class="exercise-config">
+          <span>Escolha um desfecho:</span>
+          <button type="button" class="active" data-classifier-scenario="stack">stack</button>
+          <button type="button" data-classifier-scenario="queue">queue</button>
+          <button type="button" data-classifier-scenario="priority">priority queue</button>
+          <button type="button" data-classifier-scenario="unsure">not sure</button>
+          <button type="button" data-classifier-scenario="impossible">impossible</button>
+        </div>
+        <div class="player-controls">
+          <button type="button" data-player="previous">Anterior</button>
+          <button type="button" class="next-button" data-player="next">Próximo</button>
+          <button type="button" class="play-button" data-player="play">Executar</button>
+          <button type="button" data-player="reset">Reiniciar</button>
+          <label class="speed-control">Velocidade <input type="range" min="150" max="1300" value="750" data-player-speed></label>
+        </div>
+        <div class="step-copy"><span class="step-badge">hipóteses</span><p data-player-explanation></p></div>
+        <div class="exercise-stage">
+          <section class="stage-section">
+            <div class="stage-title"><h3>Sequência de operações</h3><span>1 insere · 2 remove</span></div>
+            <div class="operation-row" data-operation-row></div>
+          </section>
+          <section class="stage-section candidate-grid">
+            <div class="candidate-panel" data-candidate="stack">
+              <div class="candidate-head"><h3>Pilha</h3><span class="candidate-status" data-candidate-status></span></div>
+              <div class="candidate-items" data-candidate-items></div>
+              <p>Próxima saída: último valor inserido.</p><p data-candidate-action></p>
+            </div>
+            <div class="candidate-panel" data-candidate="queue">
+              <div class="candidate-head"><h3>Fila</h3><span class="candidate-status" data-candidate-status></span></div>
+              <div class="candidate-items" data-candidate-items></div>
+              <p>Próxima saída: primeiro valor inserido.</p><p data-candidate-action></p>
+            </div>
+            <div class="candidate-panel" data-candidate="priority">
+              <div class="candidate-head"><h3>Prioridade</h3><span class="candidate-status" data-candidate-status></span></div>
+              <div class="candidate-items" data-candidate-items></div>
+              <p>Próxima saída: maior valor disponível.</p><p data-candidate-action></p>
+            </div>
+          </section>
+          <div class="result-banner" data-classifier-result hidden></div>
+        </div>
+        <div class="movement-summary">
+          <div><strong>Valor da operação</strong><span data-movement-entered></span></div>
+          <div><strong>Quem cada uma removeu</strong><span data-movement-removed></span></div>
+          <div><strong>Quem permaneceu candidata</strong><span data-movement-remaining></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>Por que inserir valores negativos?</h2>
+        <p><code>queue.PriorityQueue</code> remove primeiro a menor prioridade. Guardar <code>-elemento</code> transforma o maior valor original no menor número armazenado.</p>
+        <p>Exemplo: valores 2 e 7 viram -2 e -7. A fila retira -7 primeiro; ao negar novamente, recuperamos 7.</p>
+      </div>
+      <details class="code-details" open>
+        <summary>Núcleo da solução Python</summary>
+<pre><code>pilha = collections.deque()
+fila = collections.deque()
+filaDePrioridade = queue.PriorityQueue()
+p, f, fp = True, True, True
+
+if opcao == 1:
+    if p:
+        pilha.append(elemento)
+    if f:
+        fila.append(elemento)
+    if fp:
+        filaDePrioridade.put(-elemento)
+else:
+    if p:
+        if len(pilha) == 0 or pilha[-1] != elemento:
+            p = False
+        else:
+            pilha.pop()
+    if f:
+        if len(fila) == 0 or fila[0] != elemento:
+            f = False
+        else:
+            fila.popleft()
+    if fp and (
+        filaDePrioridade.empty() or
+        filaDePrioridade.get() != -elemento
+    ):
+        fp = False</code></pre>
+      </details>
+    </section>
+
+    <section class="band">
+      <h2>Complexidade</h2>
+      <p>Para cada uma das n operações, pilha e fila trabalham em O(1). A fila de prioridade insere e remove em O(log n). Assim, o limite dominante é <strong>O(n log n)</strong>, com O(n) de espaço.</p>
+    </section>
+
+    <nav class="lesson-nav"><a href="resolucao_03_beecrowd_1258.html">← Anterior: 1258</a><a href="resolucao_05_beecrowd_1766.html">Próxima: 1766 →</a></nav>
+  </main>
+  <script src="../assets/exercicios.js"></script>
+</body>
+</html>

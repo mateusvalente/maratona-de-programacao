@@ -103,39 +103,66 @@
     <section class="band two-col">
       <div>
         <h2>Por que inserir valores negativos?</h2>
-        <p><code>queue.PriorityQueue</code> remove primeiro a menor prioridade. Guardar <code>-elemento</code> transforma o maior valor original no menor número armazenado.</p>
+        <p><code>heapq</code> remove primeiro o menor valor. Guardar <code>-elemento</code> transforma o maior valor original no menor número armazenado.</p>
         <p>Exemplo: valores 2 e 7 viram -2 e -7. A fila retira -7 primeiro; ao negar novamente, recuperamos 7.</p>
       </div>
       <details class="code-details" open>
-        <summary>Núcleo da solução Python</summary>
-<pre><code>pilha = collections.deque()
-fila = collections.deque()
-filaDePrioridade = queue.PriorityQueue()
-p, f, fp = True, True, True
+        <summary>Código completo comentado</summary>
+<pre><code>from collections import deque
+import heapq
+import sys
 
-if opcao == 1:
-    if p:
-        pilha.append(elemento)
-    if f:
-        fila.append(elemento)
-    if fp:
-        filaDePrioridade.put(-elemento)
-else:
-    if p:
-        if len(pilha) == 0 or pilha[-1] != elemento:
-            p = False
-        else:
-            pilha.pop()
-    if f:
-        if len(fila) == 0 or fila[0] != elemento:
-            f = False
-        else:
-            fila.popleft()
-    if fp and (
-        filaDePrioridade.empty() or
-        filaDePrioridade.get() != -elemento
-    ):
-        fp = False</code></pre>
+
+def classificar(operacoes):
+    # Reproduzimos a mesma sequência nas três candidatas.
+    pilha = []
+    fila = deque()
+    prioridade = []  # Negativos transformam a min-heap em max-heap.
+    pode_ser_pilha = pode_ser_fila = pode_ser_prioridade = True
+
+    for tipo, valor in operacoes:
+        if tipo == 1:
+            # A operação 1 insere o valor.
+            if pode_ser_pilha:
+                pilha.append(valor)
+            if pode_ser_fila:
+                fila.append(valor)
+            if pode_ser_prioridade:
+                heapq.heappush(prioridade, -valor)
+            continue
+
+        # A operação 2 informa qual valor deveria sair.
+        if pode_ser_pilha and (not pilha or pilha.pop() != valor):
+            pode_ser_pilha = False
+        if pode_ser_fila and (not fila or fila.popleft() != valor):
+            pode_ser_fila = False
+        if pode_ser_prioridade and (
+            not prioridade or -heapq.heappop(prioridade) != valor
+        ):
+            pode_ser_prioridade = False
+
+    candidatas = sum((pode_ser_pilha, pode_ser_fila, pode_ser_prioridade))
+    if candidatas == 0:
+        return "impossible"
+    if candidatas &gt; 1:
+        return "not sure"
+    if pode_ser_pilha:
+        return "stack"
+    if pode_ser_fila:
+        return "queue"
+    return "priority queue"
+
+
+# Os casos são lidos até EOF.
+dados = iter(map(int, sys.stdin.buffer.read().split()))
+while True:
+    try:
+        quantidade = next(dados)
+    except StopIteration:
+        break
+
+    operacoes = [(next(dados), next(dados)) for _ in range(quantidade)]
+    print(classificar(operacoes))</code></pre>
       </details>
     </section>
 

@@ -68,15 +68,16 @@
         <div class="code-title"><span>Python</span><span>collections.deque</span></div>
 <pre><code>from collections import deque
 
-d = deque([2, 3, 4])
+d = deque([2, 3, 4])  # front = 2 e back = 4
 
-d.appendleft(1) # push_front
-d.append(5)     # push_back
+d.appendleft(1)        # push_front: insere antes do front
+d.append(5)            # push_back: insere depois do back
 
-esquerda = d.popleft() # pop_front
-direita = d.pop()      # pop_back
+esquerda = d.popleft() # pop_front: remove 1
+direita = d.pop()      # pop_back: remove 5
 
-print(list(d)) # [2, 3, 4]</code></pre>
+print(esquerda, direita)  # 1 5
+print(list(d))             # [2, 3, 4]</code></pre>
       </div>
     </section>
 
@@ -108,4 +109,3 @@ print(list(d)) # [2, 3, 4]</code></pre>
   <script src="../assets/visualizador.js"></script>
 </body>
 </html>
-

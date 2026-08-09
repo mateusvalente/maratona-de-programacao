@@ -106,11 +106,14 @@ class Stack:
         self.top = None
 
     def push(self, value):
+        # O novo nó aponta para o topo antigo e passa a ser o topo.
         self.top = Node(value, self.top)
 
     def pop(self):
         if self.top is None:
             raise IndexError("pilha vazia")
+
+        # Guardamos o valor antes de descartar a referência do nó removido.
         value = self.top.value
         self.top = self.top.next
         return value</code></pre>
@@ -130,4 +133,3 @@ class Stack:
   <script src="../assets/visualizador.js"></script>
 </body>
 </html>
-

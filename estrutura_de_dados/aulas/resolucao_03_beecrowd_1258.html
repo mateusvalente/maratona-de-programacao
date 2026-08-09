@@ -100,39 +100,78 @@
         <p><code>i</code> aponta para a primeira posição da região que ainda não contém um elemento menor que o pivô. Sempre que <code>comp(V[j], pivo) &lt; 0</code>, o objeto de <code>j</code> é levado para essa região.</p>
       </div>
       <details class="code-details" open>
-        <summary>Comparador e partição da solução</summary>
-<pre><code>def comp(a, b):
-    if a.cor == b.cor:
-        if a.tamanho == b.tamanho:
-            if a.nome &lt; b.nome:
-                return -1
-            if a.nome &gt; b.nome:
-                return 1
-            return 0
-        if a.tamanho &gt; b.tamanho:
-            return -1
-        return 1
-    if a.cor &lt; b.cor:
-        return -1
-    return 1
+        <summary>Código completo comentado</summary>
+<pre><code>class Camiseta:
+    # O objeto mantém juntos os dados da mesma inscrição.
+    def __init__(self, nome, cor, tamanho):
+        self.nome = nome
+        self.cor = cor
+        self.tamanho = tamanho
 
-def particao(V, inicio, fim):
-    pivo = V[fim - 1]
-    i = inicio
-    for j in range(inicio, fim):
-        if comp(V[j], pivo) &lt; 0:
-            V[j], V[i] = V[i], V[j]
-            i += 1
 
-    if comp(pivo, V[i]) &lt; 0:
-        V[fim - 1], V[i] = V[i], V[fim - 1]
-    return i
+def comparar(a, b):
+    # 1º critério: cor crescente.
+    if a.cor != b.cor:
+        return -1 if a.cor &lt; b.cor else 1
 
-def quickSort(V, inicio, fim):
-    if fim &gt; inicio:
-        posicaoPivo = particao(V, inicio, fim)
-        quickSort(V, inicio, posicaoPivo)
-        quickSort(V, posicaoPivo + 1, fim)</code></pre>
+    # 2º critério: tamanho decrescente.
+    if a.tamanho != b.tamanho:
+        return -1 if a.tamanho &gt; b.tamanho else 1
+
+    # 3º critério: nome crescente.
+    if a.nome != b.nome:
+        return -1 if a.nome &lt; b.nome else 1
+    return 0
+
+
+def particionar(valores, inicio, fim):
+    # fim é exclusivo; por isso o pivô está em fim - 1.
+    pivo = valores[fim - 1]
+    posicao_dos_menores = inicio
+
+    for indice in range(inicio, fim - 1):
+        if comparar(valores[indice], pivo) &lt; 0:
+            valores[posicao_dos_menores], valores[indice] = (
+                valores[indice], valores[posicao_dos_menores]
+            )
+            posicao_dos_menores += 1
+
+    # O pivô fica entre os menores e os maiores/iguais.
+    valores[posicao_dos_menores], valores[fim - 1] = (
+        valores[fim - 1], valores[posicao_dos_menores]
+    )
+    return posicao_dos_menores
+
+
+def quicksort(valores, inicio, fim):
+    if fim - inicio &lt;= 1:
+        return
+
+    posicao_do_pivo = particionar(valores, inicio, fim)
+    quicksort(valores, inicio, posicao_do_pivo)
+    quicksort(valores, posicao_do_pivo + 1, fim)
+
+
+primeiro_caso = True
+while True:
+    quantidade = int(input())
+    if quantidade == 0:
+        break
+
+    if not primeiro_caso:
+        print()  # O enunciado pede uma linha vazia entre casos.
+    primeiro_caso = False
+
+    camisetas = []
+    for _ in range(quantidade):
+        nome = input()
+        cor, tamanho = input().split()
+        camisetas.append(Camiseta(nome, cor, tamanho))
+
+    quicksort(camisetas, 0, len(camisetas))
+
+    for camiseta in camisetas:
+        print(camiseta.cor, camiseta.tamanho, camiseta.nome)</code></pre>
       </details>
     </section>
 

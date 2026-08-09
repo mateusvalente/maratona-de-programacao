@@ -1,20 +1,24 @@
-# Cole aqui sua solução validada do beecrowd 1110.
-# Enunciado: https://judge.beecrowd.com/pt/problems/view/1110
+from collections import deque
+
 
 while True:
-    n = int(input())
+    quantidade = int(input())
 
-    if n == 0 :
+    # O valor zero não representa um baralho: ele encerra a entrada.
+    if quantidade == 0:
         break
 
-    inicial = []
-    for i in range(1,n+1):
-        inicial.append(i)
+    # O início do deque é o topo do baralho e o fim é a base.
+    cartas = deque(range(1, quantidade + 1))
+    descartadas = []
 
-    resultado = []
-    while len(inicial) > 1:
-        resultado.append(inicial.pop(0))
-        inicial.insert(len(inicial)-1,inicial.pop(0))
+    while len(cartas) > 1:
+        # A carta do topo sai definitivamente do baralho.
+        descartadas.append(cartas.popleft())
 
-    print("Discarded cards: " + str(resultado).replace("[","").replace("]",""))
-    print("Remaining card: " + str(inicial[0]))
+        # A nova carta do topo é retirada e recolocada na base.
+        cartas.append(cartas.popleft())
+
+    texto_descartadas = ", ".join(map(str, descartadas))
+    print(f"Discarded cards: {texto_descartadas}")
+    print(f"Remaining card: {cartas[0]}")

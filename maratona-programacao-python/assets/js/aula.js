@@ -27,9 +27,9 @@
     13: ["Esperar que o limite final de range seja incluído.", "Reiniciar o acumulador dentro do laço."],
     14: ["Não atualizar o estado e criar um laço infinito.", "Processar o sentinela como se fosse um dado comum.", "Confundir continue, que pula uma volta, com break, que encerra o laço.", "Colocar a atualização depois de continue e nunca alcançar essa linha."],
     15: ["Acessar o índice len(lista), que já está fora da lista.", "Confundir uma lista indexada com uma lista encadeada."],
-    16: ["Remover espaços quando eles fazem parte da resposta.", "Alternar ou contar posições sem lembrar que o primeiro índice é zero."],
+    16: ["Usar split quando os espaços fazem parte do texto e perder a formatação original.", "Acessar o índice len(texto), que já está fora da string.", "Tentar alterar texto[i] diretamente, apesar de strings serem imutáveis.", "Usar strip para remover um prefixo e apagar caracteres válidos das pontas.", "Normalizar maiúsculas e pontuação sem o enunciado permitir.", "Tratar todo código devolvido por ord como ASCII, embora Python trabalhe com Unicode.", "Parar a intercalação no tamanho da menor string e perder a sobra."],
     17: ["Confundir print com return.", "Criar funções sem responsabilidade clara apenas para fragmentar o código."],
-    18: ["Calcular a mediana antes de ordenar os dados.", "Dividir pela quantidade errada em uma média ponderada.", "Supor que todo conjunto possui uma única moda.", "Arredondar resultados intermediários e acumular erro."],
+    18: ["Usar uma função de math sem escrever import math.", "Confundir ceil, floor e round sem observar o sentido exigido pelo problema.", "Passar graus diretamente para sin ou cos, que recebem radianos.", "Trocar uma constante fixada pelo enunciado por math.pi e alterar o resultado esperado.", "Calcular a mediana antes de ordenar os dados.", "Dividir pela quantidade errada em uma média ponderada.", "Supor que todo conjunto possui uma única moda.", "Arredondar resultados intermediários e acumular erro."],
     19: ["Procurar uma sintaxe chamada switch em Python em vez de usar match/case.", "Esquecer case _ e não tratar valores inesperados.", "Usar match para intervalos que seriam mais claros com if/elif.", "Colocar um padrão geral antes de um caso mais específico."],
     20: ["Usar colchetes em uma chave inexistente e causar KeyError.", "Esperar que um conjunto mantenha índices ou uma ordem fixa.", "Criar um conjunto vazio com {}, que na verdade cria um dicionário.", "Alterar o tamanho de um dicionário enquanto o percorre."]
   };
@@ -439,12 +439,67 @@
   }
 
   function stringActivity(body, lab) {
+    function visibleCharacter(char) {
+      if (char === " ") return "␠";
+      if (char === "\t") return "⇥";
+      return char;
+    }
+
+    function characterType(char, code) {
+      if (code <= 31 || code === 127) return "controle ASCII";
+      if (code === 32) return "espaço ASCII";
+      if (code >= 48 && code <= 57) return "dígito ASCII";
+      if (code >= 65 && code <= 90) return "maiúscula ASCII";
+      if (code >= 97 && code <= 122) return "minúscula ASCII";
+      if (code <= 127) return "símbolo ASCII";
+      return "Unicode fora do ASCII";
+    }
+
+    function drawIndices(text) {
+      const characters = [...text];
+      body.innerHTML = `<div class="tokens">${characters.map((char, index) => `<span class="token">${ui.esc(visibleCharacter(char))}<span class="token-index">${index} / ${index - characters.length}</span></span>`).join("") || '<p>A string está vazia.</p>'}</div><div class="concept-grid"><article class="concept-card"><h3>len(texto)</h3><p><strong>${characters.length}</strong> caracteres, contando os espaços.</p></article><article class="concept-card"><h3>lower()</h3><p><code>${ui.esc(text.toLowerCase())}</code></p></article><article class="concept-card"><h3>upper()</h3><p><code>${ui.esc(text.toUpperCase())}</code></p></article><article class="concept-card"><h3>strip()</h3><p><code>${ui.esc(text.trim())}</code></p></article></div><div class="lab-message">Cada célula mostra primeiro o índice positivo e depois o índice negativo equivalente.</div>`;
+    }
+
+    function drawSlices(text) {
+      const characters = [...text];
+      const middle = Math.floor(characters.length / 2);
+      const left = characters.slice(0, middle).join("");
+      const right = characters.slice(middle).join("");
+      const reversed = [...characters].reverse().join("");
+      const everyOther = characters.filter((_, index) => index % 2 === 0).join("");
+      body.innerHTML = `<div class="concept-grid"><article class="concept-card"><h3>texto[:${middle}]</h3><p><code>${ui.esc(left)}</code></p><span class="future-label">primeira parte</span></article><article class="concept-card"><h3>texto[${middle}:]</h3><p><code>${ui.esc(right)}</code></p><span class="future-label">segunda parte</span></article><article class="concept-card"><h3>texto[::-1]</h3><p><code>${ui.esc(reversed)}</code></p><span class="future-label">inversão</span></article><article class="concept-card"><h3>texto[::2]</h3><p><code>${ui.esc(everyOther)}</code></p><span class="future-label">índices pares</span></article></div><div class="lab-message"><strong>Metade = len(texto) // 2 = ${middle}.</strong> O limite final de uma fatia não entra no resultado.</div>`;
+    }
+
+    function drawCodes(text) {
+      const characters = [...text];
+      body.innerHTML = `<div class="tokens">${characters.map((char) => {
+        const code = char.codePointAt(0);
+        return `<span class="token ${code <= 127 ? "done" : "bad"}">${ui.esc(visibleCharacter(char))}<span class="token-index">dec ${code}</span></span>`;
+      }).join("") || '<p>A string está vazia.</p>'}</div><div class="trace">${characters.map((char, index) => {
+        const code = char.codePointAt(0);
+        return `<div class="trace-row"><span class="trace-number">${index}</span><div class="trace-copy"><code>ord("${ui.esc(char)}") = ${code}</code>: ${characterType(char, code)}.</div></div>`;
+      }).join("")}</div><div class="lab-message"><strong>Verde:</strong> código entre 0 e 127, pertencente ao ASCII. <strong>Vermelho:</strong> caractere Unicode fora da tabela ASCII.</div>`;
+    }
+
+    function drawFrequencies(text) {
+      const characters = [...text.toLowerCase()].filter((char) => !/\s/.test(char));
+      const frequencies = new Map();
+      characters.forEach((char) => frequencies.set(char, (frequencies.get(char) || 0) + 1));
+      const maximum = Math.max(1, ...frequencies.values());
+      body.innerHTML = `<div class="frequency-list">${frequencies.size ? [...frequencies.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([char, quantity]) => `<div class="frequency-row"><strong>${ui.esc(visibleCharacter(char))}</strong><div class="frequency-track"><span style="width:${(quantity / maximum) * 100}%"></span></div><span>${quantity} vez${quantity === 1 ? "" : "es"}</span></div>`).join("") : '<p>Nenhum caractere para contar.</p>'}</div><div class="lab-message">A simulação converte para minúsculas e ignora espaços. Em uma questão real, faça isso somente quando o enunciado definir essas regras.</div>`;
+    }
+
     function draw() {
       const text = lab.querySelector("#string-value").value;
-      body.innerHTML = `<div class="tokens">${[...text].map((char, index) => `<span class="token">${char === " " ? "␠" : ui.esc(char)}<span class="token-index">índice ${index}</span></span>`).join("") || '<p>A string está vazia.</p>'}</div><div class="lab-message"><strong>len = ${[...text].length}</strong><br>lower: ${ui.esc(text.toLowerCase())}<br>upper: ${ui.esc(text.toUpperCase())}<br>strip: ${ui.esc(text.trim())}</div>`;
+      const mode = lab.querySelector("#string-mode").value;
+      if (mode === "slices") drawSlices(text);
+      else if (mode === "codes") drawCodes(text);
+      else if (mode === "frequencies") drawFrequencies(text);
+      else drawIndices(text);
     }
-    controls(lab, '<div class="field"><label for="string-value">Texto</label><input id="string-value" value="Maratona"></div><button class="btn primary" id="string-run" type="button">Examinar</button>');
+    controls(lab, '<div class="field"><label for="string-mode">Visualização</label><select id="string-mode"><option value="indices">Índices e métodos</option><option value="slices">Fatias e inversão</option><option value="codes">ASCII e Unicode</option><option value="frequencies">Frequências</option></select></div><div class="field"><label for="string-value">Texto</label><input id="string-value" value="Maratona 123"></div><button class="btn primary" id="string-run" type="button">Examinar</button>');
     lab.querySelector("#string-run").onclick = draw;
+    lab.querySelector("#string-mode").onchange = draw;
     lab.querySelector("#string-value").oninput = draw;
     draw();
   }

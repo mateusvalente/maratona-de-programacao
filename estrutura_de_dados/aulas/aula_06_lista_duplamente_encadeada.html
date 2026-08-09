@@ -93,19 +93,56 @@ class DoublyLinkedList:
         self.head = None
         self.tail = None
 
+    def push_front(self, value):
+        node = Node(value)
+        node.next = self.head
+
+        if self.head is None:
+            self.tail = node
+        else:
+            # O head antigo passa a reconhecer o novo predecessor.
+            self.head.prev = node
+
+        self.head = node
+
+    def push_back(self, value):
+        node = Node(value)
+        node.prev = self.tail
+
+        if self.tail is None:
+            self.head = node
+        else:
+            self.tail.next = node
+
+        self.tail = node
+
     def remove(self, node):
+        # Reconecta o vizinho anterior ou move o head.
         if node.prev is None:
             self.head = node.next
         else:
             node.prev.next = node.next
 
+        # Reconecta o vizinho seguinte ou move o tail.
         if node.next is None:
             self.tail = node.prev
         else:
             node.next.prev = node.prev
 
+        # O nó removido deixa de pertencer à lista.
         node.prev = None
-        node.next = None</code></pre>
+        node.next = None
+        return node.value
+
+    def pop_front(self):
+        if self.head is None:
+            raise IndexError("lista vazia")
+        return self.remove(self.head)
+
+    def pop_back(self):
+        if self.tail is None:
+            raise IndexError("lista vazia")
+        return self.remove(self.tail)</code></pre>
       </div>
     </section>
 

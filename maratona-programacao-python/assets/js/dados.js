@@ -660,7 +660,7 @@ while numero &lt; 5:
       slug: "aula-15-listas",
       title: "Listas e vetores",
       summary: "Armazene vários valores, acesse posições e percorra dados para encontrar respostas.",
-      duration: "85 min",
+      duration: "105 min",
       activity: "list",
       content: `
         <section class="band">
@@ -685,9 +685,21 @@ for numero in numeros:
     print(i, numeros[i])</code></pre></div>
           <div class="warning"><strong>Índice inválido:</strong> em uma lista de tamanho 4, os índices válidos vão de 0 a 3. Tentar acessar 4 causa Runtime Error.</div>
         </section>
-        <section class="band"><h2>Lista Python e array</h2><p>Em cursos introdutórios, “vetor” costuma significar uma sequência indexada de tamanho definido. A <code>list</code> de Python também é indexada, mas pode crescer e guardar referências a objetos. Para os problemas desta etapa, ela cumpre o papel prático do vetor.</p><p class="note"><strong>Não há campo “próximo” em cada posição.</strong> Isso pertence a uma lista encadeada, outra estrutura. Aqui acessamos células por índice.</p></section>`,
-      challenge: "Dada a lista [8, 3, 9, 3], encontre o menor valor e a primeira posição em que ele aparece sem usar index().",
-      solution: "menor = numeros[0]\nposicao = 0\nfor i in range(1, len(numeros)):\n    if numeros[i] < menor:\n        menor = numeros[i]\n        posicao = i",
+        <section class="band"><h2>Lista Python e array</h2><p>Em cursos introdutórios, “vetor” costuma significar uma sequência indexada de tamanho definido. A <code>list</code> de Python também é indexada, mas pode crescer e guardar referências a objetos. Para os problemas desta etapa, ela cumpre o papel prático do vetor.</p><p class="note"><strong>Não há campo “próximo” em cada posição.</strong> Isso pertence a uma lista encadeada, outra estrutura. Aqui acessamos células por índice.</p></section>
+        <section class="band">
+          <h2>Pratique listas com problemas do beecrowd</h2>
+          <p>Esta sequência começa com acesso e alteração por índice, avança para construção de valores e termina procurando um elemento e sua posição. Abra a explicação, mas tente montar o laço antes de consultar a solução.</p>
+          <div class="problem-list">
+            <article class="problem-card"><span class="problem-id">1172</span><div><h3>Substituição em Vetor I</h3><p>Leia dez valores, substitua os inválidos e imprima índice e conteúdo.</p><a class="btn" href="../../problemas/beecrowd/1172/index.html">Ver exercício explicado</a></div><span class="difficulty">alteração</span></article>
+            <article class="problem-card"><span class="problem-id">1173</span><div><h3>Preenchimento de Vetor I</h3><p>Construa uma lista em que cada posição depende da anterior.</p><a class="btn" href="../../problemas/beecrowd/1173/index.html">Ver exercício explicado</a></div><span class="difficulty">construção</span></article>
+            <article class="problem-card"><span class="problem-id">1174</span><div><h3>Seleção em Vetor I</h3><p>Percorra valores reais e selecione somente os que atendem à condição.</p><a class="btn" href="../../problemas/beecrowd/1174/index.html">Ver exercício explicado</a></div><span class="difficulty">filtro</span></article>
+            <article class="problem-card"><span class="problem-id">1175</span><div><h3>Troca em Vetor I</h3><p>Inverta os valores e cuide dos índices das duas extremidades.</p><a class="btn" href="../../problemas/beecrowd/1175/index.html">Ver exercício explicado</a></div><span class="difficulty">índices</span></article>
+            <article class="problem-card"><span class="problem-id">1176</span><div><h3>Fibonacci em Vetor</h3><p>Pré-calcule uma sequência e responda várias consultas por posição.</p><a class="btn" href="../../problemas/beecrowd/1176/index.html">Ver exercício explicado</a></div><span class="difficulty">consultas</span></article>
+            <article class="problem-card"><span class="problem-id">1180</span><div><h3>Menor e Posição</h3><p>Encontre simultaneamente o menor valor e o índice em que ele aparece.</p><a class="btn" href="../../problemas/beecrowd/1180/index.html">Ver exercício explicado</a></div><span class="difficulty">busca</span></article>
+          </div>
+        </section>`,
+      challenge: "Leia N e depois uma linha com N inteiros. Mostre o menor valor e a primeira posição em que ele aparece, sem usar min() nem index().",
+      solution: "n = int(input())\nnumeros = list(map(int, input().split()))\n\nmenor = numeros[0]\nposicao = 0\n\nfor i in range(1, n):\n    if numeros[i] < menor:\n        menor = numeros[i]\n        posicao = i\n\nprint(menor)\nprint(posicao)",
       sources: [
         ["Listas em Python — GeeksforGeeks", "https://www.geeksforgeeks.org/python/python-lists/"],
         ["Estruturas de dados — documentação Python", "https://docs.python.org/3/tutorial/datastructures.html"]
@@ -696,21 +708,45 @@ for numero in numeros:
     {
       id: 16,
       slug: "aula-16-strings",
-      title: "Strings",
-      summary: "Observe texto como sequência de caracteres e pratique índices, limpeza e transformação.",
-      duration: "75 min",
+      title: "Strings: técnicas para resolver problemas",
+      summary: "Domine leitura, índices, fatias, métodos, ASCII, frequências e padrões comuns dos exercícios de texto.",
+      duration: "150 min",
       activity: "string",
       content: `
         <section class="band">
           <h2>Uma sequência de caracteres</h2>
           <div class="code-shell"><div class="code-head">Texto</div><pre><code>texto = "Maratona"</code></pre></div>
           <div class="table-wrap"><table><thead><tr><th>Índice</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr></thead><tbody><tr><td>Caractere</td><td>M</td><td>a</td><td>r</td><td>a</td><td>t</td><td>o</td><td>n</td><td>a</td></tr></tbody></table></div>
-          <p><code>texto[0]</code> devolve <code>M</code>. Como listas, strings usam índice inicial zero. Diferentemente das listas, strings não podem ter um caractere alterado diretamente.</p>
+          <p><code>texto[0]</code> devolve <code>M</code> e <code>texto[-1]</code> devolve <code>a</code>. Os índices positivos começam em zero pela esquerda; os negativos começam em -1 pela direita.</p>
+          <div class="concept-grid"><article class="concept-card"><h3>Sequência</h3><p>Possui tamanho, ordem e acesso por índice. Espaços e sinais também ocupam posições.</p></article><article class="concept-card"><h3>Imutável</h3><p><code>texto[0] = "m"</code> causa erro. Uma transformação produz uma nova string.</p></article><article class="concept-card"><h3>Um caractere ainda é str</h3><p>Python não possui um tipo separado chamado <code>char</code>. <code>texto[0]</code> é uma string de tamanho 1.</p></article><article class="concept-card"><h3>String vazia</h3><p><code>""</code> tem tamanho zero e é considerada falsa em uma condição.</p></article></div>
+          <div class="warning"><strong>Limite do índice:</strong> se <code>len(texto)</code> vale 8, o último índice é 7. Tentar acessar <code>texto[8]</code> causa <code>IndexError</code>.</div>
         </section>
         <section class="band">
           <h2>Percorrer e transformar</h2>
           <div class="two-col"><div class="code-shell"><div class="code-head">Caractere por caractere</div><pre><code>for letra in texto:
     print(letra)</code></pre></div><div class="concept-grid"><article class="concept-card"><h3>len(texto)</h3><p>Quantidade de caracteres.</p></article><article class="concept-card"><h3>lower() / upper()</h3><p>Cria texto em minúsculas ou maiúsculas.</p></article><article class="concept-card"><h3>strip()</h3><p>Remove espaços e quebras nas pontas.</p></article><article class="concept-card"><h3>split()</h3><p>Separa em partes e produz uma lista.</p></article></div></div>
+        </section>
+        <section class="band">
+          <h2>Antes do algoritmo, leia o formato corretamente</h2>
+          <div class="table-wrap"><table><thead><tr><th>Formato do enunciado</th><th>Leitura</th><th>Cuidado principal</th></tr></thead><tbody><tr><td>uma linha inteira</td><td><code>texto = input()</code></td><td>preserva espaços internos</td></tr><tr><td>duas palavras na mesma linha</td><td><code>a, b = input().split()</code></td><td>separa nos espaços</td></tr><tr><td>primeira linha contém T</td><td><code>for _ in range(int(input())):</code></td><td>cada volta lê um caso</td></tr><tr><td>linhas até EOF</td><td><code>for linha in sys.stdin:</code></td><td>termina no fim da entrada</td></tr><tr><td>até um sentinela</td><td><code>while True</code> e <code>break</code></td><td>não processe o sentinela</td></tr></tbody></table></div>
+          <div class="two-col"><div class="code-shell"><div class="code-head">Preservar a frase</div><pre><code>frase = input()
+
+for caractere in frase:
+    print(caractere)</code></pre></div><div class="code-shell"><div class="code-head">Linhas até EOF</div><pre><code>import sys
+
+for linha in sys.stdin:
+    texto = linha.rstrip("\\n")
+    print(texto)</code></pre></div></div>
+          <div class="warning"><strong>split pode destruir informação.</strong> Se a posição dos espaços faz parte do problema, como em uma frase transformada, não use <code>split()</code>. Ele separa palavras e descarta os espaços usados como separadores.</div>
+          <p><code>rstrip("\\n")</code> remove apenas a quebra de linha entregue por <code>sys.stdin</code>. Usar <code>strip()</code> removeria também espaços legítimos no início e no final.</p>
+        </section>
+        <section class="band">
+          <h2>Três formas de percorrer</h2>
+          <div class="three-col"><article class="concept-card"><h3>Somente o caractere</h3><pre><code>for caractere in texto:
+    print(caractere)</code></pre><p>Use quando a posição não importa.</p></article><article class="concept-card"><h3>Índice e caractere</h3><pre><code>for i, caractere in enumerate(texto):
+    print(i, caractere)</code></pre><p>Use quando precisa dos dois.</p></article><article class="concept-card"><h3>Controle do índice</h3><pre><code>for i in range(len(texto)):
+    print(texto[i])</code></pre><p>Útil para comparar posições vizinhas ou duas strings.</p></article></div>
+          <p class="note"><strong>Escolha pela pergunta:</strong> não use índices por hábito. Se o exercício só pede contar letras, percorrer diretamente os caracteres costuma ser mais simples.</p>
         </section>
         <section class="band">
           <h2>Padrões frequentes</h2>
@@ -721,12 +757,126 @@ for numero in numeros:
           <h2>Recortes e métodos úteis</h2>
           <div class="concept-grid"><article class="concept-card"><h3>texto[inicio:fim]</h3><p>Cria um recorte do início até antes do fim. <code>texto[:4]</code> pega os quatro primeiros caracteres.</p></article><article class="concept-card"><h3>texto[::-1]</h3><p>Usa passo -1 para criar uma cópia invertida.</p></article><article class="concept-card"><h3>replace(a, b)</h3><p>Cria uma string trocando ocorrências de <code>a</code> por <code>b</code>.</p></article><article class="concept-card"><h3>isalpha()</h3><p>Informa se o caractere é uma letra; ajuda a preservar espaços e sinais.</p></article></div>
           <p><code>lstrip("0")</code> remove zeros somente do início. Isso é diferente de <code>strip()</code>, que sem argumento remove espaços nas duas pontas.</p>
+          <h3>Fatias usam texto[início:fim:passo]</h3>
+          <p>Uma fatia cria uma nova string. O índice <code>fim</code> não entra no resultado, assim como acontece em <code>range</code>.</p>
+          <div class="table-wrap"><table><thead><tr><th>Expressão para texto = "Maratona"</th><th>Resultado</th><th>Leitura</th></tr></thead><tbody><tr><td><code>texto[0:4]</code></td><td><code>"Mara"</code></td><td>índices 0, 1, 2 e 3</td></tr><tr><td><code>texto[:4]</code></td><td><code>"Mara"</code></td><td>do início até antes do 4</td></tr><tr><td><code>texto[4:]</code></td><td><code>"tona"</code></td><td>do índice 4 até o final</td></tr><tr><td><code>texto[::2]</code></td><td><code>"Mrtn"</code></td><td>um caractere a cada dois</td></tr><tr><td><code>texto[::-1]</code></td><td><code>"anotaraM"</code></td><td>passo -1: string invertida</td></tr></tbody></table></div>
+          <div class="code-shell"><div class="code-head">Dividir ao meio e inverter cada parte</div><pre><code>metade = len(texto) // 2
+esquerda = texto[:metade]
+direita = texto[metade:]
+
+resultado = esquerda[::-1] + direita[::-1]</code></pre></div>
+        </section>
+        <section class="band">
+          <h2>Métodos que resolvem boa parte dos exercícios</h2>
+          <div class="table-wrap"><table><thead><tr><th>Objetivo</th><th>Ferramenta</th><th>Exemplo</th></tr></thead><tbody><tr><td>normalizar maiúsculas</td><td><code>lower()</code> / <code>upper()</code></td><td><code>"Py".lower()</code> → <code>"py"</code></td></tr><tr><td>remover espaços das pontas</td><td><code>strip()</code></td><td><code>"  oi ".strip()</code> → <code>"oi"</code></td></tr><tr><td>remover somente à esquerda</td><td><code>lstrip()</code></td><td><code>"00042".lstrip("0")</code> → <code>"42"</code></td></tr><tr><td>trocar ou remover trechos</td><td><code>replace()</code></td><td><code>"banana".replace("a", "")</code> → <code>"bnn"</code></td></tr><tr><td>separar palavras</td><td><code>split()</code></td><td><code>"um dois".split()</code> → <code>["um", "dois"]</code></td></tr><tr><td>juntar partes</td><td><code>separador.join(lista)</code></td><td><code>"-".join(["a", "b"])</code> → <code>"a-b"</code></td></tr><tr><td>contar ocorrências</td><td><code>count()</code></td><td><code>"banana".count("a")</code> → <code>3</code></td></tr><tr><td>procurar sem causar erro</td><td><code>find()</code></td><td>devolve o índice ou <code>-1</code></td></tr><tr><td>testar conteúdo</td><td><code>isalpha()</code>, <code>isdigit()</code>, <code>isalnum()</code></td><td>letra, dígito ou ambos</td></tr><tr><td>testar começo ou final</td><td><code>startswith()</code> / <code>endswith()</code></td><td><code>"arquivo.py".endswith(".py")</code></td></tr></tbody></table></div>
+          <div class="warning"><strong>strip não remove um prefixo exato.</strong> <code>strip("ab")</code> remove caracteres <code>a</code> ou <code>b</code> repetidamente nas duas pontas. Para retirar uma parte conhecida, use <code>removeprefix()</code>, <code>removesuffix()</code> ou uma fatia bem definida.</div>
+        </section>
+        <section class="band">
+          <h2>ASCII: caracteres também possuem códigos</h2>
+          <p>ASCII é uma codificação de 7 bits com valores de 0 a 127. Os códigos de 32 a 126 são imprimíveis; os demais representam controles, como tabulação e quebra de linha. Python usa Unicode, que é muito maior, mas os caracteres ASCII mantêm esses mesmos valores dentro do Unicode.</p>
+          <div class="table-wrap"><table><thead><tr><th>Faixa decimal</th><th>Caracteres</th><th>Uso</th></tr></thead><tbody><tr><td>0–31</td><td>controles não imprimíveis</td><td>inclui TAB = 9 e LF = 10</td></tr><tr><td>32</td><td>espaço</td><td>primeiro caractere imprimível</td></tr><tr><td>33–47</td><td><code>! " # $ % &amp; ' ( ) * + , - . /</code></td><td>pontuação e símbolos</td></tr><tr><td>48–57</td><td><code>0 1 2 3 4 5 6 7 8 9</code></td><td>dígitos</td></tr><tr><td>58–64</td><td><code>: ; &lt; = &gt; ? @</code></td><td>pontuação e símbolos</td></tr><tr><td>65–90</td><td><code>A–Z</code></td><td>letras maiúsculas</td></tr><tr><td>91–96</td><td><code>[ &#92; ] ^ _ &#96;</code></td><td>símbolos</td></tr><tr><td>97–122</td><td><code>a–z</code></td><td>letras minúsculas</td></tr><tr><td>123–126</td><td><code>{ | } ~</code></td><td>símbolos finais imprimíveis</td></tr><tr><td>127</td><td>DEL</td><td>controle não imprimível</td></tr></tbody></table></div>
+          <div class="two-col"><div class="code-shell"><div class="code-head">Caractere para código: ord</div><pre><code>print(ord("A"))  # 65
+print(ord("a"))  # 97
+print(ord("0"))  # 48</code></pre></div><div class="code-shell"><div class="code-head">Código para caractere: chr</div><pre><code>print(chr(65))   # A
+print(chr(97))   # a
+print(chr(48))   # 0</code></pre></div></div>
+          <div class="trace"><div class="trace-row"><span class="trace-number">1</span><div class="trace-copy"><code>ord(caractere)</code> recebe uma string de tamanho 1 e devolve seu código Unicode.</div></div><div class="trace-row"><span class="trace-number">2</span><div class="trace-copy"><code>chr(codigo)</code> faz o caminho inverso e devolve o caractere.</div></div><div class="trace-row"><span class="trace-number">3</span><div class="trace-copy">Em ASCII, dígitos, maiúsculas e minúsculas formam intervalos contínuos.</div></div></div>
+          <div class="code-shell"><div class="code-head">Transformar a–z em índices de 0 a 25</div><pre><code>letra = "f"
+indice = ord(letra) - ord("a")
+
+print(indice)  # 5</code></pre></div>
+          <p>Essa técnica permite usar uma lista de 26 contadores. Antes, confirme que o enunciado garante letras de <code>a</code> a <code>z</code>, ou normalize e valide o caractere.</p>
+          <div class="warning"><strong>ASCII não é todo o texto possível.</strong> <code>ord("á")</code> também funciona, mas o resultado não pertence ao ASCII. Para classificar texto geral, prefira <code>isalpha()</code> e outros métodos; use intervalos ASCII quando o problema limitar explicitamente os caracteres.</div>
+        </section>
+        <section class="band">
+          <h2>Strings são imutáveis: reconstrua o resultado</h2>
+          <p>Métodos como <code>upper</code> e <code>replace</code> não alteram a string original. Em transformações caractere por caractere, guarde as novas partes e junte-as no final.</p>
+          <div class="code-shell"><div class="code-head">Filtrar somente letras e dígitos</div><pre><code>texto = input()
+partes = []
+
+for caractere in texto:
+    if caractere.isalnum():
+        partes.append(caractere.lower())
+
+normalizado = "".join(partes)
+print(normalizado)</code></pre></div>
+          <div class="note"><strong>Por que lista e join?</strong> <code>append</code> registra cada parte sem tentar modificar a string antiga. Ao final, <code>"".join(partes)</code> cria o resultado de uma vez.</div>
+        </section>
+        <section class="band">
+          <h2>Técnicas que se repetem nos exercícios</h2>
+          <div class="concept-grid"><article class="concept-card"><h3>Normalização</h3><p>Converta para <code>lower()</code> quando maiúsculas e minúsculas devem ser equivalentes. Remova apenas o que o enunciado autorizar.</p></article><article class="concept-card"><h3>Contagem</h3><p>Use um contador para um alvo, um dicionário para vários caracteres ou uma lista de 26 posições para letras ASCII.</p></article><article class="concept-card"><h3>Estado durante o percurso</h3><p>Um booleano pode indicar se a próxima letra será maiúscula. Espaços podem ser copiados sem alterar esse estado.</p></article><article class="concept-card"><h3>Dois índices</h3><p>Compare começo e fim, intercale duas strings ou percorra partes diferentes sem perder a sobra.</p></article><article class="concept-card"><h3>Fatiamento</h3><p>Divida em metades, retire prefixos conhecidos ou inverta com <code>[::-1]</code>.</p></article><article class="concept-card"><h3>Ordenação</h3><p><code>sorted(texto)</code> produz uma lista ordenada. É útil para comparar anagramas quando frequência não é necessária.</p></article></div>
+        </section>
+        <section class="band">
+          <h2>Padrão 1: frequência de caracteres</h2>
+          <div class="two-col"><div class="code-shell"><div class="code-head">Com dicionário</div><pre><code>frequencias = {}
+
+for letra in input().lower():
+    if letra.isalpha():
+        frequencias[letra] = frequencias.get(letra, 0) + 1</code></pre></div><div class="code-shell"><div class="code-head">Com 26 posições ASCII</div><pre><code>contagens = [0] * 26
+
+for letra in input().lower():
+    if "a" &lt;= letra &lt;= "z":
+        indice = ord(letra) - ord("a")
+        contagens[indice] += 1</code></pre></div></div>
+          <p>O dicionário aceita qualquer chave encontrada. A lista é compacta e direta quando o alfabeto está limitado às 26 letras ASCII minúsculas.</p>
+        </section>
+        <section class="band">
+          <h2>Padrão 2: palíndromo</h2>
+          <div class="code-shell"><div class="code-head">Normalizar e comparar com o inverso</div><pre><code>texto = input()
+partes = []
+
+for caractere in texto:
+    if caractere.isalnum():
+        partes.append(caractere.lower())
+
+normalizado = "".join(partes)
+
+if normalizado == normalizado[::-1]:
+    print("palindromo")
+else:
+    print("nao palindromo")</code></pre></div>
+          <p>A normalização só é correta se o problema mandar ignorar caixa, espaços e pontuação. Caso contrário, compare a entrada exatamente como foi recebida.</p>
+        </section>
+        <section class="band">
+          <h2>Padrão 3: intercalar strings de tamanhos diferentes</h2>
+          <div class="code-shell"><div class="code-head">Não perder a sobra da maior</div><pre><code>primeira, segunda = input().split()
+resultado = []
+maior_tamanho = max(len(primeira), len(segunda))
+
+for i in range(maior_tamanho):
+    if i &lt; len(primeira):
+        resultado.append(primeira[i])
+    if i &lt; len(segunda):
+        resultado.append(segunda[i])
+
+print("".join(resultado))</code></pre></div>
+          <p>Percorremos até o tamanho da maior, mas verificamos cada índice antes do acesso. Assim, quando uma string termina, somente a outra continua contribuindo.</p>
+        </section>
+        <section class="band">
+          <h2>Checklist antes de enviar</h2>
+          <ol class="steps"><li><strong>Os espaços fazem parte do dado?</strong> Decida entre <code>input()</code> e <code>split()</code>.</li><li><strong>A comparação diferencia maiúsculas?</strong> Normalize somente quando o enunciado permitir.</li><li><strong>O índice pode sair da string?</strong> Confira <code>0 &lt;= i &lt; len(texto)</code>.</li><li><strong>O caso termina com T, EOF ou sentinela?</strong> Escolha o laço correspondente.</li><li><strong>A saída pode ficar vazia?</strong> Trate explicitamente quando o enunciado exigir zero ou outra resposta.</li><li><strong>A transformação preservou a sobra, os espaços e a ordem?</strong> Faça um teste de mesa com entradas curtas e tamanhos diferentes.</li></ol>
+        </section>
+        <section class="band">
+          <h2>Pratique com os exercícios de Strings</h2>
+          <div class="problem-list">
+            <article class="problem-card"><span class="problem-id">1120</span><div><h3>Revisão de Contrato</h3><p><code>replace</code>, <code>lstrip</code>, resultado vazio e entrada com sentinela.</p><a class="btn" href="../../problemas/beecrowd/1120/index.html">Ver exercício explicado</a></div><span class="difficulty">métodos</span></article>
+            <article class="problem-card"><span class="problem-id">1168</span><div><h3>LED</h3><p>Percurso de dígitos e consulta do custo de cada caractere em uma tabela.</p><a class="btn" href="../../problemas/beecrowd/1168/index.html">Ver exercício explicado</a></div><span class="difficulty">tabela</span></article>
+            <article class="problem-card"><span class="problem-id">1234</span><div><h3>Sentença Dançante</h3><p>Leitura até EOF, preservação de espaços, <code>isalpha</code> e estado booleano.</p><a class="btn" href="../../problemas/beecrowd/1234/index.html">Ver exercício explicado</a></div><span class="difficulty">estado</span></article>
+            <article class="problem-card"><span class="problem-id">1235</span><div><h3>De Dentro para Fora</h3><p>Divisão ao meio, fatiamento e inversão independente das partes.</p><a class="btn" href="../../problemas/beecrowd/1235/index.html">Ver exercício explicado</a></div><span class="difficulty">fatias</span></article>
+            <article class="problem-card"><span class="problem-id">1238</span><div><h3>Combinador</h3><p>Intercalação por índice e tratamento da sobra da string maior.</p><a class="btn" href="../../problemas/beecrowd/1238/index.html">Ver exercício explicado</a></div><span class="difficulty">índices</span></article>
+            <article class="problem-card"><span class="problem-id">1255</span><div><h3>Frequência de Letras</h3><p>Normalização, contagem e conversão das letras em índices.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1255" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">ASCII</span></article>
+            <article class="problem-card"><span class="problem-id">1024</span><div><h3>Criptografia</h3><p>Códigos de caracteres, deslocamento, inversão e transformação por posição.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1024" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">transformação</span></article>
+          </div>
         </section>`,
-      challenge: "Conte quantas letras 'a' aparecem em uma linha, considerando A e a equivalentes.",
-      solution: "texto = input().lower()\ncontador = 0\nfor letra in texto:\n    if letra == \"a\":\n        contador += 1\nprint(contador)",
+      challenge: "Leia uma frase e verifique se ela é um palíndromo, ignorando maiúsculas, minúsculas, espaços e pontuação. Monte a string normalizada com append e join antes da comparação.",
+      solution: "texto = input()\npartes = []\n\nfor caractere in texto:\n    if caractere.isalnum():\n        partes.append(caractere.lower())\n\nnormalizado = \"\".join(partes)\n\nif normalizado == normalizado[::-1]:\n    print(\"palindromo\")\nelse:\n    print(\"nao palindromo\")",
       sources: [
+        ["Tipo str e métodos de string — documentação Python", "https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str"],
+        ["Funções ord e chr — documentação Python", "https://docs.python.org/3/library/functions.html#ord"],
         ["Strings em Python — GeeksforGeeks", "https://www.geeksforgeeks.org/python/python-string/"],
-        ["Métodos de string — documentação Python", "https://docs.python.org/3/library/stdtypes.html#string-methods"]
+        ["Métodos de string — GeeksforGeeks", "https://www.geeksforgeeks.org/python/python-string-methods/"],
+        ["Tabela ASCII — GeeksforGeeks", "https://www.geeksforgeeks.org/dsa/ascii-table/"],
+        ["Exercícios de string em Python — GeeksforGeeks", "https://www.geeksforgeeks.org/python/python-string-coding-practice-problems/"]
       ]
     },
     {
@@ -843,8 +993,8 @@ print(resposta)</code></pre></div>
       id: 18,
       slug: "aula-18-matematica-estatistica",
       title: "Matemática e estatística com Python",
-      summary: "Transforme fórmulas e conjuntos de dados em algoritmos para calcular porcentagens, médias, mediana, moda e amplitude.",
-      duration: "90 min",
+      summary: "Use fórmulas, o módulo math e conjuntos de dados para resolver cálculos e resumir informações.",
+      duration: "120 min",
       activity: "statistics",
       content: `
         <section class="band">
@@ -876,6 +1026,87 @@ print(resposta)</code></pre></div>
             <tr><td>Quociente e resto</td><td>divisão inteira e sobra</td><td><code>a // b</code> e <code>a % b</code></td><td>17 = 3 × 5 + 2</td></tr>
           </tbody></table></div>
           <div class="warning"><strong>Divisão exige atenção:</strong> não existe divisão por zero. Em uma média, isso significa que a lista de dados não pode estar vazia. Na variação percentual, o valor antigo também precisa ser diferente de zero.</div>
+        </section>
+
+        <section class="band">
+          <h2>O módulo math amplia as ferramentas matemáticas</h2>
+          <p>Operadores como <code>+</code>, <code>**</code> e <code>%</code>, além de funções como <code>abs</code>, <code>min</code>, <code>max</code>, <code>sum</code> e <code>round</code>, já estão disponíveis diretamente. Para raízes, arredondamentos direcionados, constantes e outras operações, importamos o módulo <code>math</code> da biblioteca padrão.</p>
+          <div class="code-shell"><div class="code-head">Importar e usar</div><pre><code>import math
+
+print(math.sqrt(81))  # 9.0
+print(math.pi)        # 3.141592...</code></pre></div>
+          <div class="note"><strong>Por que escrever math.sqrt?</strong> O prefixo deixa visível que <code>sqrt</code> veio do módulo <code>math</code>. Não é necessário instalar nada com <code>pip</code>: ele acompanha o Python.</div>
+        </section>
+
+        <section class="band">
+          <h2>Funções de math que aparecem em problemas</h2>
+          <div class="table-wrap"><table><thead><tr><th>Ferramenta</th><th>O que calcula</th><th>Exemplo</th><th>Resultado</th></tr></thead><tbody>
+            <tr><td><code>math.sqrt(x)</code></td><td>raiz quadrada</td><td><code>math.sqrt(49)</code></td><td><code>7.0</code></td></tr>
+            <tr><td><code>math.hypot(a, b)</code></td><td>hipotenusa ou distância usando dois catetos</td><td><code>math.hypot(3, 4)</code></td><td><code>5.0</code></td></tr>
+            <tr><td><code>math.ceil(x)</code></td><td>menor inteiro maior ou igual a x</td><td><code>math.ceil(4.2)</code></td><td><code>5</code></td></tr>
+            <tr><td><code>math.floor(x)</code></td><td>maior inteiro menor ou igual a x</td><td><code>math.floor(4.8)</code></td><td><code>4</code></td></tr>
+            <tr><td><code>math.factorial(n)</code></td><td>produto de 1 até n</td><td><code>math.factorial(5)</code></td><td><code>120</code></td></tr>
+            <tr><td><code>math.gcd(a, b)</code></td><td>máximo divisor comum</td><td><code>math.gcd(18, 24)</code></td><td><code>6</code></td></tr>
+            <tr><td><code>math.lcm(a, b)</code></td><td>mínimo múltiplo comum</td><td><code>math.lcm(18, 24)</code></td><td><code>72</code></td></tr>
+            <tr><td><code>math.pi</code></td><td>constante π</td><td><code>2 * math.pi * 3</code></td><td>aproximadamente <code>18.85</code></td></tr>
+          </tbody></table></div>
+          <div class="warning"><strong>ceil, floor e round não são iguais.</strong> Para <code>4.2</code>, <code>ceil</code> produz 5, <code>floor</code> produz 4 e <code>round</code> procura o inteiro mais próximo. Escolha a operação que representa a regra do enunciado.</div>
+        </section>
+
+        <section class="band">
+          <h2>Exemplo 1: distância entre dois pontos</h2>
+          <p>A diferença entre as coordenadas forma os catetos de um triângulo retângulo. <code>math.hypot</code> calcula a raiz da soma dos quadrados desses catetos.</p>
+          <div class="code-shell"><div class="code-head">Distância euclidiana</div><pre><code>import math
+
+x1, y1 = map(float, input().split())
+x2, y2 = map(float, input().split())
+
+delta_x = x2 - x1
+delta_y = y2 - y1
+distancia = math.hypot(delta_x, delta_y)
+
+print(f"{distancia:.4f}")</code></pre></div>
+          <div class="flow"><span class="flow-step">diferenças</span><span class="flow-arrow">→</span><span class="flow-step">quadrados e soma</span><span class="flow-arrow">→</span><span class="flow-step active">raiz</span></div>
+          <p>A forma equivalente é <code>math.sqrt(delta_x ** 2 + delta_y ** 2)</code>. <code>hypot</code> apenas comunica diretamente que estamos calculando uma hipotenusa.</p>
+        </section>
+
+        <section class="band">
+          <h2>Exemplo 2: arredondar para cima porque não pode faltar espaço</h2>
+          <p>Uma van leva 4 estudantes e a turma possui 53. A divisão <code>53 / 4</code> resulta em 13,25, mas 13 vans deixariam uma pessoa sem lugar. O contexto exige arredondamento para cima.</p>
+          <div class="code-shell"><div class="code-head">Quantidade mínima de vans</div><pre><code>import math
+
+estudantes = 53
+capacidade = 4
+
+vans = math.ceil(estudantes / capacidade)
+print(vans)  # 14</code></pre></div>
+          <p class="success"><strong>A matemática vem antes da função:</strong> não escolha <code>ceil</code> apenas porque existe uma parte decimal. Use-o quando a regra disser que qualquer sobra exige uma unidade adicional.</p>
+        </section>
+
+        <section class="band">
+          <h2>Exemplo 3: fatorial, MDC e MMC</h2>
+          <div class="two-col"><div class="code-shell"><div class="code-head">Fatorial</div><pre><code>import math
+
+n = 6
+print(math.factorial(n))  # 720</code></pre></div><div class="code-shell"><div class="code-head">Divisores e múltiplos</div><pre><code>import math
+
+a, b = 18, 24
+print(math.gcd(a, b))  # 6
+print(math.lcm(a, b))  # 72</code></pre></div></div>
+          <p><code>factorial</code> recebe um inteiro não negativo. O MDC ajuda a formar o maior agrupamento sem sobras; o MMC encontra o primeiro momento ou tamanho em que dois ciclos coincidem.</p>
+        </section>
+
+        <section class="band">
+          <h2>Ângulos: as funções trigonométricas recebem radianos</h2>
+          <div class="code-shell"><div class="code-head">De graus para radianos</div><pre><code>import math
+
+angulo_graus = 30
+angulo_radianos = math.radians(angulo_graus)
+
+print(f"{math.sin(angulo_radianos):.2f}")  # 0.50
+print(f"{math.cos(angulo_radianos):.2f}")  # 0.87</code></pre></div>
+          <div class="warning"><strong>Não passe 30 diretamente para sin.</strong> <code>math.sin(30)</code> interpreta 30 radianos, não 30 graus. Use <code>math.radians</code> quando a entrada estiver em graus.</div>
+          <p class="note"><strong>Constantes do enunciado prevalecem.</strong> Se um problema mandar usar π = 3.14159, use exatamente esse valor em vez de <code>math.pi</code>. Isso evita diferenças no resultado esperado pelo juiz.</p>
         </section>
 
         <section class="band">
@@ -989,12 +1220,16 @@ print(max(dados) - min(dados))</code></pre></div>
             <article class="concept-card"><h3>4. Mediana</h3><p>Encontre a mediana de 9, 2, 7 e 5.</p><details class="solution"><summary>Conferir resposta</summary><div><p>Ordenando: 2, 5, 7, 9. A média dos centros é <strong>6</strong>.</p></div></details></article>
             <article class="concept-card"><h3>5. Moda</h3><p>Quais são as modas de 1, 2, 2, 3, 3 e 4?</p><details class="solution"><summary>Conferir resposta</summary><div><p>2 e 3 aparecem duas vezes. O conjunto é bimodal: <strong>2 e 3</strong>.</p></div></details></article>
             <article class="concept-card"><h3>6. Amplitude</h3><p>Calcule a amplitude de 12, 5, 9, 20 e 8.</p><details class="solution"><summary>Conferir resposta</summary><div><p>Máximo 20 menos mínimo 5: <strong>15</strong>.</p></div></details></article>
+            <article class="concept-card"><h3>7. Diagonal</h3><p>Um retângulo mede 6 por 8. Calcule a diagonal com <code>math.hypot</code>.</p><details class="solution"><summary>Conferir resposta</summary><div><p><code>math.hypot(6, 8)</code> resulta em <strong>10.0</strong>.</p></div></details></article>
+            <article class="concept-card"><h3>8. Caixas completas</h3><p>53 objetos serão colocados em caixas de capacidade 8. Quantas caixas são necessárias?</p><details class="solution"><summary>Conferir resposta</summary><div><p><code>math.ceil(53 / 8)</code> resulta em <strong>7</strong>.</p></div></details></article>
+            <article class="concept-card"><h3>9. Fatorial</h3><p>Calcule quantas ordenações diferentes existem para 6 objetos distintos.</p><details class="solution"><summary>Conferir resposta</summary><div><p><code>math.factorial(6)</code> resulta em <strong>720</strong>.</p></div></details></article>
+            <article class="concept-card"><h3>10. Agrupamento</h3><p>Encontre o maior tamanho de grupo que divide 18 e 24 sem sobras.</p><details class="solution"><summary>Conferir resposta</summary><div><p><code>math.gcd(18, 24)</code> resulta em <strong>6</strong>.</p></div></details></article>
           </div>
         </section>
 
         <section class="band">
           <h2>Pratique com problemas do beecrowd</h2>
-          <p>Os exercícios abaixo já possuem uma página explicativa no módulo. Tente resolver pelo enunciado oficial antes de abrir a explicação.</p>
+          <p>Os primeiros exercícios possuem uma página explicativa no módulo; os desafios matemáticos seguintes abrem o enunciado oficial. Em todos eles, tente identificar a fórmula antes de procurar uma implementação.</p>
           <div class="problem-list">
             <article class="problem-card"><span class="problem-id">1002</span><div><h3>Área do Círculo</h3><p>Fórmula, potência, constante e formatação decimal.</p><a class="btn" href="../../problemas/beecrowd/1002/index.html">Ver exercício explicado</a></div><span class="difficulty">fórmula</span></article>
             <article class="problem-card"><span class="problem-id">1005</span><div><h3>Média 1</h3><p>Primeira aplicação de média ponderada.</p><a class="btn" href="../../problemas/beecrowd/1005/index.html">Ver exercício explicado</a></div><span class="difficulty">média</span></article>
@@ -1002,11 +1237,17 @@ print(max(dados) - min(dados))</code></pre></div>
             <article class="problem-card"><span class="problem-id">1014</span><div><h3>Consumo</h3><p>Razão entre distância percorrida e combustível.</p><a class="btn" href="../../problemas/beecrowd/1014/index.html">Ver exercício explicado</a></div><span class="difficulty">proporção</span></article>
             <article class="problem-card"><span class="problem-id">1040</span><div><h3>Média 3</h3><p>Média ponderada combinada com decisões.</p><a class="btn" href="../../problemas/beecrowd/1040/index.html">Ver exercício explicado</a></div><span class="difficulty">condicionais</span></article>
             <article class="problem-card"><span class="problem-id">1064</span><div><h3>Positivos e Média</h3><p>Filtragem, contagem, soma e média.</p><a class="btn" href="../../problemas/beecrowd/1064/index.html">Ver exercício explicado</a></div><span class="difficulty">repetição</span></article>
+            <article class="problem-card"><span class="problem-id">1015</span><div><h3>Distância Entre Dois Pontos</h3><p>Distância euclidiana com raiz quadrada ou <code>math.hypot</code>.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1015" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">raiz</span></article>
+            <article class="problem-card"><span class="problem-id">1161</span><div><h3>Soma de Fatoriais</h3><p>Leitura até EOF e aplicação de fatorial.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1161" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">fatorial</span></article>
+            <article class="problem-card"><span class="problem-id">1028</span><div><h3>Figurinhas</h3><p>O máximo divisor comum determina o maior tamanho possível dos montes.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1028" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">MDC</span></article>
+            <article class="problem-card"><span class="problem-id">1541</span><div><h3>Construindo Casas</h3><p>Fórmula, raiz quadrada e escolha correta da parte inteira.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1541" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">raiz</span></article>
           </div>
         </section>`,
       challenge: "Leia uma linha com números inteiros e mostre: média com duas casas, mediana, todas as modas e amplitude. Se nenhum valor se repetir, escreva 'sem moda'.",
       solution: "from statistics import median, multimode\n\ndados = list(map(int, input().split()))\nmedia = sum(dados) / len(dados)\nmodas = multimode(dados)\namplitude = max(dados) - min(dados)\n\nprint(f\"media: {media:.2f}\")\nprint(f\"mediana: {median(dados)}\")\n\nif len(modas) == len(dados):\n    print(\"moda: sem moda\")\nelse:\n    print(\"moda:\", *modas)\n\nprint(f\"amplitude: {amplitude}\")",
       sources: [
+        ["Módulo math — documentação Python", "https://docs.python.org/3/library/math.html"],
+        ["Módulo math em Python — GeeksforGeeks", "https://www.geeksforgeeks.org/python/python-math-module/"],
         ["Funções de estatística matemática — documentação Python", "https://docs.python.org/3/library/statistics.html"],
         ["Média, mediana e moda — GeeksforGeeks", "https://www.geeksforgeeks.org/maths/mean-median-mode/"],
         ["Média, mediana e moda em Python — GeeksforGeeks", "https://www.geeksforgeeks.org/python/finding-mean-median-mode-in-python-without-libraries/"]
@@ -1017,7 +1258,7 @@ print(max(dados) - min(dados))</code></pre></div>
       slug: "aula-19-match-case",
       title: "Switch case em Python: match/case",
       summary: "Escolha uma ação comparando um valor com padrões claros usando match, case e o caso padrão.",
-      duration: "80 min",
+      duration: "100 min",
       activity: "match-case",
       content: `
         <section class="band">
@@ -1113,6 +1354,17 @@ match comando:
             <article class="concept-card"><h3>3. Dia da semana</h3><p>Receba um número de 1 a 7 e imprima o nome correspondente.</p><details class="solution"><summary>Conferir ideia</summary><div><p>São sete casos literais e um caso padrão para valores inválidos.</p></div></details></article>
             <article class="concept-card"><h3>4. Faixa de idade</h3><p>Devemos usar <code>match</code> ou <code>if</code> para testar idade &lt; 12, &lt; 18 e demais?</p><details class="solution"><summary>Conferir resposta</summary><div><p><code>if/elif</code> é mais direto porque trabalhamos com intervalos e comparações.</p></div></details></article>
           </div>
+        </section>
+
+        <section class="band">
+          <h2>Agora pratique com problemas do beecrowd</h2>
+          <p>Os três primeiros problemas comparam um mesmo código com alternativas fixas, exatamente o cenário de <code>match/case</code>. O último usa faixas e serve para reconhecer quando <code>if/elif</code> continua sendo a ferramenta mais clara.</p>
+          <div class="problem-list">
+            <article class="problem-card"><span class="problem-id">1038</span><div><h3>Lanche</h3><p>Associe o código do produto ao preço, calcule o total e formate duas casas.</p><a class="btn" href="../../problemas/beecrowd/1038/index.html">Ver exercício explicado</a></div><span class="difficulty">códigos</span></article>
+            <article class="problem-card"><span class="problem-id">1050</span><div><h3>DDD</h3><p>Compare um código com vários DDDs e trate o caso não cadastrado.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1050" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">case padrão</span></article>
+            <article class="problem-card"><span class="problem-id">1052</span><div><h3>Mês</h3><p>Transforme um número de 1 a 12 no nome correspondente em inglês.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1052" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">alternativas</span></article>
+            <article class="problem-card"><span class="problem-id">1041</span><div><h3>Coordenadas de um Ponto</h3><p>Analise quadrantes e eixos com comparações; aqui <code>if/elif</code> é mais apropriado.</p><a class="btn" href="../../problemas/beecrowd/1041/index.html">Ver exercício explicado</a></div><span class="difficulty">use if</span></article>
+          </div>
         </section>`,
       challenge: "Leia uma operação (+, -, * ou /) e dois números. Use match/case para calcular o resultado. Trate divisão por zero e operação inválida.",
       solution: "operacao = input().strip()\na = float(input())\nb = float(input())\n\nmatch operacao:\n    case \"+\":\n        print(a + b)\n    case \"-\":\n        print(a - b)\n    case \"*\":\n        print(a * b)\n    case \"/\" if b != 0:\n        print(a / b)\n    case \"/\":\n        print(\"divisão por zero\")\n    case _:\n        print(\"operação inválida\")",
@@ -1127,7 +1379,7 @@ match comando:
       slug: "aula-20-dicionarios-conjuntos",
       title: "Dicionários e conjuntos",
       summary: "Associe chaves a valores, conte frequências e elimine repetições com dict e set.",
-      duration: "95 min",
+      duration: "120 min",
       activity: "dictionary-set",
       content: `
         <section class="band">
@@ -1224,6 +1476,18 @@ print(7 in unicos)</code></pre></div>
             <article class="concept-card"><h3>2. Frequência</h3><p>Conte quantas vezes cada número aparece em uma lista.</p><details class="solution"><summary>Conferir ideia</summary><div><p>Use o número como chave e <code>frequencias.get(numero, 0) + 1</code>.</p></div></details></article>
             <article class="concept-card"><h3>3. Distintos</h3><p>Descubra quantos valores diferentes existem em uma lista.</p><details class="solution"><summary>Conferir ideia</summary><div><p><code>len(set(valores))</code> devolve a quantidade de valores únicos.</p></div></details></article>
             <article class="concept-card"><h3>4. Em comum</h3><p>Encontre os valores presentes em duas listas.</p><details class="solution"><summary>Conferir ideia</summary><div><p>Converta as listas para conjuntos e use a interseção <code>A &amp; B</code>.</p></div></details></article>
+          </div>
+        </section>
+
+        <section class="band">
+          <h2>Dicionários em problemas do beecrowd</h2>
+          <p>Em cada problema, identifique primeiro quem será a <strong>chave</strong> e qual informação será o <strong>valor</strong>. Essa decisão costuma revelar a estrutura da solução antes mesmo do código.</p>
+          <div class="problem-list">
+            <article class="problem-card"><span class="problem-id">1050</span><div><h3>DDD</h3><p>Use o número do DDD como chave e o nome da cidade como valor.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1050" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">consulta</span></article>
+            <article class="problem-card"><span class="problem-id">1052</span><div><h3>Mês</h3><p>Mapeie cada número para o nome do mês e faça uma única consulta.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1052" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">mapeamento</span></article>
+            <article class="problem-card"><span class="problem-id">1255</span><div><h3>Frequência de Letras</h3><p>Conte quantas vezes cada letra aparece e encontre a maior frequência.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1255" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">frequência</span></article>
+            <article class="problem-card"><span class="problem-id">1281</span><div><h3>Ida à Feira</h3><p>Associe produtos a preços e consulte o valor durante cada compra.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/1281" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">preços</span></article>
+            <article class="problem-card"><span class="problem-id">2482</span><div><h3>Etiquetas de Noel</h3><p>Guarde a saudação de cada idioma e recupere-a pelo nome da língua.</p><a class="btn" href="https://judge.beecrowd.com/pt/problems/view/2482" target="_blank" rel="noreferrer">Resolver no beecrowd</a></div><span class="difficulty">tradução</span></article>
           </div>
         </section>`,
       challenge: "Leia uma frase, normalize para minúsculas e mostre quantas palavras diferentes existem. Depois imprima cada palavra e sua frequência em ordem alfabética.",

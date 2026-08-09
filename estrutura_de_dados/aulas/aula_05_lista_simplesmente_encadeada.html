@@ -95,6 +95,7 @@ class LinkedList:
 
     def push_front(self, value):
         node = Node(value)
+        # O novo nó aponta para o head antigo.
         node.next = self.head
         self.head = node
         if self.tail is None:
@@ -105,8 +106,37 @@ class LinkedList:
         if self.tail is None:
             self.head = self.tail = node
             return
+
+        # O tail antigo liga-se ao novo nó, que vira o tail.
         self.tail.next = node
-        self.tail = node</code></pre>
+        self.tail = node
+
+    def pop_front(self):
+        if self.head is None:
+            raise IndexError("lista vazia")
+
+        value = self.head.value
+        self.head = self.head.next
+        if self.head is None:
+            self.tail = None
+        return value
+
+    def pop_back(self):
+        if self.head is None:
+            raise IndexError("lista vazia")
+
+        if self.head is self.tail:
+            return self.pop_front()
+
+        # Sem referência para trás, precisamos localizar o penúltimo nó.
+        penultimo = self.head
+        while penultimo.next is not self.tail:
+            penultimo = penultimo.next
+
+        value = self.tail.value
+        penultimo.next = None
+        self.tail = penultimo
+        return value</code></pre>
       </div>
     </section>
 
@@ -123,4 +153,3 @@ class LinkedList:
   <script src="../assets/visualizador.js"></script>
 </body>
 </html>
-

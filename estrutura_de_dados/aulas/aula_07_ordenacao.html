@@ -102,14 +102,17 @@
       <div class="code-panel">
         <div class="code-title"><span>Python</span><span>implementação didática</span></div>
 <pre><code>def insertion_sort(values):
+    # O prefixo values[:i] já está ordenado no início de cada rodada.
     for i in range(1, len(values)):
         current = values[i]
         j = i - 1
 
+        # Abre espaço deslocando para a direita os valores maiores.
         while j >= 0 and values[j] > current:
             values[j + 1] = values[j]
             j -= 1
 
+        # Insere o elemento atual na posição livre encontrada.
         values[j + 1] = current</code></pre>
       </div>
     </section>
@@ -129,11 +132,21 @@ class Produto:
     categoria: str
     preco: float
 
+produtos = [
+    Produto("Teclado", "periferico", 180.0),
+    Produto("Mouse", "periferico", 90.0),
+    Produto("Cabo", "acessorio", 25.0),
+]
+
+# sorted cria outra lista; os objetos originais não são alterados.
 ordenados = sorted(
     produtos,
     # categoria crescente, preço decrescente, nome crescente
     key=lambda p: (p.categoria, -p.preco, p.nome)
-)</code></pre>
+)
+
+for produto in ordenados:
+    print(produto)</code></pre>
       </div>
     </section>
 

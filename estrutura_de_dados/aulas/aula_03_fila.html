@@ -96,17 +96,25 @@ class Queue:
 
     def enqueue(self, value):
         node = Node(value)
+
+        # Na primeira inserção, front e back apontam para o mesmo nó.
         if self.back is None:
             self.front = self.back = node
             return
+
+        # Nas demais, o back antigo aponta para o novo último nó.
         self.back.next = node
         self.back = node
 
     def dequeue(self):
         if self.front is None:
             raise IndexError("fila vazia")
+
+        # Retiramos sempre do front para preservar a ordem FIFO.
         value = self.front.value
         self.front = self.front.next
+
+        # Ao remover o último nó, as duas extremidades voltam a ser None.
         if self.front is None:
             self.back = None
         return value</code></pre>

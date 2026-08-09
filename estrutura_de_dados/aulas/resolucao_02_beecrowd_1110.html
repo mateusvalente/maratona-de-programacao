@@ -90,39 +90,42 @@
 
     <section class="band two-col">
       <div>
-        <h2>O detalhe do <code>insert</code></h2>
-        <p>Em <code>inicial.insert(len(inicial)-1, inicial.pop(0))</code>, os argumentos são avaliados da esquerda para a direita. O índice é calculado antes do <code>pop(0)</code>; depois da remoção, esse índice corresponde ao final da lista.</p>
-        <p class="note">Uma escrita mais direta para a mesma ideia seria <code>inicial.append(inicial.pop(0))</code>. Com <code>collections.deque</code>, usaríamos <code>append(popleft())</code>.</p>
+        <h2>Por que usar <code>deque</code>?</h2>
+        <p>O topo do baralho está no início da fila. <code>popleft()</code> retira essa carta em O(1), enquanto <code>append()</code> coloca a próxima carta na base, também em O(1).</p>
+        <p class="note">A expressão <code>cartas.append(cartas.popleft())</code> representa exatamente a segunda regra: retirar a carta do topo e transferi-la para a base.</p>
       </div>
       <details class="code-details" open>
         <summary>Solução Python analisada</summary>
-<pre><code>while True:
-    n = int(input())
+<pre><code>from collections import deque
 
-    if n == 0:
+
+while True:
+    quantidade = int(input())
+
+    # Zero encerra a entrada e não forma um baralho.
+    if quantidade == 0:
         break
 
-    inicial = []
-    for i in range(1, n + 1):
-        inicial.append(i)
+    # O início é o topo; o fim é a base do baralho.
+    cartas = deque(range(1, quantidade + 1))
+    descartadas = []
 
-    resultado = []
-    while len(inicial) &gt; 1:
-        resultado.append(inicial.pop(0))
-        inicial.insert(
-            len(inicial) - 1,
-            inicial.pop(0)
-        )
+    while len(cartas) &gt; 1:
+        # Regra 1: descarte a carta que está no topo.
+        descartadas.append(cartas.popleft())
 
-    print("Discarded cards: " +
-          str(resultado).replace("[", "").replace("]", ""))
-    print("Remaining card: " + str(inicial[0]))</code></pre>
+        # Regra 2: mova a nova carta do topo para a base.
+        cartas.append(cartas.popleft())
+
+    texto_descartadas = ", ".join(map(str, descartadas))
+    print(f"Discarded cards: {texto_descartadas}")
+    print(f"Remaining card: {cartas[0]}")</code></pre>
       </details>
     </section>
 
     <section class="band">
       <h2>Complexidade da implementação</h2>
-      <p>Em uma lista Python, <code>pop(0)</code> desloca os elementos restantes e custa O(n). Repetido durante a simulação, produz tempo O(n²). O limite pequeno do problema torna a solução viável. Com <code>deque</code>, as operações nas pontas seriam O(1), levando a simulação para O(n).</p>
+      <p>Cada carta é descartada ou movimentada um número constante de vezes. Como <code>popleft</code> e <code>append</code> custam O(1), a simulação leva <strong>O(n)</strong> de tempo e usa <strong>O(n)</strong> de espaço.</p>
     </section>
 
     <nav class="lesson-nav"><a href="resolucao_01_beecrowd_1068.html">← Anterior: 1068</a><a href="resolucao_03_beecrowd_1258.html">Próxima: 1258 →</a></nav>

@@ -1,43 +1,29 @@
-# Cole aqui sua solução validada do exercício Insert a node at the head.
-# Enunciado: https://www.hackerrank.com/challenges/insert-a-node-at-the-head-of-a-linked-list/problem
+quantidade_de_cenarios = int(input())
 
-t = int(input())
-
-cenario = 1
-
-for _ in range(t):
-
-    maximo, puxar = map(int, input().split())
-
+for numero_do_cenario in range(1, quantidade_de_cenarios + 1):
+    quantidade_de_renas, quantidade_escolhida = map(int, input().split())
     renas = []
 
-    for _ in range(maximo):
-
+    for _ in range(quantidade_de_renas):
         nome, peso, idade, altura = input().split()
 
-        peso = int(peso)
-        idade = int(idade)
-        altura = float(altura)
+        # Cada tupla funciona como um registro: os quatro campos da rena
+        # permanecem juntos durante toda a ordenação.
+        renas.append((nome, int(peso), int(idade), float(altura)))
 
-        renas.append((nome, peso, idade, altura))
-
-    # Ordenação:
-    # 1. peso decrescente
-    # 2. idade crescente
-    # 3. altura crescente
-    # 4. nome crescente
+    # As tuplas-chave são comparadas campo a campo:
+    # peso decrescente, idade crescente, altura crescente e nome crescente.
     renas.sort(
         key=lambda rena: (
             -rena[1],
             rena[2],
             rena[3],
-            rena[0]
+            rena[0],
         )
     )
 
-    print(f"CENARIO {{{cenario}}}")
+    print(f"CENARIO {{{numero_do_cenario}}}")
 
-    for i in range(puxar):
-        print(f"{i + 1} - {renas[i][0]}")
-
-    cenario += 1
+    # A lista já está no ranking correto; basta imprimir o prefixo solicitado.
+    for posicao, rena in enumerate(renas[:quantidade_escolhida], start=1):
+        print(f"{posicao} - {rena[0]}")

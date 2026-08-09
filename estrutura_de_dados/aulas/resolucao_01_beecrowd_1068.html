@@ -98,31 +98,36 @@
     <section class="band two-col">
       <div>
         <h2>Ligação com o código</h2>
-        <p><code>valida</code> memoriza um fechamento antecipado. A pilha memoriza aberturas que ainda sobraram. A resposta só pode ser correta quando as duas verificações aprovam a expressão.</p>
+        <p>A pilha memoriza as aberturas que ainda aguardam fechamento. A função pode responder <code>False</code> imediatamente quando encontra um fechamento antecipado; ao final, a pilha precisa estar vazia.</p>
         <p class="note">Os demais caracteres não entram na pilha. Eles fazem parte da expressão, mas não interferem no balanceamento.</p>
       </div>
       <details class="code-details" open>
         <summary>Solução Python analisada</summary>
 <pre><code>import sys
 
-for palavra in sys.stdin.read().split():
+
+def esta_balanceada(expressao):
+    """Verifica se os parênteses abrem e fecham na ordem correta."""
     pilha = []
-    valida = True
 
-    for caractere in palavra:
-        if caractere == '(':
+    for caractere in expressao:
+        if caractere == "(":
+            # Guarda uma abertura que ainda precisa ser fechada.
             pilha.append(caractere)
+        elif caractere == ")":
+            # Sem abertura disponível, este fechamento é inválido.
+            if not pilha:
+                return False
+            pilha.pop()
 
-        elif caractere == ')':
-            if len(pilha) == 0:
-                valida = False
-            else:
-                pilha.pop()
+    # Uma pilha vazia significa que nenhuma abertura ficou sobrando.
+    return not pilha
 
-    if len(pilha) != 0 or valida == False:
-        print("incorrect")
-    else:
-        print("correct")</code></pre>
+
+# O beecrowd fornece uma expressão por linha até o fim do arquivo.
+for linha in sys.stdin:
+    expressao = linha.rstrip("\n")
+    print("correct" if esta_balanceada(expressao) else "incorrect")</code></pre>
       </details>
     </section>
 

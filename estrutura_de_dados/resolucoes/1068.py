@@ -1,25 +1,25 @@
-# Cole aqui sua solução validada do beecrowd 1068.
-# Enunciado: https://judge.beecrowd.com/pt/problems/view/1068
-
 import sys
 
-for palavra in sys.stdin.read().split():
 
+def esta_balanceada(expressao):
+    """Verifica se os parênteses de uma expressão abrem e fecham na ordem correta."""
     pilha = []
-    valida = True
 
-    for caractere in palavra:
-
-        if caractere == '(':
+    for caractere in expressao:
+        if caractere == "(":
+            # A abertura fica pendente até aparecer o fechamento correspondente.
             pilha.append(caractere)
+        elif caractere == ")":
+            # Fechar sem nenhuma abertura disponível invalida a expressão.
+            if not pilha:
+                return False
+            pilha.pop()
 
-        elif caractere == ')':
-            if len(pilha) == 0:
-                valida = False
-            else:
-                pilha.pop()
+    # Se ainda há itens na pilha, sobraram aberturas sem fechamento.
+    return not pilha
 
-    if len(pilha) != 0 or valida == False:
-        print("incorrect")
-    else:
-        print("correct")
+
+# Cada linha da entrada é uma expressão; a leitura termina no fim do arquivo.
+for linha in sys.stdin:
+    expressao = linha.rstrip("\n")
+    print("correct" if esta_balanceada(expressao) else "incorrect")

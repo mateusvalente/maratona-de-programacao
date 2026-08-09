@@ -1,50 +1,61 @@
-# Cole aqui sua solução validada do beecrowd 1340.
-# Enunciado: https://judge.beecrowd.com/pt/problems/view/1340
+from collections import deque
+import heapq
+import sys
 
-import collections
-import queue
+
+def classificar(operacoes):
+    """Simula as três estruturas e classifica quais reproduzem as remoções."""
+    pilha = []
+    fila = deque()
+    prioridade = []  # heapq é min-heap; valores negativos simulam uma max-heap.
+
+    pode_ser_pilha = True
+    pode_ser_fila = True
+    pode_ser_prioridade = True
+
+    for tipo, valor in operacoes:
+        if tipo == 1:
+            # Toda inserção é reproduzida nas candidatas que ainda são possíveis.
+            if pode_ser_pilha:
+                pilha.append(valor)
+            if pode_ser_fila:
+                fila.append(valor)
+            if pode_ser_prioridade:
+                heapq.heappush(prioridade, -valor)
+            continue
+
+        # Na remoção, o valor observado precisa ser exatamente o que a estrutura
+        # candidata retiraria naquele momento.
+        if pode_ser_pilha and (not pilha or pilha.pop() != valor):
+            pode_ser_pilha = False
+        if pode_ser_fila and (not fila or fila.popleft() != valor):
+            pode_ser_fila = False
+        if pode_ser_prioridade and (
+            not prioridade or -heapq.heappop(prioridade) != valor
+        ):
+            pode_ser_prioridade = False
+
+    candidatas = sum((pode_ser_pilha, pode_ser_fila, pode_ser_prioridade))
+    if candidatas == 0:
+        return "impossible"
+    if candidatas > 1:
+        return "not sure"
+    if pode_ser_pilha:
+        return "stack"
+    if pode_ser_fila:
+        return "queue"
+    return "priority queue"
+
+
+# Os casos aparecem até EOF. Usar um iterador facilita consumir exatamente
+# a quantidade de operações declarada em cada caso.
+dados = iter(map(int, sys.stdin.buffer.read().split()))
 
 while True:
     try:
-        n = int(input())
-
-        pilha = collections.deque()
-        fila = collections.deque()
-        filaDePrioridade = queue.PriorityQueue()
-        [p, f, fp] = [True, True, True]
-        for _ in range(n):
-            [opcao, elemento] = [int(x) for x in input().strip().split(' ')]
-
-            if opcao == 1:
-                if p:
-                    pilha.append(elemento)
-                if f:
-                    fila.append(elemento)
-                if fp:
-                    filaDePrioridade.put(-elemento)
-            else:
-                if p:
-                    if len(pilha) == 0 or pilha[-1] != elemento:
-                        p = False
-                    else:
-                        pilha.pop()
-                if f:
-                    if len(fila) == 0 or fila[0] != elemento:
-                        f = False
-                    else:
-                        fila.popleft()
-                if fp and (filaDePrioridade.empty() or filaDePrioridade.get() != -elemento):
-                        fp = False
-
-        if p and not f and not fp:
-            print('stack')
-        elif not p and f and not fp:
-            print('queue')
-        elif not p and not f and fp:
-            print('priority queue')
-        elif not p and not f and not fp:
-            print('impossible')
-        else:
-            print('not sure')
-    except EOFError:
+        quantidade = next(dados)
+    except StopIteration:
         break
+
+    operacoes = [(next(dados), next(dados)) for _ in range(quantidade)]
+    print(classificar(operacoes))

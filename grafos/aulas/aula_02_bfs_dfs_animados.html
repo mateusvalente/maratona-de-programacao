@@ -424,38 +424,64 @@ H: D</pre>
   </div>
 
   <div id="dfsMatrix" class="code-panel active">
-<pre><span class="kw">def</span> <span class="fn">dfs</span>(v):
-    visitado[v] = <span class="kw">True</span>
-    print(v)
+<pre>vertices = ["A", "B", "C", "D", "E", "F", "G", "H"]
+arestas = [
+    ("A", "B"), ("A", "C"), ("B", "D"), ("B", "E"),
+    ("C", "F"), ("C", "G"), ("D", "H"),
+]
 
-    <span class="cm"># Na matriz, testamos TODOS os vértices</span>
-    <span class="kw">for</span> w <span class="kw">in</span> range(V):
+# A matriz usa índices; este dicionário converte a letra em posição.
+indice = {vertice: i for i, vertice in enumerate(vertices)}
+quantidade = len(vertices)
+adj = [[0] * quantidade for _ in range(quantidade)]
 
-        <span class="cm"># Existe ligação v -- w?</span>
-        <span class="kw">if</span> adj[v][w] == <span class="nu">1</span>:
+for a, b in arestas:
+    i, j = indice[a], indice[b]
+    adj[i][j] = 1
+    adj[j][i] = 1  # A árvore não é direcionada.
 
-            <span class="kw">if not</span> visitado[w]:
-                dfs(w)
 
+def dfs(v):
+    # Marcar antes de aprofundar evita visitar o mesmo vértice novamente.
+    visitado[v] = True
+    print(vertices[v])
 
-visitado = [<span class="kw">False</span>] * V
-dfs(origem)</pre>
-  </div>
-
-  <div id="dfsList" class="code-panel">
-<pre><span class="kw">def</span> <span class="fn">dfs</span>(v):
-    visitado[v] = <span class="kw">True</span>
-    print(v)
-
-    <span class="cm"># Na lista, já temos SOMENTE os vizinhos</span>
-    <span class="kw">for</span> w <span class="kw">in</span> grafo[v]:
-
-        <span class="kw">if not</span> visitado[w]:
+    # Na matriz, examinamos todas as colunas da linha de v.
+    for w in range(quantidade):
+        if adj[v][w] == 1 and not visitado[w]:
             dfs(w)
 
 
-visitado = [<span class="kw">False</span>] * V
-dfs(origem)</pre>
+visitado = [False] * quantidade
+dfs(indice["A"])</pre>
+  </div>
+
+  <div id="dfsList" class="code-panel">
+<pre>grafo = {
+    "A": ["B", "C"],
+    "B": ["A", "D", "E"],
+    "C": ["A", "F", "G"],
+    "D": ["B", "H"],
+    "E": ["B"],
+    "F": ["C"],
+    "G": ["C"],
+    "H": ["D"],
+}
+
+
+def dfs(v):
+    # O conjunto registra os vértices já descobertos.
+    visitado.add(v)
+    print(v)
+
+    # A lista grafo[v] contém somente os vizinhos de v.
+    for vizinho in grafo[v]:
+        if vizinho not in visitado:
+            dfs(vizinho)
+
+
+visitado = set()
+dfs("A")</pre>
   </div>
 
   <div class="grid2" style="margin-top:14px">
@@ -590,49 +616,69 @@ dfs(origem)</pre>
   </div>
 
   <div id="bfsMatrix" class="code-panel active">
-<pre><span class="kw">from</span> collections <span class="kw">import</span> deque
+<pre>from collections import deque
 
-<span class="kw">def</span> <span class="fn">bfs</span>(origem):
+vertices = ["A", "B", "C", "D", "E", "F", "G", "H"]
+arestas = [
+    ("A", "B"), ("A", "C"), ("B", "D"), ("B", "E"),
+    ("C", "F"), ("C", "G"), ("D", "H"),
+]
+indice = {vertice: i for i, vertice in enumerate(vertices)}
+quantidade = len(vertices)
+adj = [[0] * quantidade for _ in range(quantidade)]
+
+for a, b in arestas:
+    i, j = indice[a], indice[b]
+    adj[i][j] = adj[j][i] = 1
+
+
+def bfs(origem):
     fila = deque([origem])
-    visitado[origem] = <span class="kw">True</span>
+    visitado = [False] * quantidade
+    visitado[origem] = True  # Marcar na entrada evita duplicatas na fila.
 
-    <span class="kw">while</span> fila:
-        v = fila.popleft()
-        print(v)
+    while fila:
+        v = fila.popleft()  # Sempre processamos o mais antigo da fila.
+        print(vertices[v])
 
-        <span class="cm"># Na matriz, testamos TODOS os vértices</span>
-        <span class="kw">for</span> w <span class="kw">in</span> range(V):
-
-            <span class="kw">if</span> adj[v][w] == <span class="nu">1</span> <span class="kw">and not</span> visitado[w]:
-                visitado[w] = <span class="kw">True</span>
+        # Na matriz, examinamos todas as possíveis posições vizinhas.
+        for w in range(quantidade):
+            if adj[v][w] == 1 and not visitado[w]:
+                visitado[w] = True
                 fila.append(w)
 
 
-visitado = [<span class="kw">False</span>] * V
-bfs(origem)</pre>
+bfs(indice["A"])</pre>
   </div>
 
   <div id="bfsList" class="code-panel">
-<pre><span class="kw">from</span> collections <span class="kw">import</span> deque
+<pre>from collections import deque
 
-<span class="kw">def</span> <span class="fn">bfs</span>(origem):
+grafo = {
+    "A": ["B", "C"],
+    "B": ["A", "D", "E"],
+    "C": ["A", "F", "G"],
+    "D": ["B", "H"],
+    "E": ["B"], "F": ["C"], "G": ["C"], "H": ["D"],
+}
+
+
+def bfs(origem):
     fila = deque([origem])
-    visitado[origem] = <span class="kw">True</span>
+    visitado = {origem}  # A origem já entrou na fila.
 
-    <span class="kw">while</span> fila:
+    while fila:
         v = fila.popleft()
         print(v)
 
-        <span class="cm"># Na lista, percorremos diretamente os vizinhos</span>
-        <span class="kw">for</span> w <span class="kw">in</span> grafo[v]:
+        # A lista fornece diretamente os vizinhos do vértice atual.
+        for vizinho in grafo[v]:
+            if vizinho not in visitado:
+                visitado.add(vizinho)
+                fila.append(vizinho)
 
-            <span class="kw">if not</span> visitado[w]:
-                visitado[w] = <span class="kw">True</span>
-                fila.append(w)
 
-
-visitado = [<span class="kw">False</span>] * V
-bfs(origem)</pre>
+bfs("A")</pre>
   </div>
 
   <div class="callout">

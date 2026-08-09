@@ -17,7 +17,8 @@ const lessons = [
 ];
 const paradigms = [
   "forca-bruta", "recursao", "backtracking", "divisao-conquista",
-  "guloso", "programacao-dinamica", "memoizacao", "branch-and-bound"
+  "guloso", "programacao-dinamica", "memoizacao", "branch-and-bound",
+  "pre-processamento", "iteracao"
 ];
 
 function ensure(directory) {
@@ -65,6 +66,7 @@ paradigms.forEach((paradigm) => {
   <script src="../../assets/js/conteudo.js"></script>
   <script src="../../assets/js/exercicios.js"></script>
   <script src="../../assets/js/status-respostas.js"></script>
+  <script src="../../assets/js/resolucoes.js"></script>
   <script src="../../assets/js/comum.js"></script>
   <script src="../../assets/js/catalogo.js"></script>
 </body>
@@ -76,6 +78,30 @@ const context = { window: {} };
 vm.createContext(context);
 vm.runInContext(fs.readFileSync(path.join(base, "assets", "js", "exercicios.js"), "utf8"), context);
 const exercises = context.window.PARADIGM_EXERCISES;
+
+vm.runInContext(fs.readFileSync(path.join(base, "assets", "js", "resolucoes.js"), "utf8"), context);
+const solutions = context.window.PARADIGM_SOLUTIONS;
+
+solutions.forEach((solution) => {
+  write(path.join(base, "resolucoes", solution.key, "index.html"), `<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Resolução explicada do beecrowd ${solution.id} — ${solution.title}.">
+  <title>${solution.id} — ${solution.title} | Resolução explicada</title>
+  <link rel="stylesheet" href="../../assets/css/curso.css">
+</head>
+<body data-root="../../" data-solution="${solution.key}">
+  <main id="app"><p>Carregando resolução...</p></main>
+  <script src="../../assets/js/conteudo.js"></script>
+  <script src="../../assets/js/resolucoes.js"></script>
+  <script src="../../assets/js/comum.js"></script>
+  <script src="../../assets/js/resolucao.js"></script>
+</body>
+</html>
+`);
+});
 
 ensure(path.join(base, "questoes"));
 ensure(path.join(base, "respostas"));
@@ -99,7 +125,7 @@ exercises.forEach((exercise) => {
   exercisesById.set(exercise.id, matches);
 });
 const validated = fs.readdirSync(path.join(base, "respostas"), { withFileTypes: true })
-  .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith(".py"))
+  .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith(".py") && fs.statSync(path.join(base, "respostas", entry.name)).size > 0)
   .map((entry) => path.basename(entry.name, path.extname(entry.name)))
   .map((name) => {
     if (validKeys.has(name)) return name;
@@ -116,4 +142,5 @@ write(
 console.log(`Aulas: ${lessons.length}`);
 console.log(`Páginas por paradigma: ${paradigms.length}`);
 console.log(`Arquivos de tentativa: ${exercises.length}`);
+console.log(`Aulas de resolução: ${solutions.length}`);
 console.log(`Respostas validadas detectadas: ${validated.length}`);

@@ -249,6 +249,7 @@ th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: l
 th { background: var(--surface-2); color: var(--text); font-size: .77rem; text-transform: uppercase; }
 td { color: var(--muted); }
 tr:last-child td { border-bottom: 0; }
+tr.trace-active td { background: #332c16; color: var(--yellow); }
 
 .diagram {
   min-width: 0;

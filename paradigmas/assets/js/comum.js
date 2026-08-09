@@ -27,6 +27,7 @@
           <nav class="topnav" aria-label="Navegação principal">
             <a href="${root}index.html#aulas">Aulas</a>
             <a href="${root}exercicios/index.html">Exercícios</a>
+            <a href="${root}resolucoes/index.html">Resoluções</a>
             <a href="${root}index.html#estudos">Estudo</a>
           </nav>
         </div>
@@ -47,6 +48,7 @@
         <nav class="course-menu" aria-label="Aulas de paradigmas">${links}</nav>
         <nav class="sidebar-extra" aria-label="Materiais">
           <a href="${root}exercicios/index.html">Catálogo de exercícios</a>
+          <a href="${root}resolucoes/index.html">Resoluções explicadas</a>
           <a href="${root}questoes/index.html">Arquivos para tentativas</a>
         </nav>
       </aside>`;

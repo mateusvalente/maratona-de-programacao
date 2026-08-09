@@ -5,7 +5,7 @@
   const root = window.CourseUI.rootPath();
   const app = document.querySelector("#app");
   const labels = window.PARADIGM_LABELS;
-  const mainParadigms = ["forca-bruta", "recursao", "backtracking", "divisao-conquista", "guloso", "programacao-dinamica", "memoizacao", "branch-and-bound"];
+  const mainParadigms = ["forca-bruta", "recursao", "backtracking", "divisao-conquista", "guloso", "programacao-dinamica", "memoizacao", "branch-and-bound", "pre-processamento", "iteracao"];
   const title = fixedParadigm ? `Exercícios de ${labels[fixedParadigm]}` : "Exercícios por paradigma";
 
   document.title = `${title} | Paradigmas`;
@@ -56,6 +56,7 @@
 
   function card(exercise) {
     const validated = isValidated(exercise);
+    const lessonAvailable = window.PARADIGM_SOLUTIONS.some((solution) => solution.key === exercise.key);
     return `
       <article class="exercise-card">
         <div><span class="exercise-id">${exercise.platform}<br>${exercise.id}</span></div>
@@ -68,8 +69,9 @@
         <div class="exercise-side">
           <span class="status-badge ${validated ? "validated" : "waiting"}">${validated ? "✓ Solução validada" : "⏳ Aguardando validação"}</span>
           <a class="btn primary" href="${exercise.url}" target="_blank" rel="noreferrer">Abrir enunciado ↗</a>
+          ${lessonAvailable ? `<a class="btn secondary" href="${root}resolucoes/${exercise.key}/index.html">Ver aula explicada →</a>` : ""}
           <a class="btn" href="${root}questoes/${exercise.key}.py">Abrir arquivo .py</a>
-          ${validated ? `<span class="source-note">Arquivo localizado em respostas/. A explicação será criada a partir dele.</span>` : ""}
+          ${validated ? `<span class="source-note">Código validado e explicado sem alterar o arquivo original.</span>` : ""}
         </div>
       </article>`;
   }

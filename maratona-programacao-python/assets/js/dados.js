@@ -363,19 +363,25 @@ classificada = True  # bool</code></pre></div>
       id: 10,
       slug: "aula-10-input-output",
       title: "Input e output",
-      summary: "Desmonte input, split, map e formatação até cada valor chegar à variável correta.",
-      duration: "80 min",
+      summary: "Leia uma ou várias informações, processe casos de teste e reconheça entradas que terminam em EOF.",
+      duration: "95 min",
       activity: "input",
       content: `
         <section class="band">
           <h2>O programa precisa receber os dados do caso</h2>
           <div class="code-shell"><div class="code-head">Ler e repetir um texto</div><pre><code>nome = input()
 print(nome)</code></pre></div>
-          <p><code>input()</code> lê uma linha da entrada e devolve texto. Mesmo que a pessoa digite <code>20</code>, o valor inicial é a string <code>"20"</code>. Para fazer contas inteiras, convertemos:</p>
+          <p><code>input()</code> lê uma linha, retira a quebra de linha do final e devolve uma <code>str</code>. Mesmo que a entrada contenha <code>20</code>, o valor inicial é o texto <code>"20"</code>. Para fazer contas inteiras, convertemos:</p>
           <div class="code-shell"><div class="code-head">Conversão</div><pre><code>idade = int(input())</code></pre></div>
+          <div class="note"><strong>Sem mensagens na leitura:</strong> em exercícios de juiz online, use <code>input()</code>, e não <code>input("Digite um valor: ")</code>. O texto do convite também vai para a saída e pode causar Wrong Answer.</div>
         </section>
         <section class="band">
-          <h2>Dois valores em linhas diferentes</h2>
+          <h2>Primeiro, observe o formato da entrada</h2>
+          <p>Não existe uma única leitura pronta para todos os problemas. O enunciado informa como os dados estão organizados, e o código deve consumir essa organização na mesma ordem.</p>
+          <div class="table-wrap"><table><thead><tr><th>O enunciado informa</th><th>Estratégia</th><th>Leitura principal</th></tr></thead><tbody><tr><td>um valor por linha</td><td>uma chamada para cada linha</td><td><code>int(input())</code></td></tr><tr><td>vários valores na mesma linha</td><td>separar e converter</td><td><code>map(int, input().split())</code></td></tr><tr><td>a primeira linha contém T casos</td><td>repetir exatamente T vezes</td><td><code>for _ in range(t)</code></td></tr><tr><td>vários casos até o fim do arquivo</td><td>percorrer a entrada até não existir outra linha</td><td><code>for linha in sys.stdin</code></td></tr></tbody></table></div>
+        </section>
+        <section class="band">
+          <h2>Valores em linhas diferentes</h2>
           <div class="two-col"><div class="code-shell"><div class="code-head">Entrada</div><pre><code>10
 20</code></pre></div><div class="code-shell"><div class="code-head">Código</div><pre><code>a = int(input())
 b = int(input())
@@ -384,11 +390,54 @@ print(a + b)</code></pre></div></div>
           <p>A primeira chamada consome a primeira linha; a segunda consome a próxima. Cada string é convertida para inteiro antes da soma.</p>
         </section>
         <section class="band">
-          <h2>Dois valores na mesma linha</h2>
-          <div class="code-shell"><div class="code-head">Leitura competitiva comum</div><pre><code>a, b = map(int, input().split())</code></pre></div>
-          <div class="trace"><div class="trace-row"><span class="trace-number">1</span><div class="trace-copy"><code>input()</code> lê a linha e produz <code>"10 20"</code>.</div></div><div class="trace-row"><span class="trace-number">2</span><div class="trace-copy"><code>split()</code> separa nos espaços: <code>["10", "20"]</code>.</div></div><div class="trace-row"><span class="trace-number">3</span><div class="trace-copy"><code>map(int, ...)</code> converte cada parte: <code>10</code> e <code>20</code>.</div></div><div class="trace-row"><span class="trace-number">4</span><div class="trace-copy">A atribuição múltipla coloca <code>10</code> em <code>a</code> e <code>20</code> em <code>b</code>.</div></div></div>
-          <p>Quando queremos guardar uma quantidade variável de números, construímos uma lista:</p>
-          <div class="code-shell"><div class="code-head">Linha inteira em uma lista</div><pre><code>numeros = list(map(int, input().split()))</code></pre></div>
+          <h2>Vários valores na mesma linha</h2>
+          <div class="two-col"><div class="code-shell"><div class="code-head">Entrada</div><pre><code>10 20 30</code></pre></div><div class="code-shell"><div class="code-head">Três inteiros</div><pre><code>a, b, c = map(int, input().split())
+print(a + b + c)</code></pre></div></div>
+          <div class="trace"><div class="trace-row"><span class="trace-number">1</span><div class="trace-copy"><code>input()</code> lê a linha e produz <code>"10 20 30"</code>.</div></div><div class="trace-row"><span class="trace-number">2</span><div class="trace-copy"><code>split()</code> usa os espaços para separar: <code>["10", "20", "30"]</code>.</div></div><div class="trace-row"><span class="trace-number">3</span><div class="trace-copy"><code>map(int, ...)</code> aplica <code>int</code> a cada parte: <code>10</code>, <code>20</code> e <code>30</code>.</div></div><div class="trace-row"><span class="trace-number">4</span><div class="trace-copy">A atribuição múltipla coloca os três resultados em <code>a</code>, <code>b</code> e <code>c</code>, na mesma ordem da entrada.</div></div></div>
+          <div class="warning"><strong>A quantidade precisa combinar:</strong> se há três variáveis, a linha deve fornecer exatamente três partes. Valores a mais ou a menos provocam erro no desempacotamento.</div>
+          <h3>Escolha a leitura de acordo com os tipos</h3>
+          <div class="table-wrap"><table><thead><tr><th>Entrada</th><th>Objetivo</th><th>Código</th></tr></thead><tbody><tr><td><code>8 13</code></td><td>dois inteiros</td><td><code>a, b = map(int, input().split())</code></td></tr><tr><td><code>7.5 9.0</code></td><td>dois números reais</td><td><code>x, y = map(float, input().split())</code></td></tr><tr><td><code>Ana Uberaba</code></td><td>duas palavras</td><td><code>nome, cidade = input().split()</code></td></tr><tr><td><code>Ana 20 1.68</code></td><td>tipos diferentes</td><td><code>nome, idade, altura = input().split()</code><br><code>idade = int(idade)</code><br><code>altura = float(altura)</code></td></tr><tr><td><code>4 8 15 16 23 42</code></td><td>quantidade variável de inteiros</td><td><code>numeros = list(map(int, input().split()))</code></td></tr></tbody></table></div>
+          <p class="note"><strong>Atenção aos nomes com espaço:</strong> <code>split()</code> separaria <code>"Ana Maria 20"</code> em três partes. Use essa forma apenas quando o enunciado também define cada informação como uma palavra ou quando oferece um separador específico.</p>
+        </section>
+        <section class="band">
+          <h2>Quando a primeira linha informa T casos de teste</h2>
+          <p>Se o enunciado diz que a primeira linha contém <code>T</code>, leia esse número uma única vez. Depois, o <code>for</code> executa o bloco exatamente <code>T</code> vezes; cada volta consome os dados de um caso.</p>
+          <div class="two-col"><div class="code-shell"><div class="code-head">Entrada</div><pre><code>3
+10 20
+5 7
+8 1</code></pre></div><div class="code-shell"><div class="code-head">Código</div><pre><code>t = int(input())
+
+for caso in range(1, t + 1):
+    a, b = map(int, input().split())
+    soma = a + b
+    print(f"Caso {caso}: {soma}")</code></pre></div></div>
+          <div class="io-grid"><div class="io-box"><h3>Saída</h3><pre><code>Caso 1: 30
+Caso 2: 12
+Caso 3: 9</code></pre></div><div class="io-box"><h3>O que cada parte controla</h3><pre><code>t = 3       # quantidade de casos
+caso = 1..3 # número da volta
+a, b        # dados do caso atual</code></pre></div></div>
+          <ol class="steps"><li><strong>Leia T fora do laço.</strong> Essa linha é o contador, não é um caso.</li><li><strong>Leia um caso dentro do laço.</strong> Na primeira volta entram <code>10</code> e <code>20</code>.</li><li><strong>Resolva e imprima.</strong> Depois o laço volta e lê a linha do caso seguinte.</li></ol>
+        </section>
+        <section class="band">
+          <h2>Quando os casos continuam até EOF</h2>
+          <p><strong>EOF</strong> significa <em>End of File</em>, ou fim do arquivo. Nesse formato não existe uma primeira linha com <code>T</code> e normalmente não existe um valor sentinela. O programa processa cada linha disponível e para quando a entrada termina.</p>
+          <div class="two-col"><div class="code-shell"><div class="code-head">Entrada sem T</div><pre><code>10 20
+5 7
+8 1</code></pre></div><div class="code-shell"><div class="code-head">Leitura até EOF</div><pre><code>import sys
+
+for linha in sys.stdin:
+    a, b = map(int, linha.split())
+    print(a + b)</code></pre></div></div>
+          <p><code>sys.stdin</code> representa a entrada padrão. O <code>for</code> entrega uma linha por vez e termina sozinho quando não há outra linha. Como <code>split()</code> já ignora espaços e a quebra de linha nas extremidades, não é necessário usar <code>strip()</code> antes dele nesse exemplo.</p>
+          <h3>Outra forma: tratar o EOF de input()</h3>
+          <div class="code-shell"><div class="code-head">Com try e except</div><pre><code>while True:
+    try:
+        a, b = map(int, input().split())
+        print(a + b)
+    except EOFError:
+        break</code></pre></div>
+          <p>Ao alcançar o fim da entrada, <code>input()</code> lança <code>EOFError</code>. O <code>except</code> captura apenas essa situação e o <code>break</code> encerra o laço. Para entradas organizadas por linha, <code>for linha in sys.stdin</code> costuma expressar a intenção com mais clareza.</p>
+          <div class="warning"><strong>EOF não é um valor digitado:</strong> não compare a linha com <code>"EOF"</code>. O juiz apenas deixa de fornecer dados.</div>
         </section>
         <section class="band">
           <h2>Saída exata</h2>
@@ -404,11 +453,13 @@ print(f"X = {resultado}")</code></pre></div>
 b = input()
 print(a + b)</code></pre></div><div><p>Com entradas <code>10</code> e <code>20</code>, as variáveis guardam textos. Somar strings significa juntar: o resultado é <code>1020</code>.</p><p>Converta com <code>int</code> para obter <code>30</code>.</p></div></div>
         </section>`,
-      challenge: "A entrada possui três preços na mesma linha. Escreva a leitura que os coloca em a, b e c como float e uma saída com o total em duas casas decimais.",
-      solution: "a, b, c = map(float, input().split())\ntotal = a + b + c\nprint(f\"{total:.2f}\")",
+      challenge: "A primeira linha contém T. Cada um dos T casos possui três preços na mesma linha. Para cada caso, leia os valores e imprima a soma com duas casas decimais.",
+      solution: "t = int(input())\n\nfor _ in range(t):\n    a, b, c = map(float, input().split())\n    total = a + b + c\n    print(f\"{total:.2f}\")",
       sources: [
         ["Métodos de entrada em Python competitivo — GeeksforGeeks", "https://www.geeksforgeeks.org/competitive-programming/python-input-methods-competitive-programming/"],
-        ["Entrada e saída em Python — documentação oficial", "https://docs.python.org/3/tutorial/inputoutput.html"]
+        ["Entrada e saída em Python — documentação oficial", "https://docs.python.org/3/tutorial/inputoutput.html"],
+        ["Função input e EOFError — documentação oficial", "https://docs.python.org/3/library/functions.html#input"],
+        ["Entrada padrão sys.stdin — documentação oficial", "https://docs.python.org/3/library/sys.html#sys.stdin"]
       ]
     },
     {

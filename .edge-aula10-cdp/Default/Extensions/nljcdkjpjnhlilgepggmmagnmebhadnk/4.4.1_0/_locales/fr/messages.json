@@ -1,0 +1,17 @@
+{
+   "appActionName": {
+      "message": "Automatisez votre routine SEO on-page."
+   },
+   "appDesc": {
+      "message": "L'analyse site web SEO gratuit. L'audit seo technique de votre site par 100+ de paramètres."
+   },
+   "appName": {
+      "message": "Analyse référencement site web"
+   },
+   "fail_url_key": {
+      "message": "Il n'y a pas d'URL dans un onglet. Ouvrez une page que vous souhaitez archiver dans l'onglet actif et cliquez une fois sur l'icône du plug-in."
+   },
+   "loading_key": {
+      "message": "Chargement..."
+   }
+}

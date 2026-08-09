@@ -21,7 +21,7 @@
     7: ["Enviar o arquivo certo para o problema errado.", "Confundir o placar público com o feedback privado da equipe."],
     8: ["Trocar de linguagem para esconder um algoritmo inadequado.", "Usar uma linguagem sem confirmar se ela está disponível na competição."],
     9: ["Confundir / com //.", "Usar ^ como potência; em Python, potência é **."],
-    10: ["Somar strings e produzir 1020 em vez de 30.", "Acrescentar mensagens que não foram pedidas na saída."],
+    10: ["Somar strings e produzir 1020 em vez de 30.", "Tentar desempacotar uma quantidade de valores diferente da quantidade de variáveis.", "Ler T dentro do laço ou tratar a linha de T como se já fosse o primeiro caso.", "Esperar a palavra EOF em vez de reconhecer o fim real da entrada.", "Acrescentar mensagens que não foram pedidas na saída."],
     11: ["Copiar código antes de entender a fórmula.", "Testar somente a amostra e ignorar formatação e limites."],
     12: ["Usar = quando a intenção era comparar com ==.", "Esquecer a indentação ou testar intervalos em ordem incorreta."],
     13: ["Esperar que o limite final de range seja incluído.", "Reiniciar o acumulador dentro do laço."],
@@ -246,22 +246,102 @@
   }
 
   function inputActivity(body, lab) {
+    const presets = {
+      line: "10 20 30",
+      tests: "3\n10 20\n5 7\n8 1",
+      eof: "10 20\n5 7\n8 1"
+    };
+    let mode = "line";
     let step = 0;
-    const stages = [
-      ["input()", (raw) => `\"${raw}\"`, "A linha inteira ainda é texto."],
-      ["split()", (raw) => `[${raw.trim().split(/\s+/).map((x) => `\"${x}\"`).join(", ")}]`, "Os espaços separam strings."],
-      ["map(int, ...)", (raw) => raw.trim().split(/\s+/).map(Number).join("    "), "Cada parte foi convertida para inteiro."],
-      ["atribuição", (raw) => raw.trim().split(/\s+/).map((x, i) => `${String.fromCharCode(97 + i)} = ${Number(x)}`).join("; "), "Cada número chega à sua variável."]
-    ];
-    function draw() {
-      const raw = lab.querySelector("#raw-input")?.value || "10 20";
-      const [name, transform, message] = stages[step];
-      body.innerHTML = `<div class="flow">${stages.map((item, index) => `<span class="flow-step ${index === step ? "active" : ""}">${item[0]}</span>${index < stages.length - 1 ? '<span class="flow-arrow">→</span>' : ''}`).join("")}</div><div class="tokens">${raw.trim().split(/\s+/).map((token) => `<span class="token ${step >= 2 ? "done" : ""}">${ui.esc(token)}<span class="token-index">${step >= 2 ? "int" : "str"}</span></span>`).join("")}</div><div class="lab-message"><strong>${name}:</strong> ${ui.esc(transform(raw))}<br>${message}</div>`;
+
+    function linesFrom(raw) {
+      return raw.replace(/\r/g, "").split("\n").filter((line) => line.trim() !== "");
     }
-    controls(lab, '<div class="field"><label for="raw-input">Linha de entrada</label><input id="raw-input" value="10 20"></div><button class="btn" id="input-back" type="button">←</button><button class="btn primary" id="input-next" type="button">Próxima etapa</button>');
-    lab.querySelector("#input-back").onclick = () => { step = (step - 1 + stages.length) % stages.length; draw(); };
-    lab.querySelector("#input-next").onclick = () => { step = (step + 1) % stages.length; draw(); };
-    lab.querySelector("#raw-input").oninput = draw;
+
+    function sumLine(line) {
+      const values = line.trim().split(/\s+/).map(Number);
+      return values.every(Number.isFinite) ? values.reduce((sum, value) => sum + value, 0) : "entrada inválida";
+    }
+
+    function drawSingleLine(raw) {
+      const line = linesFrom(raw)[0] || "";
+      const tokens = line.trim() ? line.trim().split(/\s+/) : [];
+      const stages = ["input()", "split()", "map(int, ...)", "atribuição"];
+      const explanations = [
+        [`\"${line}\"`, "A linha inteira chegou como uma única string."],
+        [`[${tokens.map((token) => `\"${token}\"`).join(", ")}]`, "Os espaços separaram a linha em várias strings."],
+        [tokens.map((token) => Number(token)).join(", "), "int foi aplicado a cada parte da linha."],
+        [tokens.map((token, index) => `${String.fromCharCode(97 + index)} = ${Number(token)}`).join("; "), "Os valores foram distribuídos entre as variáveis, na ordem."]
+      ];
+      const [result, message] = explanations[step];
+      body.innerHTML = `<div class="flow">${stages.map((name, index) => `<span class="flow-step ${index === step ? "active" : ""}">${name}</span>${index < stages.length - 1 ? '<span class="flow-arrow">→</span>' : ''}`).join("")}</div><div class="tokens">${tokens.length ? tokens.map((token) => `<span class="token ${step >= 2 ? "done" : ""}">${ui.esc(token)}<span class="token-index">${step >= 2 ? "int" : "str"}</span></span>`).join("") : "<p>Digite pelo menos um valor.</p>"}</div><div class="lab-message"><strong>Resultado desta etapa:</strong> ${ui.esc(result)}<br>${message}</div>`;
+    }
+
+    function inputRows(lines, consumed, current, countFirst) {
+      return lines.map((line, index) => {
+        const isConsumed = index < consumed;
+        const isCurrent = index === current;
+        const label = countFirst && index === 0 ? "T" : countFirst ? `caso ${index}` : `caso ${index + 1}`;
+        return `<div class="input-line ${isConsumed ? "consumed" : ""} ${isCurrent ? "current" : ""}"><span class="input-line-number">${index + 1}</span><code>${ui.esc(line)}</code><span class="input-status">${isConsumed ? "consumida" : isCurrent ? "próxima" : label}</span></div>`;
+      }).join("");
+    }
+
+    function drawTests(raw) {
+      const lines = linesFrom(raw);
+      const declared = Number.parseInt(lines[0], 10);
+      const validT = Number.isInteger(declared) && declared >= 0;
+      const available = Math.max(lines.length - 1, 0);
+      const totalCases = validT ? Math.min(declared, available) : 0;
+      const consumedCases = Math.min(Math.max(step - 1, 0), totalCases);
+      const consumedLines = step === 0 ? 0 : 1 + consumedCases;
+      const current = step === 0 ? 0 : consumedCases < totalCases ? consumedCases + 1 : -1;
+      const outputs = lines.slice(1, 1 + consumedCases).map(sumLine);
+      let message = "A primeira leitura recebe T; ela informa quantas voltas o for deverá executar.";
+      if (!validT) message = "A primeira linha precisa ser um inteiro não negativo para representar T.";
+      else if (step === 1) message = `T vale ${declared}. Agora começa a primeira das ${declared} voltas.`;
+      else if (consumedCases < totalCases) message = `O caso ${consumedCases} foi resolvido. A próxima volta lerá o caso ${consumedCases + 1}.`;
+      else if (declared > available) message = `T vale ${declared}, mas a simulação possui apenas ${available} linha(s) de casos.`;
+      else message = `Os ${declared} casos foram processados. O for terminou exatamente após T voltas.`;
+      body.innerHTML = `<div class="input-simulation"><div><h3>Linhas da entrada</h3><div class="input-lines">${inputRows(lines, consumedLines, current, true)}</div></div><div><h3>Saída acumulada</h3><div class="input-output">${outputs.length ? outputs.map((value, index) => `<code>Caso ${index + 1}: ${ui.esc(value)}</code>`).join("") : "<span>Nenhum caso processado.</span>"}</div></div></div><div class="lab-message"><strong>Estado do laço:</strong> ${message}</div>`;
+    }
+
+    function drawEof(raw) {
+      const lines = linesFrom(raw);
+      const consumed = Math.min(step, lines.length);
+      const eofReached = step > lines.length;
+      const current = consumed < lines.length ? consumed : -1;
+      const outputs = lines.slice(0, consumed).map(sumLine);
+      const eofRow = `<div class="input-line eof ${eofReached ? "consumed" : consumed === lines.length ? "current" : ""}"><span class="input-line-number">${lines.length + 1}</span><code>EOF</code><span class="input-status">${eofReached ? "alcançado" : consumed === lines.length ? "próximo" : "fim"}</span></div>`;
+      let message = "O for pede a primeira linha disponível em sys.stdin.";
+      if (consumed > 0 && consumed < lines.length) message = `A linha ${consumed} foi processada. Ainda existe outra linha na entrada.`;
+      else if (consumed === lines.length && !eofReached) message = "Todas as linhas foram processadas. A próxima tentativa encontra o fim da entrada.";
+      else if (eofReached) message = "Não existe outra linha: o for reconhece o EOF e termina sozinho.";
+      body.innerHTML = `<div class="input-simulation"><div><h3>Linhas da entrada</h3><div class="input-lines">${inputRows(lines, consumed, current, false)}${eofRow}</div></div><div><h3>Saída acumulada</h3><div class="input-output">${outputs.length ? outputs.map((value) => `<code>${ui.esc(value)}</code>`).join("") : "<span>Nenhuma linha processada.</span>"}</div></div></div><div class="lab-message"><strong>Leitura até EOF:</strong> ${message}</div>`;
+    }
+
+    function draw() {
+      const raw = lab.querySelector("#input-data")?.value || "";
+      if (mode === "line") drawSingleLine(raw);
+      else if (mode === "tests") drawTests(raw);
+      else drawEof(raw);
+      const next = lab.querySelector("#input-next");
+      if (mode === "line") next.disabled = step >= 3;
+      else if (mode === "tests") {
+        const lines = linesFrom(raw);
+        const declared = Number.parseInt(lines[0], 10);
+        next.disabled = !Number.isInteger(declared) || step >= Math.min(Math.max(declared, 0), Math.max(lines.length - 1, 0)) + 1;
+      } else next.disabled = step > linesFrom(raw).length;
+    }
+    controls(lab, `<div class="field input-mode-field"><label for="input-mode">Formato do enunciado</label><select id="input-mode"><option value="line">Vários valores na mesma linha</option><option value="tests">Primeira linha contém T</option><option value="eof">Casos até EOF</option></select></div><div class="field input-data-field"><label for="input-data">Entrada de exemplo</label><textarea id="input-data" rows="5">${presets.line}</textarea></div><button class="btn" id="input-reset" type="button">Reiniciar</button><button class="btn primary" id="input-next" type="button">Próxima leitura</button>`);
+    lab.querySelector("#input-mode").onchange = (event) => {
+      mode = event.target.value;
+      step = 0;
+      lab.querySelector("#input-data").value = presets[mode];
+      draw();
+    };
+    lab.querySelector("#input-reset").onclick = () => { step = 0; draw(); };
+    lab.querySelector("#input-next").onclick = () => { step += 1; draw(); };
+    lab.querySelector("#input-data").oninput = () => { step = 0; draw(); };
     draw();
   }
 

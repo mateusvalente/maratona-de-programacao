@@ -1,0 +1,17 @@
+{
+   "appActionName": {
+      "message": "Automatiza tu rutina de SEO on-page."
+   },
+   "appDesc": {
+      "message": "Obtén un informe SEO con más de 100 analisis web gratis de tu sitio web con el mejor auditor SEO."
+   },
+   "appName": {
+      "message": "Analisis SEO gratis"
+   },
+   "fail_url_key": {
+      "message": "No hay URL en una pestaña. Abra una página que desee registrar en la pestaña activa y haga clic una vez en el icono del complemento."
+   },
+   "loading_key": {
+      "message": "Cargando..."
+   }
+}

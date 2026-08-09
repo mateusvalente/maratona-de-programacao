@@ -1,0 +1,581 @@
+{
+   "designModal_align": {
+      "message": "Выравнивание дизайна"
+   },
+   "designModal_center": {
+      "message": "По центру"
+   },
+   "designModal_deleteImageButton": {
+      "message": "Удалить изображение"
+   },
+   "designModal_description": {
+      "message": "Настройте ваш дизайн"
+   },
+   "designModal_filter": {
+      "message": "Режим отображения"
+   },
+   "designModal_filterColor": {
+      "message": "Цвет фильтра"
+   },
+   "designModal_filterColorBlack": {
+      "message": "Чёрный"
+   },
+   "designModal_filterColorCyan": {
+      "message": "Голубой"
+   },
+   "designModal_filterColorMagenta": {
+      "message": "Магента"
+   },
+   "designModal_filterColorWhite": {
+      "message": "Белый"
+   },
+   "designModal_filterDefault": {
+      "message": "По умолчанию"
+   },
+   "designModal_filterDifference": {
+      "message": "Разница"
+   },
+   "designModal_filterOpacity": {
+      "message": "Прозрачность фильтра"
+   },
+   "designModal_filterOverlay": {
+      "message": "Наложение"
+   },
+   "designModal_filterWireframe": {
+      "message": "Каркас"
+   },
+   "designModal_horizontalOffset": {
+      "message": "Горизонтальное смещение"
+   },
+   "designModal_importFromFigmaButton": {
+      "message": "Импортировать из Figma"
+   },
+   "designModal_left": {
+      "message": "Влево"
+   },
+   "designModal_replaceDesignButton": {
+      "message": "Заменить дизайн"
+   },
+   "designModal_right": {
+      "message": "Вправо"
+   },
+   "designModal_scale": {
+      "message": "Масштаб"
+   },
+   "designModal_title": {
+      "message": "Настройки дизайна"
+   },
+   "designModal_uploadDesignButton": {
+      "message": "Загрузить дизайн"
+   },
+   "designModal_verticalOffset": {
+      "message": "Вертикальное смещение"
+   },
+   "downgradedModal_text": {
+      "message": "Вы только что потеряли доступ к некоторым крутым функциям"
+   },
+   "downgradedModal_title": {
+      "message": "Жаль, что вы уходите"
+   },
+   "feedbackModal_title": {
+      "message": "Обратная связь"
+   },
+   "general_extensionDescription": {
+      "message": "Набор инструментов для точного проектирования и разработки сайтов."
+   },
+   "general_extensionName": {
+      "message": "Designer Tools"
+   },
+   "gridModal_align": {
+      "message": "Выравнивание сетки"
+   },
+   "gridModal_alignRulersWithGrid": {
+      "message": "Выровнять линейки по сетке"
+   },
+   "gridModal_center": {
+      "message": "По центру"
+   },
+   "gridModal_columnCount": {
+      "message": "Количество"
+   },
+   "gridModal_columnGutter": {
+      "message": "Интервал"
+   },
+   "gridModal_columnMargin": {
+      "message": "Отступ"
+   },
+   "gridModal_columnOffset": {
+      "message": "Смещение"
+   },
+   "gridModal_columnWidth": {
+      "message": "Ширина"
+   },
+   "gridModal_columnsEnabled": {
+      "message": "Включить колонки"
+   },
+   "gridModal_description": {
+      "message": "Настройте вашу сетку"
+   },
+   "gridModal_fillCells": {
+      "message": "Заполнить ячейки"
+   },
+   "gridModal_importFromFigmaButton": {
+      "message": "Импортировать из Figma"
+   },
+   "gridModal_left": {
+      "message": "Влево"
+   },
+   "gridModal_right": {
+      "message": "Вправо"
+   },
+   "gridModal_rowCount": {
+      "message": "Количество"
+   },
+   "gridModal_rowGutter": {
+      "message": "Интервал"
+   },
+   "gridModal_rowHeight": {
+      "message": "Высота"
+   },
+   "gridModal_rowMargin": {
+      "message": "Отступ"
+   },
+   "gridModal_rowOffset": {
+      "message": "Смещение"
+   },
+   "gridModal_rowsEnabled": {
+      "message": "Включить ряды"
+   },
+   "gridModal_showOnOtherTabs": {
+      "message": "Показывать сетку на других вкладках"
+   },
+   "gridModal_stretch": {
+      "message": "Растянуть"
+   },
+   "gridModal_title": {
+      "message": "Настройки сетки"
+   },
+   "guidelineLimitModal_cta": {
+      "message": "Войти"
+   },
+   "guidelineLimitModal_header": {
+      "message": "Сохраняйте и используйте направляющие в любое время"
+   },
+   "guidelineLimitModal_text": {
+      "message": "Войдите в систему, чтобы создавать неограниченное количество направляющих и сохранять их для будущего использования."
+   },
+   "guidelineLimitModal_title": {
+      "message": "Войдите для неограниченного доступа к направляющим"
+   },
+   "loggingInModal_text": {
+      "message": "Проверяем ваши учетные данные"
+   },
+   "loggingInModal_title": {
+      "message": "Вход в систему..."
+   },
+   "loginModal_title": {
+      "message": "Вход"
+   },
+   "loginSuccessModal_text": {
+      "message": "Приятного пользования!"
+   },
+   "loginSuccessModal_title": {
+      "message": "Вход выполнен"
+   },
+   "loginWallModal_cta": {
+      "message": "Войти"
+   },
+   "loginWallModal_header": {
+      "message": "Попробуйте бесплатно"
+   },
+   "loginWallModal_text": {
+      "message": "Вы можете попробовать эту функцию бесплатно — без необходимости вводить платежные данные. Просто войдите в систему, чтобы начать."
+   },
+   "loginWallModal_title": {
+      "message": "Премиум-функция"
+   },
+   "logoutSuccessModal_text": {
+      "message": "Вы успешно вышли из системы"
+   },
+   "logoutSuccessModal_title": {
+      "message": "Вы вышли"
+   },
+   "offlineWallModal_cta": {
+      "message": "Закрыть"
+   },
+   "offlineWallModal_header": {
+      "message": "Вы офлайн"
+   },
+   "offlineWallModal_text": {
+      "message": "Не удается подключиться к серверу уже неделю. Проверьте интернет-соединение, чтобы продолжить использовать Designer Tools."
+   },
+   "offlineWallModal_title": {
+      "message": "Автономный режим"
+   },
+   "settingsModal_auto": {
+      "message": "Авто"
+   },
+   "settingsModal_comfortable": {
+      "message": "Комфортно"
+   },
+   "settingsModal_compact": {
+      "message": "Компактно"
+   },
+   "settingsModal_dark": {
+      "message": "Тёмная"
+   },
+   "settingsModal_default": {
+      "message": "Обычная"
+   },
+   "settingsModal_extraThin": {
+      "message": "Очень тонкая"
+   },
+   "settingsModal_language": {
+      "message": "Язык"
+   },
+   "settingsModal_light": {
+      "message": "Светлая"
+   },
+   "settingsModal_logIn": {
+      "message": "Войти"
+   },
+   "settingsModal_logInForBestExperience": {
+      "message": "Войдите для лучшего опыта"
+   },
+   "settingsModal_logOut": {
+      "message": "Выйти"
+   },
+   "settingsModal_loggedOutCta": {
+      "message": "Войти"
+   },
+   "settingsModal_loggedOutHeader": {
+      "message": "Войдите для доступа к настройкам"
+   },
+   "settingsModal_loggedOutText": {
+      "message": "После входа в систему вы сможете получить доступ к настройкам и настроить их под себя."
+   },
+   "settingsModal_manageSubscription": {
+      "message": "Управлять подпиской"
+   },
+   "settingsModal_notLoggedIn": {
+      "message": "Не вошли в систему"
+   },
+   "settingsModal_pixels": {
+      "message": "Пиксели"
+   },
+   "settingsModal_rem": {
+      "message": "Rem"
+   },
+   "settingsModal_rulerThickness": {
+      "message": "Толщина линейки"
+   },
+   "settingsModal_spacious": {
+      "message": "Просторно"
+   },
+   "settingsModal_theme": {
+      "message": "Тема"
+   },
+   "settingsModal_thick": {
+      "message": "Толстая"
+   },
+   "settingsModal_thin": {
+      "message": "Тонкая"
+   },
+   "settingsModal_tier": {
+      "message": "Уровень"
+   },
+   "settingsModal_title": {
+      "message": "Настройки"
+   },
+   "settingsModal_toolbarDensity": {
+      "message": "Плотность панели инструментов"
+   },
+   "settingsModal_units": {
+      "message": "Единицы (Скоро)"
+   },
+   "settingsModal_upgrade": {
+      "message": "Улучшить"
+   },
+   "settingsModal_upgradeToPro": {
+      "message": "Улучшить до Pro"
+   },
+   "settingsModal_validUntil": {
+      "message": "действительно до"
+   },
+   "toolbar_accessibilityDescription": {
+      "message": "Проверить сайт на проблемы доступности."
+   },
+   "toolbar_accessibilityTab": {
+      "message": "Доступность"
+   },
+   "toolbar_ad1": {
+      "message": "Разблокируйте продвинутые инструменты"
+   },
+   "toolbar_ad10": {
+      "message": "Используйте Designer Tools PRO"
+   },
+   "toolbar_ad2": {
+      "message": "Разблокируйте все функции"
+   },
+   "toolbar_ad3": {
+      "message": "Получите доступ ко всем возможностям"
+   },
+   "toolbar_ad4": {
+      "message": "Используйте Designer Tools PLUS"
+   },
+   "toolbar_ad5": {
+      "message": "Поддержите Designer Tools"
+   },
+   "toolbar_ad6": {
+      "message": "Разблокируйте PRO-функции"
+   },
+   "toolbar_ad7": {
+      "message": "Обновитесь до версии PLUS"
+   },
+   "toolbar_ad8": {
+      "message": "Получите полный функционал"
+   },
+   "toolbar_ad9": {
+      "message": "Улучшите свой опыт"
+   },
+   "toolbar_brandingDescription": {
+      "message": "Проверить брендирование страницы."
+   },
+   "toolbar_brandingTab": {
+      "message": "Брендинг"
+   },
+   "toolbar_collapseToolbar": {
+      "message": "Свернуть панель инструментов"
+   },
+   "toolbar_comingSoon": {
+      "message": "Скоро"
+   },
+   "toolbar_day": {
+      "message": "день"
+   },
+   "toolbar_days": {
+      "message": "дня"
+   },
+   "toolbar_designDescription": {
+      "message": "Сравните сайт с дизайном."
+   },
+   "toolbar_designTab": {
+      "message": "Дизайн"
+   },
+   "toolbar_feedback": {
+      "message": "Обратная связь"
+   },
+   "toolbar_gridDescription": {
+      "message": "Настроить сетки и макеты."
+   },
+   "toolbar_gridTab": {
+      "message": "Сетка"
+   },
+   "toolbar_hour": {
+      "message": "час"
+   },
+   "toolbar_hours": {
+      "message": "часа"
+   },
+   "toolbar_logIn": {
+      "message": "Войти"
+   },
+   "toolbar_login": {
+      "message": "Вам нужно войти в аккаунт, чтобы использовать эту функцию"
+   },
+   "toolbar_loginRequired": {
+      "message": "Чтобы использовать эту функцию, войдите в аккаунт"
+   },
+   "toolbar_measureDescription": {
+      "message": "Измеряйте элементы на странице."
+   },
+   "toolbar_measureTab": {
+      "message": "Измерение"
+   },
+   "toolbar_minute": {
+      "message": "минута"
+   },
+   "toolbar_minutes": {
+      "message": "минуты"
+   },
+   "toolbar_offline": {
+      "message": "Нет соединения. Вам нужно подключение к интернету для использования этой функции"
+   },
+   "toolbar_plusRequired": {
+      "message": "Эта функция доступна в тарифе PLUS."
+   },
+   "toolbar_plusTrial": {
+      "message": "Эта функция PLUS бесплатна в течение 14-дневного пробного периода"
+   },
+   "toolbar_proRequired": {
+      "message": "Эта функция доступна в тарифе PRO."
+   },
+   "toolbar_proTrial": {
+      "message": "Эта функция PRO бесплатна в течение 14-дневного пробного периода"
+   },
+   "toolbar_settings": {
+      "message": "Настройки"
+   },
+   "toolbar_trialAd1": {
+      "message": "Скидка 25% на подписку? Улучшите план сейчас"
+   },
+   "toolbar_trialAd10": {
+      "message": "Обновитесь сегодня, скидка скоро закончится"
+   },
+   "toolbar_trialAd11": {
+      "message": "У вас осталось %time_left% %time_unit%, чтобы получить скидку 25%"
+   },
+   "toolbar_trialAd12": {
+      "message": "Сохраните полный доступ, обновитесь и сэкономьте 25%"
+   },
+   "toolbar_trialAd13": {
+      "message": "Бонус пробного периода: скидка 25%, обновитесь сейчас"
+   },
+   "toolbar_trialAd14": {
+      "message": "Нравится? Оставьте с 25% скидкой"
+   },
+   "toolbar_trialAd15": {
+      "message": "Кончается пробный период? Продолжите со скидкой 25%"
+   },
+   "toolbar_trialAd16": {
+      "message": "Ваш пробный бонус: скидка 25%, действуйте"
+   },
+   "toolbar_trialAd17": {
+      "message": "Обновитесь сейчас и получите скидку 25%"
+   },
+   "toolbar_trialAd18": {
+      "message": "Обновитесь, пока не поздно, скидка 25%"
+   },
+   "toolbar_trialAd19": {
+      "message": "Зафиксируйте скидку 25% до конца пробного периода"
+   },
+   "toolbar_trialAd2": {
+      "message": "У вас осталось %time_left% %time_unit% пробного периода"
+   },
+   "toolbar_trialAd20": {
+      "message": "Экономьте, пока можно! Осталось %time_left% %time_unit%"
+   },
+   "toolbar_trialAd21": {
+      "message": "Ваша скидка ждет, 25% сегодня"
+   },
+   "toolbar_trialAd22": {
+      "message": "Обновитесь сейчас и сохраните 25% на подписку"
+   },
+   "toolbar_trialAd23": {
+      "message": "Осталось %time_left% %time_unit%, получите скидку сейчас"
+   },
+   "toolbar_trialAd24": {
+      "message": "Гарантируйте свою экономию, скидка 25%"
+   },
+   "toolbar_trialAd25": {
+      "message": "Обновитесь сейчас и продолжайте получать скидку 25%"
+   },
+   "toolbar_trialAd26": {
+      "message": "Бонус пробного периода: скидка 25%, не пропустите"
+   },
+   "toolbar_trialAd27": {
+      "message": "Обновитесь сегодня, скидка скоро исчезнет"
+   },
+   "toolbar_trialAd28": {
+      "message": "Сэкономьте 25%, предложение ограничено"
+   },
+   "toolbar_trialAd29": {
+      "message": "Ваш пробный период заканчивается через %time_left% %time_unit%! Обновитесь и получите скидку 25%"
+   },
+   "toolbar_trialAd3": {
+      "message": "Поторопитесь, осталось %time_left% %time_unit% для скидки 25%"
+   },
+   "toolbar_trialAd30": {
+      "message": "Не упустите шанс! Скидка 25% закончится через %time_left% %time_unit%"
+   },
+   "toolbar_trialAd4": {
+      "message": "Скидка 25%, обновитесь до окончания времени"
+   },
+   "toolbar_trialAd5": {
+      "message": "Осталось %time_left% %time_unit%! Получите скидку 25%"
+   },
+   "toolbar_trialAd6": {
+      "message": "Обновитесь сейчас, %time_left% %time_unit% на скидку"
+   },
+   "toolbar_trialAd7": {
+      "message": "Обновитесь до окончания пробного периода и получите скидку 25%"
+   },
+   "toolbar_trialAd8": {
+      "message": "Осталось %time_left% %time_unit% для фиксирования скидки 25%"
+   },
+   "toolbar_trialAd9": {
+      "message": "Время на исходе! Получите скидку 25% сейчас"
+   },
+   "toolbar_trialAdEnding1": {
+      "message": "Осталось %time_left% %time_unit% пробного периода"
+   },
+   "toolbar_trialAdEnding10": {
+      "message": "Ваша скидка скоро исчезнет! Осталось %time_left% %time_unit%"
+   },
+   "toolbar_trialAdEnding2": {
+      "message": "Последний шанс сэкономить 25%! Осталось %time_left% %time_unit%"
+   },
+   "toolbar_trialAdEnding3": {
+      "message": "Скидка 25%? Осталось %time_left% %time_unit%"
+   },
+   "toolbar_trialAdEnding4": {
+      "message": "Ваш пробный период заканчивается через %time_left% %time_unit%!"
+   },
+   "toolbar_trialAdEnding5": {
+      "message": "Обновитесь сейчас, осталось %time_left% %time_unit% для скидки 25%"
+   },
+   "toolbar_trialAdEnding6": {
+      "message": "Обновитесь и получите скидку 25%! Осталось %time_left% %time_unit%"
+   },
+   "toolbar_trialAdEnding7": {
+      "message": "Осталось %time_left% %time_unit% для фиксации скидки 25%"
+   },
+   "toolbar_trialAdEnding8": {
+      "message": "Обновитесь сейчас, осталось %time_left% %time_unit% для скидки 25%"
+   },
+   "toolbar_trialAdEnding9": {
+      "message": "Последний шанс сэкономить 25%! Осталось %time_left% %time_unit%"
+   },
+   "toolbar_week": {
+      "message": "неделя"
+   },
+   "upgradePlusWallModal_cta": {
+      "message": "Обновиться до Plus"
+   },
+   "upgradePlusWallModal_header": {
+      "message": "У вас нет доступа к этой функции"
+   },
+   "upgradePlusWallModal_text": {
+      "message": "Обновитесь до Plus, чтобы использовать эту функцию."
+   },
+   "upgradePlusWallModal_title": {
+      "message": "Требуется Designer Tools Plus"
+   },
+   "upgradeProWallModal_cta": {
+      "message": "Обновиться до Pro"
+   },
+   "upgradeProWallModal_header": {
+      "message": "У вас нет доступа к этой функции"
+   },
+   "upgradeProWallModal_text": {
+      "message": "Обновитесь до Pro, чтобы использовать эту функцию."
+   },
+   "upgradeProWallModal_title": {
+      "message": "Требуется Designer Tools Pro"
+   },
+   "upgradedModal_text": {
+      "message": "Вы только что разблокировали мир новых функций!"
+   },
+   "upgradedModal_title": {
+      "message": "Спасибо за вашу поддержку"
+   },
+   "upgradingModal_closeButton": {
+      "message": "Закрыть"
+   },
+   "upgradingModal_text": {
+      "message": "Проверяем статус вашей подписки"
+   },
+   "upgradingModal_title": {
+      "message": "Ожидание обновления..."
+   }
+}

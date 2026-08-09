@@ -1,0 +1,581 @@
+{
+   "designModal_align": {
+      "message": "Alinear diseño"
+   },
+   "designModal_center": {
+      "message": "Centro"
+   },
+   "designModal_deleteImageButton": {
+      "message": "Eliminar imagen"
+   },
+   "designModal_description": {
+      "message": "Aquí puedes ajustar la configuración de tu diseño"
+   },
+   "designModal_filter": {
+      "message": "Modo de visualización"
+   },
+   "designModal_filterColor": {
+      "message": "Color del filtro"
+   },
+   "designModal_filterColorBlack": {
+      "message": "Negro"
+   },
+   "designModal_filterColorCyan": {
+      "message": "Cian"
+   },
+   "designModal_filterColorMagenta": {
+      "message": "Magenta"
+   },
+   "designModal_filterColorWhite": {
+      "message": "Blanco"
+   },
+   "designModal_filterDefault": {
+      "message": "Predeterminado"
+   },
+   "designModal_filterDifference": {
+      "message": "Diferencias"
+   },
+   "designModal_filterOpacity": {
+      "message": "Opacidad del filtro"
+   },
+   "designModal_filterOverlay": {
+      "message": "Superposición"
+   },
+   "designModal_filterWireframe": {
+      "message": "Esqueleto"
+   },
+   "designModal_horizontalOffset": {
+      "message": "Desplazamiento horizontal"
+   },
+   "designModal_importFromFigmaButton": {
+      "message": "Importar desde Figma"
+   },
+   "designModal_left": {
+      "message": "Izquierda"
+   },
+   "designModal_replaceDesignButton": {
+      "message": "Reemplazar diseño"
+   },
+   "designModal_right": {
+      "message": "Derecha"
+   },
+   "designModal_scale": {
+      "message": "Escala"
+   },
+   "designModal_title": {
+      "message": "Configuración de diseño"
+   },
+   "designModal_uploadDesignButton": {
+      "message": "Subir diseño"
+   },
+   "designModal_verticalOffset": {
+      "message": "Desplazamiento vertical"
+   },
+   "downgradedModal_text": {
+      "message": "Ya no tienes acceso a algunas funciones increíbles"
+   },
+   "downgradedModal_title": {
+      "message": "Lamentamos que te vayas"
+   },
+   "feedbackModal_title": {
+      "message": "Comentarios"
+   },
+   "general_extensionDescription": {
+      "message": "Designer Tools es una colección de herramientas que te ayudan a diseñar sitios web."
+   },
+   "general_extensionName": {
+      "message": "Designer Tools"
+   },
+   "gridModal_align": {
+      "message": "Alinear rejilla"
+   },
+   "gridModal_alignRulersWithGrid": {
+      "message": "Alinear reglas con la rejilla"
+   },
+   "gridModal_center": {
+      "message": "Centro"
+   },
+   "gridModal_columnCount": {
+      "message": "Cantidad"
+   },
+   "gridModal_columnGutter": {
+      "message": "Espaciado"
+   },
+   "gridModal_columnMargin": {
+      "message": "Margen"
+   },
+   "gridModal_columnOffset": {
+      "message": "Desplazamiento"
+   },
+   "gridModal_columnWidth": {
+      "message": "Ancho"
+   },
+   "gridModal_columnsEnabled": {
+      "message": "Habilitar columnas"
+   },
+   "gridModal_description": {
+      "message": "Personaliza tu rejilla"
+   },
+   "gridModal_fillCells": {
+      "message": "Rellenar celdas"
+   },
+   "gridModal_importFromFigmaButton": {
+      "message": "Importar desde Figma"
+   },
+   "gridModal_left": {
+      "message": "Izquierda"
+   },
+   "gridModal_right": {
+      "message": "Derecha"
+   },
+   "gridModal_rowCount": {
+      "message": "Cantidad"
+   },
+   "gridModal_rowGutter": {
+      "message": "Espaciado"
+   },
+   "gridModal_rowHeight": {
+      "message": "Altura"
+   },
+   "gridModal_rowMargin": {
+      "message": "Margen"
+   },
+   "gridModal_rowOffset": {
+      "message": "Desplazamiento"
+   },
+   "gridModal_rowsEnabled": {
+      "message": "Habilitar filas"
+   },
+   "gridModal_showOnOtherTabs": {
+      "message": "Mostrar rejilla en otras pestañas"
+   },
+   "gridModal_stretch": {
+      "message": "Estirar"
+   },
+   "gridModal_title": {
+      "message": "Configuración de rejilla"
+   },
+   "guidelineLimitModal_cta": {
+      "message": "Iniciar sesión"
+   },
+   "guidelineLimitModal_header": {
+      "message": "Guarda y accede a tus directrices en cualquier momento"
+   },
+   "guidelineLimitModal_text": {
+      "message": "Inicia sesión para crear directrices ilimitadas y guardarlas para el futuro."
+   },
+   "guidelineLimitModal_title": {
+      "message": "Inicia sesión para directrices ilimitadas"
+   },
+   "loggingInModal_text": {
+      "message": "Verificando tus credenciales"
+   },
+   "loggingInModal_title": {
+      "message": "Iniciando sesión..."
+   },
+   "loginModal_title": {
+      "message": "Iniciar sesión"
+   },
+   "loginSuccessModal_text": {
+      "message": "¡Éxito!"
+   },
+   "loginSuccessModal_title": {
+      "message": "Sesión iniciada"
+   },
+   "loginWallModal_cta": {
+      "message": "Iniciar sesión"
+   },
+   "loginWallModal_header": {
+      "message": "Pruébalo gratis"
+   },
+   "loginWallModal_text": {
+      "message": "Puedes probar esta función de forma gratuita, sin necesidad de datos de pago. Simplemente inicia sesión para comenzar."
+   },
+   "loginWallModal_title": {
+      "message": "Función premium"
+   },
+   "logoutSuccessModal_text": {
+      "message": "Has cerrado sesión"
+   },
+   "logoutSuccessModal_title": {
+      "message": "Cierre de sesión"
+   },
+   "offlineWallModal_cta": {
+      "message": "Cerrar"
+   },
+   "offlineWallModal_header": {
+      "message": "Estás sin conexión"
+   },
+   "offlineWallModal_text": {
+      "message": "No hay conexión con el servidor desde hace una semana. Verifica tu conexión a internet para seguir usando Designer Tools."
+   },
+   "offlineWallModal_title": {
+      "message": "Modo sin conexión"
+   },
+   "settingsModal_auto": {
+      "message": "Automático"
+   },
+   "settingsModal_comfortable": {
+      "message": "Cómodo"
+   },
+   "settingsModal_compact": {
+      "message": "Compacto"
+   },
+   "settingsModal_dark": {
+      "message": "Oscuro"
+   },
+   "settingsModal_default": {
+      "message": "Predeterminado"
+   },
+   "settingsModal_extraThin": {
+      "message": "Extra fino"
+   },
+   "settingsModal_language": {
+      "message": "Idioma"
+   },
+   "settingsModal_light": {
+      "message": "Claro"
+   },
+   "settingsModal_logIn": {
+      "message": "Iniciar sesión"
+   },
+   "settingsModal_logInForBestExperience": {
+      "message": "Inicia sesión para la mejor experiencia"
+   },
+   "settingsModal_logOut": {
+      "message": "Cerrar sesión"
+   },
+   "settingsModal_loggedOutCta": {
+      "message": "Iniciar sesión"
+   },
+   "settingsModal_loggedOutHeader": {
+      "message": "Inicia sesión para acceder a la configuración"
+   },
+   "settingsModal_loggedOutText": {
+      "message": "Inicia sesión para ajustar tu configuración"
+   },
+   "settingsModal_manageSubscription": {
+      "message": "Gestionar suscripción"
+   },
+   "settingsModal_notLoggedIn": {
+      "message": "No has iniciado sesión"
+   },
+   "settingsModal_pixels": {
+      "message": "Píxeles"
+   },
+   "settingsModal_rem": {
+      "message": "Rem"
+   },
+   "settingsModal_rulerThickness": {
+      "message": "Grosor de la regla"
+   },
+   "settingsModal_spacious": {
+      "message": "Espacioso"
+   },
+   "settingsModal_theme": {
+      "message": "Tema"
+   },
+   "settingsModal_thick": {
+      "message": "Grueso"
+   },
+   "settingsModal_thin": {
+      "message": "Fino"
+   },
+   "settingsModal_tier": {
+      "message": "Nivel"
+   },
+   "settingsModal_title": {
+      "message": "Configuración"
+   },
+   "settingsModal_toolbarDensity": {
+      "message": "Densidad de barra"
+   },
+   "settingsModal_units": {
+      "message": "Unidades (Próximamente)"
+   },
+   "settingsModal_upgrade": {
+      "message": "Mejorar"
+   },
+   "settingsModal_upgradeToPro": {
+      "message": "Mejorar a Pro"
+   },
+   "settingsModal_validUntil": {
+      "message": "hasta el"
+   },
+   "toolbar_accessibilityDescription": {
+      "message": "Revisa el sitio web en busca de problemas de accesibilidad."
+   },
+   "toolbar_accessibilityTab": {
+      "message": "Accesibilidad"
+   },
+   "toolbar_ad1": {
+      "message": "Desbloquea herramientas avanzadas"
+   },
+   "toolbar_ad10": {
+      "message": "Disfruta de Designer Tools PRO"
+   },
+   "toolbar_ad2": {
+      "message": "Desbloquea todas las funciones"
+   },
+   "toolbar_ad3": {
+      "message": "Accede a todas las características"
+   },
+   "toolbar_ad4": {
+      "message": "Disfruta de Designer Tools PLUS"
+   },
+   "toolbar_ad5": {
+      "message": "Apoya a Designer Tools"
+   },
+   "toolbar_ad6": {
+      "message": "Desbloquea funciones PRO"
+   },
+   "toolbar_ad7": {
+      "message": "Mejora a la versión PLUS"
+   },
+   "toolbar_ad8": {
+      "message": "Obtén la experiencia completa"
+   },
+   "toolbar_ad9": {
+      "message": "Mejora tu experiencia"
+   },
+   "toolbar_brandingDescription": {
+      "message": "Inspecciona la identidad visual de la página."
+   },
+   "toolbar_brandingTab": {
+      "message": "Marca"
+   },
+   "toolbar_collapseToolbar": {
+      "message": "Ocultar barra de herramientas"
+   },
+   "toolbar_comingSoon": {
+      "message": "Próximamente"
+   },
+   "toolbar_day": {
+      "message": "día"
+   },
+   "toolbar_days": {
+      "message": "días"
+   },
+   "toolbar_designDescription": {
+      "message": "Compara el sitio web con un diseño."
+   },
+   "toolbar_designTab": {
+      "message": "Diseño"
+   },
+   "toolbar_feedback": {
+      "message": "Comentarios"
+   },
+   "toolbar_gridDescription": {
+      "message": "Configura cuadrículas y diseños."
+   },
+   "toolbar_gridTab": {
+      "message": "Cuadrícula"
+   },
+   "toolbar_hour": {
+      "message": "hora"
+   },
+   "toolbar_hours": {
+      "message": "horas"
+   },
+   "toolbar_logIn": {
+      "message": "Iniciar sesión"
+   },
+   "toolbar_login": {
+      "message": "Debes iniciar sesión para usar esta función"
+   },
+   "toolbar_loginRequired": {
+      "message": "Debes iniciar sesión para usar esta función"
+   },
+   "toolbar_measureDescription": {
+      "message": "Mide elementos en la página."
+   },
+   "toolbar_measureTab": {
+      "message": "Medir"
+   },
+   "toolbar_minute": {
+      "message": "minuto"
+   },
+   "toolbar_minutes": {
+      "message": "minutos"
+   },
+   "toolbar_offline": {
+      "message": "No se puede conectar. Debes estar en línea para probar esta función"
+   },
+   "toolbar_plusRequired": {
+      "message": "Esta función es parte del plan PLUS."
+   },
+   "toolbar_plusTrial": {
+      "message": "Esta función de PLUS es gratis durante los 14 días de prueba"
+   },
+   "toolbar_proRequired": {
+      "message": "Esta función es parte del plan PRO."
+   },
+   "toolbar_proTrial": {
+      "message": "Esta función de PRO es gratis durante los 14 días de prueba"
+   },
+   "toolbar_settings": {
+      "message": "Configuración"
+   },
+   "toolbar_trialAd1": {
+      "message": "¿25% de descuento en tu suscripción? Mejora tu plan ahora"
+   },
+   "toolbar_trialAd10": {
+      "message": "Mejora hoy, tu descuento no durará para siempre"
+   },
+   "toolbar_trialAd11": {
+      "message": "Te quedan %time_left% %time_unit% para reclamar un 25% de descuento"
+   },
+   "toolbar_trialAd12": {
+      "message": "Mantén el acceso total, mejora tu plan y ahorra 25%"
+   },
+   "toolbar_trialAd13": {
+      "message": "Beneficio de prueba: 25% de descuento si mejoras ahora"
+   },
+   "toolbar_trialAd14": {
+      "message": "¿Te gusta? Consérvalo con un 25% de descuento"
+   },
+   "toolbar_trialAd15": {
+      "message": "¿Se acaba tu prueba? Continúa con un 25% de descuento"
+   },
+   "toolbar_trialAd16": {
+      "message": "Tu oferta de prueba: 25% de descuento, actúa ahora"
+   },
+   "toolbar_trialAd17": {
+      "message": "Mejora ahora y obtén un 25% de descuento"
+   },
+   "toolbar_trialAd18": {
+      "message": "Mejora antes de que sea tarde, 25% de descuento"
+   },
+   "toolbar_trialAd19": {
+      "message": "Asegura un 25% de descuento antes de que termine tu prueba"
+   },
+   "toolbar_trialAd2": {
+      "message": "Te quedan %time_left% %time_unit% de prueba"
+   },
+   "toolbar_trialAd20": {
+      "message": "¡Aprovecha el descuento! Solo %time_left% %time_unit% restante"
+   },
+   "toolbar_trialAd21": {
+      "message": "Tu descuento te espera, 25% de descuento hoy"
+   },
+   "toolbar_trialAd22": {
+      "message": "Mejora ahora y mantén un 25% de descuento en tu suscripción"
+   },
+   "toolbar_trialAd23": {
+      "message": "Solo %time_left% %time_unit% restante, obtén tu descuento ahora"
+   },
+   "toolbar_trialAd24": {
+      "message": "Asegura tu descuento, 25% de ahorro"
+   },
+   "toolbar_trialAd25": {
+      "message": "Mejora ahora y mantén un 25% de descuento mientras sigas suscrito"
+   },
+   "toolbar_trialAd26": {
+      "message": "Bono de prueba: 25% de descuento, no lo dejes pasar"
+   },
+   "toolbar_trialAd27": {
+      "message": "Mejora hoy, el descuento desaparecerá pronto"
+   },
+   "toolbar_trialAd28": {
+      "message": "Ahorra 25%, esta oferta no durará"
+   },
+   "toolbar_trialAd29": {
+      "message": "Tu prueba termina en %time_left% %time_unit%! Mejora ahora y ahorra 25%"
+   },
+   "toolbar_trialAd3": {
+      "message": "¡Apresúrate! Solo %time_left% %time_unit% para ahorrar 25%"
+   },
+   "toolbar_trialAd30": {
+      "message": "No lo dejes pasar, el 25% de descuento termina en %time_left% %time_unit%"
+   },
+   "toolbar_trialAd4": {
+      "message": "25% de descuento, mejora tu plan antes de que termine"
+   },
+   "toolbar_trialAd5": {
+      "message": "¡Solo %time_left% %time_unit%! Obtén un 25% de descuento"
+   },
+   "toolbar_trialAd6": {
+      "message": "Mejora ahora, solo %time_left% %time_unit% para ahorrar"
+   },
+   "toolbar_trialAd7": {
+      "message": "Mejora antes de que termine tu prueba y obtén un 25% de descuento"
+   },
+   "toolbar_trialAd8": {
+      "message": "Solo %time_left% %time_unit% para asegurar un 25% de descuento"
+   },
+   "toolbar_trialAd9": {
+      "message": "¡El tiempo se acaba! Ahorra un 25% ahora"
+   },
+   "toolbar_trialAdEnding1": {
+      "message": "Solo quedan %time_left% %time_unit% en tu prueba"
+   },
+   "toolbar_trialAdEnding10": {
+      "message": "Tu descuento desaparecerá pronto. Solo %time_left% %time_unit% restante"
+   },
+   "toolbar_trialAdEnding2": {
+      "message": "¡Última oportunidad para ahorrar un 25%! Quedan %time_left% %time_unit%"
+   },
+   "toolbar_trialAdEnding3": {
+      "message": "¿25% de descuento? Solo %time_left% %time_unit% restante"
+   },
+   "toolbar_trialAdEnding4": {
+      "message": "Tu prueba termina en %time_left% %time_unit%!"
+   },
+   "toolbar_trialAdEnding5": {
+      "message": "Mejora ahora, solo %time_left% %time_unit% para ahorrar un 25%"
+   },
+   "toolbar_trialAdEnding6": {
+      "message": "Mejora ahora y obtén un 25% de descuento. Solo %time_left% %time_unit%"
+   },
+   "toolbar_trialAdEnding7": {
+      "message": "Solo %time_left% %time_unit% para asegurar un 25% de descuento"
+   },
+   "toolbar_trialAdEnding8": {
+      "message": "Mejora ahora, %time_left% %time_unit% para ahorrar 25%"
+   },
+   "toolbar_trialAdEnding9": {
+      "message": "¡Última oportunidad para ahorrar un 25%! %time_left% %time_unit% restante"
+   },
+   "toolbar_week": {
+      "message": "semana"
+   },
+   "upgradePlusWallModal_cta": {
+      "message": "Mejorar a Plus"
+   },
+   "upgradePlusWallModal_header": {
+      "message": "No tienes acceso a esta función"
+   },
+   "upgradePlusWallModal_text": {
+      "message": "Actualízate a Plus para usar esta función."
+   },
+   "upgradePlusWallModal_title": {
+      "message": "Se requiere Designer Tools Plus"
+   },
+   "upgradeProWallModal_cta": {
+      "message": "Mejorar a Pro"
+   },
+   "upgradeProWallModal_header": {
+      "message": "No tienes acceso a esta función"
+   },
+   "upgradeProWallModal_text": {
+      "message": "Actualízate a Pro para usar esta función."
+   },
+   "upgradeProWallModal_title": {
+      "message": "Se requiere Designer Tools Pro"
+   },
+   "upgradedModal_text": {
+      "message": "¡Acabas de desbloquear un mundo nuevo de funciones!"
+   },
+   "upgradedModal_title": {
+      "message": "Gracias por tu apoyo"
+   },
+   "upgradingModal_closeButton": {
+      "message": "Cerrar"
+   },
+   "upgradingModal_text": {
+      "message": "Esperando la suscripción"
+   },
+   "upgradingModal_title": {
+      "message": "Un momento..."
+   }
+}

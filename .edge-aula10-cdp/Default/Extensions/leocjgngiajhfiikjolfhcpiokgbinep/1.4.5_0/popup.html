@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<head>
+	<link href="styles/popup.css" rel="stylesheet" type="text/css">
+	<script src="scripts/jquery-2.0.3.min.js"></script>
+	<script src="scripts/jquery.nestable.js"></script>
+	<script src="scripts/shared.js"></script>
+	<script src="scripts/popup.js"></script>
+</head>
+
+<body>
+	<div id="menubar">
+		<!--<input type="button" value="Sync" id="syncbutton" title="Sync" class="icon menubar" />-->
+		<input type="button" value="Sign off" id="signoffbutton" title="Log out" class="icon menubar" />		
+		<input type="button" value="Settings" id="settingsbutton" title="Go to Settings page" class="icon menubar" />
+	</div>
+	
+	<div class="content" id="passform">
+		<form id="loginform">
+			<label for="passfield">Please log in: </label>
+			<input type="password" id="passfield" />
+			<input type="submit" class="bigbutton" value="Go!" />
+		</form>
+	</div>
+	
+	<div class="content" id="main">
+		<div id="buttons">
+			<input type="button" class="bigbutton" value="+ New Bookmark" id="addbutton" title="Bookmark current page" />
+			<input type="button" class="bigbutton" value="+ New Folder" id="folderbutton" title="Create empty folder" />
+		</div>
+		
+		<div id="messages"></div>
+		
+		<div id="itemlist" class="dd"></div>
+	</div>
+</body>
+
+</html>

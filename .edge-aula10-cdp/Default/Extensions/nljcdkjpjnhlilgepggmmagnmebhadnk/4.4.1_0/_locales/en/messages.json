@@ -1,0 +1,17 @@
+{
+   "appActionName": {
+      "message": "Automate your on-page SEO routine."
+   },
+   "appDesc": {
+      "message": "Get free on-page SEO report by 100+ parameters with the best website SEO checker"
+   },
+   "appName": {
+      "message": "Website SEO Checker"
+   },
+   "fail_url_key": {
+      "message": "There is no URL in a tab. Open a page you want to check in active tab and click plugin icon once."
+   },
+   "loading_key": {
+      "message": "Loading..."
+   }
+}

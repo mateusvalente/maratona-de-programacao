@@ -1,0 +1,32 @@
+{
+   "action": {
+      "default_icon": "icon.png",
+      "default_popup": "index.html",
+      "default_title": "__MSG_appActionName__"
+   },
+   "background": {
+      "service_worker": "background.js"
+   },
+   "content_scripts": [ {
+      "css": [ "css/page_style.min.css" ],
+      "js": [ "js/page_scripts.js" ],
+      "matches": [ "\u003Call_urls>" ]
+   } ],
+   "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'",
+      "web_accessible_resources": "script-src 'self'; style-src 'self'"
+   },
+   "default_locale": "en",
+   "description": "__MSG_appDesc__",
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj0AVdKXfB+AuS6srseDd2K+zNBVAXmCtIJrFIdy4dk8FhbMQAkkLNKCCZuZc298yTb4C8FdHwxNcwK0G87ReKWWCaoggiCKah1mArkusne36hRK7dkusbQCVO//GejpHrMOi2X8n6Zgo4S+6hS0XaNesVL5EXaEPFx9F5l+EWljDgEmiIeduESpd2Ck728TzS503KetgTPVjAB2FRjiAgcLeS08YRC10EMvrGMAe+dNq9At+v9JMhHvk8GEE7VmzbJrt2c0HZGKNh0RMRMCAZcl7WNWWDYRuwv7gvoGyDSHfrxgzE25l9sXWs7wQqmVSdPXOHZpNkOESC4TcdeSMgwIDAQAB",
+   "manifest_version": 3,
+   "name": "__MSG_appName__",
+   "permissions": [ "activeTab", "storage", "identity" ],
+   "short_name": "SiteChecker.pro",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "4.4.1",
+   "web_accessible_resources": [ {
+      "matches": [ "\u003Call_urls>" ],
+      "resources": [ "css/page_style.min.css", "js/page_scripts.js", "images/logo.svg" ]
+   } ]
+}

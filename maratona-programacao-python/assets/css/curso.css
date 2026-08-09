@@ -263,9 +263,12 @@ tr:last-child td { border-bottom: 0; }
 .lab-controls { display: flex; flex-wrap: wrap; gap: 10px; padding: 13px 16px; border-top: 1px solid var(--line); background: var(--surface-2); }
 .field { display: grid; flex: 1 1 180px; gap: 4px; min-width: 0; }
 .field label { color: var(--muted); font-size: .72rem; font-weight: 900; text-transform: uppercase; }
-.field input, .field select {
+.field input, .field select, .field textarea {
   width: 100%; min-height: 42px; padding: 8px 10px; border: 1px solid var(--line-strong); border-radius: 5px; background: #0d1418; color: var(--text);
 }
+.field textarea { min-height: 116px; resize: vertical; font: .86rem/1.5 Consolas, "Courier New", monospace; }
+.input-mode-field { flex: 0 1 260px; }
+.input-data-field { flex-basis: 320px; }
 .btn { display: inline-flex; min-height: 42px; padding: 8px 13px; align-items: center; justify-content: center; gap: 7px; border: 1px solid var(--line-strong); border-radius: 6px; background: #27333a; color: var(--text); font-weight: 850; text-decoration: none; cursor: pointer; }
 .btn:hover { border-color: var(--blue); }
 .btn.primary { border-color: var(--green); background: var(--green); color: var(--ink); }
@@ -281,6 +284,30 @@ tr:last-child td { border-bottom: 0; }
 .token-index { display: block; color: var(--muted); font-size: .65rem; }
 .lab-message { min-height: 46px; margin-top: 14px; padding: 11px 13px; border-left: 3px solid var(--green); background: var(--surface-3); color: var(--muted); }
 .lab-message strong { color: var(--text); }
+
+.input-simulation { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(210px, .65fr); gap: 18px; align-items: start; }
+.input-lines { display: grid; gap: 7px; }
+.input-line {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface-3);
+  color: var(--muted);
+}
+.input-line.current { border-color: var(--yellow); background: #332c16; }
+.input-line.consumed { border-color: #416a57; background: #153426; }
+.input-line.eof { border-style: dashed; }
+.input-line-number { display: grid; width: 27px; height: 27px; place-items: center; border-radius: 50%; background: var(--surface-2); color: var(--muted); font: 800 .72rem/1 Consolas, monospace; }
+.input-line code { min-width: 0; overflow-wrap: anywhere; color: var(--text); }
+.input-status { color: var(--muted); font-size: .7rem; font-weight: 850; text-transform: uppercase; }
+.input-output { display: grid; min-height: 72px; gap: 7px; padding: 11px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface-3); align-content: start; }
+.input-output code { color: var(--green); }
+.input-output span { color: var(--muted); }
 
 .stats-grid {
   display: grid;
@@ -379,12 +406,14 @@ details.solution > div { padding-top: 12px; }
   .topnav a { padding: 6px; font-size: .78rem; }
   .layout { padding: 18px 14px 46px; gap: 22px; }
   h1 { font-size: 2.08rem; }
-  .two-col, .three-col, .concept-grid, .io-grid { grid-template-columns: 1fr; }
+  .two-col, .three-col, .concept-grid, .io-grid, .input-simulation { grid-template-columns: 1fr; }
   .problem-card { grid-template-columns: 68px minmax(0, 1fr); }
   .problem-card .difficulty { grid-column: 2; }
   .score-row { grid-template-columns: 26px minmax(90px, 1fr) 54px 62px; font-size: .8rem; }
   .lab-body { min-height: 0; padding: 14px; }
   .field { flex-basis: 100%; }
+  .input-line { grid-template-columns: 30px minmax(0, 1fr); }
+  .input-status { grid-column: 2; }
   .lab-controls .btn { flex: 1 1 120px; }
   .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lesson-nav { grid-template-columns: 1fr; }

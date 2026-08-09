@@ -1,0 +1,23 @@
+{
+   "background": {
+      "page": "background.html"
+   },
+   "browser_action": {
+      "default_icon": {
+         "19": "on_19.png",
+         "38": "on_38.png"
+      },
+      "default_popup": "popup.html",
+      "default_title": "ADB Plugin"
+   },
+   "description": "ADB Plugin for remote debugging Chrome on Android (Now deprecated)",
+   "icons": {
+      "128": "icon_128.png",
+      "48": "icon_48.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDWpUlaopBRPBwGOqZcVWK/6EoKgqXRJXcV4EuwFD3+pc4KCrwO/rU/EqFH61pyAylXzUrJQUMYHSifwDy/KHpXL1jl7vmkGA/v5cOBrFxHGOxrkCgy0/cST3JuaNkypZVw/TZl3wPw5O6eSAliBYAKvlXTY2fNhmFT4fkpMFx+BQIDAQAB",
+   "manifest_version": 2,
+   "name": "ADB",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.9.8"
+}

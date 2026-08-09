@@ -1,0 +1,23 @@
+{
+   "action": {
+      "default_icon": "assets/img/icon128.png"
+   },
+   "background": {
+      "service_worker": "background/index.js",
+      "type": "module"
+   },
+   "default_locale": "en",
+   "description": "__MSG_extension_description__",
+   "homepage_url": "https://github.com/0x416C65/design-mode",
+   "icons": {
+      "128": "assets/img/icon128.png",
+      "16": "assets/img/icon16.png",
+      "48": "assets/img/icon48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAh18rB3CwS1lqfr6NlrXrpDHrNGZnRq6j9bMtv5GXxArAihpKzXX5KsfeGrs8iFSZ/2hfAI7zw7Hj/4QpVxv5XVTHqUC2GpucswcZ59nwCAgN7WeA1EKP/DCmmgHIXndXaGitmKi4+wqUxno+oNfsfrxZvq2fteoNnfDbkWC7zGh16c2VcmZOzCME07PqTVG74HZTcGvqxhMISFgp8yJMuLQrvtxYA6E/S+jlwQq/ahP55O9IC3HWj5TO+oPy55yIqFvEyHEmhTvy2ORXvkeYXWKcpeHivEXRiROe0vpnThNCvfnSnfMXxHq03UckB1HuFO2lMwgQXk4eClwINowLKQIDAQAB",
+   "manifest_version": 3,
+   "name": "__MSG_extension_name__",
+   "permissions": [ "activeTab", "contextMenus", "scripting" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0"
+}

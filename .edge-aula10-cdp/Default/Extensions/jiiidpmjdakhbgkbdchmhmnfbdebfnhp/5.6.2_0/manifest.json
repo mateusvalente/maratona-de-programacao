@@ -1,0 +1,28 @@
+{
+   "action": {
+      "default title": "Open"
+   },
+   "background": {
+      "service_worker": "service_worker.js",
+      "type": "module"
+   },
+   "default_locale": "en",
+   "description": "__MSG_general_extensionDescription__",
+   "host_permissions": [ "https://designer.tools/" ],
+   "icons": {
+      "128": "icon128.png",
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAllXv7hpbmprtxxSGq645lquu/u3Ccqpm866sostgj2Bh7KQmBT6NeAWmw/J0zT8ePWYcZBXqRTjDy+O7VEmr8W2asfOxbYVLd8IRtP3icYkTF1b1+HncNX9EKXo2RlPym6EYk+C6bjznra8uWBPQ1x8gUM0JX5rZ2i6pHC8asXCle90MaHI49RnPqDiLSKzX1A+0kLRLVFUm88hCvRqx4DImddZMkSdZR8bv/wBfTlQRKEKoMNEDsAgoLennsqCheuhRmrBgtdx1aVr1Mz96RSnwPK7dol4mWC8E+4cLXAAJ0oh9mCkP30xzmCubQ/A1w0IrYQ2HTI97lZKhaGdRXQIDAQAB",
+   "manifest_version": 3,
+   "name": "__MSG_general_extensionName__",
+   "permissions": [ "scripting", "activeTab", "storage", "webNavigation" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "5.6.2",
+   "web_accessible_resources": [ {
+      "matches": [ "\u003Call_urls>" ],
+      "resources": [ "media/*", "assets/*" ]
+   } ]
+}

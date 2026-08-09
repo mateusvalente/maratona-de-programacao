@@ -6,6 +6,26 @@
   padding: 22px 20px 60px;
 }
 
+.module-nav {
+  display: flex;
+  align-items: center;
+}
+
+.portal-link {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: .82rem;
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.portal-link:hover { border-color: var(--green); color: var(--green); }
+
 .index-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 390px);
@@ -147,6 +167,8 @@
 .study-link span { color: var(--muted); font-size: .84rem; }
 
 .index-footer {
+  display: grid;
+  gap: 5px;
   padding-top: 24px;
   color: var(--muted);
   font-size: .86rem;

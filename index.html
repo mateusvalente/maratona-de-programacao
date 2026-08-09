@@ -1,1 +1,159 @@
-<div>olá mundo</div>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Portal de aulas do Curso de Inverno de Programação dos cursos de TI da Uniube, por Professor Mestre Mateus de Sousa Valente.">
+  <title>Curso de Inverno de Programação | Uniube</title>
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="topbar">
+      <a class="brand" href="index.html" aria-label="Página inicial do Curso de Inverno de Programação">
+        <span class="brand-mark">CI</span>
+        <span><strong>Curso de Inverno</strong><small>Programação com Python</small></span>
+      </a>
+      <nav class="topnav" aria-label="Navegação principal">
+        <a href="#modulos">Módulos</a>
+        <a href="#metodologia">Como estudar</a>
+        <a href="#fontes">Fontes</a>
+        <a href="#professor">Professor</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="course-intro" aria-labelledby="course-title">
+      <div class="intro-copy">
+        <p class="eyebrow">Uniube · Cursos de Tecnologia da Informação</p>
+        <h1 id="course-title">Curso de Inverno de Programação</h1>
+        <p class="lead">Um percurso de aprendizagem para os alunos praticarem programação competitiva com Python, começando pelos fundamentos e avançando por estruturas de dados, strings, grafos, geometria e paradigmas algorítmicos.</p>
+        <p class="teacher-line">Material preparado pelo <strong>Professor Mestre Mateus de Sousa Valente</strong>, professor dos cursos de TI da Uniube.</p>
+        <div class="intro-actions">
+          <a class="button primary" href="maratona-programacao-python/index.html">Iniciar pelo módulo 1</a>
+          <a class="button" href="#modulos">Conhecer os módulos</a>
+        </div>
+        <div class="course-facts" aria-label="Resumo do curso">
+          <span><strong>6</strong> módulos de aprendizagem</span>
+          <span><strong>Python 3</strong> como linguagem principal</span>
+          <span><strong>Teoria e prática</strong> com exercícios explicados</span>
+        </div>
+      </div>
+      <figure class="course-visual">
+        <img src="maratona-programacao-python/assets/img/trilha.svg" alt="Trilha visual que parte da leitura do problema, passa pelo algoritmo e chega à solução aceita">
+        <figcaption>Leia o problema, construa o raciocínio, implemente, teste e aprenda com cada tentativa.</figcaption>
+      </figure>
+    </section>
+
+    <section class="page-section" id="modulos" aria-labelledby="modules-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Trilha de aprendizagem</p>
+          <h2 id="modules-title">Módulos do curso</h2>
+        </div>
+        <p>Os módulos formam uma sequência sugerida, mas podem ser consultados separadamente durante os estudos.</p>
+      </div>
+
+      <div class="module-grid">
+        <a class="module-card module-python" href="maratona-programacao-python/index.html">
+          <div class="module-meta"><span class="module-number">01</span><span>17 aulas · 5 listas</span></div>
+          <h3>Maratona com Python</h3>
+          <p>Introdução à programação competitiva, entrada e saída, decisões, repetição, listas, strings e resolução dos primeiros problemas.</p>
+          <span class="module-topics">Python · lógica · beecrowd</span>
+          <strong class="module-action">Abrir módulo</strong>
+        </a>
+
+        <a class="module-card module-structures" href="estrutura_de_dados/index.html">
+          <div class="module-meta"><span class="module-number">02</span><span>7 aulas · 5 resoluções</span></div>
+          <h3>Estruturas de dados</h3>
+          <p>Arrays, pilhas, filas, deques, listas encadeadas, filas de prioridade e ordenação com visualizações interativas.</p>
+          <span class="module-topics">LIFO · FIFO · nós · ordenação</span>
+          <strong class="module-action">Abrir módulo</strong>
+        </a>
+
+        <a class="module-card module-strings" href="strings/index.html">
+          <div class="module-meta"><span class="module-number">03</span><span>7 aulas · 7 resoluções</span></div>
+          <h3>Strings</h3>
+          <p>Leitura caractere a caractere, índices, transformações, comparação, simulação e programação dinâmica aplicada a textos.</p>
+          <span class="module-topics">caracteres · índices · padrões</span>
+          <strong class="module-action">Abrir módulo</strong>
+        </a>
+
+        <a class="module-card module-graphs" href="grafos/index.html">
+          <div class="module-meta"><span class="module-number">04</span><span>7 aulas · 3 resoluções</span></div>
+          <h3>Grafos</h3>
+          <p>Representações, lista de adjacência, DFS, BFS, grafos ponderados, Dijkstra e acompanhamento visual das estruturas auxiliares.</p>
+          <span class="module-topics">vértices · arestas · caminhos</span>
+          <strong class="module-action">Abrir módulo</strong>
+        </a>
+
+        <a class="module-card module-geometry" href="geometria-computacional/index.html">
+          <div class="module-meta"><span class="module-number">05</span><span>6 aulas · 6 resoluções</span></div>
+          <h3>Geometria computacional</h3>
+          <p>Distâncias, círculos, segmentos, circuncentro, áreas e modelagem geométrica apoiada por diagramas e testes interativos.</p>
+          <span class="module-topics">pontos · vetores · círculos</span>
+          <strong class="module-action">Abrir módulo</strong>
+        </a>
+
+        <a class="module-card module-paradigms" href="paradigmas/index.html">
+          <div class="module-meta"><span class="module-number">06</span><span>10 aulas · 15 resoluções</span></div>
+          <h3>Paradigmas algorítmicos</h3>
+          <p>Força bruta, recursão, backtracking, divisão e conquista, estratégias gulosas, programação dinâmica, memoização e poda.</p>
+          <span class="module-topics">estratégia · complexidade · corretude</span>
+          <strong class="module-action">Abrir módulo</strong>
+        </a>
+      </div>
+    </section>
+
+    <section class="page-section study-method" id="metodologia" aria-labelledby="method-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Como usar o material</p>
+          <h2 id="method-title">Aprender fazendo</h2>
+        </div>
+        <p>As páginas foram organizadas para apoiar a aula e também a revisão individual.</p>
+      </div>
+      <ol class="method-steps">
+        <li><span>1</span><div><strong>Entenda o problema</strong><p>Identifique entradas, saídas, restrições e o que precisa ser calculado.</p></div></li>
+        <li><span>2</span><div><strong>Acompanhe a visualização</strong><p>Observe como dados, estados e decisões mudam durante o algoritmo.</p></div></li>
+        <li><span>3</span><div><strong>Tente implementar</strong><p>Escreva sua própria solução antes de consultar o código comentado.</p></div></li>
+        <li><span>4</span><div><strong>Teste e compare</strong><p>Use casos pequenos, entenda os erros e relacione o código ao raciocínio.</p></div></li>
+      </ol>
+    </section>
+
+    <section class="page-section" id="fontes" aria-labelledby="sources-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Referências</p>
+          <h2 id="sources-title">Fontes centrais do curso</h2>
+        </div>
+        <p>As fontes específicas de cada assunto também estão indicadas dentro de seus respectivos módulos.</p>
+      </div>
+      <div class="source-grid">
+        <a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noreferrer"><strong>Tutorial oficial do Python</strong><span>Fundamentos e referência da linguagem utilizada no curso.</span><small>Python Software Foundation</small></a>
+        <a href="https://judge.beecrowd.com/pt" target="_blank" rel="noreferrer"><strong>beecrowd Judge</strong><span>Enunciados, submissões e prática com problemas de programação.</span><small>Plataforma de exercícios</small></a>
+        <a href="https://www.geeksforgeeks.org/dsa/dsa-tutorial-learn-data-structures-and-algorithms/" target="_blank" rel="noreferrer"><strong>DSA Tutorial</strong><span>Estruturas de dados, algoritmos e técnicas de resolução.</span><small>GeeksforGeeks</small></a>
+        <a href="https://cp-algorithms.com/" target="_blank" rel="noreferrer"><strong>CP-Algorithms</strong><span>Referência de algoritmos para programação competitiva.</span><small>Competitive Programming Algorithms</small></a>
+        <a href="https://maratona.sbc.org.br/" target="_blank" rel="noreferrer"><strong>Maratona SBC</strong><span>Informações sobre a competição brasileira de programação.</span><small>Sociedade Brasileira de Computação</small></a>
+        <a href="https://icpc.global/regionals/rules/" target="_blank" rel="noreferrer"><strong>Regras do ICPC</strong><span>Formato e regras oficiais das competições regionais.</span><small>International Collegiate Programming Contest</small></a>
+      </div>
+    </section>
+
+    <section class="page-section professor-section" id="professor" aria-labelledby="professor-title">
+      <div>
+        <p class="eyebrow">Autoria e acompanhamento</p>
+        <h2 id="professor-title">Professor Mestre Mateus de Sousa Valente</h2>
+      </div>
+      <p>Professor dos cursos de Tecnologia da Informação da Uniube. Este portal foi organizado para os alunos do Curso de Inverno de Programação, reunindo teoria, demonstrações visuais, exercícios e resoluções comentadas em Python 3.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>Curso de Inverno de Programação · Uniube</span>
+      <span>Material de autoria do Professor Mestre Mateus de Sousa Valente, dos cursos de TI da Uniube. Todos os direitos reservados &copy; 2026.</span>
+    </div>
+  </footer>
+</body>
+</html>

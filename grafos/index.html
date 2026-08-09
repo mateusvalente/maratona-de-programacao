@@ -25,6 +25,9 @@ body{
   line-height:1.55;
 }
 main{width:min(1120px,100%);margin:0 auto;padding:34px 20px 60px}
+.module-nav{display:flex;align-items:center;margin-bottom:12px}
+.portal-link{display:inline-flex;min-height:40px;align-items:center;padding:7px 12px;border:1px solid var(--line);border-radius:6px;color:var(--text);font-size:.82rem;font-weight:850;text-decoration:none}
+.portal-link:hover{border-color:var(--green);color:var(--green)}
 header{
   padding:34px;
   border:1px solid var(--line);
@@ -80,7 +83,7 @@ h2{margin:0 0 14px;font-size:1.35rem}
 }
 .row a{color:var(--blue);font-weight:800;text-decoration:none}
 .row small{color:var(--muted)}
-footer{padding-top:22px;color:var(--muted);font-size:.82rem;text-align:center}
+footer{display:grid;gap:5px;padding-top:22px;color:var(--muted);font-size:.82rem;text-align:center}
 @media(max-width:760px){
   .grid{grid-template-columns:1fr}
   header{padding:24px}
@@ -89,6 +92,9 @@ footer{padding-top:22px;color:var(--muted);font-size:.82rem;text-align:center}
 </head>
 <body>
 <main>
+  <nav class="module-nav" aria-label="Navegação do módulo">
+    <a class="portal-link" href="../index.html">Portal do curso</a>
+  </nav>
   <header>
     <span class="tag">Curso de Grafos</span>
     <h1>Aulas, exercícios e resoluções</h1>
@@ -155,7 +161,8 @@ footer{padding-top:22px;color:var(--muted);font-size:.82rem;text-align:center}
   </section>
 
   <footer>
-    Pasta organizada em aulas, exercícios e resoluções.
+    <span>Grafos · aulas, exercícios e resoluções</span>
+    <span>Material de autoria do Professor Mestre Mateus de Sousa Valente, dos cursos de TI da Uniube. Todos os direitos reservados &copy; 2026.</span>
   </footer>
 </main>
 </body>

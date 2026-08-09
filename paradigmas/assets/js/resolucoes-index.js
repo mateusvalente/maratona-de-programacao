@@ -16,7 +16,7 @@
       </header>
 
       <section class="band">
-        <div class="filter-bar" style="grid-template-columns:repeat(2,minmax(180px,1fr))">
+        <div class="filter-bar two-filters">
           <div class="field"><label for="solution-paradigm">Paradigma</label><select id="solution-paradigm"><option value="">Todos</option>${[...new Set(window.PARADIGM_SOLUTIONS.map((item) => item.paradigm))].sort().map((item) => `<option>${escapeHTML(item)}</option>`).join("")}</select></div>
           <div class="field"><label for="solution-search">Buscar por ID ou nome</label><input id="solution-search" type="search" placeholder="Ex.: 1084 ou Futebol"></div>
         </div>
@@ -46,7 +46,7 @@
       <article class="exercise-card">
         <span class="exercise-id">beecrowd<br>${solution.id}</span>
         <div class="exercise-main"><h2>${escapeHTML(solution.title)}</h2><p>${escapeHTML(solution.summary)}</p><div class="exercise-tags"><span class="tag">${escapeHTML(solution.paradigm)}</span><span class="tag">${escapeHTML(solution.time)}</span></div></div>
-        <div class="exercise-side"><a class="btn primary" href="${solution.key}/index.html">Ver aula explicada →</a><a class="btn" href="${root}respostas/${solution.id}.py">Abrir `.py`</a></div>
+        <div class="exercise-side"><a class="btn primary" href="${solution.key}/index.html">Ver aula explicada →</a><a class="btn" href="${root}respostas/${solution.id}.py">Abrir <code>.py</code></a></div>
       </article>`).join("") : `<div class="empty-state">Nenhuma resolução corresponde ao filtro.</div>`;
   }
 

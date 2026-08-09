@@ -18,7 +18,7 @@
         </div>
       </section>
       <section class="band">
-        <div class="filter-bar" style="grid-template-columns:repeat(2,minmax(180px,1fr))">
+        <div class="filter-bar two-filters">
           <div class="field"><label for="draft-paradigm">Paradigma</label><select id="draft-paradigm"><option value="">Todos</option>${Object.entries(window.PARADIGM_LABELS).map(([key, label]) => `<option value="${key}">${label}</option>`).join("")}</select></div>
           <div class="field"><label for="draft-platform">Plataforma</label><select id="draft-platform"><option value="">Todas</option>${[...new Set(window.PARADIGM_EXERCISES.map((item) => item.platform))].sort().map((platform) => `<option>${platform}</option>`).join("")}</select></div>
         </div>

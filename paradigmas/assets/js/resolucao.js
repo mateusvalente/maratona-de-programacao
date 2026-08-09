@@ -33,7 +33,7 @@
           <h1>${escapeHTML(solution.title)}</h1>
           <p class="lead">${escapeHTML(solution.summary)}</p>
           <div class="lesson-meta"><span class="badge green">${escapeHTML(solution.paradigm)}</span><span class="badge">Python 3</span><span class="badge yellow">código do professor</span></div>
-          <div class="problem-actions"><a class="btn primary" href="${solution.sourceUrl}" target="_blank" rel="noreferrer">Abrir enunciado ↗</a><a class="btn" href="${root}respostas/${solution.id}.py">Abrir `.py` original</a></div>
+          <div class="problem-actions"><a class="btn primary" href="${solution.sourceUrl}" target="_blank" rel="noreferrer">Abrir enunciado ↗</a><a class="btn" href="${root}respostas/${solution.id}.py">Abrir <code>.py</code> original</a></div>
         </header>
 
         <section class="band">
@@ -114,19 +114,19 @@
   const previousButton = document.querySelector("#trace-prev");
   const nextButton = document.querySelector("#trace-next");
 
-  function renderTrace() {
+  function renderTrace(shouldScroll = false) {
     rows.forEach((row, rowIndex) => row.classList.toggle("trace-active", rowIndex === traceIndex));
     const values = solution.trace.rows[traceIndex];
     current.textContent = traceIndex + 1;
     message.innerHTML = `<strong>${escapeHTML(values[0])}:</strong> ${escapeHTML(values.at(-1))}`;
     previousButton.disabled = traceIndex === 0;
     nextButton.disabled = traceIndex === rows.length - 1;
-    rows[traceIndex].scrollIntoView({ block: "nearest", behavior: "smooth" });
+    if (shouldScroll) rows[traceIndex].scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
 
-  previousButton.addEventListener("click", () => { traceIndex -= 1; renderTrace(); });
-  nextButton.addEventListener("click", () => { traceIndex += 1; renderTrace(); });
-  document.querySelector("#trace-reset").addEventListener("click", () => { traceIndex = 0; renderTrace(); });
+  previousButton.addEventListener("click", () => { traceIndex -= 1; renderTrace(true); });
+  nextButton.addEventListener("click", () => { traceIndex += 1; renderTrace(true); });
+  document.querySelector("#trace-reset").addEventListener("click", () => { traceIndex = 0; renderTrace(true); });
   window.CourseUI.initCopyButtons();
   renderTrace();
 }());

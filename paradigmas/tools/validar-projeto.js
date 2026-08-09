@@ -37,11 +37,23 @@ const lessonPages = fs.readdirSync(path.join(base, "aulas"), { withFileTypes: tr
 if (lessonPages.length !== 10) errors.push(`Esperadas 10 aulas; encontradas ${lessonPages.length}.`);
 
 const exerciseSource = fs.readFileSync(path.join(base, "assets", "js", "exercicios.js"), "utf8");
-const keys = [...exerciseSource.matchAll(/key: "([^"]+)"/g)].map((match) => match[1]);
+const keys = [...exerciseSource.matchAll(/"?key"?\s*:\s*"([^"]+)"/g)].map((match) => match[1]);
 keys.forEach((key) => {
   const file = path.join(base, "questoes", `${key}.py`);
   if (!fs.existsSync(file)) errors.push(`Arquivo de tentativa ausente: questoes/${key}.py`);
 });
+
+const solutionSource = fs.readFileSync(path.join(base, "assets", "js", "resolucoes.js"), "utf8");
+const solutionKeys = [...solutionSource.matchAll(/"?key"?\s*:\s*"([^"]+)"/g)].map((match) => match[1]);
+solutionKeys.forEach((key) => {
+  const page = path.join(base, "resolucoes", key, "index.html");
+  if (!fs.existsSync(page)) errors.push(`Aula de resolução ausente: resolucoes/${key}/index.html`);
+});
+
+const externalExercises = [...exerciseSource.matchAll(/"?platform"?\s*:\s*"([^"]+)"/g)]
+  .map((match) => match[1])
+  .filter((platform) => platform !== "beecrowd");
+if (externalExercises.length) errors.push(`Plataformas não beecrowd encontradas: ${[...new Set(externalExercises)].join(", ")}`);
 
 console.log(`HTML: ${stats.html}`);
 console.log(`JavaScript: ${stats.js}`);
@@ -49,6 +61,7 @@ console.log(`CSS: ${stats.css}`);
 console.log(`Arquivos .py de tentativa: ${stats.py}`);
 console.log(`Aulas: ${lessonPages.length}`);
 console.log(`Exercícios catalogados: ${keys.length}`);
+console.log(`Aulas de resolução: ${solutionKeys.length}`);
 console.log(`Respostas .py detectadas: ${answerPythonFiles.length}`);
 
 if (errors.length) {

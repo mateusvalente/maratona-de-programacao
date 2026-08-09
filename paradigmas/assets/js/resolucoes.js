@@ -93,6 +93,106 @@ window.PARADIGM_SOLUTIONS = [
     sourceUrl: "https://judge.beecrowd.com/pt/problems/view/1025"
   },
   {
+    key: "beecrowd-1029",
+    id: "1029",
+    title: "Fibonacci, Quantas Chamadas?",
+    paradigm: "Memoização com recursão",
+    paradigmSlug: "memoizacao",
+    summary: "Duas recorrências calculam Fibonacci e o tamanho de sua árvore de chamadas; a memoização evita refazer os mesmos cálculos.",
+    problem: [
+      "O enunciado apresenta a versão recursiva de Fibonacci e pede, para cada n, o valor fib(n) e quantas chamadas recursivas seriam feitas para calculá-lo. A chamada inicial não entra nessa contagem.",
+      "Construir literalmente toda a árvore de chamadas repetiria os mesmos valores muitas vezes. A solução calcula tanto Fibonacci quanto a quantidade teórica de chamadas por recorrência e guarda os resultados para reutilizá-los."
+    ],
+    idea: "As listas F e CF funcionam como memórias. F[n] guarda fib(n), enquanto CF[n] guarda o total de nós da árvore recursiva, incluindo a chamada inicial. Quando um estado ainda vale -1, calcula(n) resolve n - 1 e n - 2, combina os dois resultados e os memoriza. Na saída, CF[n] - 1 remove a chamada inicial, como pede o problema.",
+    why: [
+      "A recursão traduz diretamente as relações de Fibonacci e da contagem de chamadas.",
+      "A memoização transforma cada n em um estado calculado uma única vez.",
+      "O código não precisa executar toda a recursão ingênua: ele calcula quantas chamadas ela teria por meio da recorrência CF(n) = CF(n - 1) + CF(n - 2) + 1.",
+      "Como as listas permanecem entre os casos de teste, valores calculados em uma consulta também ajudam nas próximas."
+    ],
+    steps: [
+      "Criar F e CF com -1 para marcar os estados ainda desconhecidos.",
+      "Definir os casos base: F(0) = 0, F(1) = 1 e uma chamada total para cada base.",
+      "Ao calcular n, obter recursivamente os pares correspondentes a n - 1 e n - 2.",
+      "Somar os Fibonacci dos filhos e somar suas contagens mais uma unidade para a chamada atual.",
+      "Guardar os dois resultados e, para cada entrada, imprimir CF[n] - 1 e F[n]."
+    ],
+    commentedCode: [
+      "# F guarda os números de Fibonacci já calculados.",
+      "# O valor -1 identifica uma posição que ainda não foi resolvida.",
+      "F = [-1 for _ in range(40)]",
+      "# CF guarda o total de chamadas da árvore, incluindo sua raiz.",
+      "CF = [-1 for _ in range(40)]",
+      "",
+      "# Casos base da sequência de Fibonacci.",
+      "F[0] = 0",
+      "F[1] = 1",
+      "",
+      "# Cada caso base possui uma chamada: a própria chamada atual.",
+      "CF[0] = 1",
+      "CF[1] = 1",
+      "",
+      "def calcula(n):",
+      "    # Só abre os subproblemas quando n ainda não está memorizado.",
+      "    if(F[n] == -1):",
+      "        # Resolve o ramo n - 1 e recebe Fibonacci e chamadas.",
+      "        result1, num_calls1 = calcula(n - 1)",
+      "        # Resolve o ramo n - 2; resultados já conhecidos são reutilizados.",
+      "        result2, num_calls2 = calcula(n - 2)",
+      "        # A recorrência de Fibonacci soma os dois valores anteriores.",
+      "        F[n] = result1 + result2",
+      "        # Soma as árvores filhas e conta também a chamada calcula(n).",
+      "        CF[n] = num_calls1 + num_calls2 + 1",
+      "    # Devolve as duas informações que o problema relaciona.",
+      "    return (F[n], CF[n])",
+      "",
+      "# Quantidade de casos de teste.",
+      "N = int(input())",
+      "",
+      "for _ in range(N):",
+      "    X = int(input())",
+      "    # A memoização pode aproveitar resultados de casos anteriores.",
+      "    result, num_calls = calcula(X)",
+      "    # O enunciado exclui a chamada inicial; por isso usamos - 1.",
+      "    print(f'fib({X}) = {num_calls - 1} calls = {result}')"
+    ],
+    breakdown: [
+      ["Duas memórias", "F responde qual é o número de Fibonacci. CF responde quantos nós existiriam na árvore da implementação recursiva mostrada no enunciado."],
+      ["Sentinela -1", "Se F[n] ainda vale -1, o estado não foi calculado. Depois de preenchido, a função devolve o valor guardado sem expandir novamente seus filhos."],
+      ["Chamadas teóricas", "A memoização reduz o trabalho real do programa. Mesmo assim, CF reconstrói numericamente a quantidade de chamadas que a recursão ingênua faria."],
+      ["Por que somar 1?", "CF(n - 1) e CF(n - 2) contam as duas subárvores. O +1 representa a raiz atual, calcula(n)."],
+      ["Por que retirar 1?", "CF inclui a primeira chamada para facilitar a recorrência, mas o beecrowd pede somente as chamadas feitas por ela. A impressão usa num_calls - 1."]
+    ],
+    trace: {
+      title: "Calculando n = 5",
+      intro: "Os casos 0 e 1 já estão prontos. Cada novo estado é guardado e não precisa ser reconstruído.",
+      headers: ["Estado", "F[n]", "CF[n] incluindo a raiz"],
+      rows: [
+        ["n = 2", "1 + 0 = 1", "1 + 1 + 1 = 3"],
+        ["n = 3", "1 + 1 = 2", "3 + 1 + 1 = 5"],
+        ["n = 4", "2 + 1 = 3", "5 + 3 + 1 = 9"],
+        ["n = 5", "3 + 2 = 5", "9 + 5 + 1 = 15"],
+        ["Saída", "fib(5) = 5", "15 - 1 = 14 calls"]
+      ]
+    },
+    correctness: [
+      "Nos casos base 0 e 1, F contém o Fibonacci correto e CF vale 1, que é exatamente o único nó de cada árvore.",
+      "Supondo corretos os resultados de n - 1 e n - 2, a soma armazenada em F[n] satisfaz a definição de Fibonacci.",
+      "Pela mesma hipótese, CF[n - 1] e CF[n - 2] contam as duas subárvores; somar 1 conta sua raiz. Logo CF[n] contém o total correto por indução.",
+      "A saída subtrai apenas a raiz da árvore completa, portanto apresenta exatamente as chamadas recursivas pedidas."
+    ],
+    time: "O(M + T) para todos os casos",
+    space: "O(M)",
+    complexityReason: "M é o maior X consultado e T é a quantidade de testes. Cada estado de 0 a M é preenchido uma única vez, e cada consulta faz ao menos um acesso. As duas listas e a profundidade máxima da recursão ocupam O(M). Como o problema limita M a 39, o uso prático é constante.",
+    errors: [
+      "Confundir as chamadas realmente executadas pelo programa memoizado com as chamadas teóricas pedidas",
+      "Inicializar CF[0] e CF[1] com zero e quebrar a recorrência",
+      "Esquecer de retirar a chamada inicial na impressão",
+      "Recriar F e CF dentro de cada caso e perder o reaproveitamento"
+    ],
+    sourceUrl: "https://judge.beecrowd.com/pt/problems/view/1029"
+  },
+  {
     key: "beecrowd-1033",
     id: "1033",
     title: "Quantas Chamadas Recursivas?",

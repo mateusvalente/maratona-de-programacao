@@ -2,6 +2,7 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
+const vm = require("vm");
 
 const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const base = path.resolve(__dirname, "..");
@@ -12,6 +13,13 @@ const lessonSlugs = [
   "05-divisao-conquista", "06-guloso", "07-programacao-dinamica", "08-memoizacao",
   "09-branch-and-bound", "10-comparando-paradigmas"
 ];
+const solutionContext = { window: {} };
+vm.createContext(solutionContext);
+vm.runInContext(
+  fs.readFileSync(path.join(base, "assets", "js", "resolucoes.js"), "utf8"),
+  solutionContext
+);
+const solutionSlugs = solutionContext.window.PARADIGM_SOLUTIONS.map((solution) => solution.key);
 
 const chrome = spawn(chromePath, [
   "--headless=new", "--disable-gpu", `--remote-debugging-port=${port}`,
@@ -38,6 +46,7 @@ async function createSession(url) {
   const target = await response.json();
   const socket = new WebSocket(target.webSocketDebuggerUrl);
   const pending = new Map();
+  const exceptions = [];
   let sequence = 0;
   await new Promise((resolve, reject) => {
     socket.addEventListener("open", resolve, { once: true });
@@ -45,6 +54,10 @@ async function createSession(url) {
   });
   socket.addEventListener("message", (event) => {
     const message = JSON.parse(event.data);
+    if (message.method === "Runtime.exceptionThrown") {
+      const details = message.params.exceptionDetails;
+      exceptions.push(details.exception?.description || details.text || "Exceção sem descrição");
+    }
     if (!message.id || !pending.has(message.id)) return;
     const operation = pending.get(message.id);
     pending.delete(message.id);
@@ -55,7 +68,7 @@ async function createSession(url) {
     socket.send(JSON.stringify({ id: sequence, method, params }));
     return new Promise((resolve, reject) => pending.set(sequence, { resolve, reject }));
   }
-  return { target, socket, send };
+  return { target, socket, send, exceptions };
 }
 
 function fileUrl(relativePage) {
@@ -77,15 +90,15 @@ async function inspect(relativePage, label) {
   await delay(450);
   const result = await session.send("Runtime.evaluate", {
     expression: `(() => {
-      const lab = document.querySelector('#lesson-lab .lab');
-      const button = document.querySelector('#lesson-lab button:not(:disabled)');
-      const range = document.querySelector('#lesson-lab input[type=range]');
+      const lab = document.querySelector('.lab');
+      const button = document.querySelector('.lab button:not(:disabled)');
+      const range = document.querySelector('.lab input[type=range]');
       if (button) button.click();
       if (range) { range.value = range.max; range.dispatchEvent(new Event('input', { bubbles: true })); }
       return JSON.stringify({
         title: document.title,
         lab: Boolean(lab),
-        loading: document.body.textContent.includes('Carregando aula'),
+        loading: document.body.textContent.includes('Carregando aula') || document.body.textContent.includes('Carregando resolução'),
         clientWidth: document.documentElement.clientWidth,
         scrollWidth: document.documentElement.scrollWidth,
         errors: window.__courseErrors
@@ -99,6 +112,7 @@ async function inspect(relativePage, label) {
   if (data.loading) failures.push("página permaneceu carregando");
   if (data.scrollWidth !== data.clientWidth) failures.push(`overflow ${data.scrollWidth}/${data.clientWidth}`);
   if (data.errors.length) failures.push(`erros: ${data.errors.join("; ")}`);
+  if (session.exceptions.length) failures.push(`exceções: ${session.exceptions.join("; ")}`);
   console.log(`${label}: ${failures.length ? `FALHOU — ${failures.join(", ")}` : "OK"}`);
   session.socket.close();
   await fetch(`http://127.0.0.1:${port}/json/close/${session.target.id}`);
@@ -107,10 +121,15 @@ async function inspect(relativePage, label) {
 
 (async () => {
   const failures = [];
+  const only = process.argv[2] || "";
   try {
     await waitForDebugger();
-    for (const slug of lessonSlugs) {
+    for (const slug of lessonSlugs.filter((item) => !only || item === only)) {
       const result = await inspect(`aulas/${slug}/index.html`, slug);
+      failures.push(...result.map((failure) => `${slug}: ${failure}`));
+    }
+    for (const slug of solutionSlugs.filter((item) => !only || item === only)) {
+      const result = await inspect(`resolucoes/${slug}/index.html`, slug);
       failures.push(...result.map((failure) => `${slug}: ${failure}`));
     }
   } finally {

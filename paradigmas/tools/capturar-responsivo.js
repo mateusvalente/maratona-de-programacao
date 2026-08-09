@@ -12,7 +12,9 @@ const port = 9237;
 const pages = [
   ["index-mobile-real.png", "index.html"],
   ["aula-dp-mobile-real.png", "aulas/07-programacao-dinamica/index.html"],
-  ["exercicios-mobile-real.png", "exercicios/index.html"]
+  ["exercicios-mobile-real.png", "exercicios/index.html"],
+  ["resolucoes-mobile-real.png", "resolucoes/index.html"],
+  ["resolucao-1084-mobile-real.png", "resolucoes/beecrowd-1084/index.html"]
 ];
 
 const chrome = spawn(chromePath, [

@@ -1,6 +1,7 @@
 // Gerado a partir dos arquivos presentes em respostas/.
 window.VALIDATED_ANSWERS = [
   "beecrowd-1025",
+  "beecrowd-1029",
   "beecrowd-1033",
   "beecrowd-1034",
   "beecrowd-1055",

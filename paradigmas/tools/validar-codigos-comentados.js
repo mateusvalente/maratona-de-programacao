@@ -30,13 +30,15 @@ const python = [
   "sys.exit(1 if failed else 0)"
 ].join("\n");
 
-const result = spawnSync("python", ["-c", python], {
+const encodedPython = Buffer.from(python, "utf8").toString("base64");
+const command = `$code = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('${encodedPython}')); python -c $code`;
+const result = spawnSync("powershell.exe", ["-NoProfile", "-Command", command], {
   input: JSON.stringify(payload),
   encoding: "utf8"
 });
 
 if (result.status !== 0) {
-  process.stderr.write(result.stdout || result.stderr);
+  process.stderr.write(result.stdout || result.stderr || String(result.error));
   process.exit(result.status || 1);
 }
 

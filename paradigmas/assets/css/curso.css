@@ -363,6 +363,7 @@ tr.trace-active td { background: #332c16; color: var(--yellow); }
 .catalog { width: min(var(--content), 100%); margin: 0 auto; padding: 34px 20px 70px; }
 .catalog-head { margin-bottom: 26px; }
 .filter-bar { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 10px; padding: 14px; border: 1px solid var(--line); background: var(--surface); }
+.filter-bar.two-filters { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
 .filter-bar .field { width: 100%; }
 .catalog-summary { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; }
 .exercise-grid { display: grid; gap: 10px; }
@@ -415,6 +416,7 @@ tr.trace-active td { background: #332c16; color: var(--yellow); }
   .section-head { display: block; }
   .section-head > p { margin-top: 8px; }
   .filter-bar { grid-template-columns: 1fr; }
+  .filter-bar.two-filters { grid-template-columns: 1fr; }
   .exercise-card { grid-template-columns: 1fr; }
   .exercise-side { grid-column: 1; }
   .validation-flow { grid-template-columns: 1fr; }

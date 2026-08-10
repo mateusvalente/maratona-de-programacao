@@ -567,6 +567,7 @@ grafo = {
 
 <span class="kw">def</span> <span class="fn">dijkstra</span>(grafo, origem):
 
+    <span class="cm"># No início, somente a distância da origem é conhecida.</span>
     dist = {
         vertice: float(<span class="str">'inf'</span>)
         <span class="kw">for</span> vertice <span class="kw">in</span> grafo
@@ -584,6 +585,7 @@ grafo = {
 
     <span class="kw">while</span> fila:
 
+        <span class="cm"># A fila de prioridade retira o menor custo acumulado.</span>
         distancia_atual, v = heapq.heappop(fila)
 
         <span class="cm"># Entrada antiga da fila?</span>
@@ -595,11 +597,13 @@ grafo = {
             novo_custo = distancia_atual + peso
 
             <span class="cm"># Relaxamento</span>
-            <span class="kw">if</span> novo_custo < dist[vizinho]:
+            <span class="kw">if</span> novo_custo &lt; dist[vizinho]:
 
                 dist[vizinho] = novo_custo
                 anterior[vizinho] = v
 
+                <span class="cm"># A nova estimativa volta para a fila e será</span>
+                <span class="cm"># processada quando for a menor disponível.</span>
                 heapq.heappush(
                     fila,
                     (novo_custo, vizinho)
@@ -608,6 +612,7 @@ grafo = {
     <span class="kw">return</span> dist, anterior
 
 
+<span class="cm"># Executa o algoritmo completo a partir de A.</span>
 dist, anterior = dijkstra(grafo, <span class="str">'A'</span>)
 
 print(dist[<span class="str">'G'</span>])</pre>

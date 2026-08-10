@@ -108,16 +108,22 @@
         <div class="code-title"><span>Python</span><span>registro com dataclass</span></div>
 <pre><code>from dataclasses import dataclass
 
+# dataclass cria automaticamente o construtor que recebe os três campos.
 @dataclass
 class Aluno:
     matricula: int
     nome: str
     nota: float
 
+# Cada posição da lista guarda um objeto Aluno completo.
 turma = [
     Aluno(31, "Lia", 8.5),
     Aluno(44, "Rui", 7.0),
-]</code></pre>
+]
+
+# Ao percorrer a lista, acessamos separadamente os campos de cada objeto.
+for aluno in turma:
+    print(aluno.matricula, aluno.nome, aluno.nota)</code></pre>
       </div>
     </section>
 
@@ -135,4 +141,3 @@ turma = [
   </main>
 </body>
 </html>
-

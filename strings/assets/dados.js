@@ -22,19 +22,40 @@ const STRING_LESSONS = [
     figure: "As três passagens preservam a quantidade de caracteres.",
     fact: "Os limites de A-Z e a-z são testados explicitamente. Assim, espaços e símbolos não recebem +3 na primeira fase.",
     warning: "Não tente executar as três regras ao mesmo tempo: a terceira fase usa a posição do caractere depois da inversão.",
-    code: `def criptografar(mensagem):
+    code: `import sys
+
+
+def criptografar(mensagem):
+    """Executa, na ordem, as três fases descritas pelo enunciado."""
+    # Fase 1: somente letras ASCII avançam três códigos.
     deslocada = [
-        chr(ord(c) + 3)
-        if "A" <= c <= "Z" or "a" <= c <= "z"
-        else c
-        for c in mensagem
+        chr(ord(caractere) + 3)
+        if "A" <= caractere <= "Z" or "a" <= caractere <= "z"
+        else caractere
+        for caractere in mensagem
     ]
+    # Fase 2: a mensagem inteira é invertida.
     invertida = deslocada[::-1]
     metade = len(invertida) // 2
+    # Fase 3: os caracteres da metade final recuam um código.
     return "".join(
         invertida[:metade]
-        + [chr(ord(c) - 1) for c in invertida[metade:]]
-    )`,
+        + [chr(ord(caractere) - 1) for caractere in invertida[metade:]]
+    )
+
+
+def main():
+    # A primeira linha informa quantas mensagens devem ser transformadas.
+    linhas = sys.stdin.buffer.read().decode().splitlines()
+    quantidade = int(linhas[0])
+    respostas = [criptografar(linhas[i]) for i in range(1, quantidade + 1)]
+
+    # write não acrescenta quebra automaticamente; fechamos também a última linha.
+    sys.stdout.write("\\n".join(respostas) + "\\n")
+
+
+if __name__ == "__main__":
+    main()`,
     time: "O(n)",
     memory: "O(n)",
     study: [
@@ -68,9 +89,32 @@ const STRING_LESSONS = [
     figure: "O filtro elimina o dígito escolhido; a normalização cuida dos zeros iniciais.",
     fact: "Manter o valor como string evita limites de tamanho e torna a remoção direta.",
     warning: "Converter para inteiro antes de remover o dígito pode falhar para números muito grandes.",
-    code: `def revisar(digito, numero):
+    code: `import sys
+
+
+def revisar(digito, numero):
+    # O número permanece como texto, mesmo quando possui muitos algarismos.
     resultado = numero.replace(digito, "").lstrip("0")
-    return resultado or "0"`,
+    return resultado or "0"
+
+
+def main():
+    respostas = []
+    for linha in sys.stdin.buffer.read().decode().splitlines():
+        if not linha.strip():
+            continue
+
+        digito, numero = linha.split()
+        if digito == "0" and numero == "0":
+            break  # O sentinela encerra a entrada e não gera resposta.
+
+        respostas.append(revisar(digito, numero))
+
+    sys.stdout.write("\\n".join(respostas) + "\\n")
+
+
+if __name__ == "__main__":
+    main()`,
     time: "O(n)",
     memory: "O(n)",
     study: [
@@ -101,13 +145,36 @@ const STRING_LESSONS = [
     figure: "Os segmentos acesos determinam o custo fixo de cada dígito.",
     fact: "A tabela elimina uma sequência longa de if/elif e deixa a correspondência entre dígito e custo explícita.",
     warning: "O valor 1 usa 2 LEDs, enquanto 7 usa 3; não confunda o dígito com seu custo.",
-    code: `LEDS_POR_DIGITO = (6, 2, 5, 5, 4, 5, 6, 3, 7, 6)
+    code: `import sys
+
+
+# O índice é o algarismo; o valor é seu custo em LEDs.
+LEDS_POR_DIGITO = (6, 2, 5, 5, 4, 5, 6, 3, 7, 6)
 
 def contar_leds(numero):
+    # Cada caractere consulta uma única posição da tabela.
     return sum(
         LEDS_POR_DIGITO[int(digito)]
         for digito in numero
-    )`,
+    )
+
+
+def main():
+    # A leitura em buffer devolve tokens em bytes.
+    linhas = sys.stdin.buffer.read().split()
+    quantidade = int(linhas[0])
+
+    respostas = [
+        f"{contar_leds(linhas[i].decode())} leds"
+        for i in range(1, quantidade + 1)
+    ]
+
+    # join separa as respostas; + "\\n" fecha também a linha final.
+    sys.stdout.write("\\n".join(respostas) + "\\n")
+
+
+if __name__ == "__main__":
+    main()`,
     time: "O(n)",
     memory: "O(1) extra",
     study: [
@@ -138,20 +205,36 @@ def contar_leds(numero):
     figure: "A chave de estado ignora espaços e troca depois de cada letra.",
     fact: "O algoritmo é uma pequena máquina de estados com apenas duas possibilidades: próxima letra maiúscula ou minúscula.",
     warning: "Usar o índice da string para decidir maiúscula/minúscula falha quando há espaços.",
-    code: `def transformar_sentenca(sentenca):
+    code: `import sys
+
+
+def transformar_sentenca(sentenca):
+    """Alterna a caixa das letras sem deixar espaços alterarem o estado."""
     usar_maiuscula = True
     resposta = []
+
     for caractere in sentenca:
         if caractere.isalpha():
+            # O estado determina a caixa desta letra e muda para a próxima.
             resposta.append(
-                caractere.upper()
-                if usar_maiuscula
-                else caractere.lower()
+                caractere.upper() if usar_maiuscula else caractere.lower()
             )
             usar_maiuscula = not usar_maiuscula
         else:
+            # Espaços e sinais são copiados sem consumir a alternância.
             resposta.append(caractere)
-    return "".join(resposta)`,
+
+    return "".join(resposta)
+
+
+def main():
+    # O problema fornece sentenças até o fim do arquivo.
+    linhas = sys.stdin.buffer.read().decode().splitlines()
+    sys.stdout.write("\\n".join(map(transformar_sentenca, linhas)) + "\\n")
+
+
+if __name__ == "__main__":
+    main()`,
     time: "O(n)",
     memory: "O(n)",
     study: [
@@ -182,11 +265,32 @@ def contar_leds(numero):
     figure: "As duas setas mostram inversões independentes; os blocos continuam no mesmo lado.",
     fact: "O enunciado garante linhas de tamanho par, então as duas metades têm o mesmo comprimento.",
     warning: "Inverter frase[::-1] troca também a posição das metades e produz uma resposta diferente.",
-    code: `def inverter_metades(frase):
+    code: `import sys
+
+
+def inverter_metades(frase):
+    """Inverte cada metade separadamente, sem trocar os blocos de posição."""
+    # O corte separa os dois blocos sem trocar suas posições.
     metade = len(frase) // 2
     esquerda = frase[:metade][::-1]
     direita = frase[metade:][::-1]
-    return esquerda + direita`,
+    return esquerda + direita
+
+
+def main():
+    # A primeira linha contém o número de frases.
+    linhas = sys.stdin.buffer.read().decode().splitlines()
+    quantidade = int(linhas[0])
+
+    # Cada frase é independente, então aplicamos a mesma transformação a todas.
+    respostas = [inverter_metades(linhas[i]) for i in range(1, quantidade + 1)]
+
+    # join separa as respostas por linhas; o último \\n encerra a saída final.
+    sys.stdout.write("\\n".join(respostas) + "\\n")
+
+
+if __name__ == "__main__":
+    main()`,
     time: "O(n)",
     memory: "O(n)",
     study: [
@@ -220,17 +324,41 @@ def contar_leds(numero):
     figure: "A diagonal 1, 2, 3 representa a substring comum cde.",
     fact: "A recorrência e a complexidade O(n·m) foram validadas na referência de Longest Common Substring do GeeksforGeeks.",
     warning: "Não use o algoritmo de maior subsequência comum: ele aceita saltos e resolve outro problema.",
-    code: `def maior_substring_comum(a, b):
+    code: `import sys
+
+
+def maior_substring_comum(a, b):
+    # Mantemos b como a menor string para economizar memória.
+    if len(b) > len(a):
+        a, b = b, a
+
+    # anterior representa a linha anterior da tabela de DP.
     anterior = [0] * (len(b) + 1)
     melhor = 0
     for caractere_a in a:
         atual = [0] * (len(b) + 1)
         for j, caractere_b in enumerate(b, start=1):
             if caractere_a == caractere_b:
+                # Uma coincidência estende a diagonal anterior.
                 atual[j] = anterior[j - 1] + 1
                 melhor = max(melhor, atual[j])
         anterior = atual
-    return melhor`,
+    return melhor
+
+
+def main():
+    # Cada caso ocupa duas linhas e a entrada termina em EOF.
+    linhas = sys.stdin.buffer.read().decode().splitlines()
+    respostas = []
+
+    for i in range(0, len(linhas) - 1, 2):
+        respostas.append(str(maior_substring_comum(linhas[i], linhas[i + 1])))
+
+    sys.stdout.write("\\n".join(respostas) + "\\n")
+
+
+if __name__ == "__main__":
+    main()`,
     time: "O(n · m)",
     memory: "O(m)",
     study: [
@@ -264,12 +392,36 @@ def contar_leds(numero):
     figure: "As colunas viram pares; os caracteres sem parceiro formam a sobra.",
     fact: "A ordem relativa dos caracteres de cada entrada nunca muda.",
     warning: "Parar quando a menor string termina sem anexar a sobra perde caracteres da entrada maior.",
-    code: `def combinar(a, b):
+    code: `import sys
+
+
+def combinar(a, b):
+    """Intercala o prefixo comum e acrescenta a sobra da string maior."""
+    # Intercalamos enquanto as duas strings possuem a posição i.
     limite = min(len(a), len(b))
     intercalada = "".join(
         a[i] + b[i] for i in range(limite)
     )
-    return intercalada + a[limite:] + b[limite:]`,
+    # Apenas uma das duas sobras será não vazia.
+    return intercalada + a[limite:] + b[limite:]
+
+
+def main():
+    # A primeira linha informa quantos pares devem ser combinados.
+    linhas = sys.stdin.buffer.read().decode().splitlines()
+    quantidade = int(linhas[0])
+    respostas = []
+
+    for i in range(1, quantidade + 1):
+        a, b = linhas[i].split()
+        respostas.append(combinar(a, b))
+
+    # Uma única escrita costuma ser mais eficiente do que vários prints.
+    sys.stdout.write("\\n".join(respostas) + "\\n")
+
+
+if __name__ == "__main__":
+    main()`,
     time: "O(n + m)",
     memory: "O(n + m)",
     study: [

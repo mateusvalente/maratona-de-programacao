@@ -82,7 +82,7 @@ def main():
         ]
         respostas.append(str(maior_quantidade_cocircular(pontos)))
 
-    sys.stdout.write("\n".join(respostas))
+    sys.stdout.write("\n".join(respostas) + "\n")
 
 
 if __name__ == "__main__":

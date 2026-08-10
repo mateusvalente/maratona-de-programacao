@@ -66,7 +66,7 @@ def main():
 
         respostas.append(f"{menor_abertura(largura, aletas):.2f}")
 
-    sys.stdout.write("\n".join(respostas))
+    sys.stdout.write("\n".join(respostas) + "\n")
 
 
 if __name__ == "__main__":

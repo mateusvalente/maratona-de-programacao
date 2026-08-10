@@ -89,11 +89,38 @@
       </div>
       <div class="code-panel">
         <div class="code-title"><span>Sistema resolvido</span><a href="../resolucoes/1291.py">Abrir 1291.py</a></div>
-        <pre><code>quadriculada = (
-    8 * segmento + 8 * complementar - 4 * quadrado
-)
-pontilhada = 4 * complementar - 2 * quadriculada
-listrada = quadrado - pontilhada - quadriculada</code></pre>
+<pre><code>import math
+import sys
+
+
+def calcular_areas(lado):
+    # Todas as fórmulas-base são proporcionais ao quadrado do lado.
+    quadrado = lado * lado
+    quarto_de_circulo = math.pi * quadrado / 4.0
+    complementar = quadrado - quarto_de_circulo
+    segmento = (
+        quadrado * (4.0 * math.pi - 3.0 * math.sqrt(3.0)) / 24.0
+    )
+
+    # As combinações isolam as três regiões pedidas pelo desenho.
+    quadriculada = 8.0 * segmento + 8.0 * complementar - 4.0 * quadrado
+    pontilhada = 4.0 * complementar - 2.0 * quadriculada
+    listrada = quadrado - pontilhada - quadriculada
+    return listrada, pontilhada, quadriculada
+
+
+def main():
+    # Existe um valor de lado por caso, e a entrada termina em EOF.
+    lados = map(float, sys.stdin.buffer.read().split())
+    respostas = [
+        f"{listrada:.3f} {pontilhada:.3f} {quadriculada:.3f}"
+        for listrada, pontilhada, quadriculada in map(calcular_areas, lados)
+    ]
+    sys.stdout.write("\n".join(respostas) + "\n")
+
+
+if __name__ == "__main__":
+    main()</code></pre>
       </div>
     </section>
 

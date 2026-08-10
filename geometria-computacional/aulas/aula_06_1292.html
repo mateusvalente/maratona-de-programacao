@@ -85,12 +85,31 @@
       </div>
       <div class="code-panel">
         <div class="code-title"><span>Lei dos senos em Python</span><a href="../resolucoes/1292.py">Abrir 1292.py</a></div>
-        <pre><code>lado = (
-    F
-    * math.sin(math.radians(108.0))
-    / math.sin(math.radians(63.0))
-)
-print(f"{lado:.10f}")</code></pre>
+<pre><code>import math
+import sys
+
+
+def lado_do_quadrado(lado_do_pentagono):
+    # Pela lei dos senos: L / sen(108°) = F / sen(63°).
+    # math.sin recebe radianos, então convertemos os dois ângulos.
+    return (
+        lado_do_pentagono
+        * math.sin(math.radians(108.0))
+        / math.sin(math.radians(63.0))
+    )
+
+
+def main():
+    # A leitura e a escrita em bloco atendem todos os casos até EOF.
+    entradas = map(float, sys.stdin.buffer.read().split())
+    respostas = [f"{lado_do_quadrado(valor):.10f}" for valor in entradas]
+
+    # join separa as respostas; o último + "\n" fecha a linha final.
+    sys.stdout.write("\n".join(respostas) + "\n")
+
+
+if __name__ == "__main__":
+    main()</code></pre>
       </div>
     </section>
 

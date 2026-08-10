@@ -118,7 +118,9 @@ def classificar(operacoes):
     pilha = []
     fila = deque()
     prioridade = []  # Negativos transformam a min-heap em max-heap.
-    pode_ser_pilha = pode_ser_fila = pode_ser_prioridade = True
+    pode_ser_pilha = True
+    pode_ser_fila = True
+    pode_ser_prioridade = True
 
     for tipo, valor in operacoes:
         if tipo == 1:

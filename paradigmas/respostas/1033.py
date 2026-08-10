@@ -1,3 +1,4 @@
+# b é o módulo do caso atual e limita os valores durante as multiplicações.
 b = 0
 
 
@@ -9,7 +10,8 @@ class Matriz:
 
     def __mul__(self, outra):
         global b
-        resposta = Matriz(self.m, outra.n)
+        # (n x m) multiplicada por (m x p) produz uma matriz (n x p).
+        resposta = Matriz(self.n, outra.m)
 
         for i in range(self.n):
             for j in range(outra.m):
@@ -21,11 +23,13 @@ class Matriz:
 
 
 def potencia(base, expoente):
+    # Exponenciação rápida reduz expoentes pares pela metade.
     if(expoente == 1):
         return base
     elif(expoente % 2):
         return base * potencia(base, expoente - 1)
     else:
+        # Calculamos a metade uma única vez e reutilizamos o resultado.
         pot = potencia(base, expoente // 2)
         return pot * pot
 
@@ -35,9 +39,11 @@ while True:
     try:
         n, b = [int(x) for x in input().strip().split(' ')]
 
+        # O par 0 0 encerra a entrada.
         if(n == 0 and b == 0):
             break
 
+        # A é a transição da recorrência; a terceira coluna representa o +1.
         A = Matriz(3, 3)
         A.M[0][0] = 1
         A.M[0][1] = 1
@@ -45,6 +51,7 @@ while True:
         A.M[1][0] = 1
         A.M[2][2] = 1
 
+        # B guarda o estado base usado para iniciar a recorrência.
         B = Matriz(3, 1)
         B.M[0][0] = 1
         B.M[1][0] = 1

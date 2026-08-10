@@ -5,6 +5,7 @@ const root = path.resolve(__dirname, "..");
 const lessons = require(path.join(root, "assets", "js", "dados.js"));
 const problems = require(path.join(root, "assets", "js", "problemas.js"));
 const lists = require(path.join(root, "assets", "js", "listas.js"));
+const somenteSolucoes = process.argv.includes("--somente-solucoes");
 
 function htmlDocument(title, bodyAttributes, styles, scripts) {
   return `<!doctype html>
@@ -29,7 +30,7 @@ function write(filePath, content) {
   fs.writeFileSync(filePath, content, "utf8");
 }
 
-for (const lesson of lessons) {
+for (const lesson of somenteSolucoes ? [] : lessons) {
   const directory = path.join(root, "aulas", lesson.slug);
   const html = htmlDocument(
     `Aula ${String(lesson.id).padStart(2, "0")} — ${lesson.title}`,
@@ -40,7 +41,7 @@ for (const lesson of lessons) {
   write(path.join(directory, "index.html"), html);
 }
 
-for (const list of lists) {
+for (const list of somenteSolucoes ? [] : lists) {
   const directory = path.join(root, "listas", list.slug);
   const html = htmlDocument(
     `Lista ${String(list.id).padStart(2, "0")} — ${list.title}`,
@@ -53,14 +54,20 @@ for (const list of lists) {
 
 for (const problem of problems) {
   const directory = path.join(root, "problemas", "beecrowd", String(problem.id));
-  const html = htmlDocument(
-    `beecrowd ${problem.id} — ${problem.title}`,
-    `data-root="../../../" data-problem="${problem.id}"`,
-    ["../../../assets/css/curso.css"],
-    ["../../../assets/js/dados.js", "../../../assets/js/problemas.js", "../../../assets/js/comum.js", "../../../assets/js/problema.js"]
-  );
-  write(path.join(directory, "index.html"), html);
+  if (!somenteSolucoes) {
+    const html = htmlDocument(
+      `beecrowd ${problem.id} — ${problem.title}`,
+      `data-root="../../../" data-problem="${problem.id}"`,
+      ["../../../assets/css/curso.css"],
+      ["../../../assets/js/dados.js", "../../../assets/js/problemas.js", "../../../assets/js/comum.js", "../../../assets/js/problema.js"]
+    );
+    write(path.join(directory, "index.html"), html);
+  }
   write(path.join(directory, "solucao.py"), `${problem.code.trim()}\n`);
 }
 
-console.log(`Geradas ${lessons.length} aulas, ${lists.length} listas e ${problems.length} problemas.`);
+if (somenteSolucoes) {
+  console.log(`Atualizadas ${problems.length} soluções comentadas.`);
+} else {
+  console.log(`Geradas ${lessons.length} aulas, ${lists.length} listas e ${problems.length} problemas.`);
+}

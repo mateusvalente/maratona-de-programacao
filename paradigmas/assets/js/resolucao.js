@@ -56,7 +56,7 @@
         </section>
 
         <section class="band">
-          <div class="section-head"><div><p class="eyebrow">Código explicado</p><h2>Resposta validada com comentários</h2></div><p>Os comentários foram adicionados somente nesta página. O arquivo em <code>respostas/</code> permanece intacto.</p></div>
+          <div class="section-head"><div><p class="eyebrow">Código explicado</p><h2>Resposta validada com comentários</h2></div><p>A página e o arquivo <code>.py</code> apresentam a mesma lógica, com comentários didáticos em cada etapa do algoritmo.</p></div>
           ${window.CourseUI.codeBlock({ title: `beecrowd ${solution.id} · Python 3 comentado`, source: solution.commentedCode, note: "Versão didática: mesma lógica do arquivo validado, com comentários explicando cada bloco." })}
         </section>
 

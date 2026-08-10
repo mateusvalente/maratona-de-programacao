@@ -23,8 +23,8 @@ const allFiles = walk(root);
 const htmlFiles = allFiles.filter((file) => file.endsWith(".html"));
 const markdownFiles = allFiles.filter((file) => file.endsWith(".md"));
 
-if (lessons.length !== 17) failures.push(`Esperadas 17 aulas; encontradas ${lessons.length}.`);
-if (lists.length !== 5) failures.push(`Esperadas 5 listas; encontradas ${lists.length}.`);
+if (lessons.length !== 20) failures.push(`Esperadas 20 aulas; encontradas ${lessons.length}.`);
+if (lists.length !== 6) failures.push(`Esperadas 6 listas; encontradas ${lists.length}.`);
 if (problems.length !== 47) failures.push(`Esperados 47 problemas; encontrados ${problems.length}.`);
 if (markdownFiles.length) failures.push(`Arquivos Markdown encontrados: ${markdownFiles.join(", ")}`);
 
@@ -83,7 +83,7 @@ const tests = {
   1176: ["3\n0\n4\n2\n", "Fib(0) = 0\nFib(4) = 3\nFib(2) = 1"],
   1177: ["3\n", (output) => output.startsWith("N[0] = 0\nN[1] = 1\nN[2] = 2\nN[3] = 0") && output.endsWith("N[999] = 0")],
   1178: ["200\n", (output) => output.startsWith("N[0] = 200.0000\nN[1] = 100.0000\nN[2] = 50.0000") && output.split("\n").length === 100],
-  1179: [Array.from({ length: 15 }, (_, i) => i + 1).join("\n") + "\n", (output) => output.includes("impar[0] = 1") && output.includes("par[4] = 10") && output.endsWith("impar[2] = 15")],
+  1179: [Array.from({ length: 15 }, (_, i) => i + 1).join("\n") + "\n", (output) => output.includes("impar[0] = 1") && output.includes("par[4] = 10") && output.includes("impar[2] = 15") && output.endsWith("par[1] = 14")],
   1180: ["10\n1 2 3 4 -5 6 7 8 9 10\n", "Menor valor: -5\nPosicao: 4"],
   1120: ["5 5000000\n3 123456\n0 0\n", "0\n12456"],
   1168: ["3\n115380\n2819311\n23456\n", "27 leds\n29 leds\n25 leds"],

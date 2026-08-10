@@ -82,13 +82,76 @@
       </div>
       <div class="code-panel">
         <div class="code-title"><span>Projeção limitada</span><a href="../resolucoes/1223.py">Abrir 1223.py</a></div>
-        <pre><code>t = ((px - ax) * vx + (py - ay) * vy) / comprimento_2
-t = max(0.0, min(1.0, t))
+<pre><code>import math
+import sys
 
-projecao = (ax + t * vx, ay + t * vy)
-distancia = math.hypot(
-    px - projecao[0], py - projecao[1]
-)</code></pre>
+
+def distancia_ponto_segmento(ponto, inicio, fim):
+    px, py = ponto
+    ax, ay = inicio
+    bx, by = fim
+    vx = bx - ax
+    vy = by - ay
+    comprimento_2 = vx * vx + vy * vy
+
+    # Uma aleta de comprimento zero é tratada como um ponto.
+    if comprimento_2 == 0.0:
+        return math.hypot(px - ax, py - ay)
+
+    # t indica onde a projeção cairia na reta da aleta.
+    t = ((px - ax) * vx + (py - ay) * vy) / comprimento_2
+    t = max(0.0, min(1.0, t))  # Restringe a projeção ao segmento.
+
+    projecao = (ax + t * vx, ay + t * vy)
+    return math.hypot(px - projecao[0], py - projecao[1])
+
+
+def menor_abertura(largura, aletas):
+    resposta = float("inf")
+
+    for i, (inicio, ponta) in enumerate(aletas):
+        parte_da_esquerda = inicio[0] == 0.0
+
+        # A ponta pode tocar primeiro a parede oposta.
+        distancia_ate_haste = (
+            largura - ponta[0] if parte_da_esquerda else ponta[0]
+        )
+        resposta = min(resposta, distancia_ate_haste)
+
+        # Ou pode tocar a próxima aleta; medimos ponto contra segmento.
+        if i + 1 &lt; len(aletas):
+            resposta = min(
+                resposta,
+                distancia_ponto_segmento(ponta, *aletas[i + 1]),
+            )
+
+    return resposta
+
+
+def main():
+    dados = iter(sys.stdin.buffer.read().split())
+    respostas = []
+
+    for token in dados:
+        quantidade = int(token)
+        largura = float(next(dados))
+        _altura = float(next(dados))  # A altura não entra na fórmula.
+        aletas = []
+
+        for i in range(quantidade):
+            y_inicio = float(next(dados))
+            x_ponta = float(next(dados))
+            y_ponta = float(next(dados))
+            x_inicio = 0.0 if i % 2 == 0 else largura
+            aletas.append(((x_inicio, y_inicio), (x_ponta, y_ponta)))
+
+        respostas.append(f"{menor_abertura(largura, aletas):.2f}")
+
+    sys.stdout.write("\n".join(respostas) + "\n")
+
+
+if __name__ == "__main__":
+    main()</code></pre>
       </div>
     </section>
 

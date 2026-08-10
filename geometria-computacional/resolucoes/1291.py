@@ -24,7 +24,7 @@ def main():
         f"{listrada:.3f} {pontilhada:.3f} {quadriculada:.3f}"
         for listrada, pontilhada, quadriculada in map(calcular_areas, lados)
     ]
-    sys.stdout.write("\n".join(respostas))
+    sys.stdout.write("\n".join(respostas) + "\n")
 
 
 if __name__ == "__main__":

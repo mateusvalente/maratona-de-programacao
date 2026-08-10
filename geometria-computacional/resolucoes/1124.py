@@ -26,11 +26,11 @@ def main():
         largura, comprimento, raio_1, raio_2 = valores[i:i + 4]
         if largura == comprimento == raio_1 == raio_2 == 0:
             break
-        respostas.append(
-            "S" if circulos_cabem(largura, comprimento, raio_1, raio_2) else "N"
-        )
+        # Guardar o teste em uma variável torna explícita a decisão S ou N.
+        resposta = circulos_cabem(largura, comprimento, raio_1, raio_2)
+        respostas.append("S" if resposta else "N")
 
-    sys.stdout.write("\n".join(respostas))
+    sys.stdout.write("\n".join(respostas) + "\n")
 
 
 if __name__ == "__main__":

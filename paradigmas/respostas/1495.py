@@ -1,5 +1,6 @@
 import sys
 
+# Os casos continuam até EOF.
 entrada = sys.stdin.buffer
 
 while True:
@@ -13,6 +14,8 @@ while True:
 
     a, b = map(int, linha.split())
 
+    # Vitórias já garantem três pontos. Empates e derrotas guardam quantos gols
+    # faltam para superar o adversário.
     partidas = []
     pontos = 0
 
@@ -24,9 +27,11 @@ while True:
         else:
             pontos += 3
 
+    # Gastar gols primeiro nas partidas mais baratas é a escolha gulosa.
     partidas.sort()
 
     for diferenca in partidas:
+        # diferenca + 1 transforma a partida em vitória; diferenca, em empate.
         if b != 0 and b - (diferenca + 1) >= 0:
             b -= diferenca + 1
             pontos += 3

@@ -1,6 +1,38 @@
 (function (root) {
   function problem(id, title, topic, difficulty, summary, input, output, sampleInput, sampleOutput, algorithm, trace, errors, code) {
-    return { id, title, topic, difficulty, summary, input, output, sampleInput, sampleOutput, algorithm, trace, errors, code };
+    // A mesma versão comentada alimenta a aula HTML e o arquivo solucao.py.
+    // Assim, a explicação acompanha o programa sem criar duas versões divergentes.
+    const linhaDeComentario = (rotulo, texto) =>
+      `# ${rotulo}: ${String(texto).replace(/\s+/g, " ").trim()}`;
+
+    const commentedCode = [
+      "# Relação do algoritmo com o problema",
+      linhaDeComentario("Objetivo", summary),
+      linhaDeComentario("Entrada", input),
+      linhaDeComentario("Saída", output),
+      "#",
+      "# Passo a passo",
+      ...algorithm.map((step, index) => `# ${index + 1}. ${step}`),
+      "",
+      "# Implementação completa",
+      code.trim(),
+    ].join("\n");
+
+    return {
+      id,
+      title,
+      topic,
+      difficulty,
+      summary,
+      input,
+      output,
+      sampleInput,
+      sampleOutput,
+      algorithm,
+      trace,
+      errors,
+      code: commentedCode,
+    };
   }
 
   const problems = [

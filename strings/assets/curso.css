@@ -138,6 +138,9 @@ p { color: var(--muted); }
   align-items: start;
 }
 
+/* Impede que código longo defina a largura mínima de uma coluna do grid. */
+.two-col > * { min-width: 0; }
+
 .concept-list,
 .sources,
 .steps-list {
@@ -413,6 +416,8 @@ p { color: var(--muted); }
 .dp-table td.best { box-shadow: inset 0 0 0 2px var(--yellow); color: var(--yellow); }
 
 .code-shell {
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -431,6 +436,7 @@ p { color: var(--muted); }
 }
 
 pre {
+  max-width: 100%;
   margin: 0;
   padding: 17px;
   overflow-x: auto;

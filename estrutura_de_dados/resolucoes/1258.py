@@ -13,7 +13,7 @@ def comparar(a, b):
     if a.cor != b.cor:
         return -1 if a.cor < b.cor else 1
 
-    # Segundo: tamanho decrescente (P vem depois de M e G).
+    # Segundo: tamanho decrescente; para as letras usadas, a ordem é P, M, G.
     if a.tamanho != b.tamanho:
         return -1 if a.tamanho > b.tamanho else 1
 

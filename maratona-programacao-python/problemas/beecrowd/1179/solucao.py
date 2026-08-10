@@ -1,3 +1,15 @@
+# Relação do algoritmo com o problema
+# Objetivo: Separar quinze inteiros em vetores de pares e ímpares com capacidade cinco, imprimindo sempre que um enche.
+# Entrada: Quinze inteiros, um por linha.
+# Saída: Conteúdo dos vetores quando enchem e, ao final, sobras ímpares antes das pares.
+#
+# Passo a passo
+# 1. Manter listas par e impar.
+# 2. Adicionar cada valor à lista correta.
+# 3. Ao atingir cinco, imprimir e esvaziar.
+# 4. No final, imprimir sobras ímpares e depois pares.
+
+# Implementação completa
 pares = []
 impares = []
 

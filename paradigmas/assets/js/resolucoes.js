@@ -232,7 +232,7 @@ window.PARADIGM_SOLUTIONS = [
       "    def __mul__(self, outra):",
       "        global b",
       "        # Cria o armazenamento da matriz resultante.",
-      "        resposta = Matriz(self.m, outra.n)",
+      "        resposta = Matriz(self.n, outra.m)",
       "",
       "        # Produto matricial: linha i por coluna j.",
       "        for i in range(self.n):",

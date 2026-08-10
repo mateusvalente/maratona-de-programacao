@@ -86,11 +86,13 @@ window.PARADIGM_LESSONS = [
           title: "Exemplo didático próprio · Python 3",
           source: [
             "def pares_com_soma(valores, alvo):",
+            "    # Cada par de índices é testado exatamente uma vez.",
             "    encontrados = []",
             "",
             "    for i in range(len(valores)):",
             "        for j in range(i + 1, len(valores)):",
             "            if valores[i] + valores[j] == alvo:",
+            "                # Guardamos o par quando ele satisfaz a condição.",
             "                encontrados.append((valores[i], valores[j]))",
             "",
             "    return encontrados",
@@ -202,12 +204,16 @@ fatorial(4) → 4 × 6 = 24</pre></div>
           title: "O mesmo fatorial com repetição",
           source: [
             "def fatorial_iterativo(n):",
+            "    # O acumulador começa no elemento neutro da multiplicação.",
             "    produto = 1",
             "",
             "    for valor in range(2, n + 1):",
             "        produto *= valor",
             "",
-            "    return produto"
+            "    return produto",
+            "",
+            "",
+            "print(fatorial_iterativo(4))  # 24"
           ],
           note: "Neste exemplo, a versão iterativa usa O(1) de memória auxiliar; a recursiva usa O(n) quadros de chamada."
         }
@@ -272,7 +278,8 @@ fatorial(4) → 4 × 6 = 24</pre></div>
             "",
             "respostas = []",
             "gerar([], [\"A\", \"B\"], 2, respostas)",
-            "print(respostas)  # AA, AB, BA, BB"
+            "# A lista mostra as quatro sequências completas geradas.",
+            "print(respostas)  # [['A', 'A'], ['A', 'B'], ['B', 'A'], ['B', 'B']]"
           ],
           note: "Usamos copy() porque caminho continuará sendo modificado durante a busca."
         }
@@ -335,6 +342,7 @@ fatorial(4) → 4 × 6 = 24</pre></div>
           title: "Exemplo didático próprio · busca binária",
           source: [
             "def busca_binaria(valores, alvo):",
+            "    # O intervalo fechado [esquerda, direita] contém a busca atual.",
             "    esquerda = 0",
             "    direita = len(valores) - 1",
             "",
@@ -343,12 +351,18 @@ fatorial(4) → 4 × 6 = 24</pre></div>
             "",
             "        if valores[meio] == alvo:",
             "            return meio",
+            "",
+            "        # A ordenação permite descartar uma metade inteira.",
             "        if valores[meio] < alvo:",
             "            esquerda = meio + 1",
             "        else:",
             "            direita = meio - 1",
             "",
-            "    return -1"
+            "    return -1",
+            "",
+            "",
+            "numeros = [2, 4, 7, 9, 13]",
+            "print(busca_binaria(numeros, 9))  # índice 3"
           ],
           note: "A ordenação é a propriedade que justifica descartar uma metade inteira."
         }
@@ -494,7 +508,10 @@ fatorial(4) → 4 × 6 = 24</pre></div>
             "        if i >= 2:",
             "            dp[i] += dp[i - 2]  # último passo teve tamanho 2",
             "",
-            "    return dp[n]"
+            "    return dp[n]",
+            "",
+            "",
+            "print(contar_maneiras(5))  # 8"
           ],
           note: "A transição vem da pergunta sobre o último passo; ela não surgiu apenas como fórmula."
         }
@@ -554,17 +571,20 @@ fatorial(4) → 4 × 6 = 24</pre></div>
           title: "Exemplo didático próprio · Fibonacci memoizado",
           source: [
             "def fib(n, memo):",
+            "    # Casos base: não precisam ser armazenados nem subdivididos.",
             "    if n <= 1:",
             "        return n",
             "",
+            "    # Se o estado n já foi resolvido, evitamos repetir a recursão.",
             "    if n in memo:",
             "        return memo[n]",
             "",
+            "    # Calculamos uma vez, registramos e devolvemos a resposta.",
             "    memo[n] = fib(n - 1, memo) + fib(n - 2, memo)",
             "    return memo[n]",
             "",
             "",
-            "memo = {}",
+            "memo = {}  # O dicionário é compartilhado por toda esta execução.",
             "print(fib(10, memo))",
             "print(memo)"
           ],
@@ -591,10 +611,15 @@ fatorial(4) → 4 × 6 = 24</pre></div>
             "",
             "@cache",
             "def fib(n):",
+            "    # Os casos base encerram a recursão.",
             "    if n <= 1:",
             "        return n",
             "",
-            "    return fib(n - 1) + fib(n - 2)"
+            "    # O decorador guarda o resultado antes de futuras repetições.",
+            "    return fib(n - 1) + fib(n - 2)",
+            "",
+            "",
+            "print(fib(10))  # 55"
           ],
           note: "functools.cache equivale a lru_cache(maxsize=None). Em competição, confirme se os argumentos são imutáveis e se a profundidade recursiva é segura."
         }

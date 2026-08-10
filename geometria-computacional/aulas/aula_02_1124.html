@@ -89,13 +89,43 @@
       </div>
       <div class="code-panel">
         <div class="code-title"><span>Teste central</span><a href="../resolucoes/1124.py">Abrir 1124.py</a></div>
-        <pre><code>dx = largura - raio_1 - raio_2
-dy = comprimento - raio_1 - raio_2
+<pre><code>import sys
 
-distancia_ao_quadrado = dx * dx + dy * dy
-raios_ao_quadrado = (raio_1 + raio_2) ** 2
 
-cabem = distancia_ao_quadrado &gt;= raios_ao_quadrado</code></pre>
+def circulos_cabem(largura, comprimento, raio_1, raio_2):
+    # Cada círculo precisa caber sozinho no retângulo.
+    if (2 * raio_1 &gt; largura or 2 * raio_1 &gt; comprimento or
+            2 * raio_2 &gt; largura or 2 * raio_2 &gt; comprimento):
+        return False
+
+    # Cantos opostos maximizam a distância entre os centros.
+    dx = largura - raio_1 - raio_2
+    dy = comprimento - raio_1 - raio_2
+
+    distancia_ao_quadrado = dx * dx + dy * dy
+    raios_ao_quadrado = (raio_1 + raio_2) ** 2
+    return distancia_ao_quadrado &gt;= raios_ao_quadrado
+
+
+def main():
+    valores = list(map(int, sys.stdin.buffer.read().split()))
+    respostas = []
+
+    for i in range(0, len(valores), 4):
+        largura, comprimento, raio_1, raio_2 = valores[i:i + 4]
+
+        # O caso 0 0 0 0 é apenas o sentinela de encerramento.
+        if largura == comprimento == raio_1 == raio_2 == 0:
+            break
+
+        resposta = circulos_cabem(largura, comprimento, raio_1, raio_2)
+        respostas.append("S" if resposta else "N")
+
+    sys.stdout.write("\n".join(respostas) + "\n")
+
+
+if __name__ == "__main__":
+    main()</code></pre>
       </div>
     </section>
 

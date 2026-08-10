@@ -440,6 +440,53 @@ for linha in sys.stdin:
           <div class="warning"><strong>EOF não é um valor digitado:</strong> não compare a linha com <code>"EOF"</code>. O juiz apenas deixa de fornecer dados.</div>
         </section>
         <section class="band">
+          <h2>Entrada e saída rápidas</h2>
+          <p><code>input()</code> e <code>print()</code> são as escolhas mais claras para a maioria dos exercícios. Quando a entrada possui muitos milhares de valores, podemos reduzir o trabalho de chamadas repetidas lendo todos os tokens com <code>sys.stdin.buffer.read().split()</code> e escrevendo as respostas em um único bloco.</p>
+          <div class="two-col">
+            <div class="code-shell"><div class="code-head">Leitura rápida de inteiros</div><pre><code>import sys
+
+tokens = sys.stdin.buffer.read().split()
+numeros = map(int, tokens)
+
+for numero in numeros:
+    # int aceita diretamente cada token em bytes.
+    processar(numero)</code></pre></div>
+            <div class="code-shell"><div class="code-head">Saída rápida acumulada</div><pre><code>import sys
+
+respostas = ["10", "20", "30"]
+
+sys.stdout.write(
+    "\\n".join(respostas) + "\\n"
+)</code></pre></div>
+          </div>
+          <p><code>buffer.read().split()</code> devolve tokens em <em>bytes</em>. <code>int(token)</code> funciona diretamente; para tratar texto com métodos de string, converta com <code>token.decode()</code> ou decodifique a entrada antes de separar.</p>
+          <div class="note"><strong>A quebra final não aparece sozinha em <code>write</code>:</strong> <code>print()</code> termina a linha por padrão, mas <code>sys.stdout.write()</code> escreve exatamente o texto recebido. Por isso usamos <code>"\\n".join(respostas) + "\\n"</code>: o <code>join</code> separa as respostas e o último <code>+ "\\n"</code> encerra também a linha final.</div>
+          <div class="warning"><strong>Não complique sem necessidade:</strong> entrada rápida é útil quando o volume é grande. Em problemas pequenos, <code>input</code> e <code>print</code> deixam o raciocínio mais legível e normalmente são suficientes.</div>
+          <details class="solution"><summary>Exemplo completo com função principal</summary><div><pre><code>import sys
+
+LEDS_POR_DIGITO = (6, 2, 5, 5, 4, 5, 6, 3, 7, 6)
+
+
+def contar_leds(numero):
+    return sum(LEDS_POR_DIGITO[int(digito)] for digito in numero)
+
+
+def main():
+    linhas = sys.stdin.buffer.read().split()
+    quantidade = int(linhas[0])
+
+    respostas = [
+        f"{contar_leds(linhas[i].decode())} leds"
+        for i in range(1, quantidade + 1)
+    ]
+
+    sys.stdout.write("\\n".join(respostas) + "\\n")
+
+
+if __name__ == "__main__":
+    main()</code></pre></div></details>
+        </section>
+        <section class="band">
           <h2>Saída exata</h2>
           <div class="code-shell"><div class="code-head">f-string</div><pre><code>resultado = 19
 print(f"X = {resultado}")</code></pre></div>
@@ -459,7 +506,8 @@ print(a + b)</code></pre></div><div><p>Com entradas <code>10</code> e <code>20</
         ["Métodos de entrada em Python competitivo — GeeksforGeeks", "https://www.geeksforgeeks.org/competitive-programming/python-input-methods-competitive-programming/"],
         ["Entrada e saída em Python — documentação oficial", "https://docs.python.org/3/tutorial/inputoutput.html"],
         ["Função input e EOFError — documentação oficial", "https://docs.python.org/3/library/functions.html#input"],
-        ["Entrada padrão sys.stdin — documentação oficial", "https://docs.python.org/3/library/sys.html#sys.stdin"]
+        ["Entrada padrão sys.stdin — documentação oficial", "https://docs.python.org/3/library/sys.html#sys.stdin"],
+        ["Saída padrão sys.stdout — documentação oficial", "https://docs.python.org/3/library/sys.html#sys.stdout"]
       ]
     },
     {

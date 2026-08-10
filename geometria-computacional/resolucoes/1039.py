@@ -27,7 +27,7 @@ def main():
         respostas.append("RICO" if protegida else "MORTO")
 
     # Acumular as respostas reduz chamadas repetidas de escrita.
-    sys.stdout.write("\n".join(respostas))
+    sys.stdout.write("\n".join(respostas) + "\n")
 
 
 if __name__ == "__main__":

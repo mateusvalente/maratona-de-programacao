@@ -1,10 +1,12 @@
 import sys
 
 
+# O índice representa o dígito; o valor indica quantos LEDs ele utiliza.
 LEDS_POR_DIGITO = (6, 2, 5, 5, 4, 5, 6, 3, 7, 6)
 
 
 def contar_leds(numero):
+    # Soma uma consulta de tabela para cada caractere.
     return sum(LEDS_POR_DIGITO[int(digito)] for digito in numero)
 
 
@@ -15,7 +17,7 @@ def main():
         f"{contar_leds(linhas[i].decode())} leds"
         for i in range(1, quantidade + 1)
     ]
-    sys.stdout.write("\n".join(respostas))
+    sys.stdout.write("\n".join(respostas) + "\n")
 
 
 if __name__ == "__main__":

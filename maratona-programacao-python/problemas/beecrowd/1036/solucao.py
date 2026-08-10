@@ -1,3 +1,15 @@
+# Relação do algoritmo com o problema
+# Objetivo: Calcular as raízes reais de uma equação do segundo grau quando elas existem.
+# Entrada: Coeficientes A, B e C decimais na mesma linha.
+# Saída: As duas raízes com cinco casas ou a mensagem Impossivel calcular.
+#
+# Passo a passo
+# 1. Ler os coeficientes.
+# 2. Calcular delta.
+# 3. Impedir divisão por zero e raiz de negativo.
+# 4. Calcular e imprimir R1 e R2.
+
+# Implementação completa
 a, b, c = map(float, input().split())
 
 delta = b ** 2 - 4 * a * c

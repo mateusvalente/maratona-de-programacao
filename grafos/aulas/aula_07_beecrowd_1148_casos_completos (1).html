@@ -520,13 +520,16 @@ Nao e possivel entregar a carta
 </section>
 
 <section id="codigo">
-  <div class="head"><div class="num">07</div><h2>Código completo em Python 3.11</h2></div>
+  <div class="head"><div class="num">07</div><h2>Código completo e comentado em Python 3.11</h2></div>
 
-<pre>INF = <span class="nu">2</span> ** <span class="nu">25</span>
+<pre><span class="cm"># Um custo muito alto representa uma ligação inexistente.</span>
+INF = <span class="nu">10</span> ** <span class="nu">15</span>
 
 
 <span class="kw">def</span> <span class="fn">dijkstra</span>(origem, destino, n):
 
+    <span class="cm"># dist guarda o menor custo conhecido desde a origem.</span>
+    <span class="cm"># visitado indica as cidades cujo menor custo já foi confirmado.</span>
     dist = [INF] * (n + <span class="nu">1</span>)
     visitado = [<span class="kw">False</span>] * (n + <span class="nu">1</span>)
 
@@ -543,11 +546,13 @@ Nao e possivel entregar a carta
                 menor = dist[cidade]
                 atual = cidade
 
+        <span class="cm"># Nenhuma outra cidade alcançável restou.</span>
         <span class="kw">if</span> atual == -<span class="nu">1</span>:
             <span class="kw">break</span>
 
         visitado[atual] = <span class="kw">True</span>
 
+        <span class="cm"># Ao confirmar o destino, sua distância já é mínima.</span>
         <span class="kw">if</span> atual == destino:
             <span class="kw">break</span>
 
@@ -560,6 +565,7 @@ Nao e possivel entregar a carta
 
                 novo_custo = dist[atual] + peso
 
+                <span class="cm"># Uma rota mais barata substitui a estimativa anterior.</span>
                 <span class="kw">if</span> novo_custo &lt; dist[vizinho]:
                     dist[vizinho] = novo_custo
 
@@ -568,11 +574,14 @@ Nao e possivel entregar a carta
 
 <span class="kw">while True</span>:
 
+    <span class="cm"># Cada caso começa pela quantidade de cidades e acordos.</span>
     n, e = map(int, input().split())
 
+    <span class="cm"># O par 0 0 encerra toda a entrada.</span>
     <span class="kw">if</span> n == <span class="nu">0</span> <span class="kw">and</span> e == <span class="nu">0</span>:
         <span class="kw">break</span>
 
+    <span class="cm"># A matriz guarda o custo direto; INF significa ausência de acordo.</span>
     grafo = [
         [INF] * (n + <span class="nu">1</span>)
         <span class="kw">for</span> _ <span class="kw">in</span> range(n + <span class="nu">1</span>)
@@ -585,13 +594,15 @@ Nao e possivel entregar a carta
 
         x, y, h = map(int, input().split())
 
-        grafo[x][y] = h
+        <span class="cm"># Em entradas repetidas, preservamos o menor custo direto.</span>
+        grafo[x][y] = min(grafo[x][y], h)
 
         <span class="cm"># Se o acordo inverso já existe, os dois custos viram zero.</span>
         <span class="kw">if</span> grafo[y][x] != INF:
             grafo[x][y] = <span class="nu">0</span>
             grafo[y][x] = <span class="nu">0</span>
 
+    <span class="cm"># Cada consulta executa Dijkstra entre uma origem e um destino.</span>
     k = int(input())
 
     <span class="kw">for</span> _ <span class="kw">in</span> range(k):
@@ -600,11 +611,13 @@ Nao e possivel entregar a carta
 
         resposta = dijkstra(origem, destino, n)
 
+        <span class="cm"># INF ao final significa que nenhuma rota alcançou o destino.</span>
         <span class="kw">if</span> resposta == INF:
             print(<span class="str">"Nao e possivel entregar a carta"</span>)
         <span class="kw">else</span>:
             print(resposta)
 
+    <span class="cm"># O formato exige uma linha vazia depois de cada caso.</span>
     print()</pre>
 
   <div class="callout">

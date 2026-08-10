@@ -1,3 +1,15 @@
+# Relação do algoritmo com o problema
+# Objetivo: Classificar cinco inteiros por paridade e sinal.
+# Entrada: Cinco inteiros, um por linha.
+# Saída: Quatro contagens: pares, ímpares, positivos e negativos.
+#
+# Passo a passo
+# 1. Criar quatro contadores.
+# 2. Para cada valor, classificar paridade.
+# 3. Separadamente, classificar sinal.
+# 4. Imprimir as quatro linhas.
+
+# Implementação completa
 pares = 0
 impares = 0
 positivos = 0

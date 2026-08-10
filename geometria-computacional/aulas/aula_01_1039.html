@@ -88,14 +88,39 @@
       </div>
       <div class="code-panel">
         <div class="code-title"><span>Teste central</span><a href="../resolucoes/1039.py">Abrir 1039.py</a></div>
-        <pre><code>dx = x_cacador - x_flor
-dy = y_cacador - y_flor
-limite = r_cacador - r_flor
+<pre><code>import sys
 
-protegida = (
-    r_flor &lt;= r_cacador
-    and dx * dx + dy * dy &lt;= limite * limite
-)</code></pre>
+
+def flor_esta_protegida(r_cacador, x_cacador, y_cacador,
+                        r_flor, x_flor, y_flor):
+    # Um círculo maior não pode caber dentro do círculo protetor.
+    if r_flor &gt; r_cacador:
+        return False
+
+    # A distância entre os centros deve ser menor ou igual à diferença
+    # dos raios. Comparamos os quadrados e evitamos calcular uma raiz.
+    dx = x_cacador - x_flor
+    dy = y_cacador - y_flor
+    limite = r_cacador - r_flor
+    return dx * dx + dy * dy &lt;= limite * limite
+
+
+def main():
+    # A entrada possui seis inteiros por caso e termina em EOF.
+    valores = list(map(int, sys.stdin.buffer.read().split()))
+    respostas = []
+
+    for i in range(0, len(valores), 6):
+        caso = valores[i:i + 6]
+        protegida = flor_esta_protegida(*caso)
+        respostas.append("RICO" if protegida else "MORTO")
+
+    # write não cria a quebra final; por isso acrescentamos o último \n.
+    sys.stdout.write("\n".join(respostas) + "\n")
+
+
+if __name__ == "__main__":
+    main()</code></pre>
       </div>
     </section>
 

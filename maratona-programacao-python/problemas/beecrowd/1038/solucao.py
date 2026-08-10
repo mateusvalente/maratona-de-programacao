@@ -1,3 +1,15 @@
+# Relação do algoritmo com o problema
+# Objetivo: Usar o código do item para escolher o preço e calcular o total.
+# Entrada: Código do produto e quantidade, na mesma linha.
+# Saída: Total: R$ valor com duas casas.
+#
+# Passo a passo
+# 1. Ler código e quantidade.
+# 2. Escolher o preço com if/elif.
+# 3. Multiplicar pela quantidade.
+# 4. Formatar o total.
+
+# Implementação completa
 codigo, quantidade = map(int, input().split())
 
 if codigo == 1:

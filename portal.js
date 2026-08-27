@@ -51,6 +51,7 @@ const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const matrixCanvas = document.querySelector("#matrix-background");
 
 if (matrixCanvas) {
+  matrixCanvas.dataset.matrixReady = "true";
   const matrixContext = matrixCanvas.getContext("2d");
   const matrixGlyphs = "01{}[]<>/=+*-_PYTHONALGORITMO";
   const pointer = {

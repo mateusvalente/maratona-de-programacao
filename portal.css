@@ -55,7 +55,7 @@ body::before {
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: .62;
+  opacity: .72;
   pointer-events: none;
 }
 
@@ -203,7 +203,7 @@ h3 {
 h1 {
   max-width: 830px;
   margin-bottom: 23px;
-  font-size: clamp(3.5rem, 6.8vw, 7rem);
+  font-size: clamp(3rem, 5.1vw, 5.5rem);
   font-weight: 700;
   line-height: .86;
   text-transform: uppercase;
@@ -211,9 +211,15 @@ h1 {
 
 h1 span {
   display: block;
+  white-space: nowrap;
+}
+
+h1 .title-course {
   color: var(--blue);
   text-shadow: 0 0 32px rgba(107, 188, 255, .16);
 }
+
+h1 .title-subject { color: var(--text); }
 
 h2 {
   margin-bottom: 8px;
@@ -319,6 +325,21 @@ p { color: var(--muted); }
   background: var(--green);
 }
 
+.button.guide-download {
+  border-color: var(--yellow);
+  color: var(--ink);
+  background: var(--yellow);
+  box-shadow: 0 0 24px rgba(255, 209, 102, .12);
+}
+
+.button.guide-download::after { content: "↓"; }
+
+.button.guide-download:hover,
+.button.guide-download:focus-visible {
+  border-color: #ffe29a;
+  background: #ffe29a;
+}
+
 .button:hover,
 .button:focus-visible {
   border-color: var(--blue);
@@ -389,7 +410,8 @@ p { color: var(--muted); }
 
 .terminal-window {
   display: flex;
-  min-height: 310px;
+  height: 400px;
+  min-height: 400px;
   flex-direction: column;
   padding: 15px 17px 13px;
   background:
@@ -410,7 +432,9 @@ p { color: var(--muted); }
 .terminal-command strong { color: var(--blue); font-weight: 500; }
 
 .terminal-editor {
-  min-height: 190px;
+  height: 260px;
+  min-height: 260px;
+  flex: 0 0 260px;
   margin: 0;
   overflow: hidden;
   color: #e2ebef;
@@ -1035,7 +1059,7 @@ p { color: var(--muted); }
 
 @media (max-width: 1050px) {
   .course-intro { grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); gap: 45px; }
-  h1 { font-size: clamp(3.5rem, 7vw, 5.4rem); }
+  h1 { font-size: clamp(2.8rem, 4.9vw, 4.2rem); }
   .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .video-playlist { grid-template-columns: minmax(0, 1fr) 330px; }
 }
@@ -1061,7 +1085,7 @@ p { color: var(--muted); }
   .topnav a { font-size: .72rem; }
   .topnav .nav-profile { padding: 7px 9px; }
   .course-intro { gap: 40px; padding: 54px 4px 84px; }
-  h1 { font-size: clamp(2.85rem, 12.5vw, 3.6rem); }
+  h1 { font-size: clamp(2rem, 8.8vw, 2.8rem); }
   h2 { font-size: clamp(2.15rem, 12vw, 3.35rem); }
   .course-facts { grid-template-columns: 1fr; gap: 10px; }
   .course-facts span { display: grid; grid-template-columns: 110px 1fr; align-items: center; }

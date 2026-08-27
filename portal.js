@@ -54,7 +54,7 @@ if (matrixCanvas) {
     const columnCount = Math.ceil(matrixWidth / matrixFontSize);
     const visibleRows = Math.ceil(matrixHeight / matrixFontSize);
     matrixDrops = Array.from({ length: columnCount }, () => Math.random() * (visibleRows + 24) - 24);
-    matrixSpeeds = Array.from({ length: columnCount }, () => 0.35 + Math.random() * 0.75);
+    matrixSpeeds = Array.from({ length: columnCount }, () => 0.08 + Math.random() * 0.18);
   }
 
   function randomGlyph() {
@@ -78,37 +78,41 @@ if (matrixCanvas) {
     if (document.hidden || timestamp - lastMatrixFrame < 38) return;
     lastMatrixFrame = timestamp;
 
-    matrixContext.fillStyle = "rgba(12, 17, 20, 0.14)";
+    matrixContext.fillStyle = "rgba(12, 17, 20, 0.24)";
     matrixContext.fillRect(0, 0, matrixWidth, matrixHeight);
     matrixContext.font = `500 ${matrixFontSize}px "DM Mono", monospace`;
 
     matrixDrops.forEach((drop, column) => {
       const originalX = column * matrixFontSize;
       const originalY = drop * matrixFontSize;
-      const deltaX = originalX - pointer.x;
-      const deltaY = originalY - pointer.y;
-      const distance = Math.hypot(deltaX, deltaY);
-      const pointerRadius = 175;
-      const insidePointerField = pointer.active && distance < pointerRadius;
+      const trailLength = 13;
+      const pointerRadius = 78;
 
-      if (insidePointerField) {
-        const intensity = 1 - distance / pointerRadius;
-        matrixContext.fillStyle = `rgba(97, 227, 165, ${0.58 + intensity * 0.4})`;
-        matrixContext.shadowColor = "rgba(97, 227, 165, 0.9)";
-        matrixContext.shadowBlur = 6 + intensity * 12;
-      } else {
-        const brightness = 0.22 + matrixSpeeds[column] * 0.22;
-        matrixContext.fillStyle = `rgba(97, 227, 165, ${brightness})`;
-        matrixContext.shadowBlur = 0;
+      for (let trailIndex = 0; trailIndex < trailLength; trailIndex += 1) {
+        const glyphY = originalY - trailIndex * matrixFontSize * 1.55;
+        if (glyphY < -matrixFontSize || glyphY > matrixHeight + matrixFontSize) continue;
+
+        const distance = Math.hypot(originalX - pointer.x, glyphY - pointer.y);
+        const insidePointerField = pointer.active && distance < pointerRadius;
+        const trailFade = 1 - trailIndex / trailLength;
+        const baseBrightness = (0.08 + matrixSpeeds[column] * 0.08) * (0.32 + trailFade * 0.68);
+
+        if (insidePointerField) {
+          const intensity = 1 - distance / pointerRadius;
+          const highlightedBrightness = Math.min(1, baseBrightness + 0.6 + intensity * 0.3);
+          matrixContext.fillStyle = `rgba(116, 255, 187, ${highlightedBrightness})`;
+        } else {
+          matrixContext.fillStyle = `rgba(97, 227, 165, ${baseBrightness})`;
+        }
+
+        matrixContext.fillText(randomGlyph(), originalX, glyphY);
       }
 
-      matrixContext.fillText(randomGlyph(), originalX, originalY);
-      matrixContext.shadowBlur = 0;
       matrixDrops[column] += matrixSpeeds[column];
 
       if (originalY > matrixHeight + matrixFontSize && Math.random() > 0.965) {
         matrixDrops[column] = -Math.random() * 18;
-        matrixSpeeds[column] = 0.35 + Math.random() * 0.75;
+        matrixSpeeds[column] = 0.08 + Math.random() * 0.18;
       }
     });
   }

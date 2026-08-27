@@ -106,11 +106,11 @@ if (matrixCanvas) {
     if (document.hidden || timestamp - lastMatrixFrame < 38) return;
     lastMatrixFrame = timestamp;
 
-    const glowHoldTime = 70;
+    const glowHoldTime = 60;
     const glowTarget = pointer.active && timestamp - pointer.lastMoveAt < glowHoldTime ? 1 : 0;
-    const glowEase = glowTarget > pointer.glow ? 0.58 : 0.32;
+    const glowEase = glowTarget > pointer.glow ? 0.64 : 0.48;
     pointer.glow += (glowTarget - pointer.glow) * glowEase;
-    if (pointer.glow < 0.01) pointer.glow = 0;
+    if (pointer.glow < 0.012) pointer.glow = 0;
 
     matrixContext.fillStyle = "rgba(12, 17, 20, 0.14)";
     matrixContext.fillRect(0, 0, matrixWidth, matrixHeight);

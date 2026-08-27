@@ -4,31 +4,41 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Portal de aulas do Curso de Inverno de Programação dos cursos de TI da Uniube, por Professor Mestre Mateus de Sousa Valente.">
-  <title>Curso de Inverno de Programação | Uniube</title>
+  <meta name="theme-color" content="#0c1114">
+  <meta property="og:title" content="Curso de Inverno de Programação">
+  <meta property="og:description" content="Aulas, exercícios e resoluções de programação competitiva com Python.">
+  <meta property="og:url" content="https://maratona.mateusvalente.dev/">
+  <link rel="canonical" href="https://maratona.mateusvalente.dev/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Maratona de Programação | Curso de Inverno</title>
   <link rel="stylesheet" href="portal.css">
 </head>
 <body>
+  <canvas id="matrix-background" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
   <header class="site-header">
     <div class="topbar">
       <a class="brand" href="index.html" aria-label="Página inicial do Curso de Inverno de Programação">
-        <span class="brand-mark">CI</span>
-        <span><strong>Curso de Inverno</strong><small>Programação com Python</small></span>
+        <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand-copy"><strong>maratona<span>.dev</span></strong><small>Curso de Inverno · Uniube</small></span>
       </a>
       <nav class="topnav" aria-label="Navegação principal">
         <a href="#modulos">Módulos</a>
         <a href="#videoaulas">Videoaulas</a>
         <a href="#metodologia">Como estudar</a>
         <a href="#fontes">Fontes</a>
-        <a href="#professor">Professor</a>
+        <a class="nav-profile" href="https://mateusvalente.dev" target="_blank" rel="noreferrer">Mateus Valente ↗</a>
       </nav>
     </div>
   </header>
 
-  <main>
+  <main id="conteudo">
     <section class="course-intro" aria-labelledby="course-title">
       <div class="intro-copy">
-        <p class="eyebrow">Uniube · Cursos de Tecnologia da Informação</p>
-        <h1 id="course-title">Curso de Inverno de Programação</h1>
+        <p class="eyebrow"><span aria-hidden="true">$</span> Uniube · Tecnologia da Informação</p>
+        <h1 id="course-title"><span>Curso de Inverno</span> de Programação</h1>
         <p class="lead">Um percurso de aprendizagem para os alunos praticarem programação competitiva com Python, começando pelos fundamentos e avançando por estruturas de dados, strings, grafos, geometria e paradigmas algorítmicos.</p>
         <p class="teacher-line">Material preparado pelo <strong>Professor Mestre Mateus de Sousa Valente</strong>, professor dos cursos de TI da Uniube.</p>
         <div class="intro-actions">
@@ -43,12 +53,24 @@
         </div>
       </div>
       <figure class="course-visual">
-        <img src="maratona-programacao-python/assets/img/trilha.svg" alt="Trilha visual que parte da leitura do problema, passa pelo algoritmo e chega à solução aceita">
-        <figcaption>Leia o problema, construa o raciocínio, implemente, teste e aprenda com cada tentativa.</figcaption>
+        <div class="visual-toolbar" aria-hidden="true">
+          <span></span><span></span><span></span>
+          <code>aprendizado.py</code>
+        </div>
+        <div class="terminal-window" aria-label="Terminal demonstrando a digitação e execução de um código Python">
+          <p class="terminal-command" aria-hidden="true"><span>mateus@maratona</span>:<strong>~/curso</strong>$ nano aprendizado.py</p>
+          <pre class="terminal-editor" aria-hidden="true"><code id="typing-code"></code><span class="terminal-cursor"></span></pre>
+          <div class="terminal-result" id="terminal-result" aria-hidden="true">
+            <span>$ python aprendizado.py</span>
+            <strong>Accepted</strong><small>tempo: 0.032s · memória: 8.4 MB</small>
+          </div>
+          <span class="visually-hidden">Exemplo em Python que apresenta as etapas para entender um problema, planejar, programar, testar e evoluir.</span>
+        </div>
+        <figcaption><code id="terminal-status">status: digitando...</code><span>Escreva, execute, teste e evolua.</span></figcaption>
       </figure>
     </section>
 
-    <section class="page-section" id="modulos" aria-labelledby="modules-title">
+    <section class="page-section" id="modulos" aria-labelledby="modules-title" data-index="01">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Trilha de aprendizagem</p>
@@ -108,7 +130,7 @@
       </div>
     </section>
 
-    <section class="page-section video-section" id="videoaulas" aria-labelledby="videos-title">
+    <section class="page-section video-section" id="videoaulas" aria-labelledby="videos-title" data-index="02">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Aulas gravadas</p>
@@ -117,80 +139,36 @@
         <p>Assista à apresentação geral e acompanhe os principais conceitos de cada módulo antes ou depois das atividades interativas.</p>
       </div>
 
-      <div class="video-grid">
-        <article class="video-card">
+      <div class="video-playlist">
+        <article class="playlist-player">
           <div class="video-frame">
-            <iframe src="https://drive.google.com/file/d/1ZqrqCvTrLO9UmZ_QmrF2k0VUtoj-UoUE/preview" title="Videoaula de introdução ao curso" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            <iframe id="playlist-video" src="https://drive.google.com/file/d/1ZqrqCvTrLO9UmZ_QmrF2k0VUtoj-UoUE/preview" title="Videoaula: Introdução" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe>
           </div>
-          <div class="video-info">
-            <div><span>Apresentação</span><h3>Introdução</h3></div>
-            <a href="https://drive.google.com/file/d/1ZqrqCvTrLO9UmZ_QmrF2k0VUtoj-UoUE/view?usp=sharing" target="_blank" rel="noreferrer">Abrir no Drive</a>
+          <div class="video-info playlist-now-playing" aria-live="polite">
+            <div><span id="playlist-label">Apresentação</span><h3 id="playlist-title">Introdução</h3></div>
+            <a id="playlist-drive-link" href="https://drive.google.com/file/d/1ZqrqCvTrLO9UmZ_QmrF2k0VUtoj-UoUE/view?usp=sharing" target="_blank" rel="noreferrer">Abrir no Drive ↗</a>
           </div>
         </article>
 
-        <article class="video-card">
-          <div class="video-frame">
-            <iframe src="https://drive.google.com/file/d/1hPl10TkbxNgaRdjfcEuxSJOt2rT5B3tX/preview" title="Videoaula do módulo iniciante" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe>
-          </div>
-          <div class="video-info">
-            <div><span>Módulo 01</span><h3>Módulo iniciante</h3></div>
-            <a href="https://drive.google.com/file/d/1hPl10TkbxNgaRdjfcEuxSJOt2rT5B3tX/view?usp=sharing" target="_blank" rel="noreferrer">Abrir no Drive</a>
-          </div>
-        </article>
-
-        <article class="video-card">
-          <div class="video-frame">
-            <iframe src="https://drive.google.com/file/d/1WHt6yGViYaSQCgmh9UEsac2EcShJNVSD/preview" title="Videoaula de estruturas de dados" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe>
-          </div>
-          <div class="video-info">
-            <div><span>Módulo 02</span><h3>Estruturas de dados</h3></div>
-            <a href="https://drive.google.com/file/d/1WHt6yGViYaSQCgmh9UEsac2EcShJNVSD/view?usp=sharing" target="_blank" rel="noreferrer">Abrir no Drive</a>
-          </div>
-        </article>
-
-        <article class="video-card">
-          <div class="video-frame">
-            <iframe src="https://drive.google.com/file/d/17zpDUaLKIwAIZyw1ltF_ozVantxJmitG/preview" title="Videoaula de strings" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe>
-          </div>
-          <div class="video-info">
-            <div><span>Módulo 03</span><h3>Strings</h3></div>
-            <a href="https://drive.google.com/file/d/17zpDUaLKIwAIZyw1ltF_ozVantxJmitG/view?usp=sharing" target="_blank" rel="noreferrer">Abrir no Drive</a>
-          </div>
-        </article>
-
-        <article class="video-card">
-          <div class="video-frame">
-            <iframe src="https://drive.google.com/file/d/1p3p4KZBfQZvP_zJQUpqf_Vmta6yJTUg3/preview" title="Videoaula de grafos" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe>
-          </div>
-          <div class="video-info">
-            <div><span>Módulo 04</span><h3>Grafos</h3></div>
-            <a href="https://drive.google.com/file/d/1p3p4KZBfQZvP_zJQUpqf_Vmta6yJTUg3/view?usp=sharing" target="_blank" rel="noreferrer">Abrir no Drive</a>
-          </div>
-        </article>
-
-        <article class="video-card">
-          <div class="video-frame">
-            <iframe src="https://drive.google.com/file/d/13oSXh7-jX-va85EZ_NqLiAg7003JCPTa/preview" title="Videoaula de geometria computacional" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe>
-          </div>
-          <div class="video-info">
-            <div><span>Módulo 05</span><h3>Geometria computacional</h3></div>
-            <a href="https://drive.google.com/file/d/13oSXh7-jX-va85EZ_NqLiAg7003JCPTa/view?usp=sharing" target="_blank" rel="noreferrer">Abrir no Drive</a>
-          </div>
-        </article>
-
-        <article class="video-card">
-          <div class="video-frame">
-            <iframe src="https://drive.google.com/file/d/11o1kEbXG-PCrHZ88-Luqtck5UfvK8RTL/preview" title="Videoaula de paradigmas algorítmicos" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe>
-          </div>
-          <div class="video-info">
-            <div><span>Módulo 06</span><h3>Paradigmas algorítmicos</h3></div>
-            <a href="https://drive.google.com/file/d/11o1kEbXG-PCrHZ88-Luqtck5UfvK8RTL/view?usp=sharing" target="_blank" rel="noreferrer">Abrir no Drive</a>
-          </div>
-        </article>
+        <aside class="playlist-panel" aria-label="Playlist de videoaulas">
+          <header class="playlist-header">
+            <div><span>Playlist do curso</span><strong>Videoaulas</strong></div>
+            <small>7 vídeos</small>
+          </header>
+          <ol class="playlist-list">
+            <li><button class="playlist-item is-active" type="button" aria-pressed="true" data-label="Apresentação" data-title="Introdução" data-src="https://drive.google.com/file/d/1ZqrqCvTrLO9UmZ_QmrF2k0VUtoj-UoUE/preview" data-href="https://drive.google.com/file/d/1ZqrqCvTrLO9UmZ_QmrF2k0VUtoj-UoUE/view?usp=sharing"><span class="playlist-index">01</span><span class="playlist-copy"><small>Apresentação</small><strong>Introdução</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 01" data-title="Módulo iniciante" data-src="https://drive.google.com/file/d/1uMP8Q-e1KwK6UHQwdRiPQRFl2m8O5Z-b/preview" data-href="https://drive.google.com/file/d/1uMP8Q-e1KwK6UHQwdRiPQRFl2m8O5Z-b/view?usp=drive_link"><span class="playlist-index">02</span><span class="playlist-copy"><small>Módulo 01</small><strong>Módulo iniciante</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 02" data-title="Estruturas de dados" data-src="https://drive.google.com/file/d/19bn8gLuqQqPosVqCEiagEkqm2-IlaMvp/preview" data-href="https://drive.google.com/file/d/19bn8gLuqQqPosVqCEiagEkqm2-IlaMvp/view?usp=drive_link"><span class="playlist-index">03</span><span class="playlist-copy"><small>Módulo 02</small><strong>Estruturas de dados</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 03" data-title="Strings" data-src="https://drive.google.com/file/d/17EbieNQ757KVh78HpUpnasUFBGMEqhmU/preview" data-href="https://drive.google.com/file/d/17EbieNQ757KVh78HpUpnasUFBGMEqhmU/view?usp=drive_link"><span class="playlist-index">04</span><span class="playlist-copy"><small>Módulo 03</small><strong>Strings</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 04" data-title="Grafos" data-src="https://drive.google.com/file/d/1D7uGPHBpgXQmhX6I9pwQBZtyJUpWpdxo/preview" data-href="https://drive.google.com/file/d/1D7uGPHBpgXQmhX6I9pwQBZtyJUpWpdxo/view?usp=drive_link"><span class="playlist-index">05</span><span class="playlist-copy"><small>Módulo 04</small><strong>Grafos</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 05" data-title="Geometria computacional" data-src="https://drive.google.com/file/d/1SRK3n_U9ZBtn7rs_B1XK1N8hEoghjXyI/preview" data-href="https://drive.google.com/file/d/1SRK3n_U9ZBtn7rs_B1XK1N8hEoghjXyI/view?usp=drive_link"><span class="playlist-index">06</span><span class="playlist-copy"><small>Módulo 05</small><strong>Geometria computacional</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 06" data-title="Paradigmas algorítmicos" data-src="https://drive.google.com/file/d/1ZH0Tt9Nl89Q1Ra6yIYlMXuCDwwvF_sua/preview" data-href="https://drive.google.com/file/d/1ZH0Tt9Nl89Q1Ra6yIYlMXuCDwwvF_sua/view?usp=drive_link"><span class="playlist-index">07</span><span class="playlist-copy"><small>Módulo 06</small><strong>Paradigmas algorítmicos</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
+          </ol>
+        </aside>
       </div>
     </section>
 
-    <section class="page-section study-method" id="metodologia" aria-labelledby="method-title">
+    <section class="page-section study-method" id="metodologia" aria-labelledby="method-title" data-index="03">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Como usar o material</p>
@@ -206,7 +184,7 @@
       </ol>
     </section>
 
-    <section class="page-section" id="fontes" aria-labelledby="sources-title">
+    <section class="page-section" id="fontes" aria-labelledby="sources-title" data-index="04">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Referências</p>
@@ -224,7 +202,7 @@
       </div>
     </section>
 
-    <section class="page-section professor-section" id="professor" aria-labelledby="professor-title">
+    <section class="page-section professor-section" id="professor" aria-labelledby="professor-title" data-index="05">
       <div>
         <p class="eyebrow">Autoria e acompanhamento</p>
         <h2 id="professor-title">Professor Mestre Mateus de Sousa Valente</h2>
@@ -235,9 +213,10 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <span>Curso de Inverno de Programação · Uniube</span>
+      <span><strong>maratona.mateusvalente.dev</strong><small>Curso de Inverno de Programação · Uniube</small></span>
       <span>Material de autoria do Professor Mestre Mateus de Sousa Valente, dos cursos de TI da Uniube. Todos os direitos reservados &copy; 2026.</span>
     </div>
   </footer>
+  <script src="portal.js"></script>
 </body>
 </html>

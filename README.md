@@ -9,9 +9,11 @@ O projeto apresenta uma trilha de aprendizagem em Python 3 formada por aulas te�
 
 ## Acesso ao curso
 
-O ponto de entrada do material é o [Portal do Curso de Inverno](index.html).
+O curso está disponível em **[maratona.mateusvalente.dev](https://maratona.mateusvalente.dev/)**.
 
-O portal funciona diretamente no navegador. Não é necessário instalar dependências ou iniciar um servidor local.
+Para consultar uma cópia local, o ponto de entrada do material é o arquivo [Portal do Curso de Inverno](index.html).
+
+O portal também funciona diretamente no navegador. Não é necessário instalar dependências ou iniciar um servidor local.
 
 1. Abra o arquivo `index.html`.
 2. Escolha um módulo de aprendizagem.

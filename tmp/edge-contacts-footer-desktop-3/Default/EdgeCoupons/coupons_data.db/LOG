@@ -1,0 +1,5 @@
+2026/08/27-18:04:14.498 8dc8 Creating DB C:\Users\mateusv.dti\Desktop\maratona-de-programacao\tmp\edge-contacts-footer-desktop-3\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/08/27-18:04:14.587 8dc8 Reusing MANIFEST C:\Users\mateusv.dti\Desktop\maratona-de-programacao\tmp\edge-contacts-footer-desktop-3\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/08/27-18:04:15.134 62b0 Level-0 table #5: started
+2026/08/27-18:04:15.142 62b0 Level-0 table #5: 683273 bytes OK
+2026/08/27-18:04:15.144 62b0 Delete type=0 #3

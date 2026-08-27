@@ -12,8 +12,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer">
   <title>Maratona de Programação | Curso de Inverno</title>
   <link rel="stylesheet" href="portal.css">
+  <script src="site-global.js" defer data-site-global></script>
 </head>
 <body>
   <canvas id="matrix-background" aria-hidden="true"></canvas>
@@ -29,7 +31,13 @@
         <a href="#videoaulas">Videoaulas</a>
         <a href="#metodologia">Como estudar</a>
         <a href="#fontes">Fontes</a>
-        <a class="nav-profile" href="https://mateusvalente.dev" target="_blank" rel="noreferrer">Mateus Valente ↗</a>
+        <span class="topnav-contact" aria-label="Contato e repositórios de Mateus Valente">
+          <a href="mailto:mateus.sousa.valente@gmail.com" aria-label="Enviar e-mail para Mateus Valente" title="E-mail"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+          <a href="https://br.linkedin.com/in/mateus-valente-b6978a173" target="_blank" rel="noreferrer" aria-label="Abrir o LinkedIn de Mateus Valente" title="LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+          <a href="https://github.com/mateusvalente" target="_blank" rel="noreferrer" aria-label="Abrir o GitHub principal de Mateus Valente" title="GitHub principal"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+          <a class="nav-marathon-repo" href="https://github.com/mateusvalente/maratona-de-programacao" target="_blank" rel="noreferrer" aria-label="Abrir o repositório da Maratona de Programação" title="Repositório da maratona"><i class="fa-solid fa-code-branch" aria-hidden="true"></i></a>
+        </span>
+        <a class="nav-profile" href="https://mateusvalente.dev" target="_blank" rel="noreferrer">Portfólio <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
       </nav>
     </div>
   </header>
@@ -37,15 +45,15 @@
   <main id="conteudo">
     <section class="course-intro" aria-labelledby="course-title">
       <div class="intro-copy">
-        <p class="eyebrow"><span aria-hidden="true">$</span> Uniube · Tecnologia da Informação</p>
+        <p class="eyebrow">Uniube · Tecnologia da Informação</p>
         <h1 id="course-title"><span class="title-course">Curso de Inverno</span><span class="title-subject">de Programação</span></h1>
         <p class="lead">Um percurso de aprendizagem para os alunos praticarem programação competitiva com Python, começando pelos fundamentos e avançando por estruturas de dados, strings, grafos, geometria e paradigmas algorítmicos.</p>
         <p class="teacher-line">Material preparado pelo <strong>Professor Mestre Mateus de Sousa Valente</strong>, professor dos cursos de TI da Uniube.</p>
         <div class="intro-actions">
-          <a class="button primary" href="maratona-programacao-python/index.html">Iniciar pelo módulo 1</a>
-          <button class="button guide-download" id="open-guide-download" type="button" aria-haspopup="dialog" aria-controls="guide-download-dialog">Baixar dicas para usar no dia</button>
-          <a class="button" href="#modulos">Conhecer os módulos</a>
-          <a class="button" href="#videoaulas">Assistir às videoaulas</a>
+          <a class="button primary" href="maratona-programacao-python/index.html">Iniciar pelo módulo 1 <i class="button-icon fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <button class="button guide-download" id="open-guide-download" type="button" aria-haspopup="dialog" aria-controls="guide-download-dialog">Baixar dicas para usar no dia <i class="button-icon fa-solid fa-download" aria-hidden="true"></i></button>
+          <a class="button" href="#modulos">Conhecer os módulos <i class="button-icon fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+          <a class="button" href="#videoaulas">Assistir às videoaulas <i class="button-icon fa-solid fa-play" aria-hidden="true"></i></a>
         </div>
         <dialog class="download-dialog" id="guide-download-dialog" aria-labelledby="guide-download-title">
           <div class="download-dialog-heading">
@@ -57,12 +65,12 @@
             <a class="download-option is-color" href="assets/guias/guia-de-bolso-maratona-de-programacao.pdf" download>
               <span class="download-option-icon" aria-hidden="true">RGB</span>
               <span><strong>Versão colorida</strong><small>Ideal para ler no computador, tablet ou celular.</small></span>
-              <b aria-hidden="true">↓</b>
+              <i class="download-option-arrow fa-solid fa-download" aria-hidden="true"></i>
             </a>
             <a class="download-option is-print" href="assets/guias/manual-maratona-python-impressao-economica.pdf" download>
               <span class="download-option-icon" aria-hidden="true">P&amp;B</span>
               <span><strong>Versão para imprimir</strong><small>Preto e branco, fundo branco e baixo consumo de tinta.</small></span>
-              <b aria-hidden="true">↓</b>
+              <i class="download-option-arrow fa-solid fa-download" aria-hidden="true"></i>
             </a>
           </div>
           <form method="dialog">
@@ -108,7 +116,7 @@
           <h3>Maratona com Python</h3>
           <p>Introdução à programação competitiva, decisões, repetição, funções, coleções, matemática, estatística e primeiros problemas.</p>
           <span class="module-topics">Python · lógica · coleções · matemática · beecrowd</span>
-          <strong class="module-action">Abrir módulo</strong>
+          <strong class="module-action">Abrir módulo <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></strong>
         </a>
 
         <a class="module-card module-structures" href="estrutura_de_dados/index.html">
@@ -116,7 +124,7 @@
           <h3>Estruturas de dados</h3>
           <p>Arrays, pilhas, filas, deques, listas encadeadas, filas de prioridade e ordenação com visualizações interativas.</p>
           <span class="module-topics">LIFO · FIFO · nós · ordenação</span>
-          <strong class="module-action">Abrir módulo</strong>
+          <strong class="module-action">Abrir módulo <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></strong>
         </a>
 
         <a class="module-card module-strings" href="strings/index.html">
@@ -124,7 +132,7 @@
           <h3>Strings</h3>
           <p>Leitura caractere a caractere, índices, transformações, comparação, simulação e programação dinâmica aplicada a textos.</p>
           <span class="module-topics">caracteres · índices · padrões</span>
-          <strong class="module-action">Abrir módulo</strong>
+          <strong class="module-action">Abrir módulo <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></strong>
         </a>
 
         <a class="module-card module-graphs" href="grafos/index.html">
@@ -132,7 +140,7 @@
           <h3>Grafos</h3>
           <p>Representações, lista de adjacência, DFS, BFS, grafos ponderados, Dijkstra e acompanhamento visual das estruturas auxiliares.</p>
           <span class="module-topics">vértices · arestas · caminhos</span>
-          <strong class="module-action">Abrir módulo</strong>
+          <strong class="module-action">Abrir módulo <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></strong>
         </a>
 
         <a class="module-card module-geometry" href="geometria-computacional/index.html">
@@ -140,7 +148,7 @@
           <h3>Geometria computacional</h3>
           <p>Distâncias, círculos, segmentos, circuncentro, áreas e modelagem geométrica apoiada por diagramas e testes interativos.</p>
           <span class="module-topics">pontos · vetores · círculos</span>
-          <strong class="module-action">Abrir módulo</strong>
+          <strong class="module-action">Abrir módulo <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></strong>
         </a>
 
         <a class="module-card module-paradigms" href="paradigmas/index.html">
@@ -148,7 +156,7 @@
           <h3>Paradigmas algorítmicos</h3>
           <p>Força bruta, recursão, backtracking, divisão e conquista, estratégias gulosas, programação dinâmica, memoização e poda.</p>
           <span class="module-topics">estratégia · complexidade · corretude</span>
-          <strong class="module-action">Abrir módulo</strong>
+          <strong class="module-action">Abrir módulo <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></strong>
         </a>
       </div>
     </section>
@@ -169,7 +177,7 @@
           </div>
           <div class="video-info playlist-now-playing" aria-live="polite">
             <div><span id="playlist-label">Apresentação</span><h3 id="playlist-title">Introdução</h3></div>
-            <a id="playlist-drive-link" href="https://drive.google.com/file/d/1C3GG76HYe6sYeyKyLis-sKhuZE-YTipA/view?usp=drive_link" target="_blank" rel="noreferrer">Abrir no Drive ↗</a>
+            <a id="playlist-drive-link" href="https://drive.google.com/file/d/1C3GG76HYe6sYeyKyLis-sKhuZE-YTipA/view?usp=drive_link" target="_blank" rel="noreferrer">Abrir no Drive <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
           </div>
         </article>
 
@@ -179,13 +187,13 @@
             <small>7 vídeos</small>
           </header>
           <ol class="playlist-list">
-            <li><button class="playlist-item is-active" type="button" aria-pressed="true" data-label="Apresentação" data-title="Introdução" data-src="https://drive.google.com/file/d/1C3GG76HYe6sYeyKyLis-sKhuZE-YTipA/preview" data-href="https://drive.google.com/file/d/1C3GG76HYe6sYeyKyLis-sKhuZE-YTipA/view?usp=drive_link"><span class="playlist-index">01</span><span class="playlist-copy"><small>Apresentação</small><strong>Introdução</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
-            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 01" data-title="Módulo iniciante" data-src="https://drive.google.com/file/d/1uMP8Q-e1KwK6UHQwdRiPQRFl2m8O5Z-b/preview" data-href="https://drive.google.com/file/d/1uMP8Q-e1KwK6UHQwdRiPQRFl2m8O5Z-b/view?usp=drive_link"><span class="playlist-index">02</span><span class="playlist-copy"><small>Módulo 01</small><strong>Módulo iniciante</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
-            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 02" data-title="Estruturas de dados" data-src="https://drive.google.com/file/d/19bn8gLuqQqPosVqCEiagEkqm2-IlaMvp/preview" data-href="https://drive.google.com/file/d/19bn8gLuqQqPosVqCEiagEkqm2-IlaMvp/view?usp=drive_link"><span class="playlist-index">03</span><span class="playlist-copy"><small>Módulo 02</small><strong>Estruturas de dados</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
-            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 03" data-title="Strings" data-src="https://drive.google.com/file/d/17EbieNQ757KVh78HpUpnasUFBGMEqhmU/preview" data-href="https://drive.google.com/file/d/17EbieNQ757KVh78HpUpnasUFBGMEqhmU/view?usp=drive_link"><span class="playlist-index">04</span><span class="playlist-copy"><small>Módulo 03</small><strong>Strings</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
-            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 04" data-title="Grafos" data-src="https://drive.google.com/file/d/1D7uGPHBpgXQmhX6I9pwQBZtyJUpWpdxo/preview" data-href="https://drive.google.com/file/d/1D7uGPHBpgXQmhX6I9pwQBZtyJUpWpdxo/view?usp=drive_link"><span class="playlist-index">05</span><span class="playlist-copy"><small>Módulo 04</small><strong>Grafos</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
-            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 05" data-title="Geometria computacional" data-src="https://drive.google.com/file/d/1SRK3n_U9ZBtn7rs_B1XK1N8hEoghjXyI/preview" data-href="https://drive.google.com/file/d/1SRK3n_U9ZBtn7rs_B1XK1N8hEoghjXyI/view?usp=drive_link"><span class="playlist-index">06</span><span class="playlist-copy"><small>Módulo 05</small><strong>Geometria computacional</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
-            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 06" data-title="Paradigmas algorítmicos" data-src="https://drive.google.com/file/d/1ZH0Tt9Nl89Q1Ra6yIYlMXuCDwwvF_sua/preview" data-href="https://drive.google.com/file/d/1ZH0Tt9Nl89Q1Ra6yIYlMXuCDwwvF_sua/view?usp=drive_link"><span class="playlist-index">07</span><span class="playlist-copy"><small>Módulo 06</small><strong>Paradigmas algorítmicos</strong></span><span class="playlist-play" aria-hidden="true">▶</span></button></li>
+            <li><button class="playlist-item is-active" type="button" aria-pressed="true" data-label="Apresentação" data-title="Introdução" data-src="https://drive.google.com/file/d/1C3GG76HYe6sYeyKyLis-sKhuZE-YTipA/preview" data-href="https://drive.google.com/file/d/1C3GG76HYe6sYeyKyLis-sKhuZE-YTipA/view?usp=drive_link"><span class="playlist-index">01</span><span class="playlist-copy"><small>Apresentação</small><strong>Introdução</strong></span><span class="playlist-play" aria-hidden="true"><i class="fa-solid fa-play"></i></span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 01" data-title="Módulo iniciante" data-src="https://drive.google.com/file/d/1uMP8Q-e1KwK6UHQwdRiPQRFl2m8O5Z-b/preview" data-href="https://drive.google.com/file/d/1uMP8Q-e1KwK6UHQwdRiPQRFl2m8O5Z-b/view?usp=drive_link"><span class="playlist-index">02</span><span class="playlist-copy"><small>Módulo 01</small><strong>Módulo iniciante</strong></span><span class="playlist-play" aria-hidden="true"><i class="fa-solid fa-play"></i></span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 02" data-title="Estruturas de dados" data-src="https://drive.google.com/file/d/19bn8gLuqQqPosVqCEiagEkqm2-IlaMvp/preview" data-href="https://drive.google.com/file/d/19bn8gLuqQqPosVqCEiagEkqm2-IlaMvp/view?usp=drive_link"><span class="playlist-index">03</span><span class="playlist-copy"><small>Módulo 02</small><strong>Estruturas de dados</strong></span><span class="playlist-play" aria-hidden="true"><i class="fa-solid fa-play"></i></span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 03" data-title="Strings" data-src="https://drive.google.com/file/d/17EbieNQ757KVh78HpUpnasUFBGMEqhmU/preview" data-href="https://drive.google.com/file/d/17EbieNQ757KVh78HpUpnasUFBGMEqhmU/view?usp=drive_link"><span class="playlist-index">04</span><span class="playlist-copy"><small>Módulo 03</small><strong>Strings</strong></span><span class="playlist-play" aria-hidden="true"><i class="fa-solid fa-play"></i></span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 04" data-title="Grafos" data-src="https://drive.google.com/file/d/1D7uGPHBpgXQmhX6I9pwQBZtyJUpWpdxo/preview" data-href="https://drive.google.com/file/d/1D7uGPHBpgXQmhX6I9pwQBZtyJUpWpdxo/view?usp=drive_link"><span class="playlist-index">05</span><span class="playlist-copy"><small>Módulo 04</small><strong>Grafos</strong></span><span class="playlist-play" aria-hidden="true"><i class="fa-solid fa-play"></i></span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 05" data-title="Geometria computacional" data-src="https://drive.google.com/file/d/1SRK3n_U9ZBtn7rs_B1XK1N8hEoghjXyI/preview" data-href="https://drive.google.com/file/d/1SRK3n_U9ZBtn7rs_B1XK1N8hEoghjXyI/view?usp=drive_link"><span class="playlist-index">06</span><span class="playlist-copy"><small>Módulo 05</small><strong>Geometria computacional</strong></span><span class="playlist-play" aria-hidden="true"><i class="fa-solid fa-play"></i></span></button></li>
+            <li><button class="playlist-item" type="button" aria-pressed="false" data-label="Módulo 06" data-title="Paradigmas algorítmicos" data-src="https://drive.google.com/file/d/1ZH0Tt9Nl89Q1Ra6yIYlMXuCDwwvF_sua/preview" data-href="https://drive.google.com/file/d/1ZH0Tt9Nl89Q1Ra6yIYlMXuCDwwvF_sua/view?usp=drive_link"><span class="playlist-index">07</span><span class="playlist-copy"><small>Módulo 06</small><strong>Paradigmas algorítmicos</strong></span><span class="playlist-play" aria-hidden="true"><i class="fa-solid fa-play"></i></span></button></li>
           </ol>
         </aside>
       </div>
@@ -236,8 +244,25 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <span><strong>maratona.mateusvalente.dev</strong><small>Curso de Inverno de Programação · Uniube</small></span>
-      <span>Material de autoria do Professor Mestre Mateus de Sousa Valente, dos cursos de TI da Uniube. Todos os direitos reservados &copy; 2026.</span>
+      <div class="footer-identity">
+        <strong>maratona.mateusvalente.dev</strong>
+        <small>Curso de Inverno de Programação · Uniube</small>
+      </div>
+      <nav class="footer-contact-grid" aria-label="Contato e repositórios">
+        <a href="mailto:mateus.sousa.valente@gmail.com">
+          <i class="footer-service-icon fa-solid fa-envelope" aria-hidden="true"></i><span><small>Fale por e-mail</small><strong>E-mail</strong></span><i class="footer-contact-arrow fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        </a>
+        <a href="https://br.linkedin.com/in/mateus-valente-b6978a173" target="_blank" rel="noreferrer">
+          <i class="footer-service-icon fa-brands fa-linkedin-in" aria-hidden="true"></i><span><small>Perfil profissional</small><strong>LinkedIn</strong></span><i class="footer-contact-arrow fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        </a>
+        <a href="https://github.com/mateusvalente" target="_blank" rel="noreferrer">
+          <i class="footer-service-icon fa-brands fa-github" aria-hidden="true"></i><span><small>Código e projetos</small><strong>GitHub principal</strong></span><i class="footer-contact-arrow fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        </a>
+        <a href="https://github.com/mateusvalente/maratona-de-programacao" target="_blank" rel="noreferrer">
+          <i class="footer-service-icon fa-solid fa-code-branch" aria-hidden="true"></i><span><small>Material deste curso</small><strong>Repositório da maratona</strong></span><i class="footer-contact-arrow fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        </a>
+      </nav>
+      <p class="footer-legal">Material de autoria do Professor Mestre Mateus de Sousa Valente, dos cursos de TI da Uniube. Todos os direitos reservados &copy; 2026.</p>
     </div>
   </footer>
   <script src="portal.js"></script>

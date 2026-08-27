@@ -67,7 +67,7 @@ if (matrixCanvas) {
 
     for (let x = 0; x < matrixWidth; x += matrixFontSize * 2) {
       for (let y = matrixFontSize; y < matrixHeight; y += matrixFontSize * 4) {
-        matrixContext.fillStyle = "rgba(97, 227, 165, 0.1)";
+        matrixContext.fillStyle = "rgba(97, 227, 165, 0.18)";
         matrixContext.fillText(randomGlyph(), x, y);
       }
     }
@@ -88,25 +88,21 @@ if (matrixCanvas) {
       const deltaX = originalX - pointer.x;
       const deltaY = originalY - pointer.y;
       const distance = Math.hypot(deltaX, deltaY);
-      const insidePointerField = pointer.active && distance < 150;
-      let drawX = originalX;
-      let drawY = originalY;
+      const pointerRadius = 175;
+      const insidePointerField = pointer.active && distance < pointerRadius;
 
       if (insidePointerField) {
-        const force = (1 - distance / 150) * 30;
-        const safeDistance = Math.max(distance, 1);
-        drawX += (deltaX / safeDistance) * force;
-        drawY += (deltaY / safeDistance) * force;
-        matrixContext.fillStyle = distance < 70 ? "rgba(255, 209, 102, 0.9)" : "rgba(107, 188, 255, 0.75)";
-        matrixContext.shadowColor = "rgba(107, 188, 255, 0.65)";
-        matrixContext.shadowBlur = 10;
+        const intensity = 1 - distance / pointerRadius;
+        matrixContext.fillStyle = `rgba(97, 227, 165, ${0.58 + intensity * 0.4})`;
+        matrixContext.shadowColor = "rgba(97, 227, 165, 0.9)";
+        matrixContext.shadowBlur = 6 + intensity * 12;
       } else {
-        const brightness = 0.14 + matrixSpeeds[column] * 0.17;
+        const brightness = 0.22 + matrixSpeeds[column] * 0.22;
         matrixContext.fillStyle = `rgba(97, 227, 165, ${brightness})`;
         matrixContext.shadowBlur = 0;
       }
 
-      matrixContext.fillText(randomGlyph(), drawX, drawY);
+      matrixContext.fillText(randomGlyph(), originalX, originalY);
       matrixContext.shadowBlur = 0;
       matrixDrops[column] += matrixSpeeds[column];
 

@@ -55,7 +55,7 @@ body::before {
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: .44;
+  opacity: .62;
   pointer-events: none;
 }
 

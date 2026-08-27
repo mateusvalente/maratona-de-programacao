@@ -311,6 +311,8 @@ p { color: var(--muted); }
   font-size: .82rem;
   font-weight: 700;
   text-decoration: none;
+  font: inherit;
+  cursor: pointer;
   transition: border-color .2s ease, background .2s ease, transform .2s ease;
 }
 
@@ -345,6 +347,117 @@ p { color: var(--muted); }
   border-color: var(--blue);
   transform: translateY(-2px);
 }
+
+.download-dialog {
+  width: min(620px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 16px;
+  color: var(--text);
+  background: #10191e;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, .62);
+}
+
+.download-dialog::backdrop {
+  background: rgba(4, 8, 10, .76);
+  backdrop-filter: blur(5px);
+}
+
+.download-dialog-heading {
+  padding: 26px 26px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.download-dialog-heading .eyebrow { margin-bottom: 8px; }
+
+.download-dialog-heading h2 {
+  margin: 0;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+}
+
+.download-dialog-heading p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.download-options {
+  display: grid;
+  gap: 10px;
+  padding: 18px 26px;
+}
+
+.download-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  text-decoration: none;
+  background: rgba(255, 255, 255, .025);
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+
+.download-option:hover,
+.download-option:focus-visible {
+  border-color: var(--green);
+  background: rgba(89, 227, 175, .07);
+  transform: translateY(-2px);
+}
+
+.download-option-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 10px;
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--green), var(--blue), var(--yellow));
+  font-family: "DM Mono", monospace;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.download-option.is-print .download-option-icon {
+  border: 1px solid #839099;
+  color: #f4f7f8;
+  background: #263138;
+}
+
+.download-option strong,
+.download-option small { display: block; }
+
+.download-option small {
+  margin-top: 3px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.download-option b {
+  color: var(--green);
+  font-size: 1.15rem;
+}
+
+.download-dialog form {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 26px 22px;
+}
+
+.dialog-close {
+  padding: 8px 12px;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dialog-close:hover,
+.dialog-close:focus-visible { color: var(--text); }
 
 .course-facts {
   display: grid;

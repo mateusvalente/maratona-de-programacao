@@ -1,0 +1,5 @@
+2026/08/27-17:18:19.577 a380 Creating DB C:\Users\mateusv.dti\Desktop\maratona-de-programacao\tmp\edge-download-dialog-qa-2\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/08/27-17:18:19.628 a380 Reusing MANIFEST C:\Users\mateusv.dti\Desktop\maratona-de-programacao\tmp\edge-download-dialog-qa-2\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/08/27-17:18:20.047 809c Level-0 table #5: started
+2026/08/27-17:18:20.054 809c Level-0 table #5: 683273 bytes OK
+2026/08/27-17:18:20.056 809c Delete type=0 #3

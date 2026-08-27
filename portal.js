@@ -3,6 +3,28 @@ const playlistVideo = document.querySelector("#playlist-video");
 const playlistLabel = document.querySelector("#playlist-label");
 const playlistTitle = document.querySelector("#playlist-title");
 const playlistDriveLink = document.querySelector("#playlist-drive-link");
+const guideDownloadButton = document.querySelector("#open-guide-download");
+const guideDownloadDialog = document.querySelector("#guide-download-dialog");
+
+if (guideDownloadButton && guideDownloadDialog) {
+  guideDownloadButton.addEventListener("click", () => {
+    if (typeof guideDownloadDialog.showModal === "function") {
+      guideDownloadDialog.showModal();
+      return;
+    }
+
+    guideDownloadDialog.setAttribute("open", "");
+  });
+
+  guideDownloadDialog.addEventListener("click", (event) => {
+    if (event.target === guideDownloadDialog) guideDownloadDialog.close();
+  });
+
+  guideDownloadDialog.querySelectorAll(".download-option").forEach((option) => {
+    option.addEventListener("click", () => guideDownloadDialog.close());
+  });
+
+}
 
 playlistItems.forEach((item) => {
   item.addEventListener("click", () => {
@@ -31,7 +53,13 @@ const matrixCanvas = document.querySelector("#matrix-background");
 if (matrixCanvas) {
   const matrixContext = matrixCanvas.getContext("2d");
   const matrixGlyphs = "01{}[]<>/=+*-_PYTHONALGORITMO";
-  const pointer = { x: -1000, y: -1000, active: false };
+  const pointer = {
+    x: -1000,
+    y: -1000,
+    active: false,
+    glow: 0,
+    lastMoveAt: 0,
+  };
   let matrixWidth = 0;
   let matrixHeight = 0;
   let matrixFontSize = 17;
@@ -54,7 +82,7 @@ if (matrixCanvas) {
     const columnCount = Math.ceil(matrixWidth / matrixFontSize);
     const visibleRows = Math.ceil(matrixHeight / matrixFontSize);
     matrixDrops = Array.from({ length: columnCount }, () => Math.random() * (visibleRows + 24) - 24);
-    matrixSpeeds = Array.from({ length: columnCount }, () => 0.08 + Math.random() * 0.18);
+    matrixSpeeds = Array.from({ length: columnCount }, () => 0.35 + Math.random() * 0.75);
   }
 
   function randomGlyph() {
@@ -67,7 +95,7 @@ if (matrixCanvas) {
 
     for (let x = 0; x < matrixWidth; x += matrixFontSize * 2) {
       for (let y = matrixFontSize; y < matrixHeight; y += matrixFontSize * 4) {
-        matrixContext.fillStyle = "rgba(97, 227, 165, 0.18)";
+        matrixContext.fillStyle = "rgba(97, 227, 165, 0.1)";
         matrixContext.fillText(randomGlyph(), x, y);
       }
     }
@@ -78,41 +106,41 @@ if (matrixCanvas) {
     if (document.hidden || timestamp - lastMatrixFrame < 38) return;
     lastMatrixFrame = timestamp;
 
-    matrixContext.fillStyle = "rgba(12, 17, 20, 0.24)";
+    const glowHoldTime = 70;
+    const glowTarget = pointer.active && timestamp - pointer.lastMoveAt < glowHoldTime ? 1 : 0;
+    const glowEase = glowTarget > pointer.glow ? 0.58 : 0.32;
+    pointer.glow += (glowTarget - pointer.glow) * glowEase;
+    if (pointer.glow < 0.01) pointer.glow = 0;
+
+    matrixContext.fillStyle = "rgba(12, 17, 20, 0.14)";
     matrixContext.fillRect(0, 0, matrixWidth, matrixHeight);
     matrixContext.font = `500 ${matrixFontSize}px "DM Mono", monospace`;
 
     matrixDrops.forEach((drop, column) => {
       const originalX = column * matrixFontSize;
       const originalY = drop * matrixFontSize;
-      const trailLength = 13;
-      const pointerRadius = 78;
+      const pointerRadius = 38;
+      const distance = Math.hypot(originalX - pointer.x, originalY - pointer.y);
+      const insidePointerField = pointer.glow > 0 && distance < pointerRadius;
+      const baseBrightness = 0.14 + matrixSpeeds[column] * 0.17;
 
-      for (let trailIndex = 0; trailIndex < trailLength; trailIndex += 1) {
-        const glyphY = originalY - trailIndex * matrixFontSize * 1.55;
-        if (glyphY < -matrixFontSize || glyphY > matrixHeight + matrixFontSize) continue;
-
-        const distance = Math.hypot(originalX - pointer.x, glyphY - pointer.y);
-        const insidePointerField = pointer.active && distance < pointerRadius;
-        const trailFade = 1 - trailIndex / trailLength;
-        const baseBrightness = (0.08 + matrixSpeeds[column] * 0.08) * (0.32 + trailFade * 0.68);
-
-        if (insidePointerField) {
-          const intensity = 1 - distance / pointerRadius;
-          const highlightedBrightness = Math.min(1, baseBrightness + 0.6 + intensity * 0.3);
-          matrixContext.fillStyle = `rgba(116, 255, 187, ${highlightedBrightness})`;
-        } else {
-          matrixContext.fillStyle = `rgba(97, 227, 165, ${baseBrightness})`;
-        }
-
-        matrixContext.fillText(randomGlyph(), originalX, glyphY);
+      if (insidePointerField) {
+        const intensity = 1 - distance / pointerRadius;
+        const highlightedBrightness = Math.min(
+          1,
+          baseBrightness + pointer.glow * (0.42 + intensity * 0.42),
+        );
+        matrixContext.fillStyle = `rgba(116, 255, 187, ${highlightedBrightness})`;
+      } else {
+        matrixContext.fillStyle = `rgba(97, 227, 165, ${baseBrightness})`;
       }
 
+      matrixContext.fillText(randomGlyph(), originalX, originalY);
       matrixDrops[column] += matrixSpeeds[column];
 
       if (originalY > matrixHeight + matrixFontSize && Math.random() > 0.965) {
         matrixDrops[column] = -Math.random() * 18;
-        matrixSpeeds[column] = 0.08 + Math.random() * 0.18;
+        matrixSpeeds[column] = 0.35 + Math.random() * 0.75;
       }
     });
   }
@@ -135,6 +163,7 @@ if (matrixCanvas) {
     pointer.x = event.clientX;
     pointer.y = event.clientY;
     pointer.active = true;
+    pointer.lastMoveAt = performance.now();
   }, { passive: true });
 
   window.addEventListener("pointerout", (event) => {

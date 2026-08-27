@@ -43,10 +43,32 @@
         <p class="teacher-line">Material preparado pelo <strong>Professor Mestre Mateus de Sousa Valente</strong>, professor dos cursos de TI da Uniube.</p>
         <div class="intro-actions">
           <a class="button primary" href="maratona-programacao-python/index.html">Iniciar pelo módulo 1</a>
-          <a class="button guide-download" href="assets/guias/guia-de-bolso-maratona-de-programacao.pdf" download>Baixar dicas para usar no dia</a>
+          <button class="button guide-download" id="open-guide-download" type="button" aria-haspopup="dialog" aria-controls="guide-download-dialog">Baixar dicas para usar no dia</button>
           <a class="button" href="#modulos">Conhecer os módulos</a>
           <a class="button" href="#videoaulas">Assistir às videoaulas</a>
         </div>
+        <dialog class="download-dialog" id="guide-download-dialog" aria-labelledby="guide-download-title">
+          <div class="download-dialog-heading">
+            <span class="eyebrow">Manual com 30 programas</span>
+            <h2 id="guide-download-title">Escolha a versão do PDF</h2>
+            <p>As duas versões têm exatamente o mesmo conteúdo. Muda apenas a apresentação.</p>
+          </div>
+          <div class="download-options">
+            <a class="download-option is-color" href="assets/guias/guia-de-bolso-maratona-de-programacao.pdf" download>
+              <span class="download-option-icon" aria-hidden="true">RGB</span>
+              <span><strong>Versão colorida</strong><small>Ideal para ler no computador, tablet ou celular.</small></span>
+              <b aria-hidden="true">↓</b>
+            </a>
+            <a class="download-option is-print" href="assets/guias/manual-maratona-python-impressao-economica.pdf" download>
+              <span class="download-option-icon" aria-hidden="true">P&amp;B</span>
+              <span><strong>Versão para imprimir</strong><small>Preto e branco, fundo branco e baixo consumo de tinta.</small></span>
+              <b aria-hidden="true">↓</b>
+            </a>
+          </div>
+          <form method="dialog">
+            <button class="dialog-close" type="submit">Cancelar</button>
+          </form>
+        </dialog>
         <div class="course-facts" aria-label="Resumo do curso">
           <span><strong>6</strong> módulos de aprendizagem</span>
           <span><strong>Python 3</strong> como linguagem principal</span>

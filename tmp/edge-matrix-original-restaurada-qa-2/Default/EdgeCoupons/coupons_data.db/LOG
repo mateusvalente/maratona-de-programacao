@@ -1,0 +1,5 @@
+2026/08/27-17:21:30.344 901c Creating DB C:\Users\mateusv.dti\Desktop\maratona-de-programacao\tmp\edge-matrix-original-restaurada-qa-2\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/08/27-17:21:30.385 901c Reusing MANIFEST C:\Users\mateusv.dti\Desktop\maratona-de-programacao\tmp\edge-matrix-original-restaurada-qa-2\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/08/27-17:21:30.638 8e18 Level-0 table #5: started
+2026/08/27-17:21:30.646 8e18 Level-0 table #5: 683273 bytes OK
+2026/08/27-17:21:30.649 8e18 Delete type=0 #3

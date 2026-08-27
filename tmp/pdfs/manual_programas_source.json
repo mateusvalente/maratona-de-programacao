@@ -1,0 +1,655 @@
+{
+  "metadata": {
+    "title": "30 programas comentados para maratona em Python",
+    "author": "Professor Mestre Mateus de Sousa Valente"
+  },
+  "cover": {
+    "title": "Entrada, cálculo e print com casas decimais",
+    "subtitle": "30 programas completos e comentados em Python"
+  },
+  "language_exceptions": [
+    "nao",
+    "codigo",
+    "pagina",
+    "proximo",
+    "operacao",
+    "operacoes",
+    "decisao",
+    "decisoes",
+    "acao",
+    "acoes",
+    "tambem"
+  ],
+  "sections": [
+    {
+      "title": "Entrada, cálculo e print com casas decimais",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que lê dois valores, calcula resultados e controla exatamente a apresentação decimal."
+        },
+        {
+          "type": "code",
+          "text": "import sys\n\n\ndef main():\n    # split separa a linha; map converte cada parte para float.\n    a, b = map(float, input().split())\n\n    # Os cálculos usam a precisão original dos valores.\n    soma = a + b\n    media = soma / 2.0\n    produto = a * b\n\n    # :.2f arredonda apenas na apresentação e sempre mostra 2 casas.\n    print(f\"Soma = {soma:.2f}\")\n    print(f\"Media = {media:.2f}\")\n    print(f\"Produto = {produto:.2f}\")\n\n    # O juiz normalmente espera uma quebra após a última linha.\n    # print já acrescenta essa quebra automaticamente.\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "input() devolve texto; a conversão define quais operações podem ser feitas. A f-string separa cálculo de formatação."
+        },
+        {
+          "type": "warning",
+          "text": "Não arredonde antes de terminar os cálculos. Confira maiúsculas, rótulos, espaços e número de casas exigidos."
+        }
+      ]
+    },
+    {
+      "title": "T casos com if, elif e else",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que processa uma quantidade declarada de notas e classifica cada caso por intervalos."
+        },
+        {
+          "type": "code",
+          "text": "def classificar(nota):\n    # A ordem impede que um intervalo capture outro.\n    if 90 <= nota <= 100:\n        return \"A\"\n    elif 70 <= nota < 90:\n        return \"B\"\n    elif 60 <= nota < 70:\n        return \"C\"\n    elif 0 <= nota < 60:\n        return \"D\"\n    else:\n        return \"nota invalida\"\n\n\ndef main():\n    # A primeira linha informa quantos casos virão.\n    quantidade = int(input())\n\n    for caso in range(1, quantidade + 1):\n        nota = int(input())\n        conceito = classificar(nota)\n        print(f\"Caso {caso}: {conceito}\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "for range(1, T + 1) produz casos numerados de 1 a T. A função devolve a decisão; o main cuida do protocolo."
+        },
+        {
+          "type": "warning",
+          "text": "Teste 0, 59, 60, 69, 70, 89, 90 e 100. Bordas inclusivas são fonte frequente de WA."
+        }
+      ]
+    },
+    {
+      "title": "while, sentinela, break e continue",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que lê valores até zero, ignora negativos e acumula somente os positivos válidos."
+        },
+        {
+          "type": "code",
+          "text": "def main():\n    quantidade = 0\n    soma = 0\n\n    while True:\n        valor = int(input())\n\n        # Zero encerra a entrada e não é processado.\n        if valor == 0:\n            break\n\n        # Negativos são ignorados nesta regra.\n        if valor < 0:\n            continue\n\n        # Só valores positivos chegam até aqui.\n        quantidade += 1\n        soma += valor\n\n    print(f\"Quantidade: {quantidade}\")\n    print(f\"Soma: {soma}\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "break encerra o laço inteiro. continue pula apenas o restante da repetição atual e volta à leitura."
+        },
+        {
+          "type": "warning",
+          "text": "Em laços com índice, atualize o estado antes de um possível continue; caso contrário o mesmo estado pode repetir para sempre."
+        }
+      ]
+    },
+    {
+      "title": "Leitura até EOF preservando a linha",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que recebe frases até o fim do arquivo e conta letras, dígitos e espaços em cada uma."
+        },
+        {
+          "type": "code",
+          "text": "import sys\n\n\ndef analisar(texto):\n    letras = 0\n    digitos = 0\n    espacos = 0\n\n    for caractere in texto:\n        if caractere.isalpha():\n            letras += 1\n        elif caractere.isdigit():\n            digitos += 1\n        elif caractere == \" \":\n            espacos += 1\n\n    return letras, digitos, espacos\n\n\ndef main():\n    # O for termina naturalmente quando o arquivo acaba.\n    for linha in sys.stdin:\n        # Remove apenas a quebra, preservando outros espaços.\n        texto = linha.rstrip(\"\\n\")\n        l, d, e = analisar(texto)\n        print(l, d, e)\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "EOF não é um valor da entrada: é a ausência de outra linha. for linha in sys.stdin expressa esse formato diretamente."
+        },
+        {
+          "type": "warning",
+          "text": "strip() também remove espaços significativos das pontas. Use rstrip('\\n') quando o conteúdo completo da linha importa."
+        }
+      ]
+    },
+    {
+      "title": "Entrada e saída rápidas em bloco",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo para muitos tokens: lê tudo como bytes, consome com iterador e escreve todas as respostas de uma vez."
+        },
+        {
+          "type": "code",
+          "text": "import sys\n\n\ndef main():\n    # read().split() é rápido quando espaços e linhas são equivalentes.\n    dados = iter(sys.stdin.buffer.read().split())\n    quantidade_de_casos = int(next(dados))\n    respostas = []\n\n    for _ in range(quantidade_de_casos):\n        tamanho = int(next(dados))\n        soma = 0\n\n        for _ in range(tamanho):\n            soma += int(next(dados))\n\n        # Guardamos texto para uma única escrita no final.\n        respostas.append(str(soma))\n\n    sys.stdout.write(\"\\n\".join(respostas) + \"\\n\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "O iterador consome exatamente os tokens do caso atual. join reduz milhares de chamadas de escrita."
+        },
+        {
+          "type": "warning",
+          "text": "Essa técnica perde a distinção entre linhas. Não a use quando frases, linhas vazias ou espaços internos fazem parte do dado."
+        }
+      ]
+    },
+    {
+      "title": "for, range, enumerate e matriz",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que lê uma matriz, percorre valores e índices e encontra a posição do maior elemento."
+        },
+        {
+          "type": "code",
+          "text": "def main():\n    linhas, colunas = map(int, input().split())\n    matriz = [\n        list(map(int, input().split()))\n        for _ in range(linhas)\n    ]\n\n    soma = 0\n    maior = matriz[0][0]\n    melhor_linha = 0\n    melhor_coluna = 0\n\n    for i, linha in enumerate(matriz):\n        for j, valor in enumerate(linha):\n            soma += valor\n\n            if valor > maior:\n                maior = valor\n                melhor_linha = i\n                melhor_coluna = j\n\n    print(f\"Soma: {soma}\")\n    print(f\"Maior: {maior}\")\n    print(f\"Posicao: {melhor_linha + 1} {melhor_coluna + 1}\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "enumerate entrega posição e valor. Índices internos começam em 0; a saída pode exigir conversão para base 1."
+        },
+        {
+          "type": "warning",
+          "text": "Não assuma matriz não vazia sem conferir as restrições. Cada linha também precisa conter a quantidade declarada de colunas."
+        }
+      ]
+    },
+    {
+      "title": "Varredura de lista com melhor resposta",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que encontra o palpite mais próximo e preserva o primeiro participante quando há empate."
+        },
+        {
+          "type": "code",
+          "text": "N = int(input().strip())\n\nfor _ in range(N):\n    QT, S = [int(x) for x in input().strip().split(' ')]\n\n    palpites = [int(x) for x in input().strip().split(' ')]\n\n    # Começamos considerando o primeiro aluno como o melhor.\n    melhor_palpite = 0\n    menor_diferenca = abs(S - palpites[0])\n\n    # Só trocamos em uma diferença estritamente menor; assim, empates mantêm\n    # o primeiro palpite, como exige o enunciado.\n    for i in range(1, QT):\n        if(menor_diferenca > abs(S - palpites[i])):\n            melhor_palpite = i\n            menor_diferenca = abs(S - palpites[i])\n    \n    print(melhor_palpite + 1)"
+        },
+        {
+          "type": "callout",
+          "text": "A melhor resposta começa no primeiro elemento. A comparação estrita atualiza apenas quando a nova distância é realmente menor."
+        },
+        {
+          "type": "warning",
+          "text": "Trocar <= por < altera o desempate. A posição impressa é índice + 1."
+        }
+      ]
+    },
+    {
+      "title": "Funções, math e estatística básica",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que decompõe cálculos em funções e imprime distância, média e mediana."
+        },
+        {
+          "type": "code",
+          "text": "import math\n\n\ndef distancia(x1, y1, x2, y2):\n    # hypot calcula sqrt(dx² + dy²).\n    return math.hypot(x1 - x2, y1 - y2)\n\n\ndef media(valores):\n    return sum(valores) / len(valores)\n\n\ndef mediana(valores):\n    ordenados = sorted(valores)\n    n = len(ordenados)\n    meio = n // 2\n\n    if n % 2 == 1:\n        return ordenados[meio]\n    return (ordenados[meio - 1] + ordenados[meio]) / 2\n\n\ndef main():\n    x1, y1, x2, y2 = map(float, input().split())\n    n = int(input())\n    valores = list(map(float, input().split()))\n    assert len(valores) == n\n\n    print(f\"Distancia: {distancia(x1, y1, x2, y2):.3f}\")\n    print(f\"Media: {media(valores):.3f}\")\n    print(f\"Mediana: {mediana(valores):.3f}\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "Funções separam contratos pequenos: parâmetros entram, return devolve o resultado e print fica no programa principal."
+        },
+        {
+          "type": "warning",
+          "text": "math.sin recebe radianos. Quando o enunciado fornece graus, converta com math.radians(angulo)."
+        }
+      ]
+    },
+    {
+      "title": "Dicionário e set para frequências",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que conta palavras, remove duplicatas e responde consultas de ocorrência."
+        },
+        {
+          "type": "code",
+          "text": "def main():\n    n, q = map(int, input().split())\n    palavras = input().split()\n    assert len(palavras) == n\n\n    frequencia = {}\n    unicas = set()\n\n    for palavra in palavras:\n        frequencia[palavra] = frequencia.get(palavra, 0) + 1\n        unicas.add(palavra)\n\n    print(f\"Distintas: {len(unicas)}\")\n\n    for _ in range(q):\n        consulta = input().strip()\n        print(frequencia.get(consulta, 0))\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "O dicionário associa palavra à contagem. O set responde pertencimento e quantidade de valores distintos."
+        },
+        {
+          "type": "warning",
+          "text": "set não preserva duplicatas. A ordem de iteração não deve ser usada como regra de saída, salvo garantia explícita."
+        }
+      ]
+    },
+    {
+      "title": "Ordenação com múltiplos critérios",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que ordena registros por peso decrescente, idade, altura e nome crescentes."
+        },
+        {
+          "type": "code",
+          "text": "quantidade_de_cenarios = int(input())\n\nfor numero_do_cenario in range(1, quantidade_de_cenarios + 1):\n    quantidade_de_renas, quantidade_escolhida = map(int, input().split())\n    renas = []\n\n    for _ in range(quantidade_de_renas):\n        nome, peso, idade, altura = input().split()\n\n        # Cada tupla funciona como um registro: os quatro campos da rena\n        # permanecem juntos durante toda a ordenação.\n        renas.append((nome, int(peso), int(idade), float(altura)))\n\n    # As tuplas-chave são comparadas campo a campo:\n    # peso decrescente, idade crescente, altura crescente e nome crescente.\n    renas.sort(\n        key=lambda rena: (\n            -rena[1],\n            rena[2],\n            rena[3],\n            rena[0],\n        )\n    )\n\n    print(f\"CENARIO {{{numero_do_cenario}}}\")\n\n    # A lista já está no ranking correto; basta imprimir o prefixo solicitado.\n    for posicao, rena in enumerate(renas[:quantidade_escolhida], start=1):\n        print(f\"{posicao} - {rena[0]}\")"
+        },
+        {
+          "type": "callout",
+          "text": "A chave é uma tupla comparada em cascata. O sinal negativo transforma apenas o peso em ordem decrescente."
+        },
+        {
+          "type": "warning",
+          "text": "reverse=True inverteria todos os critérios. A tupla permite misturar sentidos e desempates corretamente."
+        }
+      ]
+    },
+    {
+      "title": "Busca binária da primeira ocorrência",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que ordena mármores uma vez e usa bisect_left em cada consulta."
+        },
+        {
+          "type": "code",
+          "text": "# bisect_left faz busca binária e devolve a primeira posição possível.\nfrom bisect import bisect_left\n\n\n# O contador produz o cabeçalho CASE# pedido pelo enunciado.\ncaso = 0\n\nwhile True:\n    n, q = map(int, input().split())\n\n    # O par 0 0 encerra a entrada.\n    if n == 0 and q == 0:\n        break\n\n    caso += 1\n\n    valores = []\n\n    for _ in range(n):\n        valor = int(input())\n        valores.append(valor)\n\n    # A ordenação é o pré-processamento necessário para todas as consultas.\n    valores.sort()\n\n    print(f\"CASE# {caso}:\")\n\n    for _ in range(q):\n        valor = int(input())\n\n        # Procuramos a primeira ocorrência, não apenas qualquer ocorrência.\n        pos = bisect_left(valores, valor)\n\n        # O ponto de inserção ainda precisa ser validado.\n        if pos < len(valores) and valores[pos] == valor:\n            print(f\"{valor} found at {pos + 1}\")\n        else:\n            print(f\"{valor} not found\")"
+        },
+        {
+          "type": "callout",
+          "text": "bisect_left devolve o ponto mais à esquerda onde o alvo poderia entrar. O código ainda confirma se ele existe."
+        },
+        {
+          "type": "warning",
+          "text": "A busca depende da ordenação. A posição interna começa em 0, mas o enunciado imprime começando em 1."
+        }
+      ]
+    },
+    {
+      "title": "Pilha: balanço de parênteses até EOF",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1068. A pilha representa aberturas que ainda aguardam fechamento."
+        },
+        {
+          "type": "code",
+          "text": "import sys\n\n\ndef esta_balanceada(expressao):\n    \"\"\"Verifica se os parênteses de uma expressão abrem e fecham na ordem correta.\"\"\"\n    pilha = []\n\n    for caractere in expressao:\n        if caractere == \"(\":\n            # A abertura fica pendente até aparecer o fechamento correspondente.\n            pilha.append(caractere)\n        elif caractere == \")\":\n            # Fechar sem nenhuma abertura disponível invalida a expressão.\n            if not pilha:\n                return False\n            pilha.pop()\n\n    # Se ainda há itens na pilha, sobraram aberturas sem fechamento.\n    return not pilha\n\n\n# Cada linha da entrada é uma expressão; a leitura termina no fim do arquivo.\nfor linha in sys.stdin:\n    expressao = linha.rstrip(\"\\n\")\n    print(\"correct\" if esta_balanceada(expressao) else \"incorrect\")"
+        },
+        {
+          "type": "callout",
+          "text": "Ao ler '(', empilhe. Ao ler ')', precisa existir uma abertura disponível. No final, a pilha deve estar vazia."
+        },
+        {
+          "type": "warning",
+          "text": "Contagens iguais não garantem ordem correta. ')(' deve ser rejeitada imediatamente."
+        }
+      ]
+    },
+    {
+      "title": "Fila com deque: jogando cartas fora",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1110. O topo fica no front e a base no back do deque."
+        },
+        {
+          "type": "code",
+          "text": "from collections import deque\n\n\nwhile True:\n    quantidade = int(input())\n\n    # O valor zero não representa um baralho: ele encerra a entrada.\n    if quantidade == 0:\n        break\n\n    # O início do deque é o topo do baralho e o fim é a base.\n    cartas = deque(range(1, quantidade + 1))\n    descartadas = []\n\n    while len(cartas) > 1:\n        # A carta do topo sai definitivamente do baralho.\n        descartadas.append(cartas.popleft())\n\n        # A nova carta do topo é retirada e recolocada na base.\n        cartas.append(cartas.popleft())\n\n    texto_descartadas = \", \".join(map(str, descartadas))\n    print(f\"Discarded cards: {texto_descartadas}\")\n    print(f\"Remaining card: {cartas[0]}\")"
+        },
+        {
+          "type": "callout",
+          "text": "popleft descarta o topo; append(popleft()) move o novo topo para a base. Cada operação nas pontas custa O(1)."
+        },
+        {
+          "type": "warning",
+          "text": "list.pop(0) desloca os demais elementos e custa O(n). Para fila, prefira collections.deque."
+        }
+      ]
+    },
+    {
+      "title": "Pilha, fila e heap simulados em paralelo",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1340. Cada remoção elimina as estruturas que não poderiam devolver o valor observado."
+        },
+        {
+          "type": "code",
+          "text": "from collections import deque\nimport heapq\nimport sys\n\n\ndef classificar(operacoes):\n    \"\"\"Simula as três estruturas e classifica quais reproduzem as remoções.\"\"\"\n    pilha = []\n    fila = deque()\n    prioridade = []  # heapq é min-heap; valores negativos simulam uma max-heap.\n\n    pode_ser_pilha = True\n    pode_ser_fila = True\n    pode_ser_prioridade = True\n\n    for tipo, valor in operacoes:\n        if tipo == 1:\n            # Toda inserção é reproduzida nas candidatas que ainda são possíveis.\n            if pode_ser_pilha:\n                pilha.append(valor)\n            if pode_ser_fila:\n                fila.append(valor)\n            if pode_ser_prioridade:\n                heapq.heappush(prioridade, -valor)\n            continue\n\n        # Na remoção, o valor observado precisa ser exatamente o que a estrutura\n        # candidata retiraria naquele momento.\n        if pode_ser_pilha and (not pilha or pilha.pop() != valor):\n            pode_ser_pilha = False\n        if pode_ser_fila and (not fila or fila.popleft() != valor):\n            pode_ser_fila = False\n        if pode_ser_prioridade and (\n            not prioridade or -heapq.heappop(prioridade) != valor\n        ):\n            pode_ser_prioridade = False\n\n    candidatas = sum((pode_ser_pilha, pode_ser_fila, pode_ser_prioridade))\n    if candidatas == 0:\n        return \"impossible\"\n    if candidatas > 1:\n        return \"not sure\"\n    if pode_ser_pilha:\n        return \"stack\"\n    if pode_ser_fila:\n        return \"queue\"\n    return \"priority queue\"\n\n\n# Os casos aparecem até EOF. Usar um iterador facilita consumir exatamente\n# a quantidade de operações declarada em cada caso.\ndados = iter(map(int, sys.stdin.buffer.read().split()))\n\nwhile True:\n    try:\n        quantidade = next(dados)\n    except StopIteration:\n        break\n\n    operacoes = [(next(dados), next(dados)) for _ in range(quantidade)]\n    print(classificar(operacoes))"
+        },
+        {
+          "type": "callout",
+          "text": "A mesma inserção é reproduzida nas três candidatas. Uma remoção compara LIFO, FIFO e maior prioridade."
+        },
+        {
+          "type": "warning",
+          "text": "heapq é min-heap. Valores negativos simulam a retirada do maior elemento."
+        }
+      ]
+    },
+    {
+      "title": "Transformação de string em três fases",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1024. Cada regra recebe o resultado da fase anterior."
+        },
+        {
+          "type": "code",
+          "text": "import sys\n\n\ndef criptografar(mensagem):\n    \"\"\"Executa, na ordem, as três fases descritas pelo enunciado.\"\"\"\n    # Fase 1: somente letras ASCII avançam três códigos.\n    deslocada = [\n        chr(ord(caractere) + 3)\n        if \"A\" <= caractere <= \"Z\" or \"a\" <= caractere <= \"z\"\n        else caractere\n        for caractere in mensagem\n    ]\n    # Fase 2: a mensagem inteira é invertida.\n    invertida = deslocada[::-1]\n    metade = len(invertida) // 2\n    # Fase 3: os caracteres da metade final recuam um código.\n    return \"\".join(\n        invertida[:metade]\n        + [chr(ord(caractere) - 1) for caractere in invertida[metade:]]\n    )\n\n\ndef main():\n    # A primeira linha informa quantas mensagens devem ser transformadas.\n    linhas = sys.stdin.buffer.read().decode().splitlines()\n    quantidade = int(linhas[0])\n    respostas = [criptografar(linhas[i]) for i in range(1, quantidade + 1)]\n    # write não acrescenta quebra automaticamente; fechamos também a última linha.\n    sys.stdout.write(\"\\n\".join(respostas) + \"\\n\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "ord e chr deslocam códigos; [::-1] inverte; len // 2 define a metade após a inversão."
+        },
+        {
+          "type": "warning",
+          "text": "Executar fases fora de ordem muda as posições usadas pela terceira regra."
+        }
+      ]
+    },
+    {
+      "title": "Máquina de estados em uma frase",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1234. O booleano informa como a próxima letra deve ser escrita."
+        },
+        {
+          "type": "code",
+          "text": "import sys\n\n\ndef transformar_sentenca(sentenca):\n    \"\"\"Alterna a caixa das letras sem deixar espaços alterarem o estado.\"\"\"\n    usar_maiuscula = True\n    resposta = []\n\n    for caractere in sentenca:\n        if caractere.isalpha():\n            # O estado determina a caixa desta letra e muda para a próxima.\n            resposta.append(\n                caractere.upper() if usar_maiuscula else caractere.lower()\n            )\n            usar_maiuscula = not usar_maiuscula\n        else:\n            # Espaços e sinais são copiados sem consumir a alternância.\n            resposta.append(caractere)\n\n    return \"\".join(resposta)\n\n\ndef main():\n    # O problema fornece sentenças até o fim do arquivo.\n    linhas = sys.stdin.buffer.read().decode().splitlines()\n    sys.stdout.write(\"\\n\".join(map(transformar_sentenca, linhas)) + \"\\n\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "O estado troca somente depois de uma letra. Espaços e sinais são copiados sem consumir a alternância."
+        },
+        {
+          "type": "warning",
+          "text": "Usar o índice absoluto falha quando espaços não devem contar."
+        }
+      ]
+    },
+    {
+      "title": "Intercalação com sobra da maior string",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1238. Intercala o prefixo comum e anexa o restante sem perder caracteres."
+        },
+        {
+          "type": "code",
+          "text": "import sys\n\n\ndef combinar(a, b):\n    \"\"\"Intercala o prefixo comum e acrescenta a sobra da string maior.\"\"\"\n    # Intercalamos enquanto as duas strings possuem a posição i.\n    limite = min(len(a), len(b))\n    intercalada = \"\".join(\n        a[i] + b[i] for i in range(limite)\n    )\n\n    # Apenas uma das duas sobras será não vazia.\n    return intercalada + a[limite:] + b[limite:]\n\n\ndef main():\n    # A primeira linha informa quantos pares devem ser combinados.\n    linhas = sys.stdin.buffer.read().decode().splitlines()\n    quantidade = int(linhas[0])\n    respostas = []\n\n    for i in range(1, quantidade + 1):\n        a, b = linhas[i].split()\n        respostas.append(combinar(a, b))\n\n    # Uma única escrita costuma ser mais eficiente do que vários prints.\n    sys.stdout.write(\"\\n\".join(respostas) + \"\\n\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "min(len(a), len(b)) define quantos pares existem. Depois do limite, somente uma das sobras é não vazia."
+        },
+        {
+          "type": "warning",
+          "text": "zip(a, b) puro descarta a sobra da string maior. Ela precisa ser anexada explicitamente."
+        }
+      ]
+    },
+    {
+      "title": "DP da maior substring comum",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1237. Coincidências estendem a diagonal anterior; divergências valem zero."
+        },
+        {
+          "type": "code",
+          "text": "import sys\n\n\ndef maior_substring_comum(a, b):\n    \"\"\"Calcula a maior substring comum com DP de memória otimizada.\"\"\"\n    # b será a menor string para reduzir a memória para O(min(n, m)).\n    if len(b) > len(a):\n        a, b = b, a\n\n    # anterior representa a linha anterior da tabela de programação dinâmica.\n    anterior = [0] * (len(b) + 1)\n    melhor = 0\n\n    for caractere_a in a:\n        atual = [0] * (len(b) + 1)\n        for j, caractere_b in enumerate(b, start=1):\n            if caractere_a == caractere_b:\n                # A coincidência estende a diagonal; diferenças permanecem zero\n                # porque uma substring não pode pular caracteres.\n                atual[j] = anterior[j - 1] + 1\n                melhor = max(melhor, atual[j])\n        anterior = atual\n\n    return melhor\n\n\ndef main():\n    # Cada caso possui duas linhas e a entrada termina em EOF.\n    linhas = sys.stdin.buffer.read().decode().splitlines()\n    respostas = []\n    for i in range(0, len(linhas) - 1, 2):\n        respostas.append(str(maior_substring_comum(linhas[i], linhas[i + 1])))\n    sys.stdout.write(\"\\n\".join(respostas) + \"\\n\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "anterior[j-1] representa o sufixo comum que terminava nas duas posições anteriores."
+        },
+        {
+          "type": "warning",
+          "text": "Substring é contínua; subsequência permite saltos e resolve outro problema."
+        }
+      ]
+    },
+    {
+      "title": "DFS e árvore de descoberta",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1076. A DFS conta arestas que alcançam vértices novos e dobra para ida e volta."
+        },
+        {
+          "type": "code",
+          "text": "def dfs(vertice, grafo, visitado):\n    \"\"\"Visita o componente e devolve quantas arestas descobriram vértices novos.\"\"\"\n    visitado[vertice] = True\n    arestas_da_busca = 0\n\n    # A DFS segue cada vizinho ainda não visitado e aprofunda a busca.\n    for vizinho in grafo[vertice]:\n        if not visitado[vizinho]:\n            # Esta aresta entra na árvore da DFS porque alcançou um vértice novo.\n            arestas_da_busca += 1\n            arestas_da_busca += dfs(vizinho, grafo, visitado)\n\n    return arestas_da_busca\n\n\n# O primeiro valor informa quantos labirintos serão processados.\nquantidade_de_casos = int(input())\n\nfor _ in range(quantidade_de_casos):\n    origem = int(input())\n    vertices, arestas = map(int, input().split())\n\n    # Cada posição guarda somente os vizinhos do respectivo vértice.\n    grafo = [[] for _ in range(vertices)]\n\n    for _ in range(arestas):\n        a, b = map(int, input().split())\n        # O labirinto é um grafo não direcionado, então registramos os dois sentidos.\n        grafo[a].append(b)\n        grafo[b].append(a)\n\n    visitado = [False] * vertices\n    arestas_da_busca = dfs(origem, grafo, visitado)\n\n    # Para sair da origem e voltar a ela, cada aresta da árvore é percorrida\n    # uma vez na ida e outra na volta.\n    print(arestas_da_busca * 2)"
+        },
+        {
+          "type": "callout",
+          "text": "A lista de adjacência guarda vizinhos. visitado evita repetir vértices e neutraliza arestas duplicadas."
+        },
+        {
+          "type": "warning",
+          "text": "Em grafo não direcionado, registre a e b nos dois sentidos. Em direcionado, não invente a volta."
+        }
+      ]
+    },
+    {
+      "title": "BFS no tabuleiro do cavalo",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1100. A fila visita casas em camadas de distância crescente."
+        },
+        {
+          "type": "code",
+          "text": "from collections import deque\nimport sys\n\n\n# Os oito deslocamentos possíveis de um cavalo: duas casas em um eixo\n# e uma casa no outro eixo.\nMOVIMENTOS = (\n    (2, 1), (2, -1), (-2, 1), (-2, -1),\n    (1, 2), (1, -2), (-1, 2), (-1, -2),\n)\n\n\ndef para_coordenada(posicao):\n    \"\"\"Converte uma casa como 'a1' para índices de linha e coluna entre 0 e 7.\"\"\"\n    coluna = ord(posicao[0]) - ord(\"a\")\n    linha = int(posicao[1]) - 1\n    return linha, coluna\n\n\ndef esta_no_tabuleiro(linha, coluna):\n    \"\"\"Informa se a coordenada pertence ao tabuleiro 8 x 8.\"\"\"\n    return 0 <= linha < 8 and 0 <= coluna < 8\n\n\ndef bfs(origem, destino):\n    \"\"\"Calcula o menor número de movimentos entre duas casas com BFS.\"\"\"\n    inicio = para_coordenada(origem)\n    fim = para_coordenada(destino)\n\n    # A fila mantém as casas por camadas de distância.\n    fila = deque([(inicio[0], inicio[1], 0)])\n    visitado = [[False] * 8 for _ in range(8)]\n    visitado[inicio[0]][inicio[1]] = True\n\n    while fila:\n        linha, coluna, distancia = fila.popleft()\n\n        # A primeira retirada do destino ocorre pelo menor caminho possível.\n        if (linha, coluna) == fim:\n            return distancia\n\n        for delta_linha, delta_coluna in MOVIMENTOS:\n            nova_linha = linha + delta_linha\n            nova_coluna = coluna + delta_coluna\n\n            if (\n                esta_no_tabuleiro(nova_linha, nova_coluna)\n                and not visitado[nova_linha][nova_coluna]\n            ):\n                # Marcar ao entrar na fila impede que a mesma casa seja enfileirada\n                # várias vezes por caminhos diferentes.\n                visitado[nova_linha][nova_coluna] = True\n                fila.append((nova_linha, nova_coluna, distancia + 1))\n\n    return -1  # Não ocorre em um tabuleiro comum, mas completa o contrato da função.\n\n\n# O problema fornece pares de casas até o fim do arquivo.\nfor linha_de_entrada in sys.stdin:\n    linha_de_entrada = linha_de_entrada.strip()\n    if not linha_de_entrada:\n        continue\n\n    origem, destino = linha_de_entrada.split()\n    resposta = bfs(origem, destino)\n    print(f\"To get from {origem} to {destino} takes {resposta} knight moves.\")"
+        },
+        {
+          "type": "callout",
+          "text": "Os oito deslocamentos formam as arestas do grafo. A primeira retirada do destino tem a menor distância."
+        },
+        {
+          "type": "warning",
+          "text": "Marque a casa quando ela entra na fila, não quando sai, para evitar inserções duplicadas."
+        }
+      ]
+    },
+    {
+      "title": "Dijkstra com lista e fila de prioridade",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo para menor caminho com pesos não negativos, usando heap e descarte de entradas antigas."
+        },
+        {
+          "type": "code",
+          "text": "import heapq\nimport sys\n\n\ndef dijkstra(grafo, origem):\n    infinito = 10**18\n    distancia = [infinito] * len(grafo)\n    distancia[origem] = 0\n    fila = [(0, origem)]\n\n    while fila:\n        custo_atual, vertice = heapq.heappop(fila)\n\n        # Uma rota melhor já foi inserida depois desta.\n        if custo_atual != distancia[vertice]:\n            continue\n\n        for vizinho, peso in grafo[vertice]:\n            novo_custo = custo_atual + peso\n\n            # Relaxamento: melhora a estimativa do vizinho.\n            if novo_custo < distancia[vizinho]:\n                distancia[vizinho] = novo_custo\n                heapq.heappush(fila, (novo_custo, vizinho))\n\n    return distancia\n\n\ndef main():\n    vertices, arestas, origem = map(int, input().split())\n    grafo = [[] for _ in range(vertices)]\n\n    for _ in range(arestas):\n        a, b, peso = map(int, input().split())\n        grafo[a].append((b, peso))\n\n    resposta = dijkstra(grafo, origem)\n    print(*(-1 if d == 10**18 else d for d in resposta))\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "Relaxar é testar se passar pelo vértice atual cria custo menor. A heap sempre oferece a menor estimativa."
+        },
+        {
+          "type": "warning",
+          "text": "Dijkstra não funciona com pesos negativos. BFS minimiza quantidade de arestas, não a soma dos pesos."
+        }
+      ]
+    },
+    {
+      "title": "Círculos: contenção e separação",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo com dois tipos de consulta: círculo dentro de outro e dois círculos em um retângulo."
+        },
+        {
+          "type": "code",
+          "text": "def circulo_dentro(r1, x1, y1, r2, x2, y2):\n    # Um círculo maior nunca cabe no menor.\n    if r2 > r1:\n        return False\n\n    dx = x1 - x2\n    dy = y1 - y2\n    limite = r1 - r2\n\n    # Distância entre centros <= diferença dos raios.\n    return dx * dx + dy * dy <= limite * limite\n\n\ndef cabem_no_retangulo(largura, altura, r1, r2):\n    # Cada diâmetro precisa caber isoladamente.\n    for raio in (r1, r2):\n        if 2 * raio > largura or 2 * raio > altura:\n            return False\n\n    # Cantos opostos maximizam a distância.\n    dx = largura - r1 - r2\n    dy = altura - r1 - r2\n    return dx * dx + dy * dy >= (r1 + r2) ** 2\n\n\ndef main():\n    t = int(input())\n\n    for _ in range(t):\n        partes = input().split()\n        tipo = partes[0]\n        valores = list(map(float, partes[1:]))\n\n        if tipo == \"DENTRO\":\n            resposta = circulo_dentro(*valores)\n        else:\n            resposta = cabem_no_retangulo(*valores)\n\n        print(\"S\" if resposta else \"N\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "Contenção usa diferença dos raios; não sobreposição usa soma. Comparar quadrados evita sqrt."
+        },
+        {
+          "type": "warning",
+          "text": "Antes de elevar a diferença ao quadrado, teste qual raio é maior. Tangência usa <= ou >=."
+        }
+      ]
+    },
+    {
+      "title": "Distância de ponto a segmento",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que projeta cada ponto no segmento e imprime a menor distância com duas casas."
+        },
+        {
+          "type": "code",
+          "text": "import math\n\n\ndef distancia_ponto_segmento(p, a, b):\n    px, py = p\n    ax, ay = a\n    bx, by = b\n    vx = bx - ax\n    vy = by - ay\n    comprimento2 = vx * vx + vy * vy\n\n    # Segmento degenerado: A e B são o mesmo ponto.\n    if comprimento2 == 0.0:\n        return math.hypot(px - ax, py - ay)\n\n    # Projeção na reta, depois limitada ao segmento.\n    t = ((px - ax) * vx + (py - ay) * vy) / comprimento2\n    t = max(0.0, min(1.0, t))\n\n    qx = ax + t * vx\n    qy = ay + t * vy\n    return math.hypot(px - qx, py - qy)\n\n\ndef main():\n    ax, ay, bx, by = map(float, input().split())\n    consultas = int(input())\n    a = (ax, ay)\n    b = (bx, by)\n\n    for _ in range(consultas):\n        ponto = tuple(map(float, input().split()))\n        distancia = distancia_ponto_segmento(ponto, a, b)\n        print(f\"{distancia:.2f}\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "t entre 0 e 1 usa a perpendicular; fora desse intervalo, a extremidade mais próxima vence."
+        },
+        {
+          "type": "warning",
+          "text": "Distância à reta infinita pode cair fora do segmento e produzir resposta impossível."
+        }
+      ]
+    },
+    {
+      "title": "Circuncírculo e comparação com EPS",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que testa se todos os pontos pertencem ao círculo definido pelos três primeiros."
+        },
+        {
+          "type": "code",
+          "text": "import math\n\n\nEPS = 1e-7\n\n\ndef circuncirculo(a, b, c):\n    ax, ay = a\n    bx, by = b\n    cx, cy = c\n    d = 2.0 * (\n        ax * (by - cy)\n        + bx * (cy - ay)\n        + cx * (ay - by)\n    )\n\n    # Determinante zero: os três pontos são colineares.\n    if math.isclose(d, 0.0, abs_tol=EPS):\n        return None\n\n    a2 = ax * ax + ay * ay\n    b2 = bx * bx + by * by\n    c2 = cx * cx + cy * cy\n    ux = (a2 * (by - cy) + b2 * (cy - ay)\n          + c2 * (ay - by)) / d\n    uy = (a2 * (cx - bx) + b2 * (ax - cx)\n          + c2 * (bx - ax)) / d\n    raio2 = (ax - ux) ** 2 + (ay - uy) ** 2\n    return ux, uy, raio2\n\n\ndef main():\n    n = int(input())\n    pontos = [tuple(map(float, input().split())) for _ in range(n)]\n    circulo = circuncirculo(*pontos[:3])\n\n    if circulo is None:\n        print(\"COLINEARES\")\n        return\n\n    ux, uy, raio2 = circulo\n    todos = all(\n        math.isclose(\n            (x - ux) ** 2 + (y - uy) ** 2,\n            raio2, rel_tol=EPS, abs_tol=EPS\n        )\n        for x, y in pontos\n    )\n    print(\"SIM\" if todos else \"NAO\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "Três pontos não colineares determinam um círculo. O determinante detecta a degeneração."
+        },
+        {
+          "type": "warning",
+          "text": "Resultados de divisões não devem ser comparados com ==. Use tolerância relativa e absoluta."
+        }
+      ]
+    },
+    {
+      "title": "Áreas, seno e conversão para radianos",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que atende consultas de áreas do quadrado com arcos e da razão pentágono-quadrado."
+        },
+        {
+          "type": "code",
+          "text": "import math\n\n\ndef areas(lado):\n    quadrado = lado * lado\n    complemento = quadrado - math.pi * quadrado / 4.0\n    segmento = (\n        quadrado * (4 * math.pi - 3 * math.sqrt(3)) / 24\n    )\n    a3 = 8 * segmento + 8 * complemento - 4 * quadrado\n    a2 = 4 * complemento - 2 * a3\n    a1 = quadrado - a2 - a3\n    return a1, a2, a3\n\n\ndef lado_do_quadrado(lado_do_pentagono):\n    # math.sin recebe radianos, não graus.\n    return (\n        lado_do_pentagono\n        * math.sin(math.radians(108))\n        / math.sin(math.radians(63))\n    )\n\n\ndef main():\n    t = int(input())\n\n    for _ in range(t):\n        tipo, texto = input().split()\n        valor = float(texto)\n\n        if tipo == \"AREA\":\n            a1, a2, a3 = areas(valor)\n            print(f\"{a1:.3f} {a2:.3f} {a3:.3f}\")\n        else:\n            print(f\"{lado_do_quadrado(valor):.10f}\")\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "Fórmulas constantes viram funções O(1). math.radians faz a conversão obrigatória antes de sin."
+        },
+        {
+          "type": "warning",
+          "text": "A ordem das áreas e a quantidade de casas pertencem ao enunciado. Não arredonde valores intermediários."
+        }
+      ]
+    },
+    {
+      "title": "Backtracking com poda por limite",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo que maximiza uma soma sem ultrapassar o limite, escolhendo, explorando e desfazendo."
+        },
+        {
+          "type": "code",
+          "text": "def melhor_soma(valores, limite):\n    n = len(valores)\n    sufixo = [0] * (n + 1)\n\n    # Bound otimista: soma de tudo que ainda resta.\n    for i in range(n - 1, -1, -1):\n        sufixo[i] = sufixo[i + 1] + valores[i]\n\n    melhor = 0\n\n    def buscar(i, soma):\n        nonlocal melhor\n\n        if soma > limite:\n            return  # ramo inviável\n\n        melhor = max(melhor, soma)\n\n        if i == n:\n            return\n\n        # Mesmo pegando tudo, este ramo não supera o incumbente.\n        if soma + sufixo[i] <= melhor:\n            return\n\n        buscar(i + 1, soma + valores[i])  # escolher\n        buscar(i + 1, soma)               # não escolher\n\n    buscar(0, 0)\n    return melhor\n\n\ndef main():\n    n, limite = map(int, input().split())\n    valores = list(map(int, input().split()))\n    assert len(valores) == n\n    print(melhor_soma(valores, limite))\n\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "type": "callout",
+          "text": "Backtracking explora escolhas; branch and bound poda um ramo que não pode superar a melhor solução já encontrada."
+        },
+        {
+          "type": "warning",
+          "text": "O bound deve ser otimista e seguro. Um limite que subestima o potencial pode eliminar a resposta ótima."
+        }
+      ]
+    },
+    {
+      "title": "Guloso com pilha monotônica",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1084. Dígitos maiores removem dígitos menores anteriores."
+        },
+        {
+          "type": "code",
+          "text": "import sys\n\n# buffer evita o custo de camadas extras de entrada em casos grandes.\nentrada = sys.stdin.buffer\n\nwhile True:\n    n, m = map(int, entrada.readline().split())\n\n    # O par 0 0 encerra a entrada.\n    if n == 0 and m == 0:\n        break\n\n    numero = entrada.readline().strip().decode()\n\n    # A pilha mantém o maior prefixo possível em ordem monotônica.\n    pilha = []\n    apagados = 0\n\n    for digito in numero:\n        # Um dígito maior substitui dígitos menores anteriores enquanto ainda\n        # houver remoções disponíveis.\n        while pilha and apagados < m and digito > pilha[-1]:\n            pilha.pop()\n            apagados += 1\n\n        # A resposta precisa terminar com exatamente n - m algarismos.\n        if len(pilha) < n - m:\n            pilha.append(digito)\n\n    print(\"\".join(pilha))"
+        },
+        {
+          "type": "callout",
+          "text": "A primeira posição diferente decide o maior número. Cada dígito entra e sai da pilha no máximo uma vez."
+        },
+        {
+          "type": "warning",
+          "text": "Uma estratégia gulosa precisa de justificativa. Escolha local sem prova pode falhar em outro problema."
+        }
+      ]
+    },
+    {
+      "title": "DP de troco ilimitado",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1034. mochila[j] guarda o menor número de blocos para formar j."
+        },
+        {
+          "type": "code",
+          "text": "N, M = 0, 0\nmochila = []\nblocos = []\n\n\ndef calculaMochila():\n    # mochila[j] guarda o menor número de blocos que forma exatamente j.\n    mochila = [-1 for _ in range(M + 1)]\n    mochila[0] = 0\n\n    for bloco in blocos:\n        # O percurso crescente permite reutilizar o mesmo tamanho de bloco.\n        for j in range(bloco, M + 1):\n            if(mochila[j - bloco] != -1):\n                if(mochila[j] == -1):\n                    mochila[j] = mochila[j - bloco] + 1\n                else:\n                    mochila[j] = min(mochila[j], mochila[j - bloco] + 1)\n\n    return mochila[M]\n\n\nT = int(input())\n\nfor _ in range(T):\n    N, M = map(int, input().strip().split(' '))\n    # Os tamanhos disponíveis formam as transições da programação dinâmica.\n    blocos = map(int, input().strip().split(' '))\n\n    print(calculaMochila())"
+        },
+        {
+          "type": "callout",
+          "text": "O laço crescente permite reutilizar o bloco atual. O estado j-bloco precisa ser alcançável."
+        },
+        {
+          "type": "warning",
+          "text": "Percorrer para trás resolveria a versão em que cada bloco só pode ser usado uma vez."
+        }
+      ]
+    },
+    {
+      "title": "Mochila 0/1 com memória comprimida",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1286. Cada pedido pode ser escolhido no máximo uma vez."
+        },
+        {
+          "type": "code",
+          "text": "import sys\n\n# O formato possui muitos inteiros; o buffer oferece leitura direta em bytes.\nentrada = sys.stdin.buffer\n\nwhile True:\n    n = int(entrada.readline())\n\n    if n == 0:\n        break\n\n    pizzas = int(entrada.readline())\n\n    # dp[c] é o maior tempo economizado usando, no máximo, c pizzas.\n    dp = [0] * (pizzas + 1)\n\n    for _ in range(n):\n        tempo, quantidade = map(int, entrada.readline().split())\n\n        # Percorre de trás para frente porque cada pedido só pode ser escolhido\n        # uma vez; avançar permitiria reutilizar o pedido na mesma rodada.\n        for capacidade in range(pizzas, quantidade - 1, -1):\n            dp[capacidade] = max(\n                dp[capacidade],\n                dp[capacidade - quantidade] + tempo\n            )\n\n    print(f\"{dp[pizzas]} min.\")"
+        },
+        {
+          "type": "callout",
+          "text": "A capacidade é percorrida de trás para frente; assim o item atual não alimenta outro estado da mesma rodada."
+        },
+        {
+          "type": "warning",
+          "text": "A direção do laço define 0/1 ou ilimitada. A fórmula isolada não revela essa diferença."
+        }
+      ]
+    },
+    {
+      "title": "Recursão e memoização de dois estados",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programa completo do beecrowd 1029. O cache guarda Fibonacci e a quantidade teórica de chamadas."
+        },
+        {
+          "type": "code",
+          "text": "# F memoriza Fibonacci; CF memoriza o total de nós da árvore de chamadas.\nF = [-1 for _ in range(40)]\nCF = [-1 for _ in range(40)]\n\nF[0] = 0\nF[1] = 1\n\nCF[0] = 1\nCF[1] = 1\n\ndef calcula(n):\n    # O estado só é expandido na primeira vez em que aparece.\n    if(F[n] == -1):\n        result1, num_calls1 = calcula(n - 1)\n        result2, num_calls2 = calcula(n - 2)\n        F[n] = result1 + result2\n        # As duas subárvores mais 1 para a chamada calcula(n).\n        CF[n] = num_calls1 + num_calls2 + 1\n    return (F[n], CF[n])\n\n# A memória permanece entre os casos e reaproveita resultados anteriores.\nN = int(input())\n\nfor _ in range(N):\n    X = int(input())\n    result, num_calls = calcula(X)\n    # O enunciado não conta a chamada inicial; por isso subtraímos 1.\n    print(f'fib({X}) = {num_calls - 1} calls = {result}')"
+        },
+        {
+          "type": "callout",
+          "text": "F[n] e CF[n] são estados distintos da mesma recorrência. Cada índice é calculado apenas uma vez."
+        },
+        {
+          "type": "warning",
+          "text": "Memoização evita recomputação, mas a versão top-down ainda usa pilha. A chave deve identificar todo o estado."
+        }
+      ]
+    }
+  ]
+}

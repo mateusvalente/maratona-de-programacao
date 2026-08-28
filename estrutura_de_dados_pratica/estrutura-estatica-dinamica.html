@@ -1,0 +1,3071 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Aula didática sobre Estruturas de Dados Estáticas vs Dinâmicas, gerenciamento de memória e perspectiva histórica.">
+  <meta name="theme-color" content="#0b1215">
+  <title>Estruturas Estáticas vs. Dinâmicas · Estruturas de Dados na Prática</title>
+  <link rel="stylesheet" href="assets/aula.css">
+  <link rel="stylesheet" href="assets/dados.css">
+  <script src="assets/site-shell.js" defer data-edp-shell></script>
+  <script src="assets/dados.js" defer></script>
+  <style>
+    .canvas-container {
+      width: 100%;
+      overflow-x: auto;
+      background: #111a1f;
+      border: 1px solid #1e2d36;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .history-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .timeline-event {
+      background: #152026;
+      border-left: 4px solid #38bdf8;
+      padding: 1.5rem;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .timeline-event h3 {
+      margin-top: 0;
+      color: #38bdf8;
+      font-size: 1.1rem;
+    }
+
+    .timeline-event p {
+      margin-bottom: 0;
+      font-size: 0.95rem;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+
+<body>
+  <main id="conteudo-pagina">
+    <section class="lesson-hero records-hero">
+      <div class="lesson-kicker"><span>Aula 05</span><i class="fa-solid fa-arrow-right"
+          aria-hidden="true"></i><span>Arquitetura</span></div>
+      <h1>Estruturas Estáticas <span>vs.</span> Dinâmicas</h1>
+      <p class="lesson-intro">Toda estrutura de dados precisa morar na memória. A forma como ela reivindica esse espaço
+        define seus limites e seu desempenho. Nesta aula, analisamos as <strong>estruturas estáticas</strong>, as
+        <strong>dinâmicas</strong> e os impactos diretos no <strong>gerenciamento de memória do sistema</strong>.
+      </p>
+
+      <div class="learning-goals" aria-label="Objetivos da aula">
+        <article><i class="fa-solid fa-shapes" aria-hidden="true"></i><span><small>Objetivo 01</small>Comparar arrays e
+            listas</span></article>
+        <article><i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i><span><small>Objetivo 02</small>Visualizar a
+            fragmentação</span></article>
+        <article><i class="fa-solid fa-timeline" aria-hidden="true"></i><span><small>Objetivo 03</small>Compreender a
+            evolução histórica</span></article>
+      </div>
+
+      <nav class="lesson-jump" aria-label="Nesta aula">
+        <a href="#modelos">Modelos</a><a href="#memoria">Gerenciamento e Fragmentação</a><a
+          href="#historia">História</a>
+      </nav>
+    </section>
+
+    <section class="lesson-section" id="modelos">
+      <header class="lesson-heading"><span>01</span>
+        <div>
+          <p>O Dilema do Armazenamento</p>
+          <h2>Array Estático, Array Dinâmico e Lista Encadeada</h2>
+        </div>
+      </header>
+      <p class="section-lead">A decisão entre usar uma estrutura estática ou dinâmica altera fundamentalmente como os
+        dados se dispõem no hardware. Veja o diagrama abaixo para entender como cada abordagem organiza os elementos
+        fisicamente.</p>
+
+      <div class="canvas-container">
+        <canvas id="canvas-modelos" width="800" height="350"
+          aria-label="Diagrama mostrando Array Estático, Array Dinâmico e Lista Encadeada"></canvas>
+      </div>
+
+      <div class="review-grid records-review" style="margin-top: 2rem;">
+        <details open>
+          <summary>Array Estático (Tamanho Fixo)<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <p>Bloco único e inalterável. Rápido, mas se faltar espaço, o programa quebra. Se sobrar espaço, desperdiça
+            recursos.</p>
+        </details>
+        <details open>
+          <summary>Array Dinâmico (Redimensionável)<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <p>Bloco contíguo que, ao encher, aloca um novo bloco maior (geralmente o dobro), copia os dados e descarta o
+            bloco velho.</p>
+        </details>
+        <details open>
+          <summary>Lista Encadeada (Nós Dispersos)<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <p>Elementos (nós) espalhados pela memória. Cresce sob demanda, sem cópias massivas, mas exige bytes extras
+            para os ponteiros.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="lesson-section" id="historia">
+
+      <header class="lesson-heading">
+        <span>02</span>
+
+        <div>
+          <p>Evolução Tecnológica</p>
+          <h2>Da Fita Magnética ao Endereçamento Direto</h2>
+        </div>
+      </header>
+
+      <p class="section-lead">
+        A escolha entre estático e dinâmico não existia no início da computação.
+        As estruturas de dados evoluíram como uma resposta direta à forma como
+        o hardware aprendeu a <strong>endereçar</strong> e localizar informações.
+      </p>
+
+
+      <!-- ========================================================= -->
+      <!-- DIAGRAMA -->
+      <!-- ========================================================= -->
+
+      <div class="addressing-diagram">
+
+        <div class="diagram-toolbar">
+
+          <div class="diagram-status">
+            <span class="status-dot"></span>
+            Demonstração em execução
+          </div>
+
+          <div class="diagram-controls">
+
+            <button type="button" id="btn-reset-enderecamento" class="diagram-btn">
+              <i class="fa-solid fa-rotate-left"></i>
+              Reiniciar
+            </button>
+
+            <button type="button" id="btn-pause-enderecamento" class="diagram-btn">
+              <i class="fa-solid fa-pause"></i>
+              Pausar
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="canvas-container-addressing">
+
+          <canvas id="canvas-enderecamento" width="1050" height="430"
+            aria-label="Comparação animada entre acesso sequencial em fita magnética e acesso direto em memória RAM">
+          </canvas>
+
+        </div>
+
+
+        <div class="diagram-help">
+
+          <span>
+            <i class="fa-solid fa-computer-mouse"></i>
+            Clique em qualquer posição da RAM para alterar o endereço acessado.
+          </span>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ========================================================= -->
+      <!-- LINHA DO TEMPO -->
+      <!-- ========================================================= -->
+
+      <div class="history-timeline">
+
+        <div class="timeline-event" style="
+                background: #152026;
+                border-left: 4px solid #64748b;
+                padding: 1.5rem;
+                border-radius: 0 8px 8px 0;
+            ">
+
+          <h3 style="
+                    color: #94a3b8;
+                    margin-top: 0;
+                    font-size: 1.1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
+            <i class="fa-solid fa-tape"></i>
+
+            Anos 1950-60: O Acesso Sequencial
+          </h3>
+
+          <p style="
+                    margin-bottom: 0;
+                    font-size: 0.95rem;
+                    color: #94a3b8;
+                    line-height: 1.6;
+                ">
+            Na era dos cartões perfurados e fitas magnéticas, o acesso aos
+            dados era predominantemente sequencial.
+
+            Para localizar determinada informação, o dispositivo precisava
+            percorrer fisicamente os registros anteriores até chegar ao
+            ponto desejado.
+
+            No exemplo acima, para alcançar o endereço <strong>#4</strong>,
+            a fita passa por <strong>#0, #1, #2 e #3</strong>.
+          </p>
+
+        </div>
+
+
+
+        <div class="timeline-event" style="
+                background: #152026;
+                border-left: 4px solid #38bdf8;
+                padding: 1.5rem;
+                border-radius: 0 8px 8px 0;
+            ">
+
+          <h3 style="
+                    color: #38bdf8;
+                    margin-top: 0;
+                    font-size: 1.1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
+
+            <i class="fa-solid fa-microchip"></i>
+
+            Anos 1970: O "R" da RAM e o Barramento de Endereço
+
+          </h3>
+
+          <p style="
+                    margin-bottom: 0;
+                    font-size: 0.95rem;
+                    color: #94a3b8;
+                    line-height: 1.6;
+                ">
+
+            A memória RAM permitiu que a CPU selecionasse diretamente um
+            endereço de memória.
+
+            A CPU envia o endereço desejado pelo
+            <strong>Barramento de Endereço (Address Bus)</strong> e o
+            hardware seleciona a posição correspondente.
+
+            Dessa forma, acessar o endereço <strong>#7</strong> não exige
+            percorrer primeiro os endereços anteriores.
+
+          </p>
+
+        </div>
+
+
+
+        <div class="timeline-event" style="
+                background: #152026;
+                border-left: 4px solid #10b981;
+                padding: 1.5rem;
+                border-radius: 0 8px 8px 0;
+            ">
+
+          <h3 style="
+                    color: #10b981;
+                    margin-top: 0;
+                    font-size: 1.1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
+
+            <i class="fa-solid fa-code-branch"></i>
+
+            O Nascimento do Dinâmico e dos Ponteiros
+
+          </h3>
+
+          <p style="
+                    margin-bottom: 0;
+                    font-size: 0.95rem;
+                    color: #94a3b8;
+                    line-height: 1.6;
+                ">
+
+            O acesso direto à memória também tornou possível utilizar
+            endereços como referências para outras regiões da memória.
+
+            Um elemento armazenado no endereço <strong>#10</strong>, por
+            exemplo, pode guardar uma referência para outro elemento
+            localizado no endereço <strong>#850</strong>.
+
+            Esse princípio é fundamental para estruturas como
+            <strong>listas encadeadas, árvores, grafos e diversas estruturas
+              dinâmicas</strong>.
+
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <style>
+      /* ========================================================= */
+      /* CONTAINER */
+      /* ========================================================= */
+
+      .addressing-diagram {
+        background:
+          radial-gradient(circle at 75% 50%,
+            rgba(56, 189, 248, 0.055),
+            transparent 38%),
+          #0b1215;
+
+        border: 1px solid #1e2d36;
+        border-radius: 12px;
+
+        margin-bottom: 2.5rem;
+
+        overflow: hidden;
+      }
+
+
+      /* ========================================================= */
+      /* TOOLBAR */
+      /* ========================================================= */
+
+      .diagram-toolbar {
+
+        min-height: 54px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 1rem;
+
+        padding: 0.7rem 1rem;
+
+        border-bottom: 1px solid #1e2d36;
+
+        background: rgba(15, 23, 42, 0.45);
+      }
+
+
+      .diagram-status {
+
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        font-size: 0.78rem;
+        color: #94a3b8;
+
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+
+      .status-dot {
+
+        width: 7px;
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: #10b981;
+
+        box-shadow:
+          0 0 0 4px rgba(16, 185, 129, 0.1),
+          0 0 12px rgba(16, 185, 129, 0.75);
+
+        animation: statusPulse 1.5s infinite;
+      }
+
+
+      @keyframes statusPulse {
+
+        0%,
+        100% {
+          opacity: 1;
+        }
+
+        50% {
+          opacity: 0.35;
+        }
+
+      }
+
+
+      .diagram-controls {
+        display: flex;
+        gap: 8px;
+      }
+
+
+      .diagram-btn {
+
+        border: 1px solid #334155;
+
+        border-radius: 6px;
+
+        background: #111b21;
+
+        color: #94a3b8;
+
+        cursor: pointer;
+
+        padding: 7px 11px;
+
+        font-size: 0.78rem;
+
+        transition:
+          border-color 0.2s,
+          color 0.2s,
+          background 0.2s;
+      }
+
+
+      .diagram-btn:hover {
+
+        border-color: #38bdf8;
+
+        color: #38bdf8;
+
+        background: rgba(56, 189, 248, 0.06);
+      }
+
+
+      /* ========================================================= */
+      /* CANVAS */
+      /* ========================================================= */
+
+      .canvas-container-addressing {
+
+        width: 100%;
+
+        overflow-x: auto;
+
+        padding: 15px;
+
+        display: flex;
+
+        justify-content: center;
+      }
+
+
+      #canvas-enderecamento {
+
+        width: 1050px;
+
+        max-width: none;
+
+        display: block;
+      }
+
+
+      /* ========================================================= */
+      /* HELP */
+      /* ========================================================= */
+
+      .diagram-help {
+
+        border-top: 1px solid #1e2d36;
+
+        padding: 11px 20px;
+
+        font-size: 0.78rem;
+
+        color: #64748b;
+
+        text-align: right;
+      }
+
+
+      .diagram-help i {
+        margin-right: 5px;
+      }
+
+
+      /* ========================================================= */
+      /* TIMELINE */
+      /* ========================================================= */
+
+      .history-timeline {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 1.5rem;
+
+        margin-top: 2rem;
+      }
+
+
+      /* ========================================================= */
+      /* MOBILE */
+      /* ========================================================= */
+
+      @media (max-width: 700px) {
+
+        .diagram-toolbar {
+
+          align-items: flex-start;
+
+          flex-direction: column;
+        }
+
+        .diagram-help {
+          text-align: left;
+        }
+
+      }
+    </style>
+
+
+
+    <script>
+
+      document.addEventListener("DOMContentLoaded", () => {
+
+        const canvas =
+          document.getElementById("canvas-enderecamento");
+
+        if (!canvas) return;
+
+
+        const ctx =
+          canvas.getContext("2d");
+
+
+        const pauseBtn =
+          document.getElementById("btn-pause-enderecamento");
+
+        const resetBtn =
+          document.getElementById("btn-reset-enderecamento");
+
+
+        /* ====================================================== */
+        /* CORES */
+        /* ====================================================== */
+
+        const COLORS = {
+
+          bg: "#0b1215",
+
+          panel: "#10191e",
+
+          panel2: "#111c22",
+
+          border: "#24343d",
+
+          grid: "#334155",
+
+          text: "#e2e8f0",
+
+          muted: "#64748b",
+
+          mutedLight: "#94a3b8",
+
+          tape: "#475569",
+
+          tapeDark: "#334155",
+
+          sequential: "#fb7185",
+
+          sequentialStrong: "#e11d48",
+
+          ram: "#38bdf8",
+
+          ramStrong: "#0284c7",
+
+          ramGlow: "rgba(56,189,248,.25)",
+
+          cpu: "#38bdf8",
+
+          green: "#10b981",
+
+          amber: "#f59e0b"
+
+        };
+
+
+        /* ====================================================== */
+        /* ESTADO */
+        /* ====================================================== */
+
+        let running = true;
+
+        let lastTime = 0;
+
+        let time = 0;
+
+
+        /*
+         * posição animada da fita
+         */
+
+        let tapeOffset = 0;
+
+
+        /*
+         * endereço atualmente acessado pela CPU
+         */
+
+        let selectedAddress = 7;
+
+
+        /*
+         * animação do sinal CPU -> RAM
+         */
+
+        let busProgress = 0;
+
+
+        /*
+         * coordenadas das células RAM
+         */
+
+        const ramCells = [];
+
+
+        /* ====================================================== */
+        /* HELPERS */
+        /* ====================================================== */
+
+        function roundedRect(
+          x,
+          y,
+          width,
+          height,
+          radius,
+          fill,
+          stroke = null
+        ) {
+
+          ctx.beginPath();
+
+          ctx.roundRect(
+            x,
+            y,
+            width,
+            height,
+            radius
+          );
+
+          if (fill) {
+
+            ctx.fillStyle = fill;
+
+            ctx.fill();
+
+          }
+
+          if (stroke) {
+
+            ctx.strokeStyle = stroke;
+
+            ctx.lineWidth = 1;
+
+            ctx.stroke();
+
+          }
+
+        }
+
+
+        function drawText(
+          text,
+          x,
+          y,
+          color = COLORS.text,
+          size = 14,
+          weight = "normal",
+          align = "left"
+        ) {
+
+          ctx.font =
+            `${weight} ${size}px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+
+          ctx.fillStyle = color;
+
+          ctx.textAlign = align;
+
+          ctx.fillText(
+            text,
+            x,
+            y
+          );
+
+        }
+
+
+        function drawMono(
+          text,
+          x,
+          y,
+          color = COLORS.text,
+          size = 12,
+          align = "left"
+        ) {
+
+          ctx.font =
+            `${size}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
+
+          ctx.fillStyle = color;
+
+          ctx.textAlign = align;
+
+          ctx.fillText(
+            text,
+            x,
+            y
+          );
+
+        }
+
+
+        function drawArrow(
+          fromX,
+          fromY,
+          toX,
+          toY,
+          color,
+          width = 2
+        ) {
+
+          const angle =
+            Math.atan2(
+              toY - fromY,
+              toX - fromX
+            );
+
+
+          ctx.strokeStyle = color;
+
+          ctx.lineWidth = width;
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            fromX,
+            fromY
+          );
+
+          ctx.lineTo(
+            toX,
+            toY
+          );
+
+          ctx.stroke();
+
+
+          const size = 8;
+
+
+          ctx.fillStyle = color;
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            toX,
+            toY
+          );
+
+          ctx.lineTo(
+            toX -
+            size * Math.cos(angle - Math.PI / 6),
+
+            toY -
+            size * Math.sin(angle - Math.PI / 6)
+          );
+
+          ctx.lineTo(
+            toX -
+            size * Math.cos(angle + Math.PI / 6),
+
+            toY -
+            size * Math.sin(angle + Math.PI / 6)
+          );
+
+          ctx.closePath();
+
+          ctx.fill();
+
+        }
+
+
+        function drawDottedLine(
+          x1,
+          y1,
+          x2,
+          y2,
+          color
+        ) {
+
+          ctx.strokeStyle = color;
+
+          ctx.lineWidth = 1.5;
+
+          ctx.setLineDash([5, 6]);
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            x1,
+            y1
+          );
+
+          ctx.lineTo(
+            x2,
+            y2
+          );
+
+          ctx.stroke();
+
+          ctx.setLineDash([]);
+
+        }
+
+
+        function glowCircle(
+          x,
+          y,
+          radius,
+          color
+        ) {
+
+          ctx.save();
+
+          ctx.shadowBlur = 18;
+
+          ctx.shadowColor = color;
+
+          ctx.fillStyle = color;
+
+          ctx.beginPath();
+
+          ctx.arc(
+            x,
+            y,
+            radius,
+            0,
+            Math.PI * 2
+          );
+
+          ctx.fill();
+
+          ctx.restore();
+
+        }
+
+
+        /* ====================================================== */
+        /* BOBINA */
+        /* ====================================================== */
+
+        function drawReel(
+          x,
+          y,
+          angle
+        ) {
+
+          ctx.save();
+
+          ctx.translate(
+            x,
+            y
+          );
+
+          ctx.rotate(angle);
+
+
+          /*
+           * aro externo
+           */
+
+          ctx.fillStyle = "#202d35";
+
+          ctx.strokeStyle = "#475569";
+
+          ctx.lineWidth = 4;
+
+
+          ctx.beginPath();
+
+          ctx.arc(
+            0,
+            0,
+            40,
+            0,
+            Math.PI * 2
+          );
+
+          ctx.fill();
+
+          ctx.stroke();
+
+
+          /*
+           * furos da bobina
+           */
+
+          for (
+            let i = 0;
+            i < 5;
+            i++
+          ) {
+
+            const a =
+              i * ((Math.PI * 2) / 5);
+
+            const hx =
+              Math.cos(a) * 22;
+
+            const hy =
+              Math.sin(a) * 22;
+
+
+            ctx.fillStyle =
+              COLORS.bg;
+
+            ctx.beginPath();
+
+            ctx.arc(
+              hx,
+              hy,
+              7,
+              0,
+              Math.PI * 2
+            );
+
+            ctx.fill();
+
+          }
+
+
+          /*
+           * eixo
+           */
+
+          ctx.fillStyle =
+            "#64748b";
+
+          ctx.beginPath();
+
+          ctx.arc(
+            0,
+            0,
+            7,
+            0,
+            Math.PI * 2
+          );
+
+          ctx.fill();
+
+
+          ctx.restore();
+
+        }
+
+
+        /* ====================================================== */
+        /* LADO ESQUERDO - FITA */
+        /* ====================================================== */
+
+        function drawSequential() {
+
+          const panelX = 25;
+
+          const panelY = 22;
+
+          const panelW = 485;
+
+          const panelH = 385;
+
+
+          roundedRect(
+            panelX,
+            panelY,
+            panelW,
+            panelH,
+            12,
+            COLORS.panel,
+            COLORS.border
+          );
+
+
+          drawText(
+            "ACESSO SEQUENCIAL",
+            50,
+            52,
+            COLORS.mutedLight,
+            13,
+            "700"
+          );
+
+
+          drawText(
+            "Fita Magnética",
+            50,
+            80,
+            COLORS.text,
+            21,
+            "700"
+          );
+
+
+          drawText(
+            "O leitor precisa percorrer os dados anteriores.",
+            50,
+            103,
+            COLORS.muted,
+            12
+          );
+
+
+          /*
+           * bobinas
+           */
+
+          const reelAngle =
+            tapeOffset * 0.035;
+
+
+          drawReel(
+            125,
+            183,
+            reelAngle
+          );
+
+
+          drawReel(
+            405,
+            183,
+            reelAngle
+          );
+
+
+          /*
+           * fita superior entre bobinas
+           */
+
+          ctx.strokeStyle =
+            COLORS.tapeDark;
+
+          ctx.lineWidth = 8;
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            160,
+            200
+          );
+
+          ctx.lineTo(
+            370,
+            200
+          );
+
+          ctx.stroke();
+
+
+          /*
+           * trilho de dados
+           */
+
+          const tapeY = 260;
+
+          const readerX = 260;
+
+          const blockWidth = 66;
+
+
+          /*
+           * fita
+           */
+
+          roundedRect(
+            48,
+            tapeY,
+            415,
+            56,
+            5,
+            "#334155"
+          );
+
+
+          /*
+           * clip para que os registros
+           * não escapem do trilho
+           */
+
+          ctx.save();
+
+          ctx.beginPath();
+
+          ctx.rect(
+            48,
+            tapeY,
+            415,
+            56
+          );
+
+          ctx.clip();
+
+
+          const offset =
+            tapeOffset % blockWidth;
+
+
+          for (
+            let i = -2;
+            i < 10;
+            i++
+          ) {
+
+            const x =
+              48 +
+              i * blockWidth +
+              offset;
+
+
+            /*
+             * endereço lógico
+             */
+
+            const addr =
+              ((i + 20) % 8);
+
+
+            ctx.fillStyle =
+              addr === 4
+                ? "rgba(251,113,133,.15)"
+                : "#273640";
+
+
+            ctx.fillRect(
+              x + 2,
+              tapeY + 4,
+              blockWidth - 4,
+              48
+            );
+
+
+            ctx.strokeStyle =
+              addr === 4
+                ? COLORS.sequential
+                : "#475569";
+
+
+            ctx.lineWidth =
+              addr === 4 ? 2 : 1;
+
+
+            ctx.strokeRect(
+              x + 2,
+              tapeY + 4,
+              blockWidth - 4,
+              48
+            );
+
+
+            drawMono(
+              `#${addr}`,
+              x + blockWidth / 2,
+              tapeY + 34,
+              addr === 4
+                ? COLORS.sequential
+                : COLORS.mutedLight,
+              13,
+              "center"
+            );
+
+          }
+
+
+          ctx.restore();
+
+
+          /*
+           * cabeça de leitura
+           */
+
+          ctx.save();
+
+          ctx.shadowColor =
+            COLORS.sequential;
+
+          ctx.shadowBlur = 12;
+
+
+          roundedRect(
+            readerX - 11,
+            tapeY - 17,
+            22,
+            22,
+            3,
+            COLORS.sequentialStrong
+          );
+
+
+          ctx.restore();
+
+
+          drawText(
+            "LEITOR",
+            readerX,
+            tapeY - 29,
+            COLORS.sequential,
+            10,
+            "700",
+            "center"
+          );
+
+
+          /*
+           * marcador vertical de leitura
+           */
+
+          ctx.strokeStyle =
+            "rgba(251,113,133,.55)";
+
+          ctx.lineWidth = 1;
+
+          ctx.setLineDash([
+            4,
+            5
+          ]);
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            readerX,
+            tapeY + 6
+          );
+
+          ctx.lineTo(
+            readerX,
+            tapeY + 51
+          );
+
+          ctx.stroke();
+
+          ctx.setLineDash([]);
+
+
+          /*
+           * seta indicando movimento
+           */
+
+          drawArrow(
+            145,
+            340,
+            365,
+            340,
+            COLORS.sequential,
+            2
+          );
+
+
+          drawText(
+            "movimento físico da fita",
+            255,
+            363,
+            COLORS.sequential,
+            11,
+            "600",
+            "center"
+          );
+
+
+          drawText(
+            "0 → 1 → 2 → 3 → 4",
+            255,
+            390,
+            COLORS.mutedLight,
+            13,
+            "700",
+            "center"
+          );
+
+        }
+
+
+        /* ====================================================== */
+        /* CPU */
+        /* ====================================================== */
+
+        function drawCPU(
+          x,
+          y
+        ) {
+
+          /*
+           * glow
+           */
+
+          ctx.save();
+
+          ctx.shadowBlur = 20;
+
+          ctx.shadowColor =
+            "rgba(56,189,248,.25)";
+
+
+          roundedRect(
+            x,
+            y,
+            115,
+            115,
+            9,
+            "#101c24",
+            COLORS.ram
+          );
+
+
+          ctx.restore();
+
+
+          /*
+           * pinos
+           */
+
+          ctx.strokeStyle =
+            "#64748b";
+
+          ctx.lineWidth = 2;
+
+
+          for (
+            let i = 0;
+            i < 5;
+            i++
+          ) {
+
+            const py =
+              y + 18 + i * 20;
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+              x - 8,
+              py
+            );
+
+            ctx.lineTo(
+              x,
+              py
+            );
+
+            ctx.stroke();
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+              x + 115,
+              py
+            );
+
+            ctx.lineTo(
+              x + 123,
+              py
+            );
+
+            ctx.stroke();
+
+          }
+
+
+          drawText(
+            "CPU",
+            x + 57,
+            y + 57,
+            COLORS.ram,
+            24,
+            "800",
+            "center"
+          );
+
+
+          drawText(
+            "PROCESSADOR",
+            x + 57,
+            y + 82,
+            COLORS.muted,
+            9,
+            "600",
+            "center"
+          );
+
+        }
+
+
+        /* ====================================================== */
+        /* RAM */
+        /* ====================================================== */
+
+        function drawRAM(
+          x,
+          y
+        ) {
+
+          ramCells.length = 0;
+
+
+          /*
+           * módulo externo
+           */
+
+          roundedRect(
+            x - 23,
+            y - 28,
+            235,
+            237,
+            10,
+            "#10191f",
+            "#334155"
+          );
+
+
+          drawText(
+            "MEMÓRIA RAM",
+            x + 94,
+            y - 7,
+            COLORS.ram,
+            11,
+            "700",
+            "center"
+          );
+
+
+          const cellWidth = 57;
+
+          const cellHeight = 48;
+
+          const gap = 6;
+
+
+          let address = 0;
+
+
+          for (
+            let row = 0;
+            row < 3;
+            row++
+          ) {
+
+            for (
+              let col = 0;
+              col < 3;
+              col++
+            ) {
+
+              const cx =
+                x +
+                col *
+                (cellWidth + gap);
+
+              const cy =
+                y +
+                row *
+                (cellHeight + gap);
+
+
+              const active =
+                address ===
+                selectedAddress;
+
+
+              if (active) {
+
+                ctx.save();
+
+                ctx.shadowColor =
+                  COLORS.ram;
+
+                ctx.shadowBlur =
+                  20;
+
+              }
+
+
+              roundedRect(
+                cx,
+                cy,
+                cellWidth,
+                cellHeight,
+                4,
+                active
+                  ? COLORS.ramStrong
+                  : "#17242b",
+                active
+                  ? COLORS.ram
+                  : "#334155"
+              );
+
+
+              if (active) {
+
+                ctx.restore();
+
+              }
+
+
+              drawMono(
+                `#${address}`,
+                cx + cellWidth / 2,
+                cy + 29,
+                active
+                  ? "#ffffff"
+                  : "#94a3b8",
+                13,
+                "center"
+              );
+
+
+              ramCells.push({
+
+                address,
+
+                x: cx,
+
+                y: cy,
+
+                width:
+                  cellWidth,
+
+                height:
+                  cellHeight,
+
+                centerX:
+                  cx +
+                  cellWidth / 2,
+
+                centerY:
+                  cy +
+                  cellHeight / 2
+
+              });
+
+
+              address++;
+
+            }
+
+          }
+
+
+          /*
+           * contatos dourados
+           */
+
+          for (
+            let i = 0;
+            i < 8;
+            i++
+          ) {
+
+            ctx.fillStyle =
+              "#8b6914";
+
+            ctx.fillRect(
+              x + i * 24,
+              y + 177,
+              13,
+              10
+            );
+
+          }
+
+        }
+
+
+        /* ====================================================== */
+        /* LADO DIREITO */
+        /* ====================================================== */
+
+        function drawRandomAccess() {
+
+          const panelX = 535;
+
+          const panelY = 22;
+
+          const panelW = 490;
+
+          const panelH = 385;
+
+
+          roundedRect(
+            panelX,
+            panelY,
+            panelW,
+            panelH,
+            12,
+            COLORS.panel2,
+            COLORS.border
+          );
+
+
+          drawText(
+            "ACESSO DIRETO",
+            560,
+            52,
+            COLORS.ram,
+            13,
+            "700"
+          );
+
+
+          drawText(
+            "CPU → Memória RAM",
+            560,
+            80,
+            COLORS.text,
+            21,
+            "700"
+          );
+
+
+          drawText(
+            "A CPU seleciona diretamente o endereço desejado.",
+            560,
+            103,
+            COLORS.muted,
+            12
+          );
+
+
+          const cpuX = 575;
+
+          const cpuY = 165;
+
+
+          const ramX = 808;
+
+          const ramY = 145;
+
+
+          drawCPU(
+            cpuX,
+            cpuY
+          );
+
+
+          drawRAM(
+            ramX,
+            ramY
+          );
+
+
+          const selected =
+            ramCells.find(
+              cell =>
+                cell.address ===
+                selectedAddress
+            );
+
+
+          if (!selected)
+            return;
+
+
+          /*
+           * BARRAMENTO
+           */
+
+          const startX =
+            cpuX + 123;
+
+          const startY =
+            cpuY + 58;
+
+
+          const bendX =
+            760;
+
+
+          const endX =
+            selected.x - 6;
+
+          const endY =
+            selected.centerY;
+
+
+          /*
+           * caminho base
+           */
+
+          ctx.strokeStyle =
+            "#334155";
+
+          ctx.lineWidth = 3;
+
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            startX,
+            startY
+          );
+
+          ctx.lineTo(
+            bendX,
+            startY
+          );
+
+          ctx.lineTo(
+            bendX,
+            endY
+          );
+
+          ctx.lineTo(
+            endX,
+            endY
+          );
+
+          ctx.stroke();
+
+
+          /*
+           * caminho ativo
+           */
+
+          ctx.save();
+
+          ctx.strokeStyle =
+            COLORS.ram;
+
+          ctx.lineWidth = 2;
+
+          ctx.shadowColor =
+            COLORS.ram;
+
+          ctx.shadowBlur = 10;
+
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            startX,
+            startY
+          );
+
+          ctx.lineTo(
+            bendX,
+            startY
+          );
+
+          ctx.lineTo(
+            bendX,
+            endY
+          );
+
+          ctx.lineTo(
+            endX,
+            endY
+          );
+
+          ctx.stroke();
+
+
+          ctx.restore();
+
+
+          /*
+           * comprimento total do caminho
+           */
+
+          const segment1 =
+            bendX - startX;
+
+          const segment2 =
+            Math.abs(
+              endY - startY
+            );
+
+          const segment3 =
+            endX - bendX;
+
+
+          const total =
+            segment1 +
+            segment2 +
+            segment3;
+
+
+          let current =
+            busProgress *
+            total;
+
+
+          let px;
+
+          let py;
+
+
+          /*
+           * horizontal CPU -> barramento
+           */
+
+          if (
+            current <=
+            segment1
+          ) {
+
+            px =
+              startX +
+              current;
+
+            py =
+              startY;
+
+          }
+
+          /*
+           * vertical
+           */
+
+          else if (
+            current <=
+            segment1 +
+            segment2
+          ) {
+
+            const local =
+              current -
+              segment1;
+
+
+            px =
+              bendX;
+
+
+            py =
+              startY +
+              Math.sign(
+                endY -
+                startY
+              ) *
+              local;
+
+          }
+
+          /*
+           * horizontal barramento -> RAM
+           */
+
+          else {
+
+            const local =
+              current -
+              segment1 -
+              segment2;
+
+
+            px =
+              bendX +
+              local;
+
+            py =
+              endY;
+
+          }
+
+
+          /*
+           * pulso elétrico
+           */
+
+          glowCircle(
+            px,
+            py,
+            5,
+            COLORS.ram
+          );
+
+
+          /*
+           * rótulo barramento
+           */
+
+          drawText(
+            "ADDRESS BUS",
+            730,
+            194,
+            COLORS.ram,
+            9,
+            "700",
+            "center"
+          );
+
+
+          drawMono(
+            `ENDEREÇO #${selectedAddress}`,
+            744,
+            314,
+            COLORS.ram,
+            12,
+            "center"
+          );
+
+
+          /*
+           * comparação final
+           */
+
+          roundedRect(
+            585,
+            350,
+            405,
+            39,
+            6,
+            "rgba(56,189,248,.055)",
+            "rgba(56,189,248,.18)"
+          );
+
+
+          drawText(
+            `CPU solicita #${selectedAddress} → RAM seleciona #${selectedAddress} diretamente`,
+            787,
+            375,
+            COLORS.mutedLight,
+            11,
+            "600",
+            "center"
+          );
+
+        }
+
+
+        /* ====================================================== */
+        /* DIVISÃO CENTRAL */
+        /* ====================================================== */
+
+        function drawComparison() {
+
+          /*
+           * VS
+           */
+
+          ctx.fillStyle =
+            COLORS.bg;
+
+          ctx.strokeStyle =
+            COLORS.border;
+
+          ctx.lineWidth = 1;
+
+
+          ctx.beginPath();
+
+          ctx.arc(
+            522,
+            215,
+            18,
+            0,
+            Math.PI * 2
+          );
+
+          ctx.fill();
+
+          ctx.stroke();
+
+
+          drawText(
+            "VS",
+            522,
+            220,
+            COLORS.muted,
+            10,
+            "800",
+            "center"
+          );
+
+        }
+
+
+        /* ====================================================== */
+        /* DESENHO */
+        /* ====================================================== */
+
+        function draw() {
+
+          ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+
+          ctx.fillStyle =
+            COLORS.bg;
+
+          ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+
+          drawSequential();
+
+          drawRandomAccess();
+
+          drawComparison();
+
+        }
+
+
+        /* ====================================================== */
+        /* LOOP */
+        /* ====================================================== */
+
+        function animate(timestamp) {
+
+          const delta =
+            Math.min(
+              timestamp -
+              lastTime,
+              40
+            );
+
+
+          lastTime =
+            timestamp;
+
+
+          if (running) {
+
+            time +=
+              delta;
+
+
+            /*
+             * velocidade da fita
+             */
+
+            tapeOffset +=
+              delta * 0.035;
+
+
+            /*
+             * pulso CPU -> RAM
+             */
+
+            busProgress +=
+              delta * 0.00055;
+
+
+            if (
+              busProgress >
+              1
+            ) {
+
+              /*
+               * pequena pausa visual
+               * antes de novo acesso
+               */
+
+              busProgress =
+                0;
+
+            }
+
+          }
+
+
+          draw();
+
+
+          requestAnimationFrame(
+            animate
+          );
+
+        }
+
+
+        /* ====================================================== */
+        /* CLIQUE NA RAM */
+        /* ====================================================== */
+
+        canvas.addEventListener(
+          "click",
+          event => {
+
+            const rect =
+              canvas.getBoundingClientRect();
+
+
+            const scaleX =
+              canvas.width /
+              rect.width;
+
+
+            const scaleY =
+              canvas.height /
+              rect.height;
+
+
+            const mouseX =
+              (
+                event.clientX -
+                rect.left
+              ) *
+              scaleX;
+
+
+            const mouseY =
+              (
+                event.clientY -
+                rect.top
+              ) *
+              scaleY;
+
+
+            const clicked =
+              ramCells.find(
+                cell =>
+
+                  mouseX >=
+                  cell.x &&
+
+                  mouseX <=
+                  cell.x +
+                  cell.width &&
+
+                  mouseY >=
+                  cell.y &&
+
+                  mouseY <=
+                  cell.y +
+                  cell.height
+              );
+
+
+            if (clicked) {
+
+              selectedAddress =
+                clicked.address;
+
+
+              /*
+               * reinicia o pulso
+               */
+
+              busProgress = 0;
+
+            }
+
+          }
+        );
+
+
+        /* ====================================================== */
+        /* CURSOR NA RAM */
+        /* ====================================================== */
+
+        canvas.addEventListener(
+          "mousemove",
+          event => {
+
+            const rect =
+              canvas.getBoundingClientRect();
+
+
+            const scaleX =
+              canvas.width /
+              rect.width;
+
+
+            const scaleY =
+              canvas.height /
+              rect.height;
+
+
+            const x =
+              (
+                event.clientX -
+                rect.left
+              ) *
+              scaleX;
+
+
+            const y =
+              (
+                event.clientY -
+                rect.top
+              ) *
+              scaleY;
+
+
+            const hover =
+              ramCells.some(
+                cell =>
+
+                  x >=
+                  cell.x &&
+
+                  x <=
+                  cell.x +
+                  cell.width &&
+
+                  y >=
+                  cell.y &&
+
+                  y <=
+                  cell.y +
+                  cell.height
+              );
+
+
+            canvas.style.cursor =
+              hover
+                ? "pointer"
+                : "default";
+
+          }
+        );
+
+
+        /* ====================================================== */
+        /* PAUSAR */
+        /* ====================================================== */
+
+        pauseBtn.addEventListener(
+          "click",
+          () => {
+
+            running =
+              !running;
+
+
+            pauseBtn.innerHTML =
+              running
+
+                ? `
+                        <i class="fa-solid fa-pause"></i>
+                        Pausar
+                      `
+
+                : `
+                        <i class="fa-solid fa-play"></i>
+                        Continuar
+                      `;
+
+          }
+        );
+
+
+        /* ====================================================== */
+        /* RESET */
+        /* ====================================================== */
+
+        resetBtn.addEventListener(
+          "click",
+          () => {
+
+            tapeOffset = 0;
+
+            busProgress = 0;
+
+            selectedAddress = 7;
+
+            running = true;
+
+
+            pauseBtn.innerHTML = `
+                <i class="fa-solid fa-pause"></i>
+                Pausar
+            `;
+
+          }
+        );
+
+
+        /* ====================================================== */
+        /* START */
+        /* ====================================================== */
+
+        requestAnimationFrame(
+          animate
+        );
+
+      });
+
+    </script>
+    <!-- Coloque este script junto com os outros no final da página -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const canvas = document.getElementById('canvas-enderecamento');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        // Configurações Globais
+        ctx.font = "14px system-ui, -apple-system, sans-serif";
+        const textCol = "#e2e8f0";
+        const muteCol = "#64748b";
+        const accentCol = "#38bdf8";
+
+        function drawArrowLine(ctx, fromX, fromY, toX, toY, color = accentCol, dashed = false) {
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          if (dashed) ctx.setLineDash([5, 5]);
+          else ctx.setLineDash([]);
+          ctx.moveTo(fromX, fromY);
+          ctx.lineTo(toX, toY);
+          ctx.stroke();
+
+          ctx.setLineDash([]); // Reset
+
+          // Seta
+          const headlen = 8;
+          const angle = Math.atan2(toY - fromY, toX - fromX);
+          ctx.beginPath();
+          ctx.fillStyle = color;
+          ctx.moveTo(toX, toY);
+          ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+          ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+          ctx.fill();
+        }
+
+        // ==========================================
+        // LADO ESQUERDO: Acesso Sequencial (Fita)
+        // ==========================================
+        ctx.fillStyle = muteCol;
+        ctx.font = "bold 16px system-ui";
+        ctx.fillText("Passado: Acesso Sequencial", 60, 40);
+        ctx.font = "13px system-ui";
+        ctx.fillText("(Fita Magnética)", 100, 60);
+
+        // Bobinas da fita
+        ctx.beginPath(); ctx.arc(100, 140, 30, 0, Math.PI * 2); ctx.fillStyle = "#1e293b"; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = "#334155"; ctx.stroke();
+        ctx.beginPath(); ctx.arc(100, 140, 10, 0, Math.PI * 2); ctx.fillStyle = "#0f172a"; ctx.fill();
+
+        ctx.beginPath(); ctx.arc(320, 140, 30, 0, Math.PI * 2); ctx.fillStyle = "#1e293b"; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = "#334155"; ctx.stroke();
+        ctx.beginPath(); ctx.arc(320, 140, 10, 0, Math.PI * 2); ctx.fillStyle = "#0f172a"; ctx.fill();
+
+        // Fita
+        ctx.fillStyle = "#334155";
+        ctx.fillRect(100, 190, 220, 40);
+
+        // Blocos de dados na fita
+        ctx.fillStyle = textCol;
+        ctx.font = "12px monospace";
+        for (let i = 0; i <= 4; i++) {
+          ctx.strokeStyle = "#0f172a";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(110 + (i * 40), 190, 40, 40);
+          ctx.fillText(`#${i}`, 118 + (i * 40), 215);
+        }
+
+        // Cabeça de leitura
+        ctx.fillStyle = "#e11d48";
+        ctx.fillRect(125, 230, 10, 20);
+        ctx.fillStyle = "#fb7185";
+        ctx.font = "12px system-ui";
+        ctx.fillText("Leitor", 112, 265);
+
+        // Caminho obrigatório
+        drawArrowLine(ctx, 130, 175, 270, 175, "#fb7185", true);
+        ctx.fillText("Precisa passar por #0, #1, #2, #3 para ler o #4", 60, 290);
+
+
+        // ==========================================
+        // DIVISÓRIA
+        // ==========================================
+        ctx.strokeStyle = "#1e2d36";
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(425, 20); ctx.lineTo(425, 300); ctx.stroke();
+
+
+        // ==========================================
+        // LADO DIREITO: Acesso Aleatório (RAM)
+        // ==========================================
+        ctx.fillStyle = accentCol;
+        ctx.font = "bold 16px system-ui";
+        ctx.fillText("Revolução: Acesso Aleatório", 530, 40);
+        ctx.font = "13px system-ui";
+        ctx.fillText("(Memória RAM)", 590, 60);
+
+        // Processador (CPU)
+        ctx.fillStyle = "#1e293b";
+        ctx.fillRect(470, 120, 80, 80);
+        ctx.strokeStyle = accentCol;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(470, 120, 80, 80);
+        ctx.fillStyle = accentCol;
+        ctx.font = "bold 18px system-ui";
+        ctx.fillText("CPU", 492, 165);
+
+        // Malha da RAM (Grid)
+        const ramX = 660;
+        const ramY = 110;
+        for (let row = 0; row < 3; row++) {
+          for (let col = 0; col < 3; col++) {
+            let addr = row * 3 + col;
+            ctx.fillStyle = (addr === 7) ? "#0284c7" : "#0f172a";
+            ctx.fillRect(ramX + (col * 45), ramY + (row * 45), 40, 40);
+            ctx.strokeStyle = "#334155";
+            ctx.strokeRect(ramX + (col * 45), ramY + (row * 45), 40, 40);
+
+            ctx.fillStyle = (addr === 7) ? "#fff" : "#475569";
+            ctx.font = "11px monospace";
+            ctx.fillText(`#${addr}`, ramX + (col * 45) + 5, ramY + (row * 45) + 24);
+          }
+        }
+
+        // Barramento de endereço (Pulo direto)
+        drawArrowLine(ctx, 555, 160, 705, 200, accentCol, false); // Linha da CPU até o #7
+
+        ctx.fillStyle = accentCol;
+        ctx.font = "12px system-ui";
+        ctx.fillText("Busca direta ao #7", 570, 150);
+
+        ctx.fillStyle = textCol;
+        ctx.fillText("O hardware se 'teletransporta' para o dado,", 510, 275);
+        ctx.fillText("permitindo nós espalhados (Ponteiros).", 520, 295);
+      });
+    </script>
+    <!-- Coloque este script junto com os outros no final da página -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const canvas = document.getElementById('canvas-enderecamento');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        // Configurações Globais
+        ctx.font = "14px system-ui, -apple-system, sans-serif";
+        const textCol = "#e2e8f0";
+        const muteCol = "#64748b";
+        const accentCol = "#38bdf8";
+
+        function drawArrowLine(ctx, fromX, fromY, toX, toY, color = accentCol, dashed = false) {
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          if (dashed) ctx.setLineDash([5, 5]);
+          else ctx.setLineDash([]);
+          ctx.moveTo(fromX, fromY);
+          ctx.lineTo(toX, toY);
+          ctx.stroke();
+
+          ctx.setLineDash([]); // Reset
+
+          // Seta
+          const headlen = 8;
+          const angle = Math.atan2(toY - fromY, toX - fromX);
+          ctx.beginPath();
+          ctx.fillStyle = color;
+          ctx.moveTo(toX, toY);
+          ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+          ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+          ctx.fill();
+        }
+
+        // ==========================================
+        // LADO ESQUERDO: Acesso Sequencial (Fita)
+        // ==========================================
+        ctx.fillStyle = muteCol;
+        ctx.font = "bold 16px system-ui";
+        ctx.fillText("Passado: Acesso Sequencial", 60, 40);
+        ctx.font = "13px system-ui";
+        ctx.fillText("(Fita Magnética)", 100, 60);
+
+        // Bobinas da fita
+        ctx.beginPath(); ctx.arc(100, 140, 30, 0, Math.PI * 2); ctx.fillStyle = "#1e293b"; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = "#334155"; ctx.stroke();
+        ctx.beginPath(); ctx.arc(100, 140, 10, 0, Math.PI * 2); ctx.fillStyle = "#0f172a"; ctx.fill();
+
+        ctx.beginPath(); ctx.arc(320, 140, 30, 0, Math.PI * 2); ctx.fillStyle = "#1e293b"; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = "#334155"; ctx.stroke();
+        ctx.beginPath(); ctx.arc(320, 140, 10, 0, Math.PI * 2); ctx.fillStyle = "#0f172a"; ctx.fill();
+
+        // Fita
+        ctx.fillStyle = "#334155";
+        ctx.fillRect(100, 190, 220, 40);
+
+        // Blocos de dados na fita
+        ctx.fillStyle = textCol;
+        ctx.font = "12px monospace";
+        for (let i = 0; i <= 4; i++) {
+          ctx.strokeStyle = "#0f172a";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(110 + (i * 40), 190, 40, 40);
+          ctx.fillText(`#${i}`, 118 + (i * 40), 215);
+        }
+
+        // Cabeça de leitura
+        ctx.fillStyle = "#e11d48";
+        ctx.fillRect(125, 230, 10, 20);
+        ctx.fillStyle = "#fb7185";
+        ctx.font = "12px system-ui";
+        ctx.fillText("Leitor", 112, 265);
+
+        // Caminho obrigatório
+        drawArrowLine(ctx, 130, 175, 270, 175, "#fb7185", true);
+        ctx.fillText("Precisa passar por #0, #1, #2, #3 para ler o #4", 60, 290);
+
+
+        // ==========================================
+        // DIVISÓRIA
+        // ==========================================
+        ctx.strokeStyle = "#1e2d36";
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(425, 20); ctx.lineTo(425, 300); ctx.stroke();
+
+
+        // ==========================================
+        // LADO DIREITO: Acesso Aleatório (RAM)
+        // ==========================================
+        ctx.fillStyle = accentCol;
+        ctx.font = "bold 16px system-ui";
+        ctx.fillText("Revolução: Acesso Aleatório", 530, 40);
+        ctx.font = "13px system-ui";
+        ctx.fillText("(Memória RAM)", 590, 60);
+
+        // Processador (CPU)
+        ctx.fillStyle = "#1e293b";
+        ctx.fillRect(470, 120, 80, 80);
+        ctx.strokeStyle = accentCol;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(470, 120, 80, 80);
+        ctx.fillStyle = accentCol;
+        ctx.font = "bold 18px system-ui";
+        ctx.fillText("CPU", 492, 165);
+
+        // Malha da RAM (Grid)
+        const ramX = 660;
+        const ramY = 110;
+        for (let row = 0; row < 3; row++) {
+          for (let col = 0; col < 3; col++) {
+            let addr = row * 3 + col;
+            ctx.fillStyle = (addr === 7) ? "#0284c7" : "#0f172a";
+            ctx.fillRect(ramX + (col * 45), ramY + (row * 45), 40, 40);
+            ctx.strokeStyle = "#334155";
+            ctx.strokeRect(ramX + (col * 45), ramY + (row * 45), 40, 40);
+
+            ctx.fillStyle = (addr === 7) ? "#fff" : "#475569";
+            ctx.font = "11px monospace";
+            ctx.fillText(`#${addr}`, ramX + (col * 45) + 5, ramY + (row * 45) + 24);
+          }
+        }
+
+        // Barramento de endereço (Pulo direto)
+        drawArrowLine(ctx, 555, 160, 705, 200, accentCol, false); // Linha da CPU até o #7
+
+        ctx.fillStyle = accentCol;
+        ctx.font = "12px system-ui";
+        ctx.fillText("Busca direta ao #7", 570, 150);
+
+        ctx.fillStyle = textCol;
+        ctx.fillText("O hardware se 'teletransporta' para o dado,", 510, 275);
+        ctx.fillText("permitindo nós espalhados (Ponteiros).", 520, 295);
+      });
+    </script>
+
+    <section class="lesson-section" id="memoria">
+      <header class="lesson-heading"><span>03</span>
+        <div>
+          <p>Gerenciamento e Hardware</p>
+          <h2>O "R" da RAM e o Fantasma da Fragmentação</h2>
+        </div>
+      </header>
+
+      <!-- Passo 1: A força bruta e o problema -->
+      <div style="background: #152026; border-left: 4px solid #38bdf8; padding: 1.5rem; border-radius: 0 8px 8px 0;">
+        <h3
+          style="color: #38bdf8; margin-top: 0; font-size: 1.2rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fa-solid fa-bolt" aria-hidden="true"></i> 1. A velocidade da RAM e a Força Bruta
+        </h3>
+        <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 1rem;">
+          RAM significa <em>Random Access Memory</em> (Acesso Aleatório). Na prática, isso significa que o processador
+          leva a mesma fração minúscula de tempo para ler a posição 0 ou a posição 8.000.000.
+        </p>
+        <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 0;">
+          <strong style="color: #e2e8f0;">O Estático (Array) é o queridinho do hardware:</strong> Como os dados moram em
+          blocos vizinhos (contíguos), a CPU acessa tudo instantaneamente. Mas ele tem um defeito grave: exige enormes
+          blocos inteiros. Conforme o sistema operacional aloca e libera espaço, a RAM vira um "queijo suíço" cheio de
+          buracos (Fragmentação). Se o Array pedir 100 espaços juntos e só houver pequenos buracos livres, o programa
+          quebra por falta de memória.
+        </p>
+      </div>
+
+      <!-- Passo 2: A solução que custa velocidade -->
+      <div style="background: #1e1b4b; border-left: 4px solid #818cf8; padding: 1.5rem; border-radius: 0 8px 8px 0;">
+        <h3
+          style="color: #818cf8; margin-top: 0; font-size: 1.2rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i> 2. O Dinâmico resolve a memória, mas cobra pedágio
+        </h3>
+        <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 0;">
+          Para não desperdiçar RAM e não travar o sistema, criamos as <strong>estruturas dinâmicas</strong> (como Listas
+          Encadeadas). Elas picotam a estrutura e jogam cada pedaço num buraco vazio da memória, interligando tudo com
+          ponteiros. O gerenciamento de memória fica perfeito! <br><br>
+          <strong style="color: #e2e8f0;">O problema:</strong> Navegar por ponteiros espalhados obriga a CPU a pular de
+          endereço em endereço. Em termos físicos de hardware, <strong>o acesso dinâmico é mais lento</strong> (Cache
+          Miss).
+        </p>
+      </div>
+
+      <!-- Passo 3: O Paradoxo (Por que usamos?) -->
+      <div style="background: #064e3b; border-left: 4px solid #10b981; padding: 1.5rem; border-radius: 0 8px 8px 0;">
+        <h3
+          style="color: #10b981; margin-top: 0; font-size: 1.2rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fa-solid fa-chess-knight" aria-hidden="true"></i> 3. O Xeque-Mate: A Algoritmia vence a Física
+        </h3>
+        <p style="color: #a7f3d0; line-height: 1.6; margin-bottom: 0;">
+          Se a estrutura dinâmica tem um acesso físico mais lento, por que a usamos para deixar sistemas mais rápidos? A
+          resposta está na <strong>inteligência do algoritmo</strong>. <br><br>
+          Imagine precisar inserir 1 novo cliente na primeira posição de um banco de dados com 1 milhão de registros. No
+          <strong>Array Estático</strong> (rápido fisicamente), você precisaria empurrar <em>1 milhão de registros</em>
+          uma casa para frente. Um trabalho absurdo. Na <strong>Lista Dinâmica</strong> (lenta fisicamente), você apenas
+          troca <em>a ligação de um único ponteiro</em>, e pronto. <br><br>
+          <strong style="color: #fff;">Conclusão:</strong> A estrutura dinâmica sacrifica um pouco da velocidade do
+          hardware para permitir algoritmos muito mais eficientes, o que torna o programa, no final das contas,
+          imensamente mais rápido.
+        </p>
+      </div>
+      </div>
+
+      <p class="section-lead">Abaixo temos uma simulação de memória RAM fragmentada. O total de espaço livre (6) é maior
+        que o tamanho das estruturas (3), mas o maior espaço contíguo é apenas 2. <strong>Arraste os bloquinhos azuis
+          para a área da memória e veja o que acontece.</strong></p>
+
+      <div class="interactive-lab"
+        style="background: #0b1215; border: 1px solid #1e2d36; border-radius: 8px; padding: 3rem 1.5rem 2rem 1.5rem; overflow-x: auto;">
+
+        <!-- Memória Física (Track) -->
+        <div id="ram-track"
+          style="display: flex; gap: 6px; justify-content: center; min-width: 700px; margin-bottom: 3rem; padding-top: 1.5rem;">
+          <!-- Gerado via JS para manter o código limpo -->
+        </div>
+
+        <div style="text-align: center; height: 30px; margin-bottom: 2rem;">
+          <p id="lab-console"
+            style="font-family: monospace; font-size: 1rem; color: #64748b; margin: 0; transition: color 0.3s;">
+            Aguardando alocação...</p>
+        </div>
+
+        <!-- Área de Draggables -->
+        <div style="display: flex; gap: 4rem; justify-content: center; align-items: flex-end; min-width: 700px;">
+
+          <!-- Arrastável: Array -->
+          <div style="text-align: center;">
+            <p style="color: #e2e8f0; font-size: 0.95rem; margin-bottom: 0.3rem;"><strong>Array[3]</strong></p>
+            <p style="color: #64748b; font-size: 0.8rem; margin-bottom: 1rem;">Exige vizinhança.</p>
+            <div id="drag-static" draggable="true"
+              style="display: flex; cursor: grab; background: #0ea5e9; border: 2px solid #0284c7; padding: 2px; border-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s;">
+              <div style="width: 35px; height: 45px; border-right: 1px solid #0369a1;"></div>
+              <div style="width: 35px; height: 45px; border-right: 1px solid #0369a1;"></div>
+              <div style="width: 35px; height: 45px;"></div>
+            </div>
+          </div>
+
+          <!-- Arrastável: Lista -->
+          <div style="text-align: center;">
+            <p style="color: #e2e8f0; font-size: 0.95rem; margin-bottom: 0.3rem;"><strong>Lista Encadeada (3
+                Nós)</strong></p>
+            <p style="color: #64748b; font-size: 0.8rem; margin-bottom: 1rem;">Usa ponteiros.</p>
+            <div id="drag-dynamic" draggable="true"
+              style="display: flex; gap: 12px; cursor: grab; transition: transform 0.2s;">
+              <div
+                style="width: 45px; height: 45px; background: #4f46e5; border: 2px solid #3730a3; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                N</div>
+              <div
+                style="width: 45px; height: 45px; background: #4f46e5; border: 2px solid #3730a3; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                N</div>
+              <div
+                style="width: 45px; height: 45px; background: #4f46e5; border: 2px solid #3730a3; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                N</div>
+            </div>
+          </div>
+
+          <button id="btn-reset"
+            style="padding: 0.6rem 1.2rem; background: #1e2d36; color: #e2e8f0; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; margin-left: 2rem;">
+            <i class="fa-solid fa-rotate-left"></i> Limpar RAM
+          </button>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Script focado na interação da Memória -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const ramTrack = document.getElementById("ram-track");
+        const dragStatic = document.getElementById("drag-static");
+        const dragDynamic = document.getElementById("drag-dynamic");
+        const consoleMsg = document.getElementById("lab-console");
+        const btnReset = document.getElementById("btn-reset");
+        let ramSlots = [];
+
+        // Estado inicial da memória: 1=Ocupado pelo sistema, 0=Livre para uso
+        const initialMap = [
+          { state: 1, label: "SO" },
+          { state: 0, label: "Livre" },
+          { state: 0, label: "Livre" },
+          { state: 1, label: "App" },
+          { state: 0, label: "Livre" },
+          { state: 0, label: "Livre" },
+          { state: 1, label: "Aba 1" },
+          { state: 0, label: "Livre" },
+          { state: 0, label: "Livre" },
+          { state: 1, label: "Serviço" }
+        ];
+
+        function renderRAM() {
+          ramTrack.innerHTML = "";
+          ramSlots = [];
+
+          initialMap.forEach((block, index) => {
+            const slot = document.createElement("div");
+            slot.style.width = "65px";
+            slot.style.height = "75px";
+            slot.style.borderRadius = "6px";
+            slot.style.position = "relative";
+            slot.style.display = "flex";
+            slot.style.flexDirection = "column";
+            slot.style.alignItems = "center";
+            slot.style.justifyContent = "center";
+            slot.style.fontFamily = "monospace";
+            slot.style.transition = "all 0.3s ease";
+
+            // Endereço na RAM simulado
+            const address = document.createElement("span");
+            address.innerText = "#" + index;
+            address.style.position = "absolute";
+            address.style.top = "-22px";
+            address.style.fontSize = "0.75rem";
+            address.style.color = "#64748b";
+            slot.appendChild(address);
+
+            if (block.state === 1) {
+              slot.style.background = "#1e293b";
+              slot.style.border = "1px solid #334155";
+              slot.style.color = "#94a3b8";
+              slot.dataset.status = "system";
+              const txt = document.createElement("span");
+              txt.innerText = block.label;
+              txt.style.fontSize = "0.8rem";
+              slot.appendChild(txt);
+            } else {
+              slot.style.background = "transparent";
+              slot.style.border = "1px dashed #334155";
+              slot.style.color = "#475569";
+              slot.dataset.status = "free";
+              slot.dataset.index = index;
+              const txt = document.createElement("span");
+              txt.innerText = block.label;
+              txt.style.fontSize = "0.8rem";
+              slot.appendChild(txt);
+            }
+
+            ramSlots.push(slot);
+            ramTrack.appendChild(slot);
+          });
+
+          // Reseta visual dos draggables
+          dragStatic.style.opacity = "1";
+          dragStatic.style.pointerEvents = "auto";
+          dragDynamic.style.opacity = "1";
+          dragDynamic.style.pointerEvents = "auto";
+          consoleMsg.innerText = "Aguardando alocação...";
+          consoleMsg.style.color = "#64748b";
+        }
+
+        renderRAM();
+
+        // Configuração do Drag and Drop
+        let draggedType = null;
+
+        [dragStatic, dragDynamic].forEach(item => {
+          item.addEventListener("dragstart", (e) => {
+            draggedType = e.target.id;
+            e.dataTransfer.effectAllowed = "move";
+            e.dataTransfer.setData("text/plain", draggedType);
+            e.target.style.transform = "scale(1.05)";
+          });
+          item.addEventListener("dragend", (e) => {
+            e.target.style.transform = "scale(1)";
+          });
+        });
+
+        ramTrack.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+        });
+
+        ramTrack.addEventListener("drop", (e) => {
+          e.preventDefault();
+          const draggedId = e.dataTransfer.getData("text/plain");
+
+          if (draggedId === "drag-static") {
+            // Falha da Fragmentação Externa
+            dragStatic.style.animation = "shake 0.4s";
+            setTimeout(() => dragStatic.style.animation = "", 400);
+
+            consoleMsg.innerHTML = "<strong>FALHA (Fragmentação):</strong> O Array exige 3 blocos contíguos. O maior espaço vazio consecutivo é de apenas 2 blocos.";
+            consoleMsg.style.color = "#e11d48";
+
+          } else if (draggedId === "drag-dynamic") {
+            // Sucesso da Alocação Dinâmica com ponteiros
+            const freeSlotsData = [];
+            ramSlots.forEach((slot, idx) => {
+              if (slot.dataset.status === "free" && freeSlotsData.length < 3) {
+                freeSlotsData.push({ element: slot, index: idx });
+              }
+            });
+
+            if (freeSlotsData.length === 3) {
+              freeSlotsData.forEach((node, i) => {
+                const el = node.element;
+                el.style.background = "#4f46e5";
+                el.style.border = "1px solid #3730a3";
+                el.style.color = "#fff";
+                el.dataset.status = "allocated";
+
+                // Lógica para mostrar onde o ponteiro aponta
+                const nextAddress = (i < 2) ? `#${freeSlotsData[i + 1].index}` : "NULL";
+
+                el.innerHTML = `
+                            <div style="position: absolute; top: -22px; font-size: 0.75rem; color: #a5b4fc;">#${node.index}</div>
+                            <span style="font-weight: bold; font-size: 1.1rem; margin-bottom: 2px;">N${i + 1}</span>
+                            <span style="font-size: 0.6rem; color: #c7d2fe; background: #312e81; padding: 2px 4px; border-radius: 4px;">&rarr; ${nextAddress}</span>
+                        `;
+              });
+
+              dragDynamic.style.opacity = "0.3";
+              dragDynamic.style.pointerEvents = "none";
+              consoleMsg.innerHTML = "<strong>SUCESSO:</strong> A Lista alocou nos espaços vagos e usou ponteiros para indicar onde está o próximo pedaço do dado.";
+              consoleMsg.style.color = "#10b981";
+            }
+          }
+        });
+
+        btnReset.addEventListener("click", renderRAM);
+      });
+    </script>
+    <style>
+      @keyframes shake {
+
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+
+        25% {
+          transform: translateX(-6px);
+        }
+
+        50% {
+          transform: translateX(6px);
+        }
+
+        75% {
+          transform: translateX(-6px);
+        }
+      }
+    </style>
+
+
+    <footer class="lesson-section"
+      style="border-top: 1px solid #1e2d36; padding-top: 2rem; margin-top: 4rem; text-align: center; color: #64748b; font-size: 0.9rem;">
+      <p>Material de autoria do Professor Mestre Mateus de Sousa Valente, dos cursos de TI da Uniube. Todos os direitos
+        reservados © 2026.</p>
+    </footer>
+  </main>
+
+  <script>
+    // Configurações globais para os diagramas Canvas
+    const fontFamily = "system-ui, -apple-system, sans-serif";
+    const colors = {
+      bg: "#111a1f",
+      text: "#e2e8f0",
+      accent: "#38bdf8",
+      arrayBg: "#1e2d36",
+      arrayBorder: "#334155",
+      dynamicBg: "#0f766e",
+      nodeBg: "#4f46e5",
+      freeMemory: "#1e293b",
+      usedMemory: "#94a3b8",
+      error: "#e11d48",
+      success: "#10b981"
+    };
+
+    function drawArrow(ctx, fromX, fromY, toX, toY) {
+      const headlen = 10;
+      const dx = toX - fromX;
+      const dy = toY - fromY;
+      const angle = Math.atan2(dy, dx);
+      ctx.beginPath();
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(toX, toY);
+      ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.moveTo(toX, toY);
+      ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.stroke();
+    }
+
+    // --- CANVAS 1: Modelos de Estruturas ---
+    const ctxMod = document.getElementById('canvas-modelos').getContext('2d');
+
+    // Configuração de texto
+    ctxMod.font = `14px ${fontFamily}`;
+    ctxMod.fillStyle = colors.text;
+
+    // 1. Array Estático
+    ctxMod.fillText("1. Array Estático (Tamanho fixo = 5)", 20, 30);
+    for (let i = 0; i < 5; i++) {
+      ctxMod.fillStyle = colors.arrayBg;
+      ctxMod.fillRect(20 + (i * 50), 45, 50, 40);
+      ctxMod.strokeStyle = colors.arrayBorder;
+      ctxMod.strokeRect(20 + (i * 50), 45, 50, 40);
+      ctxMod.fillStyle = colors.text;
+      ctxMod.fillText(i < 4 ? Math.floor(Math.random() * 99) : "", 35 + (i * 50), 70); // Último vazio
+    }
+    ctxMod.fillStyle = "#64748b";
+    ctxMod.fillText("Espaço ocioso (desperdício)", 280, 70);
+
+    // 2. Array Dinâmico
+    ctxMod.fillStyle = colors.text;
+    ctxMod.fillText("2. Array Dinâmico (Crescimento sob demanda)", 20, 140);
+    // Array antigo
+    for (let i = 0; i < 3; i++) {
+      ctxMod.fillStyle = colors.usedMemory;
+      ctxMod.fillRect(20 + (i * 50), 155, 50, 40);
+      ctxMod.strokeRect(20 + (i * 50), 155, 50, 40);
+    }
+    ctxMod.fillStyle = colors.error;
+    ctxMod.fillText("Encheu!", 180, 180);
+
+    // Seta de realocação
+    ctxMod.strokeStyle = colors.accent;
+    ctxMod.lineWidth = 2;
+    drawArrow(ctxMod, 240, 175, 300, 175);
+
+    // Novo array
+    ctxMod.lineWidth = 1;
+    for (let i = 0; i < 6; i++) {
+      ctxMod.fillStyle = i < 4 ? colors.dynamicBg : colors.arrayBg;
+      ctxMod.fillRect(320 + (i * 50), 155, 50, 40);
+      ctxMod.strokeStyle = colors.accent;
+      ctxMod.strokeRect(320 + (i * 50), 155, 50, 40);
+    }
+    ctxMod.fillStyle = "#64748b";
+    ctxMod.fillText("Realoca o dobro do tamanho e copia", 320, 215);
+
+    // 3. Lista Encadeada
+    ctxMod.fillStyle = colors.text;
+    ctxMod.fillText("3. Lista Encadeada (Nós dispersos na memória)", 20, 260);
+    const nodesX = [20, 180, 340, 500];
+    const nodesY = [280, 295, 270, 290];
+    for (let i = 0; i < 4; i++) {
+      ctxMod.fillStyle = colors.nodeBg;
+      ctxMod.fillRect(nodesX[i], nodesY[i], 40, 30); // Dado
+      ctxMod.fillStyle = "#3730a3";
+      ctxMod.fillRect(nodesX[i] + 40, nodesY[i], 20, 30); // Ponteiro
+      ctxMod.strokeStyle = colors.accent;
+      ctxMod.strokeRect(nodesX[i], nodesY[i], 60, 30);
+
+      ctxMod.fillStyle = "#fff";
+      ctxMod.fillText("D", nodesX[i] + 15, nodesY[i] + 20);
+
+      if (i < 3) {
+        ctxMod.strokeStyle = colors.text;
+        drawArrow(ctxMod, nodesX[i] + 50, nodesY[i] + 15, nodesX[i + 1], nodesY[i + 1] + 15);
+      } else {
+        ctxMod.fillStyle = colors.error;
+        ctxMod.fillText("NULL", nodesX[i] + 70, nodesY[i] + 20);
+      }
+    }
+
+
+    // --- CANVAS 2: Fragmentação ---
+    const ctxFrag = document.getElementById('canvas-fragmentacao').getContext('2d');
+    ctxFrag.font = `14px ${fontFamily}`;
+
+    ctxFrag.fillStyle = colors.text;
+    ctxFrag.fillText("Memória Física (RAM)", 20, 30);
+
+    // Desenhando o mapa de memória (14 blocos)
+    // 1: ocupado, 0: livre
+    const memoryMap = [1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1];
+
+    for (let i = 0; i < memoryMap.length; i++) {
+      ctxFrag.fillStyle = memoryMap[i] ? colors.usedMemory : colors.freeMemory;
+      ctxFrag.fillRect(20 + (i * 50), 50, 50, 50);
+      ctxFrag.strokeStyle = colors.arrayBg;
+      ctxFrag.strokeRect(20 + (i * 50), 50, 50, 50);
+
+      if (!memoryMap[i]) {
+        ctxFrag.fillStyle = colors.accent;
+        ctxFrag.fillText("Livre", 28 + (i * 50), 80);
+      }
+    }
+
+    ctxFrag.fillStyle = "#64748b";
+    ctxFrag.fillText("Total de espaço livre: 6 blocos. Maior espaço contíguo: 3 blocos.", 20, 125);
+
+    // Tentativa Array
+    ctxFrag.fillStyle = colors.text;
+    ctxFrag.fillText("Tentativa 1: Alocar Array[4] (Precisa de 4 contíguos)", 20, 180);
+    ctxFrag.fillStyle = colors.arrayBg;
+    for (let i = 0; i < 4; i++) {
+      ctxFrag.fillRect(20 + (i * 40), 200, 40, 30);
+      ctxFrag.strokeRect(20 + (i * 40), 200, 40, 30);
+    }
+    ctxFrag.fillStyle = colors.error;
+    ctxFrag.font = `bold 16px ${fontFamily}`;
+    ctxFrag.fillText("FALHOU! Fragmentação externa impede a alocação.", 200, 220);
+
+    // Tentativa Lista
+    ctxFrag.font = `14px ${fontFamily}`;
+    ctxFrag.fillStyle = colors.text;
+    ctxFrag.fillText("Tentativa 2: Alocar Lista Encadeada de 4 nós (Aceita fragmentação)", 20, 270);
+
+    // Desenha setinhas indo para os buracos livres
+    ctxFrag.fillStyle = colors.success;
+    ctxFrag.font = `bold 16px ${fontFamily}`;
+    ctxFrag.fillText("SUCESSO!", 20, 310);
+
+    ctxFrag.font = `13px ${fontFamily}`;
+    ctxFrag.fillStyle = colors.text;
+    ctxFrag.fillText("Os nós se espalham nos blocos livres e se conectam via ponteiros.", 110, 310);
+
+    // Linhas ilustrativas para a memória
+    ctxFrag.strokeStyle = colors.success;
+    ctxFrag.lineWidth = 1;
+    ctxFrag.setLineDash([5, 5]);
+    drawArrow(ctxFrag, 150, 290, 130, 100); // Para o 1º buraco
+    drawArrow(ctxFrag, 200, 290, 180, 100); // Para o 2º buraco
+    drawArrow(ctxFrag, 250, 290, 430, 100); // Para o buraco distante
+    ctxFrag.setLineDash([]);
+  </script>
+</body>
+
+</html>

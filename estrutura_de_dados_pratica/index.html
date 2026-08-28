@@ -71,6 +71,41 @@
     .section h2 { margin: 0; font-size: clamp(1.5rem, 3vw, 2.35rem); line-height: 1.08; }
     .lead { max-width: 970px; color: var(--muted); }
 
+    .course-module-layout { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(330px, .92fr); gap: 16px; align-items: stretch; }
+    .course-module-card, .course-module-lessons { min-width: 0; border: 1px solid var(--line); border-radius: 16px; background: #0a1418; }
+    .course-module-card { position: relative; display: flex; padding: clamp(22px, 4vw, 36px); flex-direction: column; overflow: hidden; }
+    .course-module-card::before { position: absolute; inset: 0 auto 0 0; width: 4px; background: linear-gradient(var(--green), var(--blue)); content: ""; }
+    .course-module-card::after { position: absolute; right: -72px; bottom: -92px; width: 260px; height: 260px; border: 1px solid rgba(97, 227, 165, .13); border-radius: 50%; box-shadow: 0 0 0 42px rgba(107, 188, 255, .025); content: ""; pointer-events: none; }
+    .course-module-meta { position: relative; z-index: 1; display: flex; margin-bottom: 32px; align-items: center; justify-content: space-between; gap: 12px; }
+    .course-module-number { color: var(--green); font: 500 .66rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .course-module-status { display: inline-flex; padding: 5px 9px; align-items: center; gap: 7px; border: 1px solid rgba(97, 227, 165, .28); border-radius: 999px; color: var(--green); background: rgba(97, 227, 165, .055); font: 500 .58rem/1.2 var(--mono); text-transform: uppercase; }
+    .course-module-status::before { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px rgba(97, 227, 165, .65); content: ""; }
+    .course-module-card h3 { position: relative; z-index: 1; margin-bottom: 12px; font-size: clamp(2rem, 4.4vw, 4rem); line-height: .96; letter-spacing: -.045em; }
+    .course-module-description { position: relative; z-index: 1; max-width: 690px; margin-bottom: 20px; color: var(--muted); font-size: .93rem; }
+    .course-module-topics { position: relative; z-index: 1; display: flex; margin: 0 0 28px; padding: 0; flex-wrap: wrap; gap: 7px; list-style: none; }
+    .course-module-topics li { padding: 6px 9px; border: 1px solid var(--line); border-radius: 7px; color: #cad5d9; background: rgba(255, 255, 255, .025); font: 400 .61rem/1.2 var(--mono); }
+    .course-module-progress { position: relative; z-index: 1; margin-top: auto; padding-top: 20px; border-top: 1px solid var(--line); }
+    .course-module-progress-copy { display: flex; margin-bottom: 9px; justify-content: space-between; gap: 12px; color: var(--muted); font: 400 .61rem/1.35 var(--mono); }
+    .course-module-progress-copy strong { color: var(--text); font-weight: 500; }
+    .course-module-progress-track { height: 5px; overflow: hidden; border-radius: 999px; background: var(--surface-2); }
+    .course-module-progress-fill { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--green), var(--blue)); transition: width .35s ease; }
+    .course-module-cta { position: relative; z-index: 1; display: inline-flex; width: fit-content; margin-top: 20px; align-items: center; gap: 9px; color: var(--green); font-size: .79rem; font-weight: 750; text-decoration: none; }
+    .course-module-cta i { transition: transform .2s ease; }
+    .course-module-cta:hover i { transform: translateX(4px); }
+    .course-module-lessons { padding: 10px; }
+    .course-module-lessons-head { display: flex; padding: 13px 12px 16px; align-items: center; justify-content: space-between; gap: 12px; }
+    .course-module-lessons-head strong { font-size: .89rem; }
+    .course-module-lessons-head span { color: var(--muted); font: 400 .57rem/1.2 var(--mono); text-transform: uppercase; }
+    .course-lesson-link { display: grid; padding: 12px; grid-template-columns: 30px minmax(0, 1fr) 18px; align-items: center; gap: 10px; border-top: 1px solid rgba(49, 67, 75, .7); border-radius: 9px; text-decoration: none; transition: border-color .2s ease, background .2s ease, transform .2s ease; }
+    .course-lesson-link:hover { border-color: rgba(107, 188, 255, .35); background: rgba(107, 188, 255, .055); transform: translateX(2px); }
+    .course-lesson-number { color: var(--green); font: 500 .6rem/1 var(--mono); }
+    .course-lesson-copy { min-width: 0; }
+    .course-lesson-copy strong, .course-lesson-copy small { display: block; }
+    .course-lesson-copy strong { color: var(--text); font-size: .76rem; line-height: 1.3; }
+    .course-lesson-copy small { margin-top: 2px; overflow: hidden; color: var(--muted); font: 400 .55rem/1.35 var(--mono); text-overflow: ellipsis; white-space: nowrap; }
+    .course-lesson-link > i { color: var(--line-strong); font-size: .66rem; transition: color .2s ease, transform .2s ease; }
+    .course-lesson-link:hover > i { color: var(--blue); transform: translateX(2px); }
+
     .concept-definition { display: grid; margin: 20px 0 18px; padding: clamp(18px, 3vw, 27px); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; border: 1px solid rgba(97, 227, 165, .25); border-radius: 14px; background: rgba(97, 227, 165, .045); }
     .concept-definition p { margin: 0; color: #d0dadd; font-size: .91rem; }
     .concept-definition strong { color: var(--green); }
@@ -145,6 +180,7 @@
 
     @media (max-width: 900px) {
       main { padding-top: 28px; }
+      .course-module-layout { grid-template-columns: 1fr; }
       .data-example { grid-template-columns: 1fr; }
       .concept-definition { grid-template-columns: 1fr; }
       .why-flow { grid-template-columns: 1fr; gap: 7px; }
@@ -156,6 +192,12 @@
       .hero { padding: 30px 21px; border-radius: 18px; }
       h1 { font-size: clamp(2.65rem, 13vw, 3.8rem); }
       .section { padding: 20px 15px; border-radius: 15px; }
+      .course-module-card { padding: 23px 20px; }
+      .course-module-meta { margin-bottom: 23px; align-items: flex-start; flex-wrap: wrap; }
+      .course-module-progress-copy { flex-direction: column; gap: 4px; }
+      .course-module-lessons { padding: 7px; }
+      .course-module-lessons-head { align-items: flex-start; flex-direction: column; gap: 4px; }
+      .course-lesson-link { padding: 11px 9px; grid-template-columns: 27px minmax(0, 1fr) 15px; gap: 7px; }
       .data-example { padding: 16px; }
       .mini-diagram { padding: 18px 12px; }
       .data-cell { min-height: 56px; }
@@ -171,15 +213,50 @@
       <h1>Estruturas de Dados na Prática</h1>
       <p>Um percurso para compreender como os dados são organizados, como cada operação funciona e o que acontece na memória. O foco é implementar estruturas do zero, testar suas invariantes e escrever C++ seguro.</p>
       <div class="actions">
-        <a class="button primary" href="#diagrama"><i class="fa-solid fa-play"></i>Começar pelo diagrama</a>
-        <a class="button" href="tipos-abstratos-de-dados.html"><i class="fa-solid fa-file-contract"></i>Estudar TAD</a>
-        <a class="button" href="dados-registros-e-estruturas.html"><i class="fa-solid fa-address-card"></i>Dados e registros</a>
+        <a class="button primary" href="#modulos"><i class="fa-solid fa-layer-group"></i>Explorar módulos</a>
+        <a class="button" href="#diagrama"><i class="fa-solid fa-diagram-project"></i>Ver mapa conceitual</a>
+        <a class="button" href="fundamentos/tipos-abstratos-de-dados.html"><i class="fa-solid fa-file-contract"></i>Estudar TAD</a>
+        <a class="button" href="fundamentos/exercicios-de-fundamentos.html"><i class="fa-solid fa-code"></i>Praticar fundamentos</a>
       </div>
-      <div class="chips"><span class="chip">21 fundamentos</span><span class="chip">pilha · fila · deque</span><span class="chip">ordenação</span><span class="chip">grafos</span></div>
+      <div class="chips"><span class="chip">1 módulo disponível</span><span class="chip">6 conteúdos</span><span class="chip">10 exercícios</span><span class="chip">C++17</span></div>
+    </section>
+
+    <section class="section" id="modulos" aria-labelledby="titulo-modulos">
+      <div class="section-head"><span class="section-number">01</span><div><p class="eyebrow">Trilha de aprendizagem</p><h2 id="titulo-modulos">Módulos do curso</h2></div></div>
+      <p class="lead">Avance pela sequência sugerida: comece entendendo como os dados são representados, conecte esse conhecimento à memória e termine analisando o custo dos algoritmos.</p>
+
+      <div class="course-module-layout">
+        <article class="course-module-card">
+          <div class="course-module-meta">
+            <span class="course-module-number">Módulo 01 · 6 conteúdos</span>
+            <span class="course-module-status">Disponível</span>
+          </div>
+          <h3>Fundamentos</h3>
+          <p class="course-module-description">Construa a base necessária para implementar estruturas de dados em C++: tipos primitivos e abstratos, registros, organização da memória, ponteiros, alocação dinâmica e análise de complexidade.</p>
+          <ul class="course-module-topics" aria-label="Assuntos do módulo">
+            <li>TAD</li><li>struct e classes</li><li>memória</li><li>ponteiros</li><li>Big O</li><li>C++17</li>
+          </ul>
+          <div class="course-module-progress">
+            <div class="course-module-progress-copy"><strong>Seu progresso na prática</strong><span id="module-progress-text">0 de 10 exercícios</span></div>
+            <div class="course-module-progress-track" role="progressbar" aria-label="Progresso nos exercícios de fundamentos" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><span class="course-module-progress-fill" id="module-progress-fill"></span></div>
+          </div>
+          <a class="course-module-cta" href="fundamentos/tipos-abstratos-de-dados.html">Começar o módulo <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </article>
+
+        <nav class="course-module-lessons" aria-label="Conteúdos do módulo Fundamentos">
+          <div class="course-module-lessons-head"><strong>Conteúdos do módulo</strong><span>Ordem sugerida</span></div>
+          <a class="course-lesson-link" href="fundamentos/tipos-abstratos-de-dados.html"><span class="course-lesson-number">01</span><span class="course-lesson-copy"><strong>Tipos Abstratos de Dados</strong><small>Dados primitivos, abstração e organização</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+          <a class="course-lesson-link" href="fundamentos/dados-registros-e-estruturas.html"><span class="course-lesson-number">02</span><span class="course-lesson-copy"><strong>Dados, registros e estruturas</strong><small>Campos, registros, structs e coleções</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+          <a class="course-lesson-link" href="fundamentos/estrutura-estatica-dinamica.html"><span class="course-lesson-number">03</span><span class="course-lesson-copy"><strong>Memória estática × dinâmica</strong><small>Stack, heap, endereços e tempo de vida</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+          <a class="course-lesson-link" href="fundamentos/alocacao-desalocao-dinamica.html"><span class="course-lesson-number">04</span><span class="course-lesson-copy"><strong>Alocação e desalocação</strong><small>Ponteiros, RAII e gerenciamento seguro</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+          <a class="course-lesson-link" href="fundamentos/complexidade-de-algotimo.html"><span class="course-lesson-number">05</span><span class="course-lesson-copy"><strong>Complexidade de algoritmos</strong><small>Tempo, espaço e notação Big O</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+          <a class="course-lesson-link" href="fundamentos/exercicios-de-fundamentos.html"><span class="course-lesson-number">06</span><span class="course-lesson-copy"><strong>Exercícios de fundamentos</strong><small>10 desafios com correção e progresso</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+        </nav>
+      </div>
     </section>
 
     <section class="section" id="diagrama">
-      <div class="section-head"><span class="section-number">01</span><div><p class="eyebrow">Mapa conceitual</p><h2>Como as estruturas de dados se organizam</h2></div></div>
+      <div class="section-head"><span class="section-number">02</span><div><p class="eyebrow">Mapa conceitual</p><h2>Como as estruturas de dados se organizam</h2></div></div>
       <div class="concept-definition">
         <p><strong>Uma estrutura de dados é uma forma planejada de organizar informações na memória.</strong> Ela define como os valores ficam relacionados e quais caminhos o programa usa para encontrá-los ou modificá-los.</p>
         <p>Ela existe porque guardar valores não basta. Um programa também precisa <strong>buscar, inserir, remover, percorrer e ordenar</strong> esses valores sem transformar cada operação em um trabalho desnecessariamente difícil.</p>
@@ -250,7 +327,7 @@
     </section>
 
     <section class="section" id="exemplos" aria-labelledby="titulo-exemplos">
-      <div class="section-head"><span class="section-number">02</span><div><p class="eyebrow">Exemplos visuais</p><h2 id="titulo-exemplos">Como cada estrutura guarda os dados</h2></div></div>
+      <div class="section-head"><span class="section-number">03</span><div><p class="eyebrow">Exemplos visuais</p><h2 id="titulo-exemplos">Como cada estrutura guarda os dados</h2></div></div>
       <p class="lead">A melhor estrutura depende de como os dados serão acessados, alterados e relacionados. Os diagramas abaixo mostram a diferença de forma direta.</p>
 
       <div class="examples-grid">
@@ -365,6 +442,8 @@
     </section>
 
   </main>
+
+  <script src="assets/index-modulos.js" defer></script>
 
 </body>
 </html>

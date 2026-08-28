@@ -1,0 +1,6543 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Aula didática sobre Estruturas de Dados Estáticas vs Dinâmicas, gerenciamento de memória e perspectiva histórica.">
+  <meta name="theme-color" content="#0b1215">
+  <title>Estruturas Estáticas vs. Dinâmicas · Estruturas de Dados na Prática</title>
+  <link rel="stylesheet" href="../assets/aula.css">
+  <link rel="stylesheet" href="../assets/dados.css">
+  <link rel="stylesheet" href="../assets/diagramas-responsivos.css">
+  <script src="../assets/site-shell.js" defer data-edp-shell></script>
+  <script src="../assets/dados.js" defer></script>
+  <style>
+    body {
+      font-size: 1.05rem;
+      /* Aumenta o tamanho base da fonte */
+      line-height: 1.7;
+      /* Melhora o respiro entre as linhas */
+    }
+
+    .section-lead {
+      font-size: 1.15rem;
+      /* Texto introdutório ligeiramente maior */
+      color: #cbd5e1;
+      /* Um pouco mais claro para contraste */
+    }
+
+    /* Aumenta o tamanho dos painéis expansíveis */
+    .review-grid details summary {
+      font-size: 1.15rem;
+      padding: 1.2rem;
+    }
+
+    .review-grid details p {
+      font-size: 1.05rem;
+      padding: 0 1.2rem 1.2rem 1.2rem;
+    }
+
+    .canvas-container {
+      width: 100%;
+      overflow-x: auto;
+      background: #111a1f;
+      border: 1px solid #1e2d36;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .history-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .timeline-event {
+      background: #152026;
+      border-left: 4px solid #38bdf8;
+      padding: 1.5rem;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .timeline-event h3 {
+      margin-top: 0;
+      color: #38bdf8;
+      font-size: 1.1rem;
+    }
+
+    .timeline-event p {
+      margin-bottom: 0;
+      font-size: 0.95rem;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+
+<body>
+  <main id="conteudo-pagina">
+    <section class="lesson-hero records-hero">
+      <div class="lesson-kicker"><span>Aula 05</span><i class="fa-solid fa-arrow-right"
+          aria-hidden="true"></i><span>Arquitetura</span></div>
+      <h1>Estruturas Estáticas <span>vs.</span> Dinâmicas</h1>
+      <p class="lesson-intro">Toda estrutura de dados precisa morar na memória. A forma como ela reivindica esse espaço
+        define seus limites e seu desempenho. Nesta aula, analisamos as <strong>estruturas estáticas</strong>, as
+        <strong>dinâmicas</strong> e os impactos diretos no <strong>gerenciamento de memória do sistema</strong>.
+      </p>
+
+      <div class="learning-goals" aria-label="Objetivos da aula">
+        <article><i class="fa-solid fa-shapes" aria-hidden="true"></i><span><small>Objetivo 01</small>Comparar arrays e
+            listas</span></article>
+        <article><i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i><span><small>Objetivo 02</small>Visualizar a
+            fragmentação</span></article>
+        <article><i class="fa-solid fa-timeline" aria-hidden="true"></i><span><small>Objetivo 03</small>Compreender a
+            evolução histórica</span></article>
+      </div>
+
+      <nav class="lesson-jump" aria-label="Nesta aula">
+        <a href="#modelos">Modelos</a><a href="#memoria">Gerenciamento e Fragmentação</a><a
+          href="#historia">História</a>
+      </nav>
+    </section>
+
+    <section class="lesson-section" id="modelos">
+      <header class="lesson-heading"><span>01</span>
+        <div>
+          <p>O Dilema do Armazenamento</p>
+          <h2>Array Estático, Array Dinâmico e Lista Encadeada</h2>
+        </div>
+      </header>
+      <p class="section-lead">A decisão entre usar uma estrutura estática ou dinâmica altera fundamentalmente como os
+        dados se dispõem no hardware. Veja o diagrama abaixo para entender como cada abordagem organiza os elementos
+        fisicamente.</p>
+
+      <div class="canvas-container">
+        <!-- Canvas aumentado -->
+        <canvas id="canvas-modelos" width="1000" height="437"
+          aria-label="Diagrama mostrando Array Estático, Array Dinâmico e Lista Encadeada"></canvas>
+      </div>
+
+      <div class="review-grid records-review" style="margin-top: 2rem;">
+        <details open>
+          <summary>Array Estático (Tamanho Fixo)<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <p>Bloco único e inalterável. Rápido, mas se faltar espaço, o programa quebra. Se sobrar espaço, desperdiça
+            recursos.</p>
+        </details>
+        <details open>
+          <summary>Array Dinâmico (Redimensionável)<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <p>Bloco contíguo que, ao encher, aloca um novo bloco maior (geralmente o dobro), copia os dados e descarta o
+            bloco velho.</p>
+        </details>
+        <details open>
+          <summary>Lista Encadeada (Nós Dispersos)<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <p>Elementos (nós) espalhados pela memória. Cresce sob demanda, sem cópias massivas, mas exige bytes extras
+            para os ponteiros.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="lesson-section" id="historia">
+
+      <header class="lesson-heading">
+        <span>02</span>
+
+        <div>
+          <p>Evolução Tecnológica</p>
+          <h2>Da Fita Magnética ao Endereçamento Direto</h2>
+        </div>
+      </header>
+
+      <p class="section-lead">
+        A escolha entre estático e dinâmico não existia no início da computação.
+        As estruturas de dados evoluíram como uma resposta direta à forma como
+        o hardware aprendeu a <strong>endereçar</strong> e localizar informações.
+      </p>
+
+
+      <!-- ========================================================= -->
+      <!-- DIAGRAMA -->
+      <!-- ========================================================= -->
+
+      <div class="addressing-diagram">
+
+        <div class="diagram-toolbar">
+
+          <div class="diagram-status">
+            <span class="status-dot"></span>
+            Demonstração em execução
+          </div>
+
+          <div class="diagram-controls">
+
+            <button type="button" id="btn-reset-enderecamento" class="diagram-btn">
+              <i class="fa-solid fa-rotate-left"></i>
+              Reiniciar
+            </button>
+
+            <button type="button" id="btn-pause-enderecamento" class="diagram-btn">
+              <i class="fa-solid fa-pause"></i>
+              Pausar
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="canvas-container-addressing">
+          <!-- Canvas aumentado -->
+          <canvas id="canvas-enderecamento" width="1312" height="537"
+            aria-label="Comparação animada entre acesso sequencial em fita magnética e acesso direto em memória RAM">
+          </canvas>
+
+        </div>
+
+
+        <div class="diagram-help">
+
+          <span>
+            <i class="fa-solid fa-computer-mouse"></i>
+            Clique em qualquer posição da RAM para alterar o endereço acessado.
+          </span>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ========================================================= -->
+      <!-- LINHA DO TEMPO -->
+      <!-- ========================================================= -->
+
+      <div class="history-timeline">
+
+        <div class="timeline-event" style="
+                background: #152026;
+                border-left: 4px solid #64748b;
+                padding: 1.5rem;
+                border-radius: 0 8px 8px 0;
+            ">
+
+          <h3 style="
+                    color: #94a3b8;
+                    margin-top: 0;
+                    font-size: 1.1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
+            <i class="fa-solid fa-tape"></i>
+
+            Anos 1950-60: O Acesso Sequencial
+          </h3>
+
+          <p style="
+                    margin-bottom: 0;
+                    font-size: 0.95rem;
+                    color: #94a3b8;
+                    line-height: 1.6;
+                ">
+            Na era dos cartões perfurados e fitas magnéticas, o acesso aos
+            dados era predominantemente sequencial.
+
+            Para localizar determinada informação, o dispositivo precisava
+            percorrer fisicamente os registros anteriores até chegar ao
+            ponto desejado.
+
+            No exemplo acima, para alcançar o endereço <strong>#4</strong>,
+            a fita passa por <strong>#0, #1, #2 e #3</strong>.
+          </p>
+
+        </div>
+
+
+
+        <div class="timeline-event" style="
+                background: #152026;
+                border-left: 4px solid #38bdf8;
+                padding: 1.5rem;
+                border-radius: 0 8px 8px 0;
+            ">
+
+          <h3 style="
+                    color: #38bdf8;
+                    margin-top: 0;
+                    font-size: 1.1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
+
+            <i class="fa-solid fa-microchip"></i>
+
+            Anos 1970: O "R" da RAM e o Barramento de Endereço
+
+          </h3>
+
+          <p style="
+                    margin-bottom: 0;
+                    font-size: 0.95rem;
+                    color: #94a3b8;
+                    line-height: 1.6;
+                ">
+
+            A memória RAM permitiu que a CPU selecionasse diretamente um
+            endereço de memória.
+
+            A CPU envia o endereço desejado pelo
+            <strong>Barramento de Endereço (Address Bus)</strong> e o
+            hardware seleciona a posição correspondente.
+
+            Dessa forma, acessar o endereço <strong>#7</strong> não exige
+            percorrer primeiro os endereços anteriores.
+
+          </p>
+
+        </div>
+
+
+
+        <div class="timeline-event" style="
+                background: #152026;
+                border-left: 4px solid #10b981;
+                padding: 1.5rem;
+                border-radius: 0 8px 8px 0;
+            ">
+
+          <h3 style="
+                    color: #10b981;
+                    margin-top: 0;
+                    font-size: 1.1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
+
+            <i class="fa-solid fa-code-branch"></i>
+
+            O Nascimento do Dinâmico e dos Ponteiros
+
+          </h3>
+
+          <p style="
+                    margin-bottom: 0;
+                    font-size: 0.95rem;
+                    color: #94a3b8;
+                    line-height: 1.6;
+                ">
+
+            O acesso direto à memória também tornou possível utilizar
+            endereços como referências para outras regiões da memória.
+
+            Um elemento armazenado no endereço <strong>#10</strong>, por
+            exemplo, pode guardar uma referência para outro elemento
+            localizado no endereço <strong>#850</strong>.
+
+            Esse princípio é fundamental para estruturas como
+            <strong>listas encadeadas, árvores, grafos e diversas estruturas
+              dinâmicas</strong>.
+
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <style>
+      /* ========================================================= */
+      /* CONTAINER */
+      /* ========================================================= */
+
+      .addressing-diagram {
+        background:
+          radial-gradient(circle at 75% 50%,
+            rgba(56, 189, 248, 0.055),
+            transparent 38%),
+          #0b1215;
+
+        border: 1px solid #1e2d36;
+        border-radius: 12px;
+
+        margin-bottom: 2.5rem;
+
+        overflow: hidden;
+      }
+
+
+      /* ========================================================= */
+      /* TOOLBAR */
+      /* ========================================================= */
+
+      .diagram-toolbar {
+
+        min-height: 54px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 1rem;
+
+        padding: 0.7rem 1rem;
+
+        border-bottom: 1px solid #1e2d36;
+
+        background: rgba(15, 23, 42, 0.45);
+      }
+
+
+      .diagram-status {
+
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        font-size: 0.78rem;
+        color: #94a3b8;
+
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+
+      .status-dot {
+
+        width: 7px;
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: #10b981;
+
+        box-shadow:
+          0 0 0 4px rgba(16, 185, 129, 0.1),
+          0 0 12px rgba(16, 185, 129, 0.75);
+
+        animation: statusPulse 1.5s infinite;
+      }
+
+
+      @keyframes statusPulse {
+
+        0%,
+        100% {
+          opacity: 1;
+        }
+
+        50% {
+          opacity: 0.35;
+        }
+
+      }
+
+
+      .diagram-controls {
+        display: flex;
+        gap: 8px;
+      }
+
+
+      .diagram-btn {
+
+        border: 1px solid #334155;
+
+        border-radius: 6px;
+
+        background: #111b21;
+
+        color: #94a3b8;
+
+        cursor: pointer;
+
+        padding: 7px 11px;
+
+        font-size: 0.78rem;
+
+        transition:
+          border-color 0.2s,
+          color 0.2s,
+          background 0.2s;
+      }
+
+
+      .diagram-btn:hover {
+
+        border-color: #38bdf8;
+
+        color: #38bdf8;
+
+        background: rgba(56, 189, 248, 0.06);
+      }
+
+
+      /* ========================================================= */
+      /* CANVAS */
+      /* ========================================================= */
+
+      .canvas-container-addressing {
+
+        width: 100%;
+
+        overflow-x: auto;
+
+        padding: 15px;
+
+        display: flex;
+
+        justify-content: center;
+      }
+
+
+      #canvas-enderecamento {
+
+        width: 1050px;
+
+        max-width: none;
+
+        display: block;
+      }
+
+
+      /* ========================================================= */
+      /* HELP */
+      /* ========================================================= */
+
+      .diagram-help {
+
+        border-top: 1px solid #1e2d36;
+
+        padding: 11px 20px;
+
+        font-size: 0.78rem;
+
+        color: #64748b;
+
+        text-align: right;
+      }
+
+
+      .diagram-help i {
+        margin-right: 5px;
+      }
+
+
+      /* ========================================================= */
+      /* TIMELINE */
+      /* ========================================================= */
+
+      .history-timeline {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 1.5rem;
+
+        margin-top: 2rem;
+      }
+
+
+      /* ========================================================= */
+      /* MOBILE */
+      /* ========================================================= */
+
+      @media (max-width: 700px) {
+
+        .diagram-toolbar {
+
+          align-items: flex-start;
+
+          flex-direction: column;
+        }
+
+        .diagram-help {
+          text-align: left;
+        }
+
+      }
+    </style>
+
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+
+        const canvas = document.getElementById("canvas-enderecamento");
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+
+        // Aplica o aumento de escala para melhorar a resolução (1.25x)
+        ctx.scale(1.25, 1.25);
+
+        const pauseBtn = document.getElementById("btn-pause-enderecamento");
+        const resetBtn = document.getElementById("btn-reset-enderecamento");
+
+        /* =========================================================
+           CORES
+        ========================================================= */
+
+        const COLORS = {
+          bg: "#0b1215",
+          panel: "#10191e",
+          panel2: "#111c22",
+          border: "#24343d",
+
+          text: "#e2e8f0",
+          muted: "#64748b",
+          mutedLight: "#94a3b8",
+
+          tape: "#475569",
+          tapeDark: "#334155",
+
+          sequential: "#fb7185",
+          sequentialStrong: "#e11d48",
+
+          ram: "#38bdf8",
+          ramStrong: "#0284c7",
+
+          green: "#10b981",
+          amber: "#f59e0b"
+        };
+
+
+        /* =========================================================
+           SEQUÊNCIA DE ACESSOS
+    
+           A MESMA sequência será executada:
+           - pela fita
+           - pela RAM
+    
+           Assim fica fácil comparar.
+        ========================================================= */
+
+        const accessSequence = [
+          2,
+          7,
+          1,
+          6,
+          4,
+          8,
+          3,
+          0,
+          5
+        ];
+
+        let accessIndex = 0;
+
+        let currentTarget = accessSequence[0];
+
+        let running = true;
+
+        let lastTime = 0;
+
+
+        /* =========================================================
+           RAM
+        ========================================================= */
+
+        let ramProgress = 0;
+
+        /*
+            0 = CPU preparando
+            1 = enviando endereço
+            2 = lendo
+            3 = retornando dado
+            4 = pausa
+        */
+
+        let ramPhase = 0;
+
+        let ramPhaseTimer = 0;
+
+
+        /* =========================================================
+           FITA
+        ========================================================= */
+
+        /*
+            posição atual do leitor na sequência lógica
+        */
+
+        let tapeCurrentAddress = 0;
+
+        /*
+            posição visual interpolada
+        */
+
+        let tapePosition = 0;
+
+        let tapeTargetPosition = currentTarget;
+
+        /*
+            velocidade visual
+        */
+
+        const tapeSpeed = 1.25;
+
+        /*
+            pequena pausa quando encontra o dado
+        */
+
+        let tapeReading = false;
+
+        let tapeReadTimer = 0;
+
+
+        /* =========================================================
+           CONTROLE DA DEMONSTRAÇÃO
+    
+           Só passa para o próximo endereço quando:
+           - RAM terminou
+           - fita terminou
+        ========================================================= */
+
+        let ramFinished = false;
+        let tapeFinished = false;
+
+        let transitionTimer = 0;
+
+
+        /* =========================================================
+           MÉTRICAS VISUAIS
+        ========================================================= */
+
+        let tapeTraversed = 0;
+        let ramAccesses = 0;
+
+        let completedAccesses = [];
+
+
+        /* =========================================================
+           HELPERS
+        ========================================================= */
+
+        function roundedRect(x, y, w, h, r, fill, stroke = null) {
+
+          ctx.beginPath();
+          ctx.roundRect(x, y, w, h, r);
+
+          if (fill) {
+            ctx.fillStyle = fill;
+            ctx.fill();
+          }
+
+          if (stroke) {
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+
+
+        function drawText(
+          text,
+          x,
+          y,
+          color = COLORS.text,
+          size = 14,
+          weight = "normal",
+          align = "left"
+        ) {
+
+          ctx.font =
+            `${weight} ${size}px system-ui, -apple-system, sans-serif`;
+
+          ctx.fillStyle = color;
+          ctx.textAlign = align;
+
+          ctx.fillText(text, x, y);
+        }
+
+
+        function drawMono(
+          text,
+          x,
+          y,
+          color = COLORS.text,
+          size = 12,
+          align = "left"
+        ) {
+
+          ctx.font =
+            `${size}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
+
+          ctx.fillStyle = color;
+          ctx.textAlign = align;
+
+          ctx.fillText(text, x, y);
+        }
+
+
+        function glowCircle(x, y, radius, color) {
+
+          ctx.save();
+
+          ctx.shadowBlur = 20;
+          ctx.shadowColor = color;
+
+          ctx.fillStyle = color;
+
+          ctx.beginPath();
+
+          ctx.arc(
+            x,
+            y,
+            radius,
+            0,
+            Math.PI * 2
+          );
+
+          ctx.fill();
+
+          ctx.restore();
+        }
+
+
+        function drawArrow(x1, y1, x2, y2, color, width = 2) {
+
+          const angle =
+            Math.atan2(
+              y2 - y1,
+              x2 - x1
+            );
+
+          ctx.strokeStyle = color;
+          ctx.lineWidth = width;
+
+          ctx.beginPath();
+
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+
+          ctx.stroke();
+
+
+          const head = 8;
+
+          ctx.fillStyle = color;
+
+          ctx.beginPath();
+
+          ctx.moveTo(x2, y2);
+
+          ctx.lineTo(
+            x2 - head * Math.cos(angle - Math.PI / 6),
+            y2 - head * Math.sin(angle - Math.PI / 6)
+          );
+
+          ctx.lineTo(
+            x2 - head * Math.cos(angle + Math.PI / 6),
+            y2 - head * Math.sin(angle + Math.PI / 6)
+          );
+
+          ctx.closePath();
+
+          ctx.fill();
+        }
+
+
+        /* =========================================================
+           SEQUÊNCIA NO TOPO
+        ========================================================= */
+
+        function drawAccessSequence() {
+
+          drawText(
+            "SEQUÊNCIA DE LEITURAS",
+            525,
+            22,
+            COLORS.muted,
+            10,
+            "700",
+            "center"
+          );
+
+
+          const totalWidth =
+            accessSequence.length * 42;
+
+          let startX =
+            525 - totalWidth / 2;
+
+
+          accessSequence.forEach((addr, index) => {
+
+            const x =
+              startX + index * 42;
+
+
+            let fill = "#152026";
+            let stroke = "#334155";
+            let color = COLORS.muted;
+
+
+            if (index < accessIndex) {
+
+              fill = "rgba(16,185,129,.10)";
+              stroke = COLORS.green;
+              color = COLORS.green;
+
+            }
+
+            if (index === accessIndex) {
+
+              fill = "rgba(245,158,11,.15)";
+              stroke = COLORS.amber;
+              color = COLORS.amber;
+
+            }
+
+
+            roundedRect(
+              x,
+              32,
+              32,
+              28,
+              4,
+              fill,
+              stroke
+            );
+
+
+            drawMono(
+              `#${addr}`,
+              x + 16,
+              51,
+              color,
+              11,
+              "center"
+            );
+
+
+            if (
+              index <
+              accessSequence.length - 1
+            ) {
+
+              drawText(
+                "→",
+                x + 37,
+                51,
+                COLORS.muted,
+                11
+              );
+
+            }
+
+          });
+
+        }
+
+
+        /* =========================================================
+           BOBINA
+        ========================================================= */
+
+        function drawReel(x, y, angle) {
+
+          ctx.save();
+
+          ctx.translate(x, y);
+
+          ctx.rotate(angle);
+
+
+          ctx.fillStyle = "#202d35";
+
+          ctx.strokeStyle = "#475569";
+
+          ctx.lineWidth = 4;
+
+
+          ctx.beginPath();
+
+          ctx.arc(
+            0,
+            0,
+            35,
+            0,
+            Math.PI * 2
+          );
+
+          ctx.fill();
+
+          ctx.stroke();
+
+
+          for (
+            let i = 0;
+            i < 5;
+            i++
+          ) {
+
+            const a =
+              i * Math.PI * 2 / 5;
+
+            const hx =
+              Math.cos(a) * 19;
+
+            const hy =
+              Math.sin(a) * 19;
+
+
+            ctx.fillStyle = COLORS.bg;
+
+            ctx.beginPath();
+
+            ctx.arc(
+              hx,
+              hy,
+              6,
+              0,
+              Math.PI * 2
+            );
+
+            ctx.fill();
+
+          }
+
+
+          ctx.fillStyle = "#64748b";
+
+          ctx.beginPath();
+
+          ctx.arc(
+            0,
+            0,
+            6,
+            0,
+            Math.PI * 2
+          );
+
+          ctx.fill();
+
+
+          ctx.restore();
+        }
+
+
+        /* =========================================================
+           ACESSO SEQUENCIAL
+        ========================================================= */
+
+        function drawSequential() {
+
+          const x = 20;
+          const y = 75;
+          const w = 495;
+          const h = 335;
+
+
+          roundedRect(
+            x,
+            y,
+            w,
+            h,
+            10,
+            COLORS.panel,
+            COLORS.border
+          );
+
+
+          drawText(
+            "ACESSO SEQUENCIAL",
+            45,
+            105,
+            COLORS.sequential,
+            12,
+            "700"
+          );
+
+
+          drawText(
+            "Fita magnética",
+            45,
+            132,
+            COLORS.text,
+            20,
+            "700"
+          );
+
+
+          drawText(
+            `Procurando endereço #${currentTarget}`,
+            45,
+            155,
+            COLORS.mutedLight,
+            12
+          );
+
+
+          /*
+           * bobinas
+           */
+
+          const reelAngle =
+            tapePosition * .6;
+
+
+          drawReel(
+            110,
+            212,
+            reelAngle
+          );
+
+          drawReel(
+            420,
+            212,
+            reelAngle
+          );
+
+
+          ctx.strokeStyle =
+            COLORS.tapeDark;
+
+          ctx.lineWidth = 7;
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            143,
+            224
+          );
+
+          ctx.lineTo(
+            387,
+            224
+          );
+
+          ctx.stroke();
+
+
+          /* =====================================================
+             REPRESENTAÇÃO DA FITA
+  
+             Agora mostramos MUITOS endereços.
+          ===================================================== */
+
+          const tapeX = 45;
+          const tapeY = 280;
+
+          const blockWidth = 47;
+
+          const blockHeight = 48;
+
+
+          roundedRect(
+            tapeX - 5,
+            tapeY - 5,
+            438,
+            blockHeight + 10,
+            4,
+            "#26343d"
+          );
+
+
+          for (
+            let addr = 0;
+            addr <= 8;
+            addr++
+          ) {
+
+            const bx =
+              tapeX +
+              addr * blockWidth;
+
+
+            const passed =
+              tapeCurrentAddress === addr ||
+              (
+                tapeTargetPosition > tapeCurrentAddress &&
+                addr >= tapeCurrentAddress &&
+                addr <= Math.floor(tapePosition)
+              ) ||
+              (
+                tapeTargetPosition < tapeCurrentAddress &&
+                addr <= tapeCurrentAddress &&
+                addr >= Math.ceil(tapePosition)
+              );
+
+
+            const isTarget =
+              addr === currentTarget;
+
+
+            ctx.fillStyle =
+              isTarget
+                ? "rgba(251,113,133,.15)"
+                : passed
+                  ? "rgba(245,158,11,.08)"
+                  : "#17242b";
+
+
+            ctx.fillRect(
+              bx,
+              tapeY,
+              blockWidth - 3,
+              blockHeight
+            );
+
+
+            ctx.strokeStyle =
+              isTarget
+                ? COLORS.sequential
+                : passed
+                  ? COLORS.amber
+                  : "#334155";
+
+
+            ctx.lineWidth =
+              isTarget ? 2 : 1;
+
+
+            ctx.strokeRect(
+              bx,
+              tapeY,
+              blockWidth - 3,
+              blockHeight
+            );
+
+
+            drawMono(
+              `#${addr}`,
+              bx + 22,
+              tapeY + 29,
+              isTarget
+                ? COLORS.sequential
+                : passed
+                  ? COLORS.amber
+                  : COLORS.muted,
+              12,
+              "center"
+            );
+
+          }
+
+
+          /* =====================================================
+             CABEÇA DE LEITURA
+  
+             Agora ela se move visualmente de uma posição
+             para outra.
+          ===================================================== */
+
+          const readerX =
+            tapeX +
+            tapePosition *
+            blockWidth +
+            22;
+
+
+          ctx.save();
+
+          ctx.shadowColor =
+            COLORS.sequential;
+
+          ctx.shadowBlur =
+            tapeReading ? 20 : 8;
+
+
+          roundedRect(
+            readerX - 11,
+            tapeY - 25,
+            22,
+            20,
+            3,
+            tapeReading
+              ? COLORS.green
+              : COLORS.sequentialStrong
+          );
+
+
+          ctx.restore();
+
+
+          /*
+           * ponteiro
+           */
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            readerX - 6,
+            tapeY - 5
+          );
+
+          ctx.lineTo(
+            readerX + 6,
+            tapeY - 5
+          );
+
+          ctx.lineTo(
+            readerX,
+            tapeY + 2
+          );
+
+          ctx.closePath();
+
+          ctx.fillStyle =
+            tapeReading
+              ? COLORS.green
+              : COLORS.sequential;
+
+          ctx.fill();
+
+
+          drawText(
+            tapeReading
+              ? "DADO ENCONTRADO"
+              : "MOVENDO LEITOR",
+            readerX,
+            tapeY - 34,
+            tapeReading
+              ? COLORS.green
+              : COLORS.sequential,
+            9,
+            "700",
+            "center"
+          );
+
+
+          /* =====================================================
+             STATUS
+          ===================================================== */
+
+          roundedRect(
+            45,
+            350,
+            438,
+            42,
+            5,
+            "#0d171c",
+            "#24343d"
+          );
+
+
+          drawText(
+            tapeReading
+              ? `Leitura de #${currentTarget} concluída`
+              : `Percorrendo fisicamente até #${currentTarget}`,
+            60,
+            376,
+            tapeReading
+              ? COLORS.green
+              : COLORS.mutedLight,
+            11,
+            "600"
+          );
+
+        }
+
+
+        /* =========================================================
+           CPU
+        ========================================================= */
+
+        function drawCPU(x, y) {
+
+          ctx.save();
+
+          ctx.shadowColor =
+            "rgba(56,189,248,.25)";
+
+          ctx.shadowBlur = 15;
+
+
+          roundedRect(
+            x,
+            y,
+            105,
+            105,
+            8,
+            "#101c24",
+            COLORS.ram
+          );
+
+
+          ctx.restore();
+
+
+          for (
+            let i = 0;
+            i < 5;
+            i++
+          ) {
+
+            const py =
+              y + 15 + i * 19;
+
+
+            ctx.strokeStyle = "#64748b";
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+              x - 7,
+              py
+            );
+
+            ctx.lineTo(
+              x,
+              py
+            );
+
+            ctx.stroke();
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+              x + 105,
+              py
+            );
+
+            ctx.lineTo(
+              x + 112,
+              py
+            );
+
+            ctx.stroke();
+
+          }
+
+
+          drawText(
+            "CPU",
+            x + 52,
+            y + 51,
+            COLORS.ram,
+            23,
+            "800",
+            "center"
+          );
+
+
+          drawText(
+            `READ #${currentTarget}`,
+            x + 52,
+            y + 74,
+            COLORS.mutedLight,
+            10,
+            "700",
+            "center"
+          );
+
+        }
+
+
+        /* =========================================================
+           RAM
+        ========================================================= */
+
+        function drawRAM(x, y) {
+
+          const cells = [];
+
+          roundedRect(
+            x - 18,
+            y - 28,
+            202,
+            190,
+            8,
+            "#10191f",
+            "#334155"
+          );
+
+
+          drawText(
+            "MEMÓRIA RAM",
+            x + 80,
+            y - 8,
+            COLORS.ram,
+            10,
+            "700",
+            "center"
+          );
+
+
+          const cw = 50;
+          const ch = 42;
+          const gap = 5;
+
+
+          let addr = 0;
+
+
+          for (
+            let row = 0;
+            row < 3;
+            row++
+          ) {
+
+            for (
+              let col = 0;
+              col < 3;
+              col++
+            ) {
+
+              const cx =
+                x + col * (cw + gap);
+
+              const cy =
+                y + row * (ch + gap);
+
+
+              const active =
+                addr === currentTarget;
+
+
+              /*
+               * só destaca fortemente durante
+               * leitura/retorno.
+               */
+
+              const reading =
+                active &&
+                (
+                  ramPhase === 2 ||
+                  ramPhase === 3
+                );
+
+
+              if (reading) {
+
+                ctx.save();
+
+                ctx.shadowColor = COLORS.ram;
+
+                ctx.shadowBlur = 18;
+
+              }
+
+
+              roundedRect(
+                cx,
+                cy,
+                cw,
+                ch,
+                4,
+                reading
+                  ? COLORS.ramStrong
+                  : active
+                    ? "rgba(56,189,248,.12)"
+                    : "#17242b",
+                active
+                  ? COLORS.ram
+                  : "#334155"
+              );
+
+
+              if (reading) {
+                ctx.restore();
+              }
+
+
+              drawMono(
+                `#${addr}`,
+                cx + cw / 2,
+                cy + 26,
+                reading
+                  ? "#fff"
+                  : active
+                    ? COLORS.ram
+                    : COLORS.muted,
+                11,
+                "center"
+              );
+
+
+              cells.push({
+                address: addr,
+                x: cx,
+                y: cy,
+                centerX: cx + cw / 2,
+                centerY: cy + ch / 2
+              });
+
+
+              addr++;
+
+            }
+
+          }
+
+
+          return cells;
+        }
+
+
+        /* =========================================================
+           RAM / ACESSO DIRETO
+        ========================================================= */
+
+        function drawRandomAccess() {
+
+          const x = 535;
+          const y = 75;
+          const w = 495;
+          const h = 335;
+
+
+          roundedRect(
+            x,
+            y,
+            w,
+            h,
+            10,
+            COLORS.panel2,
+            COLORS.border
+          );
+
+
+          drawText(
+            "ACESSO DIRETO",
+            560,
+            105,
+            COLORS.ram,
+            12,
+            "700"
+          );
+
+
+          drawText(
+            "CPU + Memória RAM",
+            560,
+            132,
+            COLORS.text,
+            20,
+            "700"
+          );
+
+
+          drawText(
+            `Solicitando endereço #${currentTarget}`,
+            560,
+            155,
+            COLORS.mutedLight,
+            12
+          );
+
+
+          const cpuX = 570;
+          const cpuY = 205;
+
+          const ramX = 810;
+          const ramY = 190;
+
+
+          drawCPU(
+            cpuX,
+            cpuY
+          );
+
+
+          const cells =
+            drawRAM(
+              ramX,
+              ramY
+            );
+
+
+          const target =
+            cells.find(
+              c =>
+                c.address ===
+                currentTarget
+            );
+
+
+          if (!target) return;
+
+
+          /* =====================================================
+             BARRAMENTO
+          ===================================================== */
+
+          const startX =
+            cpuX + 112;
+
+          const startY =
+            cpuY + 52;
+
+
+          const bendX = 750;
+
+          const endX =
+            target.x - 7;
+
+          const endY =
+            target.centerY;
+
+
+          ctx.strokeStyle = "#334155";
+          ctx.lineWidth = 3;
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            startX,
+            startY
+          );
+
+          ctx.lineTo(
+            bendX,
+            startY
+          );
+
+          ctx.lineTo(
+            bendX,
+            endY
+          );
+
+          ctx.lineTo(
+            endX,
+            endY
+          );
+
+          ctx.stroke();
+
+
+          /*
+           * caminho azul
+           */
+
+          ctx.strokeStyle =
+            ramPhase === 3
+              ? COLORS.green
+              : COLORS.ram;
+
+          ctx.lineWidth = 2;
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            startX,
+            startY
+          );
+
+          ctx.lineTo(
+            bendX,
+            startY
+          );
+
+          ctx.lineTo(
+            bendX,
+            endY
+          );
+
+          ctx.lineTo(
+            endX,
+            endY
+          );
+
+          ctx.stroke();
+
+
+          /* =====================================================
+             PULSO CPU -> RAM
+          ===================================================== */
+
+          const s1 =
+            bendX - startX;
+
+          const s2 =
+            Math.abs(
+              endY - startY
+            );
+
+          const s3 =
+            endX - bendX;
+
+          const total =
+            s1 + s2 + s3;
+
+
+          let progress =
+            ramProgress;
+
+
+          /*
+           * no retorno, fazemos o pulso voltar
+           */
+
+          if (
+            ramPhase === 3
+          ) {
+
+            progress =
+              1 - ramProgress;
+
+          }
+
+
+          const distance =
+            progress * total;
+
+
+          let px = startX;
+          let py = startY;
+
+
+          if (
+            distance <= s1
+          ) {
+
+            px =
+              startX + distance;
+
+          }
+
+          else if (
+            distance <=
+            s1 + s2
+          ) {
+
+            px = bendX;
+
+            py =
+              startY +
+              Math.sign(
+                endY -
+                startY
+              ) *
+              (
+                distance -
+                s1
+              );
+
+          }
+
+          else {
+
+            px =
+              bendX +
+              (
+                distance -
+                s1 -
+                s2
+              );
+
+            py = endY;
+
+          }
+
+
+          if (
+            ramPhase === 1 ||
+            ramPhase === 3
+          ) {
+
+            glowCircle(
+              px,
+              py,
+              5,
+              ramPhase === 3
+                ? COLORS.green
+                : COLORS.ram
+            );
+
+          }
+
+
+          /* =====================================================
+             LABELS
+          ===================================================== */
+
+          let status =
+            "CPU prepara requisição";
+
+          let statusColor =
+            COLORS.mutedLight;
+
+
+          if (ramPhase === 1) {
+
+            status =
+              `Endereço #${currentTarget} →`;
+
+            statusColor =
+              COLORS.ram;
+
+          }
+
+          if (ramPhase === 2) {
+
+            status =
+              `RAM lê diretamente #${currentTarget}`;
+
+            statusColor =
+              COLORS.ram;
+
+          }
+
+          if (ramPhase === 3) {
+
+            status =
+              `← dado de #${currentTarget}`;
+
+            statusColor =
+              COLORS.green;
+
+          }
+
+          if (ramPhase === 4) {
+
+            status =
+              `Leitura de #${currentTarget} concluída`;
+
+            statusColor =
+              COLORS.green;
+
+          }
+
+
+          roundedRect(
+            560,
+            350,
+            440,
+            42,
+            5,
+            "#0d171c",
+            "#24343d"
+          );
+
+
+          drawText(
+            status,
+            780,
+            376,
+            statusColor,
+            11,
+            "600",
+            "center"
+          );
+
+        }
+
+
+        /* =========================================================
+           INDICADOR VS
+        ========================================================= */
+
+        function drawVS() {
+
+          ctx.fillStyle = COLORS.bg;
+          ctx.strokeStyle = COLORS.border;
+
+          ctx.beginPath();
+
+          ctx.arc(
+            525,
+            235,
+            18,
+            0,
+            Math.PI * 2
+          );
+
+          ctx.fill();
+          ctx.stroke();
+
+
+          drawText(
+            "VS",
+            525,
+            239,
+            COLORS.muted,
+            10,
+            "800",
+            "center"
+          );
+
+        }
+
+
+        /* =========================================================
+           ATUALIZAÇÃO DA FITA
+        ========================================================= */
+
+        function updateTape(delta) {
+
+          if (tapeFinished)
+            return;
+
+
+          /*
+           * encontrou o endereço
+           */
+
+          if (tapeReading) {
+
+            tapeReadTimer += delta;
+
+            if (
+              tapeReadTimer >
+              650
+            ) {
+
+              tapeReading = false;
+
+              tapeReadTimer = 0;
+
+              tapeFinished = true;
+
+              tapeCurrentAddress =
+                currentTarget;
+
+            }
+
+            return;
+
+          }
+
+
+          const direction =
+            Math.sign(
+              tapeTargetPosition -
+              tapePosition
+            );
+
+
+          /*
+           * já está no endereço
+           */
+
+          if (direction === 0) {
+
+            tapeReading = true;
+
+            return;
+
+          }
+
+
+          const movement =
+            direction *
+            tapeSpeed *
+            delta /
+            1000;
+
+
+          const oldPosition =
+            tapePosition;
+
+
+          tapePosition += movement;
+
+
+          /*
+           * contabiliza deslocamento
+           */
+
+          tapeTraversed +=
+            Math.abs(
+              tapePosition -
+              oldPosition
+            );
+
+
+          /*
+           * chegou
+           */
+
+          if (
+            (
+              direction > 0 &&
+              tapePosition >=
+              tapeTargetPosition
+            )
+            ||
+            (
+              direction < 0 &&
+              tapePosition <=
+              tapeTargetPosition
+            )
+          ) {
+
+            tapePosition =
+              tapeTargetPosition;
+
+            tapeReading = true;
+
+          }
+
+        }
+
+
+        /* =========================================================
+           ATUALIZAÇÃO DA RAM
+        ========================================================= */
+
+        function updateRAM(delta) {
+
+          if (ramFinished)
+            return;
+
+
+          ramPhaseTimer += delta;
+
+
+          /* -----------------------------------------------------
+             FASE 0
+             CPU preparando endereço
+          ----------------------------------------------------- */
+
+          if (ramPhase === 0) {
+
+            if (
+              ramPhaseTimer >
+              350
+            ) {
+
+              ramPhase = 1;
+
+              ramPhaseTimer = 0;
+
+              ramProgress = 0;
+
+            }
+
+            return;
+
+          }
+
+
+          /* -----------------------------------------------------
+             FASE 1
+             endereço indo para RAM
+          ----------------------------------------------------- */
+
+          if (ramPhase === 1) {
+
+            ramProgress +=
+              delta / 700;
+
+
+            if (
+              ramProgress >= 1
+            ) {
+
+              ramProgress = 1;
+
+              ramPhase = 2;
+
+              ramPhaseTimer = 0;
+
+            }
+
+            return;
+
+          }
+
+
+          /* -----------------------------------------------------
+             FASE 2
+             RAM lendo
+          ----------------------------------------------------- */
+
+          if (ramPhase === 2) {
+
+            if (
+              ramPhaseTimer >
+              400
+            ) {
+
+              ramPhase = 3;
+
+              ramPhaseTimer = 0;
+
+              ramProgress = 0;
+
+            }
+
+            return;
+
+          }
+
+
+          /* -----------------------------------------------------
+             FASE 3
+             dado voltando RAM -> CPU
+          ----------------------------------------------------- */
+
+          if (ramPhase === 3) {
+
+            ramProgress +=
+              delta / 650;
+
+
+            if (
+              ramProgress >= 1
+            ) {
+
+              ramProgress = 1;
+
+              ramPhase = 4;
+
+              ramPhaseTimer = 0;
+
+              ramAccesses++;
+
+            }
+
+            return;
+
+          }
+
+
+          /* -----------------------------------------------------
+             FASE 4
+             pequena pausa
+          ----------------------------------------------------- */
+
+          if (ramPhase === 4) {
+
+            if (
+              ramPhaseTimer >
+              400
+            ) {
+
+              ramFinished = true;
+
+            }
+
+          }
+
+        }
+
+
+        /* =========================================================
+           PRÓXIMO ACESSO
+        ========================================================= */
+
+        function nextAccess() {
+
+          completedAccesses.push(
+            currentTarget
+          );
+
+
+          accessIndex++;
+
+
+          /*
+           * reinicia demonstração depois
+           * da sequência inteira
+           */
+
+          if (
+            accessIndex >=
+            accessSequence.length
+          ) {
+
+            accessIndex = 0;
+
+            completedAccesses = [];
+
+          }
+
+
+          currentTarget =
+            accessSequence[
+            accessIndex
+            ];
+
+
+          /*
+           * FITA
+  
+           * IMPORTANTÍSSIMO:
+           * não volta para o início.
+  
+           * Ela começa da posição onde a leitura
+           * anterior terminou.
+  
+           * Isso torna possível visualizar:
+           *
+           * #2 -> #7
+           * percorre 3,4,5,6,7
+           *
+           * #7 -> #1
+           * percorre 6,5,4,3,2,1
+           */
+
+          tapeTargetPosition =
+            currentTarget;
+
+          tapeFinished = false;
+
+          tapeReading = false;
+
+          tapeReadTimer = 0;
+
+
+          /*
+           * RAM
+           */
+
+          ramPhase = 0;
+
+          ramPhaseTimer = 0;
+
+          ramProgress = 0;
+
+          ramFinished = false;
+
+
+          transitionTimer = 0;
+
+        }
+
+
+        /* =========================================================
+           DRAW
+        ========================================================= */
+
+        function draw() {
+
+          ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+
+          ctx.fillStyle =
+            COLORS.bg;
+
+          ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+
+          drawAccessSequence();
+
+          drawSequential();
+
+          drawRandomAccess();
+
+          drawVS();
+
+        }
+
+
+        /* =========================================================
+           LOOP
+        ========================================================= */
+
+        function animate(timestamp) {
+
+          const delta =
+            Math.min(
+              timestamp -
+              lastTime,
+              40
+            );
+
+
+          lastTime = timestamp;
+
+
+          if (running) {
+
+            updateTape(delta);
+
+            updateRAM(delta);
+
+
+            /*
+             * só vai para próxima operação
+             * quando OS DOIS terminaram.
+             */
+
+            if (
+              tapeFinished &&
+              ramFinished
+            ) {
+
+              transitionTimer +=
+                delta;
+
+
+              if (
+                transitionTimer >
+                900
+              ) {
+
+                nextAccess();
+
+              }
+
+            }
+
+          }
+
+
+          draw();
+
+
+          requestAnimationFrame(
+            animate
+          );
+
+        }
+
+
+        /* =========================================================
+           PAUSE
+        ========================================================= */
+
+        if (pauseBtn) {
+
+          pauseBtn.addEventListener(
+            "click",
+            () => {
+
+              running =
+                !running;
+
+
+              pauseBtn.innerHTML =
+                running
+                  ? `
+                            <i class="fa-solid fa-pause"></i>
+                            Pausar
+                          `
+                  : `
+                            <i class="fa-solid fa-play"></i>
+                            Continuar
+                          `;
+
+            }
+          );
+
+        }
+
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        if (resetBtn) {
+
+          resetBtn.addEventListener(
+            "click",
+            () => {
+
+              accessIndex = 0;
+
+              currentTarget =
+                accessSequence[0];
+
+
+              tapeCurrentAddress = 0;
+
+              tapePosition = 0;
+
+              tapeTargetPosition =
+                currentTarget;
+
+              tapeReading = false;
+
+              tapeReadTimer = 0;
+
+              tapeFinished = false;
+
+
+              ramProgress = 0;
+
+              ramPhase = 0;
+
+              ramPhaseTimer = 0;
+
+              ramFinished = false;
+
+
+              tapeTraversed = 0;
+
+              ramAccesses = 0;
+
+              completedAccesses = [];
+
+
+              transitionTimer = 0;
+
+              running = true;
+
+
+              if (pauseBtn) {
+
+                pauseBtn.innerHTML = `
+                        <i class="fa-solid fa-pause"></i>
+                        Pausar
+                    `;
+
+              }
+
+            }
+          );
+
+        }
+
+
+        /* =========================================================
+           START
+        ========================================================= */
+
+        requestAnimationFrame(
+          animate
+        );
+
+      });
+    </script>
+
+    <section class="lesson-section" id="memoria">
+      <header class="lesson-heading"><span>03</span>
+        <div>
+          <p>Gerenciamento e Hardware</p>
+          <h2>O "R" da RAM e o Fantasma da Fragmentação</h2>
+        </div>
+      </header>
+
+      <!-- Passo 1: A força bruta e o problema -->
+      <div style="background: #152026; border-left: 4px solid #38bdf8; padding: 1.5rem; border-radius: 0 8px 8px 0;">
+        <h3
+          style="color: #38bdf8; margin-top: 0; font-size: 1.2rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fa-solid fa-bolt" aria-hidden="true"></i> 1. A velocidade da RAM e a Força Bruta
+        </h3>
+        <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 1rem;">
+          RAM significa <em>Random Access Memory</em> (Acesso Aleatório). Na prática, isso significa que o processador
+          leva a mesma fração minúscula de tempo para ler a posição 0 ou a posição 8.000.000.
+        </p>
+        <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 0;">
+          <strong style="color: #e2e8f0;">O Estático (Array) é o queridinho do hardware:</strong> Como os dados moram em
+          blocos vizinhos (contíguos), a CPU acessa tudo instantaneamente. Mas ele tem um defeito grave: exige enormes
+          blocos inteiros. Conforme o sistema operacional aloca e libera espaço, a RAM vira um "queijo suíço" cheio de
+          buracos (Fragmentação). Se o Array pedir 100 espaços juntos e só houver pequenos buracos livres, o programa
+          quebra por falta de memória.
+        </p>
+      </div>
+
+      <!-- Passo 2: A solução que custa velocidade -->
+      <div style="background: #1e1b4b; border-left: 4px solid #818cf8; padding: 1.5rem; border-radius: 0 8px 8px 0;">
+        <h3
+          style="color: #818cf8; margin-top: 0; font-size: 1.2rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i> 2. O Dinâmico resolve a memória, mas cobra pedágio
+        </h3>
+        <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 0;">
+          Para não desperdiçar RAM e não travar o sistema, criamos as <strong>estruturas dinâmicas</strong> (como Listas
+          Encadeadas). Elas picotam a estrutura e jogam cada pedaço num buraco vazio da memória, interligando tudo com
+          ponteiros. O gerenciamento de memória fica perfeito! <br><br>
+          <strong style="color: #e2e8f0;">O problema:</strong> Navegar por ponteiros espalhados obriga a CPU a pular de
+          endereço em endereço. Em termos físicos de hardware, <strong>o acesso dinâmico é mais lento</strong> (Cache
+          Miss).
+        </p>
+      </div>
+
+      <!-- Passo 3: O Paradoxo (Por que usamos?) -->
+      <div style="background: #064e3b; border-left: 4px solid #10b981; padding: 1.5rem; border-radius: 0 8px 8px 0;">
+        <h3
+          style="color: #10b981; margin-top: 0; font-size: 1.2rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fa-solid fa-chess-knight" aria-hidden="true"></i> 3. O Xeque-Mate: A Algoritmia vence a Física
+        </h3>
+        <p style="color: #a7f3d0; line-height: 1.6; margin-bottom: 0;">
+          Se a estrutura dinâmica tem um acesso físico mais lento, por que a usamos para deixar sistemas mais rápidos? A
+          resposta está na <strong>inteligência do algoritmo</strong>. <br><br>
+          Imagine precisar inserir 1 novo cliente na primeira posição de um banco de dados com 1 milhão de registros. No
+          <strong>Array Estático</strong> (rápido fisicamente), você precisaria empurrar <em>1 milhão de registros</em>
+          uma casa para frente. Um trabalho absurdo. Na <strong>Lista Dinâmica</strong> (lenta fisicamente), você apenas
+          troca <em>a ligação de um único ponteiro</em>, e pronto. <br><br>
+          <strong style="color: #fff;">Conclusão:</strong> A estrutura dinâmica sacrifica um pouco da velocidade do
+          hardware para permitir algoritmos muito mais eficientes, o que torna o programa, no final das contas,
+          imensamente mais rápido.
+        </p>
+      </div>
+      </div>
+
+     <p class="section-lead">
+  A memória disponível não precisa estar organizada da mesma forma em todas as regiões.
+  No simulador abaixo existem <strong>três pentes de memória</strong>, cada um com um padrão
+  diferente de ocupação.
+
+  Um Array precisa encontrar uma sequência de blocos <strong>contíguos dentro da região escolhida</strong>.
+  Já uma estrutura dinâmica pode aproveitar espaços separados e conectar seus nós por
+  <strong>ponteiros</strong>.
+
+  <strong>Arraste uma estrutura para um dos pentes e compare os resultados.</strong>
+</p>
+
+<div class="multi-ram-lab">
+
+  <!-- ========================================================= -->
+  <!-- CABEÇALHO -->
+  <!-- ========================================================= -->
+
+  <div class="ram-lab-toolbar">
+
+    <div class="ram-lab-title">
+      <span class="status-dot"></span>
+
+      Simulador de Memória RAM
+
+      <span class="ram-schematic-badge">
+        modelo didático
+      </span>
+    </div>
+
+    <button
+      type="button"
+      id="btn-reset-multi-ram"
+      class="ram-action-btn"
+    >
+      <i class="fa-solid fa-rotate-left"></i>
+      Reiniciar memória
+    </button>
+
+  </div>
+
+
+  <!-- ========================================================= -->
+  <!-- RESUMO GLOBAL -->
+  <!-- ========================================================= -->
+
+  <div class="ram-global-stats">
+
+    <article>
+      <small>Memória Total</small>
+      <strong id="ram-total-blocks">24 blocos</strong>
+    </article>
+
+    <article>
+      <small>Espaço Livre Total</small>
+      <strong id="ram-total-free">-</strong>
+    </article>
+
+    <article>
+      <small>Maior Bloco Contíguo</small>
+      <strong id="ram-largest-block">-</strong>
+    </article>
+
+    <article>
+      <small>Blocos Alocados</small>
+      <strong id="ram-user-allocated">0</strong>
+    </article>
+
+  </div>
+
+
+  <!-- ========================================================= -->
+  <!-- ESTRUTURAS DISPONÍVEIS -->
+  <!-- ========================================================= -->
+
+  <div class="ram-palette">
+
+    <div class="ram-palette-title">
+
+      <div>
+        <span>Estruturas para testar</span>
+        <small>
+          Arraste para um pente ou clique na estrutura e depois no pente.
+        </small>
+      </div>
+
+    </div>
+
+
+    <div class="ram-structures">
+
+      <!-- ARRAY 3 -->
+
+      <button
+        type="button"
+        class="memory-structure memory-array"
+        draggable="true"
+        data-kind="array"
+        data-size="3"
+      >
+
+        <span class="structure-name">
+          Array[3]
+        </span>
+
+        <span class="structure-description">
+          exige 3 blocos contíguos
+        </span>
+
+        <span class="array-preview">
+
+          <span></span>
+          <span></span>
+          <span></span>
+
+        </span>
+
+      </button>
+
+
+      <!-- ARRAY 4 -->
+
+      <button
+        type="button"
+        class="memory-structure memory-array"
+        draggable="true"
+        data-kind="array"
+        data-size="4"
+      >
+
+        <span class="structure-name">
+          Array[4]
+        </span>
+
+        <span class="structure-description">
+          exige 4 blocos contíguos
+        </span>
+
+        <span class="array-preview">
+
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+
+        </span>
+
+      </button>
+
+
+      <!-- LISTA 3 -->
+
+      <button
+        type="button"
+        class="memory-structure memory-list"
+        draggable="true"
+        data-kind="list"
+        data-size="3"
+      >
+
+        <span class="structure-name">
+          Lista[3]
+        </span>
+
+        <span class="structure-description">
+          3 nós independentes
+        </span>
+
+        <span class="list-preview">
+
+          <span>N</span>
+          <i>→</i>
+
+          <span>N</span>
+          <i>→</i>
+
+          <span>N</span>
+
+        </span>
+
+      </button>
+
+
+      <!-- LISTA 5 -->
+
+      <button
+        type="button"
+        class="memory-structure memory-list"
+        draggable="true"
+        data-kind="list"
+        data-size="5"
+      >
+
+        <span class="structure-name">
+          Lista[5]
+        </span>
+
+        <span class="structure-description">
+          pode usar espaços espalhados
+        </span>
+
+        <span class="list-preview">
+
+          <span>N</span>
+          <i>→</i>
+
+          <span>N</span>
+          <i>→</i>
+
+          <span>N</span>
+          <i>→</i>
+
+          <span>N</span>
+          <i>→</i>
+
+          <span>N</span>
+
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================================================= -->
+  <!-- VISÃO LÓGICA DA LISTA -->
+  <!-- ========================================================= -->
+
+  <div
+    id="logical-list-view"
+    class="logical-list-view is-empty"
+  >
+
+    <div class="logical-list-title">
+      <i class="fa-solid fa-link"></i>
+
+      Ordem lógica da última lista alocada
+    </div>
+
+    <div id="logical-list-content">
+      Nenhuma lista alocada ainda.
+    </div>
+
+  </div>
+
+
+  <!-- ========================================================= -->
+  <!-- PENTES -->
+  <!-- ========================================================= -->
+
+  <div
+    id="ram-modules"
+    class="ram-modules"
+  ></div>
+
+
+  <!-- ========================================================= -->
+  <!-- CONSOLE -->
+  <!-- ========================================================= -->
+
+  <div class="ram-console">
+
+    <div class="ram-console-icon">
+      <i class="fa-solid fa-terminal"></i>
+    </div>
+
+    <div id="multi-ram-console">
+      Escolha uma estrutura e tente alocá-la em um dos pentes.
+    </div>
+
+  </div>
+
+
+  <!-- ========================================================= -->
+  <!-- LEGENDA -->
+  <!-- ========================================================= -->
+
+  <div class="ram-legend">
+
+    <span>
+      <i class="legend-box system-box"></i>
+      Ocupado pelo sistema
+    </span>
+
+    <span>
+      <i class="legend-box free-box"></i>
+      Livre
+    </span>
+
+    <span>
+      <i class="legend-box array-box"></i>
+      Array
+    </span>
+
+    <span>
+      <i class="legend-box node-box"></i>
+      Nó de lista
+    </span>
+
+  </div>
+
+</div>
+    </section>
+
+
+    <section class="lesson-section" id="vantagens">
+      <header class="lesson-heading">
+        <span>04</span>
+        <div>
+          <p>Flexibilidade e crescimento</p>
+          <h2>As Vantagens das Estruturas Dinâmicas e o Papel do Heap</h2>
+        </div>
+      </header>
+
+      <p class="section-lead">
+        Estruturas dinâmicas existem para resolver um problema fundamental:
+        <strong>nem sempre sabemos, antecipadamente, quanto espaço vamos precisar</strong>.
+        Em vez de reservar tudo no começo, o programa pode pedir memória ao longo da execução,
+        usando a região chamada <strong>heap</strong>. Isso permite crescer sob demanda,
+        reaproveitar espaços liberados e construir estruturas flexíveis como
+        <strong>listas encadeadas, árvores, filas e grafos</strong>.
+      </p>
+
+      <div class="heap-advantages-grid">
+        <article class="heap-adv-card">
+          <h3><i class="fa-solid fa-expand" aria-hidden="true"></i> Crescimento sob demanda</h3>
+          <p>
+            A estrutura não precisa nascer com um tamanho fixo. Novos nós ou blocos
+            podem ser alocados apenas quando forem realmente necessários.
+          </p>
+        </article>
+
+        <article class="heap-adv-card">
+          <h3><i class="fa-solid fa-link" aria-hidden="true"></i> Encadeamento por ponteiros</h3>
+          <p>
+            Os elementos não precisam ficar lado a lado na memória. Cada nó guarda o
+            endereço do próximo, permitindo que a estrutura use regiões espalhadas do heap.
+          </p>
+        </article>
+
+        <article class="heap-adv-card">
+          <h3><i class="fa-solid fa-recycle" aria-hidden="true"></i> Reaproveitamento de memória</h3>
+          <p>
+            Quando um nó é removido, seu espaço volta a ficar livre e pode ser reutilizado
+            futuramente por outro elemento da estrutura.
+          </p>
+        </article>
+
+        <article class="heap-adv-card">
+          <h3><i class="fa-solid fa-shuffle" aria-hidden="true"></i> Inserções e remoções locais</h3>
+          <p>
+            Em muitas estruturas dinâmicas, alterar a estrutura exige apenas ajustar alguns
+            ponteiros, sem mover todos os elementos como ocorre em arrays.
+          </p>
+        </article>
+      </div>
+
+      <div class="heap-diagram-shell">
+        <div class="heap-diagram-toolbar">
+          <div class="heap-diagram-status">
+            <span class="status-dot"></span>
+            Simulação do heap em execução
+          </div>
+
+          <div class="heap-diagram-actions">
+            <button type="button" class="heap-diagram-btn" id="btn-add-tail">
+              <i class="fa-solid fa-plus"></i>
+              Inserir no fim
+            </button>
+
+            <button type="button" class="heap-diagram-btn" id="btn-add-head">
+              <i class="fa-solid fa-arrow-up"></i>
+              Inserir no início
+            </button>
+
+            <button type="button" class="heap-diagram-btn" id="btn-remove-middle">
+              <i class="fa-solid fa-scissors"></i>
+              Remover do meio
+            </button>
+
+            <button type="button" class="heap-diagram-btn" id="btn-reset-heap">
+              <i class="fa-solid fa-rotate-left"></i>
+              Reiniciar
+            </button>
+          </div>
+        </div>
+
+        <div class="canvas-container-heap">
+          <canvas id="canvas-heap-benefits" width="1250" height="575"
+            aria-label="Diagrama interativo mostrando uma estrutura dinâmica crescendo no heap">
+          </canvas>
+        </div>
+
+        <div class="heap-console" id="heap-console">
+          A estrutura está vazia. Clique em <strong>Inserir no fim</strong> ou
+          <strong>Inserir no início</strong> para alocar nós no heap.
+        </div>
+      </div>
+
+      <div class="review-grid records-review" style="margin-top: 2rem;">
+        <details open>
+          <summary>O que é o Heap?<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <p>
+            O <strong>heap</strong> é a região da memória usada para <strong>alocação dinâmica</strong>.
+            Em vez de existir apenas durante um bloco local de código, um objeto alocado no heap
+            pode continuar existindo até que seja explicitamente liberado (em linguagens como C/C++)
+            ou até que o coletor de lixo o remova (em linguagens com garbage collector).
+          </p>
+        </details>
+
+        <details open>
+          <summary>Por que estruturas dinâmicas usam o Heap?<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </summary>
+          <p>
+            Porque o heap permite que o programa peça memória <strong>durante a execução</strong>.
+            Isso é ideal quando a quantidade de elementos varia com o tempo, como em uma lista de
+            clientes conectados, uma fila de tarefas ou uma árvore que cresce conforme dados são inseridos.
+          </p>
+        </details>
+
+        <details open>
+          <summary>Qual é a principal vantagem?<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <p>
+            A principal vantagem é a <strong>flexibilidade</strong>. A estrutura pode crescer,
+            encolher e se reorganizar sem depender de um único bloco contíguo gigante.
+            Assim, ela se adapta melhor a cenários reais, nos quais os dados variam ao longo do tempo.
+          </p>
+        </details>
+
+        <details open>
+          <summary>Existe algum custo?<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <p>
+            Sim. Estruturas dinâmicas geralmente precisam de <strong>ponteiros extras</strong>,
+            exigem <strong>gerenciamento de memória</strong> e costumam ser menos amigáveis ao cache
+            da CPU do que arrays contíguos. Em compensação, oferecem algoritmos de inserção,
+            remoção e crescimento muito mais flexíveis.
+          </p>
+        </details>
+      </div>
+    </section>
+
+
+    <style>
+
+  /* ========================================================= */
+  /* LAB PRINCIPAL */
+  /* ========================================================= */
+
+  .multi-ram-lab {
+
+    margin-top: 1.5rem;
+
+    border: 1px solid #1e2d36;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    background:
+      radial-gradient(
+        circle at 20% 10%,
+        rgba(56, 189, 248, 0.05),
+        transparent 30%
+      ),
+      #0b1215;
+  }
+
+
+  /* ========================================================= */
+  /* TOOLBAR */
+  /* ========================================================= */
+
+  .ram-lab-toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    flex-wrap: wrap;
+
+    gap: 1rem;
+
+    padding: 0.85rem 1rem;
+
+    border-bottom: 1px solid #1e2d36;
+
+    background: rgba(15, 23, 42, 0.45);
+  }
+
+
+  .ram-lab-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.65rem;
+
+    color: #94a3b8;
+
+    font-size: 0.82rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+  }
+
+
+  .ram-schematic-badge {
+
+    padding: 0.15rem 0.45rem;
+
+    border: 1px solid #334155;
+
+    border-radius: 999px;
+
+    color: #64748b;
+
+    font-size: 0.65rem;
+
+    text-transform: none;
+
+    letter-spacing: 0;
+  }
+
+
+  .ram-action-btn {
+
+    border: 1px solid #334155;
+
+    border-radius: 6px;
+
+    background: #111b21;
+
+    color: #94a3b8;
+
+    padding: 0.55rem 0.8rem;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+  }
+
+
+  .ram-action-btn:hover {
+
+    border-color: #38bdf8;
+
+    color: #38bdf8;
+  }
+
+
+  /* ========================================================= */
+  /* ESTATÍSTICAS GERAIS */
+  /* ========================================================= */
+
+  .ram-global-stats {
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+
+    gap: 0.75rem;
+
+    padding: 1rem;
+
+    border-bottom: 1px solid #1e2d36;
+  }
+
+
+  .ram-global-stats article {
+
+    padding: 0.8rem 1rem;
+
+    border: 1px solid #24343d;
+
+    border-radius: 8px;
+
+    background: #10191f;
+  }
+
+
+  .ram-global-stats small {
+
+    display: block;
+
+    color: #64748b;
+
+    font-size: 0.7rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.04em;
+  }
+
+
+  .ram-global-stats strong {
+
+    display: block;
+
+    margin-top: 0.2rem;
+
+    color: #e2e8f0;
+
+    font-size: 1rem;
+  }
+
+
+  /* ========================================================= */
+  /* PALETA */
+  /* ========================================================= */
+
+  .ram-palette {
+
+    padding: 1rem;
+
+    border-bottom: 1px solid #1e2d36;
+  }
+
+
+  .ram-palette-title {
+
+    margin-bottom: 0.8rem;
+  }
+
+
+  .ram-palette-title span {
+
+    display: block;
+
+    color: #cbd5e1;
+
+    font-size: 0.85rem;
+
+    font-weight: 700;
+  }
+
+
+  .ram-palette-title small {
+
+    color: #64748b;
+  }
+
+
+  .ram-structures {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 0.8rem;
+  }
+
+
+  .memory-structure {
+
+    min-width: 180px;
+
+    border: 1px solid #334155;
+
+    border-radius: 8px;
+
+    background: #111a1f;
+
+    padding: 0.75rem;
+
+    cursor: grab;
+
+    text-align: left;
+
+    transition: 0.2s ease;
+  }
+
+
+  .memory-structure:hover {
+
+    border-color: #38bdf8;
+
+    transform: translateY(-2px);
+  }
+
+
+  .memory-structure.is-selected {
+
+    border-color: #38bdf8;
+
+    background: rgba(56, 189, 248, 0.08);
+
+    box-shadow:
+      0 0 0 1px rgba(56, 189, 248, 0.15) inset;
+  }
+
+
+  .structure-name {
+
+    display: block;
+
+    color: #e2e8f0;
+
+    font-weight: 700;
+
+    font-size: 0.9rem;
+  }
+
+
+  .structure-description {
+
+    display: block;
+
+    color: #64748b;
+
+    margin-bottom: 0.65rem;
+
+    font-size: 0.72rem;
+  }
+
+
+  /* ARRAY */
+
+  .array-preview {
+
+    display: flex;
+
+    gap: 2px;
+  }
+
+
+  .array-preview span {
+
+    display: block;
+
+    width: 28px;
+
+    height: 25px;
+
+    background: #0284c7;
+
+    border: 1px solid #38bdf8;
+  }
+
+
+  /* LISTA */
+
+  .list-preview {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 3px;
+  }
+
+
+  .list-preview span {
+
+    width: 25px;
+
+    height: 25px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #4f46e5;
+
+    color: white;
+
+    font-size: 0.7rem;
+
+    font-weight: 700;
+  }
+
+
+  .list-preview i {
+
+    color: #818cf8;
+
+    font-style: normal;
+
+    font-size: 0.75rem;
+  }
+
+
+  /* ========================================================= */
+  /* LISTA LÓGICA */
+  /* ========================================================= */
+
+  .logical-list-view {
+
+    margin: 1rem;
+
+    padding: 0.85rem 1rem;
+
+    border: 1px solid rgba(129, 140, 248, 0.35);
+
+    border-radius: 8px;
+
+    background: rgba(79, 70, 229, 0.06);
+  }
+
+
+  .logical-list-view.is-empty {
+
+    opacity: 0.5;
+  }
+
+
+  .logical-list-title {
+
+    color: #a5b4fc;
+
+    font-size: 0.75rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.04em;
+
+    margin-bottom: 0.5rem;
+  }
+
+
+  #logical-list-content {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 0.35rem;
+
+    font-family: monospace;
+
+    color: #cbd5e1;
+  }
+
+
+  .logical-node {
+
+    padding: 0.35rem 0.5rem;
+
+    border: 1px solid #4f46e5;
+
+    border-radius: 5px;
+
+    background: #1e1b4b;
+
+    color: #c7d2fe;
+  }
+
+
+  .logical-arrow {
+
+    color: #818cf8;
+  }
+
+
+  /* ========================================================= */
+  /* MÓDULOS RAM */
+  /* ========================================================= */
+
+  .ram-modules {
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(3, minmax(330px, 1fr));
+
+    gap: 1rem;
+
+    padding: 1rem;
+
+    overflow-x: auto;
+  }
+
+
+  .ram-stick {
+
+    min-width: 330px;
+
+    border: 1px solid #24343d;
+
+    border-radius: 10px;
+
+    background: #10191f;
+
+    overflow: hidden;
+
+    transition: 0.2s ease;
+  }
+
+
+  .ram-stick:hover {
+
+    border-color: #475569;
+  }
+
+
+  .ram-stick.drag-over {
+
+    border-color: #38bdf8;
+
+    box-shadow:
+      0 0 0 2px rgba(56, 189, 248, 0.15) inset;
+  }
+
+
+  .ram-stick.can-fit {
+
+    border-color: #10b981;
+  }
+
+
+  .ram-stick.cannot-fit {
+
+    animation: ramError 0.35s ease;
+  }
+
+
+  @keyframes ramError {
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    33% {
+      transform: translateX(-4px);
+    }
+
+    66% {
+      transform: translateX(4px);
+    }
+  }
+
+
+  /* ========================================================= */
+  /* CABEÇALHO DO PENTE */
+  /* ========================================================= */
+
+  .ram-stick-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding: 0.8rem;
+
+    border-bottom: 1px solid #24343d;
+  }
+
+
+  .ram-stick-name {
+
+    color: #e2e8f0;
+
+    font-weight: 700;
+  }
+
+
+  .ram-stick-description {
+
+    display: block;
+
+    color: #64748b;
+
+    font-size: 0.72rem;
+
+    margin-top: 0.1rem;
+  }
+
+
+  .ram-fit-indicator {
+
+    padding: 0.18rem 0.4rem;
+
+    border-radius: 999px;
+
+    font-size: 0.65rem;
+
+    color: #64748b;
+
+    border: 1px solid #334155;
+  }
+
+
+  /* ========================================================= */
+  /* ESTATÍSTICAS POR PENTE */
+  /* ========================================================= */
+
+  .ram-stick-stats {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 0.5rem;
+
+    padding: 0.75rem;
+  }
+
+
+  .ram-mini-stat {
+
+    padding: 0.5rem;
+
+    border-radius: 6px;
+
+    background: #0d161b;
+
+    border: 1px solid #1e2d36;
+  }
+
+
+  .ram-mini-stat small {
+
+    display: block;
+
+    color: #64748b;
+
+    font-size: 0.63rem;
+
+    text-transform: uppercase;
+  }
+
+
+  .ram-mini-stat strong {
+
+    color: #cbd5e1;
+
+    font-size: 0.83rem;
+  }
+
+
+  /* BARRA DE USO */
+
+  .ram-usage {
+
+    padding:
+      0 0.75rem 0.75rem;
+  }
+
+
+  .ram-usage-bar {
+
+    height: 5px;
+
+    border-radius: 999px;
+
+    overflow: hidden;
+
+    background: #1e293b;
+  }
+
+
+  .ram-usage-fill {
+
+    height: 100%;
+
+    background: #38bdf8;
+
+    transition: width 0.3s ease;
+  }
+
+
+  /* ========================================================= */
+  /* BLOCOS */
+  /* ========================================================= */
+
+  .ram-blocks {
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(4, minmax(55px, 1fr));
+
+    gap: 5px;
+
+    padding: 0.8rem;
+
+    background: #0b1215;
+  }
+
+
+  .ram-block {
+
+    min-height: 66px;
+
+    position: relative;
+
+    border-radius: 5px;
+
+    border: 1px dashed #334155;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    background: transparent;
+  }
+
+
+  .ram-address {
+
+    position: absolute;
+
+    top: 3px;
+
+    left: 4px;
+
+    font-family: monospace;
+
+    font-size: 0.57rem;
+
+    color: #475569;
+  }
+
+
+  .ram-block-label {
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+    color: #475569;
+  }
+
+
+  /* OCUPADO */
+
+  .ram-block.system {
+
+    border-style: solid;
+
+    border-color: #334155;
+
+    background: #1e293b;
+  }
+
+
+  .ram-block.system .ram-block-label {
+
+    color: #94a3b8;
+  }
+
+
+  /* ARRAY */
+
+  .ram-block.array {
+
+    border-style: solid;
+
+    border-color: #38bdf8;
+
+    background: #0284c7;
+  }
+
+
+  .ram-block.array .ram-block-label {
+
+    color: white;
+  }
+
+
+  /* LISTA */
+
+  .ram-block.list {
+
+    border-style: solid;
+
+    border-color: #818cf8;
+
+    background: #4f46e5;
+  }
+
+
+  .ram-block.list .ram-block-label {
+
+    color: white;
+  }
+
+
+  .ram-node-next {
+
+    margin-top: 3px;
+
+    padding: 1px 3px;
+
+    border-radius: 3px;
+
+    background: #312e81;
+
+    color: #c7d2fe;
+
+    font-family: monospace;
+
+    font-size: 0.52rem;
+  }
+
+
+  /* ========================================================= */
+  /* CONSOLE */
+  /* ========================================================= */
+
+  .ram-console {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 0.7rem;
+
+    min-height: 58px;
+
+    padding: 0.9rem 1rem;
+
+    border-top: 1px solid #1e2d36;
+
+    border-bottom: 1px solid #1e2d36;
+
+    background: #081015;
+  }
+
+
+  .ram-console-icon {
+
+    color: #38bdf8;
+  }
+
+
+  #multi-ram-console {
+
+    color: #94a3b8;
+
+    font-family: monospace;
+
+    font-size: 0.82rem;
+
+    line-height: 1.55;
+  }
+
+
+  #multi-ram-console strong {
+
+    color: #e2e8f0;
+  }
+
+
+  /* ========================================================= */
+  /* LEGENDA */
+  /* ========================================================= */
+
+  .ram-legend {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 1.2rem;
+
+    padding: 0.75rem 1rem;
+
+    color: #64748b;
+
+    font-size: 0.72rem;
+  }
+
+
+  .ram-legend span {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+  }
+
+
+  .legend-box {
+
+    width: 12px;
+
+    height: 12px;
+
+    display: inline-block;
+
+    border-radius: 2px;
+  }
+
+
+  .system-box {
+
+    background: #1e293b;
+
+    border: 1px solid #334155;
+  }
+
+
+  .free-box {
+
+    background: transparent;
+
+    border: 1px dashed #334155;
+  }
+
+
+  .array-box {
+
+    background: #0284c7;
+
+    border: 1px solid #38bdf8;
+  }
+
+
+  .node-box {
+
+    background: #4f46e5;
+
+    border: 1px solid #818cf8;
+  }
+
+
+  /* ========================================================= */
+  /* RESPONSIVO */
+  /* ========================================================= */
+
+  @media (max-width: 900px) {
+
+    .ram-global-stats {
+
+      grid-template-columns:
+        repeat(2, 1fr);
+    }
+
+  }
+
+
+  @media (max-width: 600px) {
+
+    .ram-global-stats {
+
+      grid-template-columns: 1fr;
+    }
+
+    .ram-lab-toolbar {
+
+      align-items: flex-start;
+
+      flex-direction: column;
+    }
+
+  }
+
+</style>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const modulesContainer =
+    document.getElementById("ram-modules");
+
+  const consoleEl =
+    document.getElementById("multi-ram-console");
+
+  const resetBtn =
+    document.getElementById("btn-reset-multi-ram");
+
+  const structures =
+    document.querySelectorAll(".memory-structure");
+
+  const logicalView =
+    document.getElementById("logical-list-view");
+
+  const logicalContent =
+    document.getElementById("logical-list-content");
+
+
+  const totalFreeEl =
+    document.getElementById("ram-total-free");
+
+  const largestBlockEl =
+    document.getElementById("ram-largest-block");
+
+  const allocatedEl =
+    document.getElementById("ram-user-allocated");
+
+
+  /* ========================================================= */
+  /* CONFIGURAÇÃO DOS PENTES */
+  /* ========================================================= */
+
+  const initialModules = [
+
+    /* =====================================================
+       PENTE A
+
+       5 blocos livres.
+       Maior sequência = 2.
+
+       Array[3] NÃO CABE.
+    ===================================================== */
+
+    {
+      id: "A",
+
+      title: "Pente A",
+
+      description: "Fragmentação forte",
+
+      baseAddress: 0x1000,
+
+      cells: [
+        "SO",
+        null,
+        null,
+        "APP",
+        null,
+        "SYS",
+        null,
+        null
+      ]
+    },
+
+
+    /* =====================================================
+       PENTE B
+
+       Também possui 5 blocos livres.
+
+       Entretanto:
+       #1 #2 #3 #4 são contíguos.
+
+       Array[3] e Array[4] CABEM.
+    ===================================================== */
+
+    {
+      id: "B",
+
+      title: "Pente B",
+
+      description: "Grande bloco contíguo",
+
+      baseAddress: 0x2000,
+
+      cells: [
+        "SO",
+        null,
+        null,
+        null,
+        null,
+        "APP",
+        "SYS",
+        null
+      ]
+    },
+
+
+    /* =====================================================
+       PENTE C
+
+       Exatamente 3 blocos livres.
+
+       Porém todos separados.
+
+       Array[3] NÃO CABE,
+       apesar de existirem 3 blocos livres.
+    ===================================================== */
+
+    {
+      id: "C",
+
+      title: "Pente C",
+
+      description: "Espaço livre, mas disperso",
+
+      baseAddress: 0x3000,
+
+      cells: [
+        "SO",
+        null,
+        "APP",
+        null,
+        "SYS",
+        null,
+        "APP",
+        "SYS"
+      ]
+    }
+
+  ];
+
+
+  /* ========================================================= */
+  /* ESTADO */
+  /* ========================================================= */
+
+  let modules = [];
+
+  let selectedStructure = null;
+
+  let allocationCounter = 1;
+
+  let listCounter = 1;
+
+  let latestList = null;
+
+
+  /* ========================================================= */
+  /* CLONE DO ESTADO INICIAL */
+  /* ========================================================= */
+
+  function resetState() {
+
+    modules =
+      initialModules.map(module => ({
+
+        ...module,
+
+        cells:
+          module.cells.map(content => {
+
+            if (content === null) {
+
+              return {
+                type: "free",
+                label: "Livre"
+              };
+
+            }
+
+            return {
+              type: "system",
+              label: content
+            };
+
+          })
+
+      }));
+
+
+    selectedStructure = null;
+
+    allocationCounter = 1;
+
+    listCounter = 1;
+
+    latestList = null;
+
+
+    structures.forEach(
+      item =>
+        item.classList.remove("is-selected")
+    );
+
+
+    consoleEl.innerHTML =
+      `
+        Escolha uma estrutura e tente alocá-la
+        em um dos pentes.
+      `;
+
+
+    render();
+
+  }
+
+
+  /* ========================================================= */
+  /* ENDEREÇO */
+  /* ========================================================= */
+
+  function getAddress(
+    module,
+    cellIndex
+  ) {
+
+    const address =
+      module.baseAddress +
+      cellIndex * 0x10;
+
+
+    return (
+      "0x" +
+      address
+        .toString(16)
+        .toUpperCase()
+    );
+
+  }
+
+
+  function shortAddress(
+    module,
+    cellIndex
+  ) {
+
+    return (
+      module.id +
+      ":#" +
+      cellIndex
+    );
+
+  }
+
+
+  /* ========================================================= */
+  /* ESTATÍSTICAS */
+  /* ========================================================= */
+
+  function countFree(module) {
+
+    return module.cells.filter(
+      cell =>
+        cell.type === "free"
+    ).length;
+
+  }
+
+
+  function largestContiguous(module) {
+
+    let largest = 0;
+
+    let current = 0;
+
+
+    module.cells.forEach(cell => {
+
+      if (
+        cell.type === "free"
+      ) {
+
+        current++;
+
+        largest =
+          Math.max(
+            largest,
+            current
+          );
+
+      }
+
+      else {
+
+        current = 0;
+
+      }
+
+    });
+
+
+    return largest;
+
+  }
+
+
+  function countAllocated() {
+
+    let total = 0;
+
+
+    modules.forEach(module => {
+
+      module.cells.forEach(cell => {
+
+        if (
+          cell.type === "array" ||
+          cell.type === "list"
+        ) {
+
+          total++;
+
+        }
+
+      });
+
+    });
+
+
+    return total;
+
+  }
+
+
+  function updateGlobalStats() {
+
+    let totalFree = 0;
+
+    let globalLargest = 0;
+
+
+    modules.forEach(module => {
+
+      totalFree +=
+        countFree(module);
+
+
+      globalLargest =
+        Math.max(
+          globalLargest,
+          largestContiguous(module)
+        );
+
+    });
+
+
+    totalFreeEl.textContent =
+      `${totalFree} / 24 blocos`;
+
+
+    largestBlockEl.textContent =
+      `${globalLargest} blocos`;
+
+
+    allocatedEl.textContent =
+      countAllocated();
+
+  }
+
+
+  /* ========================================================= */
+  /* PROCURA ESPAÇO CONTÍGUO */
+  /* ========================================================= */
+
+  function findContiguous(
+    module,
+    size
+  ) {
+
+    let count = 0;
+
+    let start = -1;
+
+
+    for (
+      let i = 0;
+      i < module.cells.length;
+      i++
+    ) {
+
+      if (
+        module.cells[i].type === "free"
+      ) {
+
+        if (
+          count === 0
+        ) {
+
+          start = i;
+
+        }
+
+
+        count++;
+
+
+        if (
+          count === size
+        ) {
+
+          return start;
+
+        }
+
+      }
+
+      else {
+
+        count = 0;
+
+        start = -1;
+
+      }
+
+    }
+
+
+    return -1;
+
+  }
+
+
+  /* ========================================================= */
+  /* RENDER PENTES */
+  /* ========================================================= */
+
+  function renderModules() {
+
+    modulesContainer.innerHTML = "";
+
+
+    modules.forEach(
+      (
+        module,
+        moduleIndex
+      ) => {
+
+        const free =
+          countFree(module);
+
+
+        const largest =
+          largestContiguous(module);
+
+
+        const used =
+          module.cells.length - free;
+
+
+        const usedPercentage =
+          (
+            used /
+            module.cells.length
+          ) * 100;
+
+
+        const stick =
+          document.createElement("article");
+
+
+        stick.className =
+          "ram-stick";
+
+
+        stick.dataset.module =
+          moduleIndex;
+
+
+        /* =====================================================
+           CABEÇALHO
+        ===================================================== */
+
+        const header =
+          document.createElement("div");
+
+
+        header.className =
+          "ram-stick-header";
+
+
+        header.innerHTML = `
+
+          <div>
+
+            <span class="ram-stick-name">
+              ${module.title}
+            </span>
+
+            <span class="ram-stick-description">
+              ${module.description}
+            </span>
+
+          </div>
+
+          <span class="ram-fit-indicator">
+            ${free} livres
+          </span>
+
+        `;
+
+
+        stick.appendChild(header);
+
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
+        const stats =
+          document.createElement("div");
+
+
+        stats.className =
+          "ram-stick-stats";
+
+
+        stats.innerHTML = `
+
+          <div class="ram-mini-stat">
+
+            <small>Espaço livre</small>
+
+            <strong>
+              ${free} / ${module.cells.length}
+            </strong>
+
+          </div>
+
+
+          <div class="ram-mini-stat">
+
+            <small>Maior sequência</small>
+
+            <strong>
+              ${largest} blocos
+            </strong>
+
+          </div>
+
+        `;
+
+
+        stick.appendChild(stats);
+
+
+        /* =====================================================
+           BARRA
+        ===================================================== */
+
+        const usage =
+          document.createElement("div");
+
+
+        usage.className =
+          "ram-usage";
+
+
+        usage.innerHTML = `
+
+          <div class="ram-usage-bar">
+
+            <div
+              class="ram-usage-fill"
+              style="
+                width:
+                ${usedPercentage}%;
+              "
+            ></div>
+
+          </div>
+
+        `;
+
+
+        stick.appendChild(usage);
+
+
+        /* =====================================================
+           BLOCOS
+        ===================================================== */
+
+        const blocks =
+          document.createElement("div");
+
+
+        blocks.className =
+          "ram-blocks";
+
+
+        module.cells.forEach(
+          (
+            cell,
+            cellIndex
+          ) => {
+
+            const block =
+              document.createElement("div");
+
+
+            block.className =
+              `ram-block ${cell.type}`;
+
+
+            const address =
+              document.createElement("span");
+
+
+            address.className =
+              "ram-address";
+
+
+            address.textContent =
+              getAddress(
+                module,
+                cellIndex
+              );
+
+
+            block.appendChild(
+              address
+            );
+
+
+            const label =
+              document.createElement("span");
+
+
+            label.className =
+              "ram-block-label";
+
+
+            label.textContent =
+              cell.label;
+
+
+            block.appendChild(
+              label
+            );
+
+
+            /* =================================================
+               PONTEIRO DA LISTA
+            ================================================= */
+
+            if (
+              cell.type === "list" &&
+              cell.next !== undefined
+            ) {
+
+              const pointer =
+                document.createElement(
+                  "span"
+                );
+
+
+              pointer.className =
+                "ram-node-next";
+
+
+              pointer.textContent =
+                cell.next === null
+                  ? "→ NULL"
+                  : `→ ${cell.next}`;
+
+
+              block.appendChild(
+                pointer
+              );
+
+            }
+
+
+            blocks.appendChild(
+              block
+            );
+
+          }
+        );
+
+
+        stick.appendChild(
+          blocks
+        );
+
+
+        /* =====================================================
+           DRAG OVER
+        ===================================================== */
+
+        stick.addEventListener(
+          "dragover",
+          event => {
+
+            event.preventDefault();
+
+            stick.classList.add(
+              "drag-over"
+            );
+
+          }
+        );
+
+
+        stick.addEventListener(
+          "dragleave",
+          () => {
+
+            stick.classList.remove(
+              "drag-over"
+            );
+
+          }
+        );
+
+
+        stick.addEventListener(
+          "drop",
+          event => {
+
+            event.preventDefault();
+
+            stick.classList.remove(
+              "drag-over"
+            );
+
+
+            const raw =
+              event.dataTransfer.getData(
+                "application/json"
+              );
+
+
+            if (!raw)
+              return;
+
+
+            try {
+
+              const request =
+                JSON.parse(raw);
+
+
+              attemptAllocation(
+                moduleIndex,
+                request
+              );
+
+            }
+
+            catch {
+
+              consoleEl.innerHTML =
+                "<strong>Erro:</strong> estrutura inválida.";
+
+            }
+
+          }
+        );
+
+
+        /* =====================================================
+           CLICK
+
+           Permite usar sem drag.
+        ===================================================== */
+
+        stick.addEventListener(
+          "click",
+          () => {
+
+            if (
+              !selectedStructure
+            ) {
+
+              consoleEl.innerHTML =
+                `
+                  Primeiro selecione
+                  <strong>Array[3]</strong>,
+                  <strong>Array[4]</strong>,
+                  <strong>Lista[3]</strong>
+                  ou
+                  <strong>Lista[5]</strong>.
+                `;
+
+              return;
+
+            }
+
+
+            attemptAllocation(
+              moduleIndex,
+              selectedStructure
+            );
+
+          }
+        );
+
+
+        modulesContainer.appendChild(
+          stick
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================================= */
+  /* RENDER LISTA LÓGICA */
+  /* ========================================================= */
+
+  function renderLogicalList() {
+
+    if (
+      !latestList
+    ) {
+
+      logicalView.classList.add(
+        "is-empty"
+      );
+
+
+      logicalContent.innerHTML =
+        "Nenhuma lista alocada ainda.";
+
+
+      return;
+
+    }
+
+
+    logicalView.classList.remove(
+      "is-empty"
+    );
+
+
+    logicalContent.innerHTML = "";
+
+
+    latestList.nodes.forEach(
+      (
+        node,
+        index
+      ) => {
+
+        const nodeEl =
+          document.createElement("span");
+
+
+        nodeEl.className =
+          "logical-node";
+
+
+        nodeEl.innerHTML =
+          `
+            ${node.label}
+            <small>
+              ${node.address}
+            </small>
+          `;
+
+
+        logicalContent.appendChild(
+          nodeEl
+        );
+
+
+        if (
+          index <
+          latestList.nodes.length - 1
+        ) {
+
+          const arrow =
+            document.createElement(
+              "span"
+            );
+
+
+          arrow.className =
+            "logical-arrow";
+
+
+          arrow.textContent =
+            "→";
+
+
+          logicalContent.appendChild(
+            arrow
+          );
+
+        }
+
+      }
+    );
+
+
+    const nullEl =
+      document.createElement("span");
+
+
+    nullEl.className =
+      "logical-arrow";
+
+
+    nullEl.textContent =
+      "→ NULL";
+
+
+    logicalContent.appendChild(
+      nullEl
+    );
+
+  }
+
+
+  /* ========================================================= */
+  /* RENDER */
+  /* ========================================================= */
+
+  function render() {
+
+    renderModules();
+
+    renderLogicalList();
+
+    updateGlobalStats();
+
+  }
+
+
+  /* ========================================================= */
+  /* ARRAY */
+  /* ========================================================= */
+
+  function allocateArray(
+    moduleIndex,
+    size
+  ) {
+
+    const module =
+      modules[moduleIndex];
+
+
+    const start =
+      findContiguous(
+        module,
+        size
+      );
+
+
+    /* =====================================================
+       FALHA
+    ===================================================== */
+
+    if (
+      start === -1
+    ) {
+
+      const free =
+        countFree(module);
+
+
+      const largest =
+        largestContiguous(module);
+
+
+      consoleEl.innerHTML = `
+
+        <strong style="color:#fb7185;">
+          FALHA NO ${module.title.toUpperCase()}:
+        </strong>
+
+        existem
+
+        <strong>
+          ${free} blocos livres
+        </strong>,
+
+        mas a maior sequência contígua possui apenas
+
+        <strong>
+          ${largest}
+        </strong>.
+
+        O Array[${size}] precisa de
+
+        <strong>
+          ${size} blocos vizinhos.
+        </strong>
+
+        Tente outro pente.
+
+      `;
+
+
+      const stick =
+        modulesContainer.querySelector(
+          `[data-module="${moduleIndex}"]`
+        );
+
+
+      stick?.classList.add(
+        "cannot-fit"
+      );
+
+
+      setTimeout(
+        () =>
+          stick?.classList.remove(
+            "cannot-fit"
+          ),
+        450
+      );
+
+
+      return;
+
+    }
+
+
+    /* =====================================================
+       SUCESSO
+    ===================================================== */
+
+    const allocationId =
+      allocationCounter++;
+
+
+    for (
+      let i = start;
+      i < start + size;
+      i++
+    ) {
+
+      module.cells[i] = {
+
+        type: "array",
+
+        label:
+          `A${allocationId}[${i - start}]`
+
+      };
+
+    }
+
+
+    consoleEl.innerHTML = `
+
+      <strong style="color:#10b981;">
+        SUCESSO NO ${module.title.toUpperCase()}:
+      </strong>
+
+      o Array[${size}] encontrou
+
+      <strong>
+        ${size} blocos contíguos
+      </strong>
+
+      começando em
+
+      <strong>
+        ${getAddress(module, start)}
+      </strong>.
+
+      Nenhum ponteiro entre elementos é necessário,
+      porque os dados ficaram lado a lado.
+
+    `;
+
+
+    render();
+
+  }
+
+
+  /* ========================================================= */
+  /* LISTA ENCADEADA
+  /* ========================================================= */
+
+  function allocateList(
+    preferredModuleIndex,
+    size
+  ) {
+
+    /* =====================================================
+       ORDEM
+
+       Primeiro tenta o pente onde o aluno soltou.
+
+       Depois usa os demais.
+
+       Assim conseguimos demonstrar o uso
+       de espaços espalhados.
+    ===================================================== */
+
+    const moduleOrder = [
+      preferredModuleIndex,
+
+      ...modules
+        .map(
+          (_, index) => index
+        )
+        .filter(
+          index =>
+            index !==
+            preferredModuleIndex
+        )
+
+    ];
+
+
+    const freePositions = [];
+
+
+    /* =====================================================
+       COLETA ESPAÇOS LIVRES
+    ===================================================== */
+
+    moduleOrder.forEach(
+      moduleIndex => {
+
+        const module =
+          modules[moduleIndex];
+
+
+        module.cells.forEach(
+          (
+            cell,
+            cellIndex
+          ) => {
+
+            if (
+              cell.type === "free"
+            ) {
+
+              freePositions.push({
+
+                moduleIndex,
+
+                cellIndex
+
+              });
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+
+    if (
+      freePositions.length <
+      size
+    ) {
+
+      consoleEl.innerHTML = `
+
+        <strong style="color:#fb7185;">
+          FALHA:
+        </strong>
+
+        a lista precisa de
+
+        <strong>
+          ${size} blocos
+        </strong>,
+
+        mas existem apenas
+
+        <strong>
+          ${freePositions.length}
+        </strong>
+
+        blocos livres no conjunto representado.
+
+      `;
+
+
+      return;
+
+    }
+
+
+    const selectedPositions =
+      freePositions.slice(
+        0,
+        size
+      );
+
+
+    const listId =
+      listCounter++;
+
+
+    const nodes = [];
+
+
+    /* =====================================================
+       MONTA NÓS
+    ===================================================== */
+
+    selectedPositions.forEach(
+      (
+        position,
+        index
+      ) => {
+
+        const module =
+          modules[
+            position.moduleIndex
+          ];
+
+
+        nodes.push({
+
+          moduleIndex:
+            position.moduleIndex,
+
+          cellIndex:
+            position.cellIndex,
+
+          label:
+            `L${listId}-N${index + 1}`,
+
+          address:
+            shortAddress(
+              module,
+              position.cellIndex
+            )
+
+        });
+
+      }
+    );
+
+
+    /* =====================================================
+       ESCREVE NA MEMÓRIA
+    ===================================================== */
+
+    nodes.forEach(
+      (
+        node,
+        index
+      ) => {
+
+        const module =
+          modules[
+            node.moduleIndex
+          ];
+
+
+        const next =
+          index <
+          nodes.length - 1
+            ? nodes[
+                index + 1
+              ].address
+            : null;
+
+
+        module.cells[
+          node.cellIndex
+        ] = {
+
+          type: "list",
+
+          label:
+            `N${index + 1}`,
+
+          listId,
+
+          next
+
+        };
+
+      }
+    );
+
+
+    latestList = {
+
+      id: listId,
+
+      nodes
+
+    };
+
+
+    const usedModules =
+      [
+        ...new Set(
+          nodes.map(
+            node =>
+              modules[
+                node.moduleIndex
+              ].title
+          )
+        )
+      ];
+
+
+    consoleEl.innerHTML = `
+
+      <strong style="color:#10b981;">
+        SUCESSO:
+      </strong>
+
+      a Lista[${size}] utilizou
+
+      <strong>
+        ${size} blocos livres
+      </strong>
+
+      sem exigir que fossem vizinhos.
+
+      Os nós foram distribuídos em:
+
+      <strong>
+        ${usedModules.join(", ")}
+      </strong>.
+
+      A ordem da estrutura é mantida pelos
+
+      <strong>
+        ponteiros next
+      </strong>.
+
+    `;
+
+
+    render();
+
+  }
+
+
+  /* ========================================================= */
+  /* TENTATIVA DE ALOCAÇÃO */
+  /* ========================================================= */
+
+  function attemptAllocation(
+    moduleIndex,
+    request
+  ) {
+
+    if (
+      request.kind === "array"
+    ) {
+
+      allocateArray(
+        moduleIndex,
+        request.size
+      );
+
+    }
+
+
+    else if (
+      request.kind === "list"
+    ) {
+
+      allocateList(
+        moduleIndex,
+        request.size
+      );
+
+    }
+
+  }
+
+
+  /* ========================================================= */
+  /* ESTRUTURAS
+  /* ========================================================= */
+
+  structures.forEach(
+    structure => {
+
+      const request = {
+
+        kind:
+          structure.dataset.kind,
+
+        size:
+          Number(
+            structure.dataset.size
+          )
+
+      };
+
+
+      /* =====================================================
+         CLICK
+      ===================================================== */
+
+      structure.addEventListener(
+        "click",
+        () => {
+
+          selectedStructure =
+            request;
+
+
+          structures.forEach(
+            item =>
+              item.classList.remove(
+                "is-selected"
+              )
+          );
+
+
+          structure.classList.add(
+            "is-selected"
+          );
+
+
+          consoleEl.innerHTML = `
+
+            <strong>
+              ${
+                request.kind === "array"
+                  ? "Array"
+                  : "Lista"
+              }[${request.size}]
+              selecionado.
+            </strong>
+
+            Agora clique em um pente
+            para tentar a alocação.
+
+          `;
+
+        }
+      );
+
+
+      /* =====================================================
+         DRAG
+      ===================================================== */
+
+      structure.addEventListener(
+        "dragstart",
+        event => {
+
+          event.dataTransfer.effectAllowed =
+            "copy";
+
+
+          event.dataTransfer.setData(
+
+            "application/json",
+
+            JSON.stringify(
+              request
+            )
+
+          );
+
+
+          structure.classList.add(
+            "is-selected"
+          );
+
+        }
+      );
+
+
+      structure.addEventListener(
+        "dragend",
+        () => {
+
+          structure.classList.remove(
+            "is-selected"
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  /* ========================================================= */
+  /* RESET */
+  /* ========================================================= */
+
+  resetBtn.addEventListener(
+    "click",
+    resetState
+  );
+
+
+  /* ========================================================= */
+  /* START */
+  /* ========================================================= */
+
+  resetState();
+
+});
+
+</script>
+
+
+    <style>
+      .heap-advantages-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0 2rem 0;
+      }
+
+      .heap-adv-card {
+        background: #111a1f;
+        border: 1px solid #1e2d36;
+        border-radius: 10px;
+        padding: 1.2rem;
+      }
+
+      .heap-adv-card h3 {
+        margin-top: 0;
+        margin-bottom: 0.7rem;
+        color: #e2e8f0;
+        font-size: 1.05rem;
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .heap-adv-card h3 i {
+        color: #38bdf8;
+      }
+
+      .heap-adv-card p {
+        margin: 0;
+        color: #94a3b8;
+        font-size: 0.98rem;
+        line-height: 1.65;
+      }
+
+      .heap-diagram-shell {
+        background:
+          radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.05), transparent 25%),
+          radial-gradient(circle at 80% 30%, rgba(56, 189, 248, 0.06), transparent 30%),
+          #0b1215;
+        border: 1px solid #1e2d36;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 1.5rem;
+      }
+
+      .heap-diagram-toolbar {
+        min-height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid #1e2d36;
+        background: rgba(15, 23, 42, 0.45);
+      }
+
+      .heap-diagram-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.8rem;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .heap-diagram-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+      }
+
+      .heap-diagram-btn {
+        border: 1px solid #334155;
+        border-radius: 6px;
+        background: #111b21;
+        color: #94a3b8;
+        cursor: pointer;
+        padding: 0.58rem 0.85rem;
+        font-size: 0.8rem;
+        transition: border-color 0.2s, color 0.2s, background 0.2s;
+      }
+
+      .heap-diagram-btn:hover {
+        border-color: #38bdf8;
+        color: #38bdf8;
+        background: rgba(56, 189, 248, 0.06);
+      }
+
+      .canvas-container-heap {
+        width: 100%;
+        overflow-x: auto;
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+      }
+
+      #canvas-heap-benefits {
+        width: 1000px;
+        max-width: none;
+        display: block;
+      }
+
+      .heap-console {
+        border-top: 1px solid #1e2d36;
+        padding: 0.95rem 1rem;
+        font-size: 0.88rem;
+        line-height: 1.65;
+        color: #94a3b8;
+        background: rgba(8, 15, 20, 0.85);
+      }
+
+      .heap-console strong {
+        color: #e2e8f0;
+      }
+
+      @media (max-width: 800px) {
+        .heap-advantages-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .heap-diagram-toolbar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const canvas = document.getElementById("canvas-heap-benefits");
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+
+        // melhora resolução
+        ctx.scale(1.25, 1.25);
+
+        const W = canvas.width / 1.25;
+        const H = canvas.height / 1.25;
+
+        const btnAddTail = document.getElementById("btn-add-tail");
+        const btnAddHead = document.getElementById("btn-add-head");
+        const btnRemoveMiddle = document.getElementById("btn-remove-middle");
+        const btnResetHeap = document.getElementById("btn-reset-heap");
+        const heapConsole = document.getElementById("heap-console");
+
+        const COLORS = {
+          bg: "#0b1215",
+          panel: "#10191f",
+          panelSoft: "#0f171c",
+          border: "#24343d",
+          text: "#e2e8f0",
+          muted: "#64748b",
+          mutedLight: "#94a3b8",
+          blue: "#38bdf8",
+          blueStrong: "#0284c7",
+          green: "#10b981",
+          greenSoft: "rgba(16,185,129,.10)",
+          purple: "#4f46e5",
+          purpleDark: "#3730a3",
+          amber: "#f59e0b",
+          red: "#fb7185",
+          grayCell: "#17242b",
+          system: "#1e293b"
+        };
+
+        const HEAP_TOTAL = 16;
+        const BASE_ADDR = 0x5000;
+        const STEP = 0x10;
+
+        // blocos já ocupados por "outras coisas"
+        const reserved = new Set([1, 5, 10]);
+
+        // ordem preferida de alocação, para mostrar nós espalhados
+        const allocationOrder = [2, 12, 4, 14, 7, 0, 9, 6, 15, 3, 8, 11, 13];
+
+        const state = {
+          nodes: [],
+          nextId: 1,
+          lastMessage:
+            'A estrutura está vazia. Clique em "Inserir no fim" ou "Inserir no início" para alocar nós no heap.',
+          time: 0,
+          lastTime: 0
+        };
+
+        function hexAddrFromIndex(index) {
+          return "0x" + (BASE_ADDR + index * STEP).toString(16).toUpperCase();
+        }
+
+        function updateConsole(html) {
+          state.lastMessage = html;
+          heapConsole.innerHTML = html;
+        }
+
+        function roundedRect(x, y, w, h, r, fill, stroke = null, lineWidth = 1) {
+          ctx.beginPath();
+          ctx.roundRect(x, y, w, h, r);
+
+          if (fill) {
+            ctx.fillStyle = fill;
+            ctx.fill();
+          }
+
+          if (stroke) {
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = lineWidth;
+            ctx.stroke();
+          }
+        }
+
+        function drawText(text, x, y, color = COLORS.text, size = 14, weight = "normal", align = "left") {
+          ctx.font = `${weight} ${size}px system-ui, -apple-system, sans-serif`;
+          ctx.fillStyle = color;
+          ctx.textAlign = align;
+          ctx.fillText(text, x, y);
+        }
+
+        function drawMono(text, x, y, color = COLORS.text, size = 12, align = "left") {
+          ctx.font = `${size}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
+          ctx.fillStyle = color;
+          ctx.textAlign = align;
+          ctx.fillText(text, x, y);
+        }
+
+        function drawArrow(x1, y1, x2, y2, color, width = 2, dashed = false) {
+          const angle = Math.atan2(y2 - y1, x2 - x1);
+
+          ctx.strokeStyle = color;
+          ctx.lineWidth = width;
+
+          if (dashed) ctx.setLineDash([6, 5]);
+          else ctx.setLineDash([]);
+
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          const headlen = 8;
+
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.moveTo(x2, y2);
+          ctx.lineTo(
+            x2 - headlen * Math.cos(angle - Math.PI / 6),
+            y2 - headlen * Math.sin(angle - Math.PI / 6)
+          );
+          ctx.lineTo(
+            x2 - headlen * Math.cos(angle + Math.PI / 6),
+            y2 - headlen * Math.sin(angle + Math.PI / 6)
+          );
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        function pulseDot(x, y, color) {
+          ctx.save();
+          ctx.shadowBlur = 18;
+          ctx.shadowColor = color;
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(x, y, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        function getUsedHeapIndexes() {
+          return state.nodes.map(node => node.heapIndex);
+        }
+
+        function getNextFreeIndex() {
+          const used = new Set(getUsedHeapIndexes());
+
+          for (const index of allocationOrder) {
+            if (!reserved.has(index) && !used.has(index)) {
+              return index;
+            }
+          }
+
+          return null;
+        }
+
+        function rebuildPointers() {
+          state.nodes.forEach((node, index) => {
+            node.next =
+              index < state.nodes.length - 1
+                ? hexAddrFromIndex(state.nodes[index + 1].heapIndex)
+                : "NULL";
+          });
+        }
+
+        function makeNode(heapIndex) {
+          const id = state.nextId++;
+          return {
+            id: `N${id}`,
+            value: id * 10,
+            heapIndex,
+            next: "NULL"
+          };
+        }
+
+        function addTailNode() {
+          if (state.nodes.length >= 6) {
+            updateConsole(
+              '<strong>Limite visual atingido:</strong> este diagrama exibe até 6 nós para manter a leitura clara.'
+            );
+            return;
+          }
+
+          const freeIndex = getNextFreeIndex();
+
+          if (freeIndex === null) {
+            updateConsole(
+              '<strong>Heap sem espaço livre útil:</strong> não há mais blocos disponíveis para novos nós.'
+            );
+            return;
+          }
+
+          const newNode = makeNode(freeIndex);
+          state.nodes.push(newNode);
+          rebuildPointers();
+
+          updateConsole(
+            `<strong>Inserção no fim:</strong> ${newNode.id} foi alocado em <strong>${hexAddrFromIndex(freeIndex)}</strong>. 
+        A estrutura cresceu <strong>sob demanda</strong>, sem precisar mover todos os elementos anteriores.`
+          );
+        }
+
+        function addHeadNode() {
+          if (state.nodes.length >= 6) {
+            updateConsole(
+              '<strong>Limite visual atingido:</strong> este diagrama exibe até 6 nós para manter a leitura clara.'
+            );
+            return;
+          }
+
+          const freeIndex = getNextFreeIndex();
+
+          if (freeIndex === null) {
+            updateConsole(
+              '<strong>Heap sem espaço livre útil:</strong> não há mais blocos disponíveis para novos nós.'
+            );
+            return;
+          }
+
+          const newNode = makeNode(freeIndex);
+          state.nodes.unshift(newNode);
+          rebuildPointers();
+
+          updateConsole(
+            `<strong>Inserção no início:</strong> ${newNode.id} entrou em <strong>${hexAddrFromIndex(freeIndex)}</strong>. 
+        Repare que a operação exigiu apenas ajustar o ponteiro <strong>head</strong> e o campo <strong>next</strong> do novo nó.`
+          );
+        }
+
+        function removeMiddleNode() {
+          if (state.nodes.length < 3) {
+            updateConsole(
+              '<strong>Remoção do meio indisponível:</strong> é preciso ter pelo menos 3 nós para visualizar essa vantagem.'
+            );
+            return;
+          }
+
+          const middle = Math.floor(state.nodes.length / 2);
+          const removed = state.nodes.splice(middle, 1)[0];
+          rebuildPointers();
+
+          updateConsole(
+            `<strong>Remoção local:</strong> ${removed.id}, que estava em <strong>${hexAddrFromIndex(removed.heapIndex)}</strong>, foi removido.
+        O espaço no heap foi liberado e a lista precisou apenas religar os ponteiros vizinhos, sem deslocar toda a estrutura.`
+          );
+        }
+
+        function resetHeapDiagram() {
+          state.nodes = [];
+          state.nextId = 1;
+
+          updateConsole(
+            'A estrutura está vazia. Clique em <strong>Inserir no fim</strong> ou <strong>Inserir no início</strong> para alocar nós no heap.'
+          );
+        }
+
+        function getHeapCellPosition(index) {
+          const cols = 8;
+          const cellW = 95;
+          const cellH = 72;
+          const gap = 12;
+          const startX = 92;
+          const startY = 252;
+
+          const row = Math.floor(index / cols);
+          const col = index % cols;
+
+          return {
+            x: startX + col * (cellW + gap),
+            y: startY + row * (cellH + gap),
+            w: cellW,
+            h: cellH
+          };
+        }
+
+        function drawHeaderSummary() {
+          roundedRect(20, 18, 960, 44, 10, "#0f171c", COLORS.border);
+
+          drawText("HEAP + ESTRUTURAS DINÂMICAS", 40, 45, COLORS.mutedLight, 12, "700");
+
+          drawText(
+            `Nós ativos: ${state.nodes.length}`,
+            610,
+            45,
+            COLORS.green,
+            11,
+            "700"
+          );
+
+          drawText(
+            `Blocos livres: ${HEAP_TOTAL - reserved.size - state.nodes.length}`,
+            760,
+            45,
+            COLORS.blue,
+            11,
+            "700"
+          );
+
+          drawText(
+            "nós podem morar em endereços espalhados",
+            952,
+            45,
+            COLORS.muted,
+            10,
+            "600",
+            "right"
+          );
+        }
+
+        function drawLogicalView() {
+          roundedRect(20, 76, 960, 128, 12, COLORS.panel, COLORS.border);
+
+          drawText("VISÃO LÓGICA DA ESTRUTURA", 42, 104, COLORS.blue, 12, "700");
+          drawText(
+            "Aqui vemos a ordem conceitual da lista: head → nó1 → nó2 → ...",
+            42,
+            126,
+            COLORS.mutedLight,
+            11
+          );
+
+          roundedRect(42, 145, 68, 34, 8, "#132129", COLORS.blue);
+          drawText("head", 76, 167, COLORS.blue, 12, "800", "center");
+
+          if (state.nodes.length === 0) {
+            drawText("NULL", 145, 167, COLORS.red, 12, "700");
+            drawArrow(110, 162, 136, 162, COLORS.red, 2);
+            return;
+          }
+
+          const nodeStartX = 150;
+          const nodeY = 137;
+          const nodeW = 100;
+          const nodeH = 48;
+          const gap = 38;
+
+          drawArrow(110, 162, nodeStartX - 10, 162, COLORS.blue, 2);
+
+          state.nodes.forEach((node, index) => {
+            const x = nodeStartX + index * (nodeW + gap);
+
+            // brilho leve no primeiro e último
+            if (index === 0 || index === state.nodes.length - 1) {
+              ctx.save();
+              ctx.shadowBlur = 12;
+              ctx.shadowColor = "rgba(16,185,129,.18)";
+            }
+
+            roundedRect(x, nodeY, nodeW, nodeH, 8, "#152028", COLORS.green, 2);
+
+            if (index === 0 || index === state.nodes.length - 1) {
+              ctx.restore();
+            }
+
+            ctx.strokeStyle = COLORS.green;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x + 50, nodeY);
+            ctx.lineTo(x + 50, nodeY + nodeH);
+            ctx.stroke();
+
+            drawText(node.id, x + 10, nodeY + 16, COLORS.muted, 9, "700");
+            drawText("valor", x + 11, nodeY + 30, COLORS.muted, 8, "600");
+            drawText("next", x + 63, nodeY + 30, COLORS.muted, 8, "600");
+
+            drawMono(String(node.value), x + 25, nodeY + 43, COLORS.text, 12, "center");
+            drawMono(node.next === "NULL" ? "NULL" : node.next.replace("0x", ""), x + 75, nodeY + 43, node.next === "NULL" ? COLORS.red : COLORS.blue, 10, "center");
+
+            if (index < state.nodes.length - 1) {
+              drawArrow(x + nodeW, 161, x + nodeW + gap - 10, 161, COLORS.green, 2);
+            }
+          });
+        }
+
+        function drawHeapView() {
+          roundedRect(20, 222, 960, 180, 12, COLORS.panel, COLORS.border);
+
+          drawText("HEAP (ALOCAÇÃO FÍSICA)", 42, 250, COLORS.green, 12, "700");
+          drawText(
+            "Os nós podem ocupar qualquer bloco livre. Eles não precisam ficar contíguos.",
+            42,
+            272,
+            COLORS.mutedLight,
+            11
+          );
+
+          for (let i = 0; i < HEAP_TOTAL; i++) {
+            const cell = getHeapCellPosition(i);
+            const occupyingNode = state.nodes.find(node => node.heapIndex === i);
+            const isReserved = reserved.has(i);
+
+            if (occupyingNode) {
+              ctx.save();
+              ctx.shadowBlur = 14;
+              ctx.shadowColor = "rgba(79,70,229,.20)";
+              roundedRect(cell.x, cell.y, cell.w, cell.h, 8, COLORS.purple, COLORS.blue, 2);
+              ctx.restore();
+
+              drawMono(hexAddrFromIndex(i), cell.x + 7, cell.y + 14, "#c7d2fe", 9);
+
+              drawText(occupyingNode.id, cell.x + cell.w / 2, cell.y + 35, "#fff", 14, "800", "center");
+              drawMono(
+                occupyingNode.next === "NULL" ? "NULL" : occupyingNode.next,
+                cell.x + cell.w / 2,
+                cell.y + 56,
+                occupyingNode.next === "NULL" ? "#fecaca" : "#dbeafe",
+                9,
+                "center"
+              );
+            } else if (isReserved) {
+              roundedRect(cell.x, cell.y, cell.w, cell.h, 8, COLORS.system, "#334155", 1);
+              drawMono(hexAddrFromIndex(i), cell.x + 7, cell.y + 14, COLORS.muted, 9);
+              drawText("OUTRO", cell.x + cell.w / 2, cell.y + 42, "#94a3b8", 12, "700", "center");
+            } else {
+              roundedRect(cell.x, cell.y, cell.w, cell.h, 8, "#111a1f", "#334155", 1);
+              drawMono(hexAddrFromIndex(i), cell.x + 7, cell.y + 14, COLORS.muted, 9);
+              drawText("LIVRE", cell.x + cell.w / 2, cell.y + 42, COLORS.muted, 11, "700", "center");
+            }
+          }
+        }
+
+        function drawMappingArrows() {
+          if (state.nodes.length === 0) return;
+
+          const nodeStartX = 150;
+          const nodeY = 137;
+          const nodeW = 100;
+          const gap = 38;
+
+          state.nodes.forEach((node, index) => {
+            const logicalCenterX = nodeStartX + index * (nodeW + gap) + nodeW / 2;
+            const logicalBottomY = nodeY + 48;
+
+            const heapCell = getHeapCellPosition(node.heapIndex);
+            const targetX = heapCell.x + heapCell.w / 2;
+            const targetY = heapCell.y - 8;
+
+            drawArrow(logicalCenterX, logicalBottomY + 8, targetX, targetY, "rgba(56,189,248,.65)", 1.6, true);
+          });
+
+          // pulso seguindo o primeiro ponteiro lógico -> físico
+          const first = state.nodes[0];
+          if (first) {
+            const heapCell = getHeapCellPosition(first.heapIndex);
+            const logicalCenterX = 150 + 50;
+            const logicalBottomY = 137 + 56;
+
+            const progress = (state.time % 1800) / 1800;
+            const px = logicalCenterX + (heapCell.x + heapCell.w / 2 - logicalCenterX) * progress;
+            const py = logicalBottomY + (heapCell.y - 8 - logicalBottomY) * progress;
+
+            pulseDot(px, py, COLORS.blue);
+          }
+        }
+
+        function drawLegendAndInsight() {
+          roundedRect(20, 418, 960, 26, 8, "#0f171c", COLORS.border);
+
+          let insight =
+            "Vantagem central: a estrutura cresce sem exigir um bloco único gigante e pode reutilizar buracos livres do heap.";
+
+          if (state.nodes.length >= 2) {
+            insight =
+              "Repare: a ordem lógica da lista é contínua, mas os nós físicos estão espalhados no heap e conectados por ponteiros.";
+          }
+
+          if (state.nodes.length >= 3) {
+            insight =
+              "Ao remover um nó do meio, basta religar os ponteiros vizinhos e liberar o bloco correspondente no heap.";
+          }
+
+          drawText(insight, 36, 436, COLORS.mutedLight, 11, "600");
+
+          // legenda
+          roundedRect(20, 450, 960, 18, 0, null, null);
+
+          ctx.fillStyle = COLORS.purple;
+          ctx.fillRect(36, 452, 14, 14);
+          drawText("nó alocado", 57, 463, COLORS.muted, 10);
+
+          ctx.fillStyle = COLORS.system;
+          ctx.fillRect(180, 452, 14, 14);
+          drawText("ocupado por outro uso", 201, 463, COLORS.muted, 10);
+
+          ctx.strokeStyle = "#334155";
+          ctx.strokeRect(390, 452, 14, 14);
+          drawText("livre", 411, 463, COLORS.muted, 10);
+
+          drawArrow(500, 459, 542, 459, COLORS.green, 2);
+          drawText("encadeamento lógico", 555, 463, COLORS.muted, 10);
+
+          drawArrow(742, 459, 784, 459, "rgba(56,189,248,.65)", 1.6, true);
+          drawText("mapeamento nó → heap", 798, 463, COLORS.muted, 10);
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, W, H);
+
+          ctx.fillStyle = COLORS.bg;
+          ctx.fillRect(0, 0, W, H);
+
+          drawHeaderSummary();
+          drawLogicalView();
+          drawHeapView();
+          drawMappingArrows();
+          drawLegendAndInsight();
+        }
+
+        function animate(timestamp) {
+          const delta = Math.min(timestamp - state.lastTime, 40);
+          state.lastTime = timestamp;
+          state.time += delta;
+
+          draw();
+          requestAnimationFrame(animate);
+        }
+
+        btnAddTail?.addEventListener("click", addTailNode);
+        btnAddHead?.addEventListener("click", addHeadNode);
+        btnRemoveMiddle?.addEventListener("click", removeMiddleNode);
+        btnResetHeap?.addEventListener("click", resetHeapDiagram);
+
+        requestAnimationFrame(animate);
+      });
+    </script>
+
+    <!-- Script focado na interação da Memória -->
+    <script>
+
+
+
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const ramTrack = document.getElementById("ram-track");
+        const dragStatic = document.getElementById("drag-static");
+        const dragDynamic = document.getElementById("drag-dynamic");
+        const consoleMsg = document.getElementById("lab-console");
+        const btnReset = document.getElementById("btn-reset");
+        let ramSlots = [];
+
+        // Estado inicial da memória: 1=Ocupado pelo sistema, 0=Livre para uso
+        const initialMap = [
+          { state: 1, label: "SO" },
+          { state: 0, label: "Livre" },
+          { state: 0, label: "Livre" },
+          { state: 1, label: "App" },
+          { state: 0, label: "Livre" },
+          { state: 0, label: "Livre" },
+          { state: 1, label: "Aba 1" },
+          { state: 0, label: "Livre" },
+          { state: 0, label: "Livre" },
+          { state: 1, label: "Serviço" }
+        ];
+
+        function renderRAM() {
+          ramTrack.innerHTML = "";
+          ramSlots = [];
+
+          initialMap.forEach((block, index) => {
+            const slot = document.createElement("div");
+            // Aumentado os slots na RAM visualmente
+            slot.style.width = "80px";
+            slot.style.height = "90px";
+            slot.style.borderRadius = "6px";
+            slot.style.position = "relative";
+            slot.style.display = "flex";
+            slot.style.flexDirection = "column";
+            slot.style.alignItems = "center";
+            slot.style.justifyContent = "center";
+            slot.style.fontFamily = "monospace";
+            slot.style.transition = "all 0.3s ease";
+
+            // Endereço na RAM simulado
+            const address = document.createElement("span");
+            address.innerText = "#" + index;
+            address.style.position = "absolute";
+            address.style.top = "-24px";
+            address.style.fontSize = "0.9rem";
+            address.style.color = "#64748b";
+            slot.appendChild(address);
+
+            if (block.state === 1) {
+              slot.style.background = "#1e293b";
+              slot.style.border = "1px solid #334155";
+              slot.style.color = "#94a3b8";
+              slot.dataset.status = "system";
+              const txt = document.createElement("span");
+              txt.innerText = block.label;
+              txt.style.fontSize = "0.95rem";
+              slot.appendChild(txt);
+            } else {
+              slot.style.background = "transparent";
+              slot.style.border = "1px dashed #334155";
+              slot.style.color = "#475569";
+              slot.dataset.status = "free";
+              slot.dataset.index = index;
+              const txt = document.createElement("span");
+              txt.innerText = block.label;
+              txt.style.fontSize = "0.95rem";
+              slot.appendChild(txt);
+            }
+
+            ramSlots.push(slot);
+            ramTrack.appendChild(slot);
+          });
+
+          // Reseta visual dos draggables
+          dragStatic.style.opacity = "1";
+          dragStatic.style.pointerEvents = "auto";
+          dragDynamic.style.opacity = "1";
+          dragDynamic.style.pointerEvents = "auto";
+          consoleMsg.innerText = "Aguardando alocação...";
+          consoleMsg.style.color = "#64748b";
+        }
+
+        renderRAM();
+
+        // Configuração do Drag and Drop
+        let draggedType = null;
+
+        [dragStatic, dragDynamic].forEach(item => {
+          item.addEventListener("dragstart", (e) => {
+            draggedType = e.target.id;
+            e.dataTransfer.effectAllowed = "move";
+            e.dataTransfer.setData("text/plain", draggedType);
+            e.target.style.transform = "scale(1.05)";
+          });
+          item.addEventListener("dragend", (e) => {
+            e.target.style.transform = "scale(1)";
+          });
+        });
+
+        ramTrack.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+        });
+
+        ramTrack.addEventListener("drop", (e) => {
+          e.preventDefault();
+          const draggedId = e.dataTransfer.getData("text/plain");
+
+          if (draggedId === "drag-static") {
+            // Falha da Fragmentação Externa
+            dragStatic.style.animation = "shake 0.4s";
+            setTimeout(() => dragStatic.style.animation = "", 400);
+
+            consoleMsg.innerHTML = "<strong>FALHA (Fragmentação):</strong> O Array exige 3 blocos contíguos. O maior espaço vazio consecutivo é de apenas 2 blocos.";
+            consoleMsg.style.color = "#e11d48";
+
+          } else if (draggedId === "drag-dynamic") {
+            // Sucesso da Alocação Dinâmica com ponteiros
+            const freeSlotsData = [];
+            ramSlots.forEach((slot, idx) => {
+              if (slot.dataset.status === "free" && freeSlotsData.length < 3) {
+                freeSlotsData.push({ element: slot, index: idx });
+              }
+            });
+
+            if (freeSlotsData.length === 3) {
+              freeSlotsData.forEach((node, i) => {
+                const el = node.element;
+                el.style.background = "#4f46e5";
+                el.style.border = "1px solid #3730a3";
+                el.style.color = "#fff";
+                el.dataset.status = "allocated";
+
+                // Lógica para mostrar onde o ponteiro aponta
+                const nextAddress = (i < 2) ? `#${freeSlotsData[i + 1].index}` : "NULL";
+
+                el.innerHTML = `
+                            <div style="position: absolute; top: -22px; font-size: 0.75rem; color: #a5b4fc;">#${node.index}</div>
+                            <span style="font-weight: bold; font-size: 1.1rem; margin-bottom: 2px;">N${i + 1}</span>
+                            <span style="font-size: 0.6rem; color: #c7d2fe; background: #312e81; padding: 2px 4px; border-radius: 4px;">&rarr; ${nextAddress}</span>
+                        `;
+              });
+
+              dragDynamic.style.opacity = "0.3";
+              dragDynamic.style.pointerEvents = "none";
+              consoleMsg.innerHTML = "<strong>SUCESSO:</strong> A Lista alocou nos espaços vagos e usou ponteiros para indicar onde está o próximo pedaço do dado.";
+              consoleMsg.style.color = "#10b981";
+            }
+          }
+        });
+
+        btnReset.addEventListener("click", renderRAM);
+      });
+    </script>
+    <style>
+      @keyframes shake {
+
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+
+        25% {
+          transform: translateX(-6px);
+        }
+
+        50% {
+          transform: translateX(6px);
+        }
+
+        75% {
+          transform: translateX(-6px);
+        }
+      }
+    </style>
+
+
+    <footer class="lesson-section"
+      style="border-top: 1px solid #1e2d36; padding-top: 2rem; margin-top: 4rem; text-align: center; color: #64748b; font-size: 0.9rem;">
+      <p>Material de autoria do Professor Mestre Mateus de Sousa Valente, dos cursos de TI da Uniube. Todos os direitos
+        reservados © 2026.</p>
+    </footer>
+  </main>
+
+  <script>
+    // Configurações globais para os diagramas Canvas
+    const fontFamily = "system-ui, -apple-system, sans-serif";
+    const colors = {
+      bg: "#111a1f",
+      text: "#e2e8f0",
+      accent: "#38bdf8",
+      arrayBg: "#1e2d36",
+      arrayBorder: "#334155",
+      dynamicBg: "#0f766e",
+      nodeBg: "#4f46e5",
+      freeMemory: "#1e293b",
+      usedMemory: "#94a3b8",
+      error: "#e11d48",
+      success: "#10b981"
+    };
+
+    function drawArrow(ctx, fromX, fromY, toX, toY) {
+      const headlen = 10;
+      const dx = toX - fromX;
+      const dy = toY - fromY;
+      const angle = Math.atan2(dy, dx);
+      ctx.beginPath();
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(toX, toY);
+      ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.moveTo(toX, toY);
+      ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.stroke();
+    }
+
+    // --- CANVAS 1: Modelos de Estruturas ---
+    const ctxMod = document.getElementById('canvas-modelos').getContext('2d');
+
+    // Aplica o aumento de escala para melhorar a resolução (1.25x)
+    ctxMod.scale(1.25, 1.25);
+
+    // Configuração de texto padrão
+    ctxMod.font = `14px ${fontFamily}`;
+    ctxMod.fillStyle = colors.text;
+
+    // 1. Array Estático
+    ctxMod.fillText("1. Array Estático (Tamanho fixo = 5)", 20, 30);
+    const startAddrStatic = 0x100;
+
+    for (let i = 0; i < 5; i++) {
+      let x = 20 + (i * 50);
+      let y = 45;
+
+      // Endereço de memória (topo)
+      ctxMod.fillStyle = "#64748b";
+      ctxMod.font = `10px monospace`;
+      ctxMod.fillText(`0x${(startAddrStatic + i * 4).toString(16).toUpperCase()}`, x + 2, y - 5);
+
+      // Caixa e Dado
+      ctxMod.fillStyle = colors.arrayBg;
+      ctxMod.fillRect(x, y, 50, 40);
+      ctxMod.strokeStyle = colors.arrayBorder;
+      ctxMod.strokeRect(x, y, 50, 40);
+      ctxMod.fillStyle = colors.text;
+      ctxMod.font = `14px ${fontFamily}`;
+      ctxMod.fillText(i < 4 ? "38" : "", x + 15, y + 25); // Último vazio
+    }
+    ctxMod.fillStyle = "#64748b";
+    ctxMod.fillText("Espaço ocioso (desperdício)", 280, 70);
+
+    // 2. Array Dinâmico
+    ctxMod.fillStyle = colors.text;
+    ctxMod.fillText("2. Array Dinâmico (Crescimento sob demanda)", 20, 140);
+
+    const startAddrDynOld = 0x200;
+    // Array antigo
+    for (let i = 0; i < 3; i++) {
+      let x = 20 + (i * 50);
+      let y = 155;
+
+      ctxMod.fillStyle = "#64748b";
+      ctxMod.font = `10px monospace`;
+      ctxMod.fillText(`0x${(startAddrDynOld + i * 4).toString(16).toUpperCase()}`, x + 2, y - 5);
+
+      ctxMod.fillStyle = colors.usedMemory;
+      ctxMod.fillRect(x, y, 50, 40);
+      ctxMod.strokeStyle = colors.arrayBorder; // usando borda padronizada
+      ctxMod.strokeRect(x, y, 50, 40);
+    }
+
+    ctxMod.fillStyle = colors.error;
+    ctxMod.font = `14px ${fontFamily}`;
+    ctxMod.fillText("Encheu!", 180, 180);
+
+    // Seta de realocação
+    ctxMod.strokeStyle = colors.accent;
+    ctxMod.lineWidth = 2;
+    drawArrow(ctxMod, 240, 175, 300, 175);
+
+    const startAddrDynNew = 0x300;
+    // Novo array
+    ctxMod.lineWidth = 1;
+    for (let i = 0; i < 6; i++) {
+      let x = 320 + (i * 50);
+      let y = 155;
+
+      ctxMod.fillStyle = "#64748b";
+      ctxMod.font = `10px monospace`;
+      ctxMod.fillText(`0x${(startAddrDynNew + i * 4).toString(16).toUpperCase()}`, x + 2, y - 5);
+
+      ctxMod.fillStyle = i < 4 ? colors.dynamicBg : colors.arrayBg;
+      ctxMod.fillRect(x, y, 50, 40);
+      ctxMod.strokeStyle = colors.accent;
+      ctxMod.strokeRect(x, y, 50, 40);
+    }
+    ctxMod.fillStyle = "#64748b";
+    ctxMod.font = `14px ${fontFamily}`;
+    ctxMod.fillText("Realoca o dobro do tamanho e copia", 320, 215);
+
+    // 3. Lista Encadeada
+    ctxMod.fillStyle = colors.text;
+    ctxMod.fillText("3. Lista Encadeada (Nós dispersos na memória)", 20, 260);
+
+    const nodesX = [20, 180, 340, 500];
+    const nodesY = [280, 295, 270, 290];
+    const nodeAddrs = ["0x4A0", "0x8C4", "0x128", "0x5F0"]; // Endereços dispersos simulados
+
+    for (let i = 0; i < 4; i++) {
+      let x = nodesX[i];
+      let y = nodesY[i];
+
+      // Endereço de memória (topo)
+      ctxMod.fillStyle = "#64748b";
+      ctxMod.font = `10px monospace`;
+      ctxMod.fillText(nodeAddrs[i], x, y - 5);
+
+      // Caixa de Dado
+      ctxMod.fillStyle = colors.nodeBg;
+      ctxMod.fillRect(x, y, 40, 30);
+      // Caixa de Ponteiro (aumentada de 20 para 35 para caber o endereço)
+      ctxMod.fillStyle = "#3730a3";
+      ctxMod.fillRect(x + 40, y, 35, 30);
+
+      // Borda Externa englobando ambos (largura 40 + 35 = 75)
+      ctxMod.strokeStyle = colors.accent;
+      ctxMod.strokeRect(x, y, 75, 30);
+
+      // Texto do Dado
+      ctxMod.fillStyle = "#fff";
+      ctxMod.font = `14px ${fontFamily}`;
+      ctxMod.fillText("D", x + 15, y + 20);
+
+      // Texto do Ponteiro (Referência)
+      ctxMod.font = `10px monospace`;
+      if (i < 3) {
+        ctxMod.fillStyle = "#a5b4fc"; // Azul clarinho para o ponteiro
+        ctxMod.fillText(nodeAddrs[i + 1], x + 43, y + 19);
+
+        ctxMod.strokeStyle = colors.text;
+        // Ajuste no x de saída da seta para refletir a nova largura da caixa (x + 75)
+        drawArrow(ctxMod, x + 75, y + 15, nodesX[i + 1], nodesY[i + 1] + 15);
+      } else {
+        ctxMod.fillStyle = "#fca5a5"; // Vermelhinho para o NULL
+        ctxMod.fillText("NULL", x + 46, y + 19);
+      }
+    }
+
+
+    // --- CANVAS 2: Fragmentação ---
+    // Envolvido em um bloco if para previnir erro caso o canvas não exista no HTML (pois foi substituído pela Div interativa)
+    const canvasFrag = document.getElementById('canvas-fragmentacao');
+    if (canvasFrag) {
+      const ctxFrag = canvasFrag.getContext('2d');
+      ctxFrag.font = `14px ${fontFamily}`;
+
+      ctxFrag.fillStyle = colors.text;
+      ctxFrag.fillText("Memória Física (RAM)", 20, 30);
+
+      // Desenhando o mapa de memória (14 blocos)
+      // 1: ocupado, 0: livre
+      const memoryMap = [1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1];
+
+      for (let i = 0; i < memoryMap.length; i++) {
+        ctxFrag.fillStyle = memoryMap[i] ? colors.usedMemory : colors.freeMemory;
+        ctxFrag.fillRect(20 + (i * 50), 50, 50, 50);
+        ctxFrag.strokeStyle = colors.arrayBg;
+        ctxFrag.strokeRect(20 + (i * 50), 50, 50, 50);
+
+        if (!memoryMap[i]) {
+          ctxFrag.fillStyle = colors.accent;
+          ctxFrag.fillText("Livre", 28 + (i * 50), 80);
+        }
+      }
+
+      ctxFrag.fillStyle = "#64748b";
+      ctxFrag.fillText("Total de espaço livre: 6 blocos. Maior espaço contíguo: 3 blocos.", 20, 125);
+
+      // Tentativa Array
+      ctxFrag.fillStyle = colors.text;
+      ctxFrag.fillText("Tentativa 1: Alocar Array[4] (Precisa de 4 contíguos)", 20, 180);
+      ctxFrag.fillStyle = colors.arrayBg;
+      for (let i = 0; i < 4; i++) {
+        ctxFrag.fillRect(20 + (i * 40), 200, 40, 30);
+        ctxFrag.strokeRect(20 + (i * 40), 200, 40, 30);
+      }
+      ctxFrag.fillStyle = colors.error;
+      ctxFrag.font = `bold 16px ${fontFamily}`;
+      ctxFrag.fillText("FALHOU! Fragmentação externa impede a alocação.", 200, 220);
+
+      // Tentativa Lista
+      ctxFrag.font = `14px ${fontFamily}`;
+      ctxFrag.fillStyle = colors.text;
+      ctxFrag.fillText("Tentativa 2: Alocar Lista Encadeada de 4 nós (Aceita fragmentação)", 20, 270);
+
+      // Desenha setinhas indo para os buracos livres
+      ctxFrag.fillStyle = colors.success;
+      ctxFrag.font = `bold 16px ${fontFamily}`;
+      ctxFrag.fillText("SUCESSO!", 20, 310);
+
+      ctxFrag.font = `13px ${fontFamily}`;
+      ctxFrag.fillStyle = colors.text;
+      ctxFrag.fillText("Os nós se espalham nos blocos livres e se conectam via ponteiros.", 110, 310);
+
+      // Linhas ilustrativas para a memória
+      ctxFrag.strokeStyle = colors.success;
+      ctxFrag.lineWidth = 1;
+      ctxFrag.setLineDash([5, 5]);
+      drawArrow(ctxFrag, 150, 290, 130, 100); // Para o 1º buraco
+      drawArrow(ctxFrag, 200, 290, 180, 100); // Para o 2º buraco
+      drawArrow(ctxFrag, 250, 290, 430, 100); // Para o buraco distante
+      ctxFrag.setLineDash([]);
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aula didática sobre vetores em Estruturas de Dados: memória contígua, índices, operações, complexidade e std::vector em C++17.">
+  <meta name="theme-color" content="#0b1215">
+  <title>Vetores · Estruturas Sequenciais · Estruturas de Dados na Prática</title>
+
+  <link rel="stylesheet" href="../assets/aula.css">
+  <link rel="stylesheet" href="../assets/dados.css">
+  <script src="../assets/site-shell.js" defer data-edp-shell></script>
+  <script src="../assets/dados.js" defer></script>
+
+  <style>
+    body { font-size: 1.05rem; line-height: 1.7; }
+    .section-lead { font-size: 1.15rem; color: #cbd5e1; }
+    .review-grid details summary { font-size: 1.12rem; padding: 1.2rem; }
+    .review-grid details p { font-size: 1.03rem; padding: 0 1.2rem 1.2rem; }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: #bae6fd;
+      background: #091116;
+      border: 1px solid #24343d;
+      border-radius: 4px;
+      padding: .06rem .28rem;
+    }
+
+    .concept-note {
+      margin: 1.35rem 0;
+      padding: 1rem 1.15rem;
+      border: 1px solid #1e2d36;
+      border-left: 4px solid #38bdf8;
+      border-radius: 0 9px 9px 0;
+      background: #111a1f;
+      color: #cbd5e1;
+    }
+    .concept-note strong { color: #f8fafc; }
+
+    .vector-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: .85rem;
+      margin: 1.4rem 0 1.8rem;
+    }
+    .vector-feature-card {
+      padding: 1rem;
+      border: 1px solid #1e2d36;
+      border-radius: 10px;
+      background: #111a1f;
+    }
+    .vector-feature-card i { color: #38bdf8; margin-bottom: .65rem; font-size: 1rem; }
+    .vector-feature-card h3 { margin: 0 0 .35rem; color: #e2e8f0; font-size: .95rem; }
+    .vector-feature-card p { margin: 0; color: #94a3b8; font-size: .85rem; line-height: 1.55; }
+
+    .vector-lab {
+      margin: 1.5rem 0 2rem;
+      overflow: hidden;
+      border: 1px solid #1e2d36;
+      border-radius: 12px;
+      background: radial-gradient(circle at 80% 20%, rgba(56,189,248,.055), transparent 32%), #0b1215;
+    }
+    .vector-toolbar {
+      min-height: 58px;
+      padding: .8rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #1e2d36;
+      background: rgba(15,23,42,.45);
+    }
+    .vector-toolbar-title {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      color: #94a3b8;
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .vector-live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 4px rgba(16,185,129,.1), 0 0 14px rgba(16,185,129,.7);
+    }
+    .vector-actions { display: flex; gap: .55rem; flex-wrap: wrap; align-items: center; }
+    .vector-btn {
+      border: 1px solid #334155;
+      border-radius: 7px;
+      background: #111b21;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: .55rem .78rem;
+      font-size: .78rem;
+      transition: .2s ease;
+    }
+    .vector-btn:hover, .vector-btn.is-active {
+      border-color: #38bdf8;
+      color: #38bdf8;
+      background: rgba(56,189,248,.07);
+    }
+    .vector-btn.danger:hover { border-color: #fb7185; color: #fb7185; }
+    .vector-console {
+      min-height: 48px;
+      padding: .8rem 1rem;
+      border-top: 1px solid #1e2d36;
+      background: #081015;
+      color: #94a3b8;
+      font: .8rem/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .vector-console strong { color: #e2e8f0; }
+
+    .vector-canvas-wrap {
+      overflow-x: auto;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+    }
+    #canvas-vector-memory { width: 1000px; max-width: none; display: block; }
+    .vector-help { border-top: 1px solid #1e2d36; padding: .75rem 1rem; color: #64748b; font-size: .78rem; }
+
+    .operations-body { padding: 1rem; }
+    .operations-top {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 240px;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .operations-explanation { color: #94a3b8; font-size: .86rem; }
+    .operations-explanation p { margin: 0; }
+    .operation-stats { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+    .operation-stat {
+      padding: .65rem;
+      border: 1px solid #1e2d36;
+      border-radius: 8px;
+      background: #10191f;
+    }
+    .operation-stat small { display: block; color: #64748b; font-size: .62rem; text-transform: uppercase; }
+    .operation-stat strong { display: block; color: #e2e8f0; font-size: .95rem; margin-top: .1rem; }
+
+    .vector-array-wrap { overflow-x: auto; }
+    .vector-array {
+      display: flex;
+      gap: 7px;
+      min-width: 780px;
+      padding: 1rem;
+      border: 1px solid #1e2d36;
+      border-radius: 9px;
+      background: #0d161b;
+    }
+    .vector-cell {
+      position: relative;
+      width: 70px;
+      min-width: 70px;
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #334155;
+      border-radius: 7px;
+      background: #17242b;
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      transition: .25s ease;
+    }
+    .vector-cell::before {
+      content: attr(data-index);
+      position: absolute;
+      top: 4px; left: 6px;
+      color: #64748b; font-size: .6rem;
+    }
+    .vector-cell::after {
+      content: attr(data-address);
+      position: absolute;
+      bottom: 4px; left: 50%; transform: translateX(-50%);
+      color: #475569; font-size: .55rem; white-space: nowrap;
+    }
+    .vector-cell.is-empty { color: #475569; border-style: dashed; background: #11191e; }
+    .vector-cell.is-active { border-color: #38bdf8; background: rgba(56,189,248,.1); color: #7dd3fc; transform: translateY(-4px); }
+    .vector-cell.is-moving { border-color: #f59e0b; background: rgba(245,158,11,.1); color: #fbbf24; transform: translateX(6px); }
+    .vector-cell.is-found { border-color: #10b981; background: rgba(16,185,129,.12); color: #34d399; box-shadow: 0 0 16px rgba(16,185,129,.15); }
+    .operations-legend { margin-top: .8rem; color: #64748b; font-size: .74rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .growth-layout {
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 230px minmax(0,1fr);
+      gap: 1rem;
+    }
+    .growth-panel {
+      padding: .9rem;
+      border: 1px solid #1e2d36;
+      border-radius: 9px;
+      background: #10191f;
+    }
+    .growth-panel h3 { margin: 0 0 .7rem; color: #e2e8f0; font-size: .9rem; }
+    .growth-stat { padding: .6rem 0; border-bottom: 1px solid #1e2d36; }
+    .growth-stat:last-child { border-bottom: 0; }
+    .growth-stat small { display: block; color: #64748b; font-size: .62rem; text-transform: uppercase; }
+    .growth-stat strong { color: #cbd5e1; font-size: .9rem; }
+    .growth-stage {
+      min-width: 0;
+      padding: 1rem;
+      border: 1px solid #1e2d36;
+      border-radius: 9px;
+      background: #0d161b;
+      overflow-x: auto;
+    }
+    .growth-row { margin-bottom: 1.15rem; }
+    .growth-row:last-child { margin-bottom: 0; }
+    .growth-row-title { display: flex; justify-content: space-between; margin-bottom: .45rem; color: #94a3b8; font-size: .72rem; }
+    .growth-cells { display: flex; gap: 5px; min-width: 620px; }
+    .growth-cell {
+      width: 54px; height: 48px;
+      border: 1px solid #334155;
+      border-radius: 5px;
+      background: #17242b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #cbd5e1;
+      font-family: monospace;
+      font-size: .78rem;
+    }
+    .growth-cell.empty { border-style: dashed; color: #475569; background: #11191e; }
+    .growth-cell.new-block { border-color: #38bdf8; background: rgba(56,189,248,.08); }
+
+    .complexity-table {
+      overflow-x: auto;
+      margin-top: 1.3rem;
+      border: 1px solid #1e2d36;
+      border-radius: 10px;
+      background: #10191f;
+    }
+    .complexity-table table { width: 100%; min-width: 760px; border-collapse: collapse; }
+    .complexity-table th, .complexity-table td { padding: .8rem .9rem; border-bottom: 1px solid #1e2d36; text-align: left; }
+    .complexity-table th { color: #94a3b8; background: #0d161b; font-size: .7rem; text-transform: uppercase; }
+    .complexity-table td { color: #cbd5e1; font-size: .82rem; }
+    .good { color: #34d399 !important; }
+    .mid { color: #38bdf8 !important; }
+    .bad { color: #fb7185 !important; }
+
+    .code-block {
+      margin: 1.2rem 0;
+      overflow-x: auto;
+      border: 1px solid #1e2d36;
+      border-radius: 9px;
+      background: #081015;
+    }
+    .code-block-header {
+      padding: .65rem .85rem;
+      border-bottom: 1px solid #1e2d36;
+      color: #64748b;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .code-block pre {
+      margin: 0;
+      padding: 1rem;
+      color: #cbd5e1;
+      font: .82rem/1.6 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: .8rem;
+      margin-top: 1.3rem;
+    }
+    .summary-grid article {
+      padding: 1rem;
+      border: 1px solid #1e2d36;
+      border-radius: 9px;
+      background: #111a1f;
+    }
+    .summary-grid small { display: block; color: #64748b; font-size: .65rem; text-transform: uppercase; }
+    .summary-grid strong { display: block; margin-top: .25rem; color: #e2e8f0; font-size: .88rem; }
+
+    @media (max-width:900px) {
+      .vector-feature-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .operations-top, .growth-layout { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width:620px) {
+      .vector-feature-grid, .summary-grid { grid-template-columns: 1fr; }
+      .vector-toolbar { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+<main id="conteudo-pagina">
+
+<section class="lesson-hero records-hero">
+  <div class="lesson-kicker">
+    <span>Módulo 02</span>
+    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    <span>Estruturas Sequenciais</span>
+  </div>
+
+  <h1>Vetores <span>e</span> Memória Contígua</h1>
+
+  <p class="lesson-intro">
+    O vetor é uma das estruturas mais importantes da computação. Seus elementos são
+    armazenados em <strong>posições consecutivas da memória</strong>, o que permite
+    calcular diretamente o endereço de qualquer posição a partir de um <strong>índice</strong>.
+    Essa simplicidade torna o acesso extremamente eficiente, mas também cria custos importantes
+    em operações como <strong>inserção</strong> e <strong>remoção no meio da estrutura</strong>.
+  </p>
+
+  <div class="learning-goals" aria-label="Objetivos da aula">
+    <article><i class="fa-solid fa-table-cells"></i><span><small>Objetivo 01</small>Entender a organização do vetor</span></article>
+    <article><i class="fa-solid fa-location-crosshairs"></i><span><small>Objetivo 02</small>Relacionar índice e endereço</span></article>
+    <article><i class="fa-solid fa-arrows-left-right"></i><span><small>Objetivo 03</small>Analisar operações e complexidade</span></article>
+  </div>
+
+  <nav class="lesson-jump" aria-label="Nesta aula">
+    <a href="#conceito">O Vetor</a>
+    <a href="#enderecamento">Índice e Endereço</a>
+    <a href="#operacoes">Operações</a>
+    <a href="#crescimento">std::vector</a>
+    <a href="#complexidade">Complexidade</a>
+    <a href="#cpp">C++17</a>
+  </nav>
+</section>
+
+<section class="lesson-section" id="conceito">
+  <header class="lesson-heading">
+    <span>01</span>
+    <div><p>A estrutura sequencial clássica</p><h2>O Que é um Vetor?</h2></div>
+  </header>
+
+  <p class="section-lead">
+    Um vetor é uma coleção ordenada de elementos, normalmente do mesmo tipo,
+    armazenados em uma <strong>sequência contígua de memória</strong>.
+    Cada elemento possui uma posição lógica chamada <strong>índice</strong>.
+    Em C e C++, os índices normalmente começam em <strong>0</strong>.
+  </p>
+
+  <div class="vector-feature-grid">
+    <article class="vector-feature-card"><i class="fa-solid fa-grip"></i><h3>Contiguidade</h3><p>Os elementos ficam lado a lado na memória, formando um único bloco.</p></article>
+    <article class="vector-feature-card"><i class="fa-solid fa-hashtag"></i><h3>Índices</h3><p>Cada posição é identificada logicamente por 0, 1, 2, 3...</p></article>
+    <article class="vector-feature-card"><i class="fa-solid fa-bolt"></i><h3>Acesso Direto</h3><p>O endereço de uma posição pode ser calculado sem percorrer as anteriores.</p></article>
+    <article class="vector-feature-card"><i class="fa-solid fa-layer-group"></i><h3>Mesmo Tipo</h3><p>Como cada elemento ocupa o mesmo tamanho, o cálculo do endereço é simples.</p></article>
+  </div>
+
+  <div class="concept-note">
+    <strong>Modelo mental:</strong> pense no vetor como uma fileira numerada de gavetas do mesmo tamanho.
+    Saber o número da gaveta permite calcular diretamente onde ela está.
+  </div>
+
+  <div class="review-grid records-review">
+    <details open><summary>Vetor é uma estrutura sequencial<i class="fa-solid fa-chevron-down"></i></summary><p>Seus elementos possuem uma ordem lógica definida. O elemento de índice 3 vem depois do índice 2 e antes do índice 4. Essa ordem lógica coincide com a disposição física contígua da memória.</p></details>
+    <details open><summary>Por que os índices começam em zero?<i class="fa-solid fa-chevron-down"></i></summary><p>O índice pode ser interpretado como deslocamento a partir do primeiro elemento. O índice 0 representa deslocamento zero; o índice 1, um elemento; o índice 2, dois elementos, e assim por diante.</p></details>
+    <details open><summary>Vetor e Array são a mesma coisa?<i class="fa-solid fa-chevron-down"></i></summary><p>No sentido conceitual, vetor costuma significar array unidimensional. Em C++, porém, <code>std::vector</code> é um contêiner dinâmico que preserva contiguidade, enquanto um array tradicional tem tamanho fixo.</p></details>
+  </div>
+</section>
+
+<section class="lesson-section" id="enderecamento">
+  <header class="lesson-heading">
+    <span>02</span>
+    <div><p>Por que acessar vetor é tão rápido?</p><h2>Índice, Endereço e Acesso Direto</h2></div>
+  </header>
+
+  <p class="section-lead">
+    Como todos os elementos possuem o mesmo tamanho e ficam lado a lado,
+    o endereço de qualquer posição pode ser calculado por uma fórmula simples.
+    Não é necessário visitar os elementos anteriores.
+  </p>
+
+  <div class="concept-note">
+    Para um vetor cujo primeiro elemento começa no endereço <code>base</code>,
+    o endereço do elemento de índice <code>i</code> é:
+    <strong>endereço = base + i × tamanho_do_elemento</strong>.
+  </div>
+
+  <div class="vector-lab">
+    <div class="vector-toolbar">
+      <div class="vector-toolbar-title"><span class="vector-live-dot"></span>Laboratório de endereçamento</div>
+      <div class="vector-actions">
+        <button class="vector-btn" type="button" data-address-index="0">índice 0</button>
+        <button class="vector-btn" type="button" data-address-index="2">índice 2</button>
+        <button class="vector-btn" type="button" data-address-index="5">índice 5</button>
+        <button class="vector-btn" type="button" data-address-index="7">índice 7</button>
+      </div>
+    </div>
+
+    <div class="vector-canvas-wrap">
+      <canvas id="canvas-vector-memory" width="1250" height="470" aria-label="Diagrama interativo mostrando índices e endereços de um vetor contíguo"></canvas>
+    </div>
+
+    <div class="vector-console" id="address-console">Clique em uma posição do vetor ou utilize os botões para calcular seu endereço.</div>
+    <div class="vector-help"><i class="fa-solid fa-computer-mouse"></i> Você também pode clicar diretamente em qualquer célula do vetor.</div>
+  </div>
+</section>
+
+<section class="lesson-section" id="operacoes">
+  <header class="lesson-heading">
+    <span>03</span>
+    <div><p>Acesso é barato; deslocar elementos não</p><h2>Operações em um Vetor</h2></div>
+  </header>
+
+  <p class="section-lead">
+    A organização contígua explica tanto a principal vantagem quanto uma das principais limitações do vetor.
+    Ler uma posição é extremamente eficiente, mas inserir ou remover elementos no início ou no meio pode exigir
+    <strong>deslocar vários elementos</strong>.
+  </p>
+
+  <div class="vector-lab">
+    <div class="vector-toolbar">
+      <div class="vector-toolbar-title"><span class="vector-live-dot"></span>Simulador de operações</div>
+      <div class="vector-actions">
+        <button class="vector-btn" type="button" id="op-access">Acessar [4]</button>
+        <button class="vector-btn" type="button" id="op-search">Buscar 50</button>
+        <button class="vector-btn" type="button" id="op-insert">Inserir 99 no índice 2</button>
+        <button class="vector-btn danger" type="button" id="op-remove">Remover índice 2</button>
+        <button class="vector-btn" type="button" id="op-reset">Reiniciar</button>
+      </div>
+    </div>
+
+    <div class="operations-body">
+      <div class="operations-top">
+        <div class="operations-explanation"><p>Observe principalmente o contador de <strong>elementos deslocados</strong>. Acesso por índice não desloca nada; inserções e remoções no meio precisam preservar a ordem.</p></div>
+        <div class="operation-stats">
+          <article class="operation-stat"><small>Comparações</small><strong id="op-comparisons">0</strong></article>
+          <article class="operation-stat"><small>Deslocamentos</small><strong id="op-shifts">0</strong></article>
+          <article class="operation-stat"><small>Size</small><strong id="op-size">6</strong></article>
+          <article class="operation-stat"><small>Capacity</small><strong>8</strong></article>
+        </div>
+      </div>
+
+      <div class="vector-array-wrap"><div class="vector-array" id="operations-vector"></div></div>
+      <div class="operations-legend"><span>Azul: acesso direto</span><span>Amarelo: deslocamento/verificação</span><span>Verde: resultado</span></div>
+    </div>
+
+    <div class="vector-console" id="operations-console">Escolha uma operação para visualizar seu custo.</div>
+  </div>
+
+  <div class="review-grid records-review">
+    <details open><summary>Acesso por índice<i class="fa-solid fa-chevron-down"></i></summary><p>Acessar <code>v[i]</code> é O(1). O endereço é calculado diretamente; não importa se estamos acessando o primeiro ou o milionésimo elemento.</p></details>
+    <details open><summary>Inserção no meio<i class="fa-solid fa-chevron-down"></i></summary><p>Para inserir em uma posição ocupada, os elementos seguintes precisam ser deslocados para abrir espaço. No pior caso, inserir no início desloca n elementos: O(n).</p></details>
+    <details open><summary>Remoção no meio<i class="fa-solid fa-chevron-down"></i></summary><p>Após remover um elemento, normalmente deslocamos os posteriores para preencher o espaço vazio. Também é O(n) no pior caso.</p></details>
+    <details open><summary>Busca<i class="fa-solid fa-chevron-down"></i></summary><p>Em um vetor não ordenado, buscar por valor pode exigir percorrer todas as posições: O(n). Se estiver ordenado, busca binária pode chegar a O(log n).</p></details>
+  </div>
+</section>
+
+<section class="lesson-section" id="crescimento">
+  <header class="lesson-heading">
+    <span>04</span>
+    <div><p>O vetor dinâmico do C++</p><h2>Como o std::vector Cresce?</h2></div>
+  </header>
+
+  <p class="section-lead">
+    <code>std::vector</code> mantém os elementos contíguos, mas consegue crescer durante a execução.
+    Para isso ele separa <strong>size</strong>, quantidade utilizada, de <strong>capacity</strong>,
+    quantidade que cabe no bloco atualmente reservado.
+  </p>
+
+  <div class="concept-note">
+    Quando <code>size == capacity</code> e um novo elemento é inserido, o vetor solicita um
+    <strong>novo bloco contíguo maior</strong>, move ou copia os elementos e libera a região anterior.
+    O fator exato de crescimento depende da implementação.
+  </div>
+
+  <div class="vector-lab">
+    <div class="vector-toolbar">
+      <div class="vector-toolbar-title"><span class="vector-live-dot"></span>Crescimento de std::vector</div>
+      <div class="vector-actions">
+        <button class="vector-btn" type="button" id="growth-push">push_back()</button>
+        <button class="vector-btn" type="button" id="growth-reset">Reiniciar</button>
+      </div>
+    </div>
+
+    <div class="growth-layout">
+      <aside class="growth-panel">
+        <h3>Estado atual</h3>
+        <div class="growth-stat"><small>size</small><strong id="growth-size">3</strong></div>
+        <div class="growth-stat"><small>capacity</small><strong id="growth-capacity">4</strong></div>
+        <div class="growth-stat"><small>Realocações</small><strong id="growth-reallocations">0</strong></div>
+        <div class="growth-stat"><small>Elementos movidos</small><strong id="growth-copies">0</strong></div>
+      </aside>
+
+      <div class="growth-stage">
+        <div class="growth-row">
+          <div class="growth-row-title"><span>Bloco atual</span><span id="growth-current-label">capacity = 4</span></div>
+          <div class="growth-cells" id="growth-current"></div>
+        </div>
+
+        <div class="growth-row" id="growth-old-row" style="display:none;">
+          <div class="growth-row-title"><span>Bloco anterior</span><span>liberado após a realocação</span></div>
+          <div class="growth-cells" id="growth-old"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vector-console" id="growth-console">O vetor possui size = 3 e capacity = 4. Ainda existe uma posição reservada disponível.</div>
+  </div>
+</section>
+
+<section class="lesson-section" id="complexidade">
+  <header class="lesson-heading">
+    <span>05</span>
+    <div><p>Resumo de desempenho</p><h2>Complexidade das Principais Operações</h2></div>
+  </header>
+
+  <div class="complexity-table">
+    <table>
+      <thead>
+        <tr><th>Operação</th><th>Complexidade</th><th>Por quê?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Acessar <code>v[i]</code></td><td class="good">O(1)</td><td>O endereço é calculado diretamente.</td></tr>
+        <tr><td>Alterar <code>v[i]</code></td><td class="good">O(1)</td><td>Mesmo princípio do acesso por índice.</td></tr>
+        <tr><td>Buscar valor não ordenado</td><td class="mid">O(n)</td><td>Pode ser necessário percorrer todos os elementos.</td></tr>
+        <tr><td>Inserir no início/meio</td><td class="bad">O(n)</td><td>É necessário deslocar elementos para abrir espaço.</td></tr>
+        <tr><td>Remover do início/meio</td><td class="bad">O(n)</td><td>Elementos posteriores precisam preencher o espaço.</td></tr>
+        <tr><td><code>push_back()</code> em std::vector</td><td class="good">O(1) amortizado</td><td>A maioria usa capacidade já reservada; realocações ocasionais custam O(n).</td></tr>
+        <tr><td><code>pop_back()</code></td><td class="good">O(1)</td><td>Remove o último elemento sem deslocar os anteriores.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="concept-note">
+    <strong>Por que O(1) amortizado?</strong> Uma realocação isolada pode custar O(n),
+    mas ela não acontece em todo <code>push_back()</code>. O custo é distribuído ao longo
+    de várias inserções.
+  </div>
+</section>
+
+<section class="lesson-section" id="cpp">
+  <header class="lesson-heading">
+    <span>06</span>
+    <div><p>Aplicação prática</p><h2>Vetores em C++17</h2></div>
+  </header>
+
+  <p class="section-lead">
+    Em C++ existem arrays de tamanho fixo e o contêiner <code>std::vector</code>.
+    Quando precisamos de uma sequência contígua cujo tamanho pode variar,
+    <code>std::vector</code> é uma das opções mais importantes da biblioteca padrão.
+  </p>
+
+  <div class="code-block">
+    <div class="code-block-header">std::vector — criação, acesso e inserção</div>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+int main() {
+    std::vector&lt;int&gt; numeros = {10, 20, 30};
+
+    numeros.push_back(40);
+
+    std::cout &lt;&lt; numeros[0] &lt;&lt; '\n';
+    std::cout &lt;&lt; numeros[2] &lt;&lt; '\n';
+
+    return 0;
+}</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-block-header">Percorrendo um vetor</div>
+    <pre><code>std::vector&lt;int&gt; v = {10, 20, 30, 40, 50};
+
+for (std::size_t i = 0; i &lt; v.size(); ++i) {
+    std::cout &lt;&lt; "v[" &lt;&lt; i &lt;&lt; "] = "
+              &lt;&lt; v[i] &lt;&lt; '\n';
+}</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-block-header">size e capacity</div>
+    <pre><code>std::vector&lt;int&gt; v;
+
+for (int i = 1; i &lt;= 10; ++i) {
+    v.push_back(i);
+
+    std::cout
+        &lt;&lt; "size = " &lt;&lt; v.size()
+        &lt;&lt; " | capacity = " &lt;&lt; v.capacity()
+        &lt;&lt; '\n';
+}</code></pre>
+  </div>
+
+  <div class="review-grid records-review">
+    <details open><summary><code>size()</code> e <code>capacity()</code><i class="fa-solid fa-chevron-down"></i></summary><p><code>size()</code> informa quantos elementos existem logicamente. <code>capacity()</code> informa quantos cabem no bloco reservado antes de uma nova realocação.</p></details>
+    <details open><summary><code>[]</code> vs <code>at()</code><i class="fa-solid fa-chevron-down"></i></summary><p><code>at()</code> verifica limites e lança exceção para índice inválido. <code>[]</code> não oferece essa verificação.</p></details>
+    <details open><summary><code>reserve()</code><i class="fa-solid fa-chevron-down"></i></summary><p>Quando temos uma estimativa da quantidade de elementos, <code>reserve()</code> permite solicitar capacidade antecipadamente e reduzir realocações.</p></details>
+  </div>
+</section>
+
+<section class="lesson-section" id="resumo">
+  <header class="lesson-heading">
+    <span>07</span>
+    <div><p>Modelo mental</p><h2>O Que Você Precisa Guardar</h2></div>
+  </header>
+
+  <div class="summary-grid">
+    <article><small>Memória</small><strong>Elementos contíguos.</strong></article>
+    <article><small>Acesso</small><strong>Índice permite O(1).</strong></article>
+    <article><small>Inserção no meio</small><strong>Pode exigir O(n) deslocamentos.</strong></article>
+    <article><small>std::vector</small><strong>Contíguo e redimensionável.</strong></article>
+  </div>
+
+  <div class="concept-note" style="border-left-color:#10b981;">
+    <strong>Resumo:</strong> o vetor troca flexibilidade de inserção no meio por excelente acesso aleatório,
+    boa localidade de memória e uma representação simples. Por isso é uma das estruturas mais utilizadas.
+  </div>
+</section>
+
+<footer class="lesson-section" style="border-top:1px solid #1e2d36;padding-top:2rem;margin-top:4rem;text-align:center;color:#64748b;font-size:.9rem;">
+  <p>Material de autoria do Professor Mestre Mateus de Sousa Valente, dos cursos de TI da Uniube. Todos os direitos reservados © 2026.</p>
+</footer>
+
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("canvas-vector-memory");
+  const consoleEl = document.getElementById("address-console");
+  const buttons = document.querySelectorAll("[data-address-index]");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  const values = [12,25,38,41,57,63,72,88];
+  const baseAddress = 0x1000;
+  const elementSize = 4;
+  let selectedIndex = 2;
+
+  const C = {
+    bg:"#0b1215", panel:"#10191f", border:"#24343d",
+    text:"#e2e8f0", muted:"#64748b", mutedLight:"#94a3b8",
+    blue:"#38bdf8", green:"#10b981", cell:"#17242b"
+  };
+
+  const address = index => "0x" + (baseAddress + index*elementSize).toString(16).toUpperCase();
+
+  function rr(x,y,w,h,r,fill,stroke=null,lw=1){
+    ctx.beginPath(); ctx.roundRect(x,y,w,h,r);
+    if(fill){ctx.fillStyle=fill;ctx.fill();}
+    if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw;ctx.stroke();}
+  }
+
+  function text(v,x,y,color=C.text,size=14,weight="normal",align="left"){
+    ctx.font=`${weight} ${size}px system-ui,-apple-system,sans-serif`;
+    ctx.fillStyle=color;ctx.textAlign=align;ctx.fillText(v,x,y);
+  }
+
+  function mono(v,x,y,color=C.text,size=12,align="left"){
+    ctx.font=`${size}px ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace`;
+    ctx.fillStyle=color;ctx.textAlign=align;ctx.fillText(v,x,y);
+  }
+
+  function arrow(x1,y1,x2,y2,color,width=2){
+    const angle=Math.atan2(y2-y1,x2-x1);
+    ctx.strokeStyle=color;ctx.lineWidth=width;
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    const h=8;
+    ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x2,y2);
+    ctx.lineTo(x2-h*Math.cos(angle-Math.PI/6),y2-h*Math.sin(angle-Math.PI/6));
+    ctx.lineTo(x2-h*Math.cos(angle+Math.PI/6),y2-h*Math.sin(angle+Math.PI/6));
+    ctx.closePath();ctx.fill();
+  }
+
+  function draw(){
+    const W=canvas.width,H=canvas.height;
+    ctx.clearRect(0,0,W,H);ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);
+    rr(25,20,1200,415,12,C.panel,C.border);
+
+    text("VETOR int v[8]",55,55,C.blue,13,"800");
+    text("8 inteiros consecutivos · cada int = 4 bytes nesta simulação",55,78,C.mutedLight,11);
+
+    rr(55,100,420,72,8,"#0d171c",C.border);
+    text("FÓRMULA DO ENDEREÇO",72,124,C.muted,10,"800");
+    mono("endereço(v[i]) = base + i × sizeof(int)",72,150,C.text,14);
+
+    const selectedAddress=baseAddress+selectedIndex*elementSize;
+    rr(500,100,670,72,8,"rgba(56,189,248,.05)","rgba(56,189,248,.28)");
+    text(`ACESSANDO v[${selectedIndex}]`,518,124,C.blue,10,"800");
+    mono(`0x${baseAddress.toString(16).toUpperCase()} + ${selectedIndex} × ${elementSize} = 0x${selectedAddress.toString(16).toUpperCase()}`,518,150,C.text,14);
+
+    const startX=73,y=245,cellW=125,cellH=95,gap=8;
+
+    values.forEach((value,index)=>{
+      const x=startX+index*(cellW+gap);
+      const active=index===selectedIndex;
+      if(active){ctx.save();ctx.shadowBlur=18;ctx.shadowColor="rgba(56,189,248,.25)";}
+      rr(x,y,cellW,cellH,8,active?"rgba(56,189,248,.09)":C.cell,active?C.blue:"#334155",active?2:1);
+      if(active)ctx.restore();
+      text(`índice ${index}`,x+cellW/2,y+20,active?C.blue:C.muted,10,"700","center");
+      mono(String(value),x+cellW/2,y+55,active?C.blue:C.text,18,"center");
+      mono(address(index),x+cellW/2,y+82,C.mutedLight,10,"center");
+    });
+
+    arrow(78,365,78,345,C.green,2);
+    text("base do vetor",78,386,C.green,10,"700","center");
+    mono("0x1000",78,403,C.green,10,"center");
+
+    const selectedCenter=startX+selectedIndex*(cellW+gap)+cellW/2;
+    arrow(selectedCenter,208,selectedCenter,238,C.blue,2);
+    text(`CPU calcula diretamente v[${selectedIndex}]`,selectedCenter,197,C.blue,11,"700","center");
+    text("Nenhum elemento anterior precisa ser percorrido.",625,411,C.green,11,"700","center");
+  }
+
+  function selectIndex(index){
+    selectedIndex=index;
+    consoleEl.innerHTML=`<strong>v[${index}]</strong> → base 0x1000 + ${index} × 4 bytes = <strong>${address(index)}</strong>. Valor encontrado: <strong>${values[index]}</strong>.`;
+    buttons.forEach(button=>button.classList.toggle("is-active",Number(button.dataset.addressIndex)===index));
+    draw();
+  }
+
+  buttons.forEach(button=>button.addEventListener("click",()=>selectIndex(Number(button.dataset.addressIndex))));
+
+  canvas.addEventListener("click",event=>{
+    const rect=canvas.getBoundingClientRect();
+    const mx=(event.clientX-rect.left)*(canvas.width/rect.width);
+    const my=(event.clientY-rect.top)*(canvas.height/rect.height);
+    const startX=73,y=245,cellW=125,cellH=95,gap=8;
+
+    values.forEach((_,index)=>{
+      const x=startX+index*(cellW+gap);
+      if(mx>=x&&mx<=x+cellW&&my>=y&&my<=y+cellH)selectIndex(index);
+    });
+  });
+
+  selectIndex(2);
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const vectorEl=document.getElementById("operations-vector");
+  const comparisonsEl=document.getElementById("op-comparisons");
+  const shiftsEl=document.getElementById("op-shifts");
+  const sizeEl=document.getElementById("op-size");
+  const consoleEl=document.getElementById("operations-console");
+
+  const btnAccess=document.getElementById("op-access");
+  const btnSearch=document.getElementById("op-search");
+  const btnInsert=document.getElementById("op-insert");
+  const btnRemove=document.getElementById("op-remove");
+  const btnReset=document.getElementById("op-reset");
+
+  const capacity=8,baseAddress=0x2000;
+  let values=[],runToken=0;
+  const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  const addr=index=>"0x"+(baseAddress+index*4).toString(16).toUpperCase();
+
+  function render(classes={}){
+    vectorEl.innerHTML="";
+    for(let i=0;i<capacity;i++){
+      const cell=document.createElement("div");
+      cell.className="vector-cell";
+      cell.dataset.index=i;
+      cell.dataset.address=addr(i);
+      if(i<values.length){cell.textContent=values[i];}
+      else{cell.textContent="—";cell.classList.add("is-empty");}
+      if(classes[i])cell.classList.add(classes[i]);
+      vectorEl.appendChild(cell);
+    }
+    sizeEl.textContent=values.length;
+  }
+
+  function reset(){
+    runToken++;
+    values=[10,20,30,40,50,60];
+    comparisonsEl.textContent="0";
+    shiftsEl.textContent="0";
+    consoleEl.innerHTML="Escolha uma operação para visualizar seu custo.";
+    render();
+  }
+
+  async function access(){
+    const token=++runToken;
+    comparisonsEl.textContent="0";shiftsEl.textContent="0";
+    render({4:"is-active"});
+    consoleEl.innerHTML="<strong>Acesso direto:</strong> o endereço de v[4] é calculado imediatamente. Nenhum elemento anterior é visitado. Complexidade <strong>O(1)</strong>.";
+    await delay(700);
+    if(token!==runToken)return;
+    render({4:"is-found"});
+  }
+
+  async function search(){
+    const token=++runToken;
+    comparisonsEl.textContent="0";shiftsEl.textContent="0";
+    for(let i=0;i<values.length;i++){
+      if(token!==runToken)return;
+      comparisonsEl.textContent=i+1;
+      render({[i]:"is-moving"});
+      consoleEl.innerHTML=`Comparando v[${i}] = <strong>${values[i]}</strong> com 50...`;
+      await delay(300);
+      if(values[i]===50){
+        render({[i]:"is-found"});
+        consoleEl.innerHTML=`<strong>50 encontrado no índice ${i}</strong> após ${i+1} comparações. Busca linear: pior caso <strong>O(n)</strong>.`;
+        return;
+      }
+    }
+  }
+
+  async function insert(){
+    if(values.length>=capacity){consoleEl.innerHTML="<strong>Sem capacidade livre.</strong> Reinicie a demonstração.";return;}
+    const token=++runToken,index=2;
+    comparisonsEl.textContent="0";shiftsEl.textContent="0";
+    for(let i=values.length-1;i>=index;i--){
+      if(token!==runToken)return;
+      render({[i]:"is-moving"});
+      consoleEl.innerHTML=`Deslocando <strong>${values[i]}</strong> do índice ${i} para ${i+1}...`;
+      await delay(280);
+      values[i+1]=values[i];
+      shiftsEl.textContent=Number(shiftsEl.textContent)+1;
+      render({[i+1]:"is-moving"});
+    }
+    values[index]=99;
+    render({[index]:"is-found"});
+    consoleEl.innerHTML=`<strong>99 inserido no índice 2.</strong> Foram necessários <strong>${shiftsEl.textContent} deslocamentos</strong>. Inserção no meio: O(n).`;
+  }
+
+  async function remove(){
+    if(values.length<=2){consoleEl.innerHTML="Não há elemento suficiente para remover nesta demonstração.";return;}
+    const token=++runToken,index=2;
+    comparisonsEl.textContent="0";shiftsEl.textContent="0";
+    render({[index]:"is-active"});
+    consoleEl.innerHTML=`Removendo o valor <strong>${values[index]}</strong> do índice ${index}.`;
+    await delay(500);
+
+    for(let i=index;i<values.length-1;i++){
+      if(token!==runToken)return;
+      render({[i+1]:"is-moving"});
+      await delay(260);
+      values[i]=values[i+1];
+      shiftsEl.textContent=Number(shiftsEl.textContent)+1;
+    }
+
+    values.pop();
+    render();
+    consoleEl.innerHTML=`<strong>Elemento removido.</strong> Foram necessários <strong>${shiftsEl.textContent} deslocamentos</strong> para preservar a sequência.`;
+  }
+
+  btnAccess.addEventListener("click",access);
+  btnSearch.addEventListener("click",search);
+  btnInsert.addEventListener("click",insert);
+  btnRemove.addEventListener("click",remove);
+  btnReset.addEventListener("click",reset);
+  reset();
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const currentEl=document.getElementById("growth-current");
+  const oldEl=document.getElementById("growth-old");
+  const oldRow=document.getElementById("growth-old-row");
+  const sizeEl=document.getElementById("growth-size");
+  const capacityEl=document.getElementById("growth-capacity");
+  const reallocEl=document.getElementById("growth-reallocations");
+  const copiesEl=document.getElementById("growth-copies");
+  const labelEl=document.getElementById("growth-current-label");
+  const consoleEl=document.getElementById("growth-console");
+  const pushBtn=document.getElementById("growth-push");
+  const resetBtn=document.getElementById("growth-reset");
+
+  let values=[],capacity=4,reallocations=0,moved=0,nextValue=40,previousBlock=null;
+
+  function drawCells(container,vals,cap,highlight=false){
+    container.innerHTML="";
+    for(let i=0;i<cap;i++){
+      const cell=document.createElement("div");
+      cell.className="growth-cell";
+      if(highlight)cell.classList.add("new-block");
+      if(i<vals.length)cell.textContent=vals[i];
+      else{cell.textContent="livre";cell.classList.add("empty");}
+      container.appendChild(cell);
+    }
+  }
+
+  function render(){
+    sizeEl.textContent=values.length;
+    capacityEl.textContent=capacity;
+    reallocEl.textContent=reallocations;
+    copiesEl.textContent=moved;
+    labelEl.textContent=`capacity = ${capacity}`;
+    drawCells(currentEl,values,capacity,reallocations>0);
+
+    if(previousBlock){
+      oldRow.style.display="";
+      drawCells(oldEl,previousBlock.values,previousBlock.capacity,false);
+    } else {
+      oldRow.style.display="none";
+    }
+  }
+
+  function reset(){
+    values=[10,20,30];
+    capacity=4;
+    reallocations=0;
+    moved=0;
+    nextValue=40;
+    previousBlock=null;
+    consoleEl.innerHTML="O vetor possui <strong>size = 3</strong> e <strong>capacity = 4</strong>. Ainda existe uma posição reservada disponível.";
+    render();
+  }
+
+  function push(){
+    if(values.length===capacity){
+      previousBlock={values:[...values],capacity};
+      const oldCapacity=capacity;
+      capacity*=2;
+      reallocations++;
+      moved+=values.length;
+      values.push(nextValue);
+      nextValue+=10;
+      consoleEl.innerHTML=`<strong>Realocação!</strong> size era igual à capacity (${oldCapacity}). Foi criado um novo bloco com capacity = ${capacity}, ${values.length-1} elementos foram movidos e o novo valor foi inserido.`;
+    } else {
+      values.push(nextValue);
+      nextValue+=10;
+      consoleEl.innerHTML=`<strong>push_back() sem realocação.</strong> A capacity já possuía espaço reservado. Novo size = ${values.length}.`;
+    }
+    render();
+  }
+
+  pushBtn.addEventListener("click",push);
+  resetBtn.addEventListener("click",reset);
+  reset();
+});
+</script>
+
+</body>
+</html>

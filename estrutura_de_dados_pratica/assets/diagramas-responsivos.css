@@ -1,0 +1,175 @@
+/*
+ * Ajustes compartilhados para laboratórios e diagramas.
+ * O canvas mantém sua resolução interna, mas cabe na largura disponível.
+ */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+.lesson-section,
+.algorithm-lab,
+.big-o-layout,
+.big-o-canvas-wrap,
+.search-array-wrap,
+.structure-table,
+.addressing-diagram,
+.canvas-container,
+.canvas-container-addressing,
+.multi-ram-lab,
+.ram-modules,
+.ram-stick,
+.heap-diagram-shell,
+.canvas-container-heap,
+.lab-shell,
+.canvas-shell,
+.allocator-lab,
+.allocator-layout,
+.allocator-main {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.big-o-canvas-wrap,
+.canvas-container,
+.canvas-container-addressing,
+.canvas-container-heap,
+.canvas-shell {
+  overflow-x: hidden !important;
+}
+
+#canvas-big-o,
+#canvas-modelos,
+#canvas-enderecamento,
+#canvas-heap-benefits,
+#canvas-ponteiros {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0 auto;
+}
+
+.search-array-wrap { overflow-x: hidden !important; }
+.search-array {
+  width: 100%;
+  min-width: 0 !important;
+  gap: clamp(2px, .7vw, 7px) !important;
+}
+.search-cell {
+  width: auto !important;
+  min-width: 0 !important;
+  flex: 1 1 0;
+}
+
+.structure-table { overflow-x: hidden !important; }
+.structure-table table {
+  width: 100%;
+  min-width: 0 !important;
+  table-layout: fixed;
+}
+.structure-table th,
+.structure-table td { overflow-wrap: anywhere; }
+
+.ram-modules {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)) !important;
+  overflow-x: hidden !important;
+}
+.ram-stick { min-width: 0 !important; }
+.memory-structure {
+  min-width: min(180px, 100%) !important;
+  flex: 1 1 180px;
+}
+
+.heap-zone {
+  min-width: 0 !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 760px) {
+  .big-o-layout,
+  .allocator-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .big-o-canvas-wrap,
+  .canvas-container,
+  .canvas-container-addressing,
+  .canvas-container-heap,
+  .canvas-shell {
+    padding: clamp(6px, 2.5vw, 12px) !important;
+  }
+
+  .search-array { padding: .65rem .35rem !important; }
+  .search-cell {
+    height: 54px !important;
+    padding: 0 !important;
+    font-size: clamp(.58rem, 2.5vw, .76rem);
+  }
+
+  .structure-table {
+    border: 0 !important;
+    background: transparent !important;
+  }
+  .structure-table table,
+  .structure-table tbody,
+  .structure-table tr,
+  .structure-table td {
+    display: block;
+    width: 100%;
+  }
+  .structure-table thead { display: none; }
+  .structure-table tr {
+    margin-bottom: .75rem;
+    overflow: hidden;
+    border: 1px solid #1e2d36;
+    border-radius: 9px;
+    background: #10191f;
+  }
+  .structure-table td {
+    display: grid;
+    padding: .65rem .75rem !important;
+    grid-template-columns: minmax(105px, .75fr) minmax(0, 1fr);
+    gap: .75rem;
+    border-bottom: 1px solid #1e2d36;
+  }
+  .structure-table td:last-child { border-bottom: 0; }
+  .structure-table td::before {
+    color: #64748b;
+    font: 600 .62rem/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+  }
+  .structure-table td:nth-child(1)::before { content: "Estrutura"; }
+  .structure-table td:nth-child(2)::before { content: "Acesso por índice"; }
+  .structure-table td:nth-child(3)::before { content: "Busca"; }
+  .structure-table td:nth-child(4)::before { content: "Inserção no início"; }
+  .structure-table td:nth-child(5)::before { content: "Inserção no fim"; }
+  .structure-table td:nth-child(6)::before { content: "Observação"; }
+
+  .allocator-sidebar {
+    border-right: 0 !important;
+    border-bottom: 1px solid #1e2d36;
+  }
+}
+
+@media (max-width: 520px) {
+  .heap-zone {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .diagram-controls,
+  .heap-diagram-actions,
+  .algorithm-actions {
+    width: 100%;
+  }
+
+  .diagram-btn,
+  .heap-diagram-btn,
+  .algorithm-btn {
+    flex: 1 1 auto;
+  }
+}

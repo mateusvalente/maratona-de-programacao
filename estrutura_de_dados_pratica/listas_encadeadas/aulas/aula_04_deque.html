@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 4 - Deque</title>
+  <link rel="stylesheet" href="../assets/curso.css">
+  <script src="../../assets/site-shell.js" defer data-edp-shell></script>
+</head>
+<body>
+  <main class="page">
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">Double-ended queue</p>
+        <h1>Deque: operações nas duas extremidades</h1>
+        <p>Um deque permite inserir e remover tanto no front quanto no back. O nome vem de double-ended queue e costuma ser pronunciado “deck”.</p>
+      </div>
+      <span class="badge">front ⇄ back</span>
+    </header>
+
+    <section class="band two-col">
+      <div>
+        <h2>Contrato do deque</h2>
+        <ul class="concept-list">
+          <li><strong>push_front</strong> insere no front.</li>
+          <li><strong>push_back</strong> insere no back.</li>
+          <li><strong>pop_front</strong> remove do front.</li>
+          <li><strong>pop_back</strong> remove do back.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Relação com pilha e fila</h2>
+        <p>Se inserirmos e removermos pela mesma ponta, usamos o deque como pilha. Se inserirmos no back e removermos no front, usamos o deque como fila.</p>
+        <div class="fact-check"><strong>Importante:</strong> deque define operações, não exige que a implementação seja uma lista duplamente encadeada.</div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Laboratório: uma implementação duplamente encadeada</h2>
+      <p>Para tornar as duas direções visíveis, este laboratório escolhe nós com <code>prev</code> e <code>next</code>. Essa é uma implementação possível, não uma descrição do interior de <code>collections.deque</code>.</p>
+      <div class="lab" data-structure-lab data-mode="deque" data-initial='["2", "3", "4"]'>
+        <div class="lab-head"><h2>Push e pop no front ou no back</h2><output data-size></output></div>
+        <div class="controls">
+          <input data-value aria-label="Valor para inserir" placeholder="valor">
+          <button class="primary" data-action="append-left">push front</button>
+          <button class="primary" data-action="append-right" data-default>push back</button>
+          <button class="danger" data-action="pop-left">pop front</button>
+          <button class="danger" data-action="pop-right">pop back</button>
+          <button class="inspect" data-action="front">ver front</button>
+          <button class="inspect" data-action="back">ver back</button>
+        </div>
+        <div class="visual-stage"><div class="structure-track" data-track></div></div>
+        <div class="lab-status">
+          <div><strong>Operação</strong><span data-last-action></span></div>
+          <div><strong>Ordem do front ao back</strong><span data-current-state></span></div>
+        </div>
+        <ol class="history" data-history></ol>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>Deque em Python</h2>
+        <p>A API usa os nomes <code>appendleft</code>, <code>append</code>, <code>popleft</code> e <code>pop</code>. Todas atuam nas extremidades.</p>
+      </div>
+      <div class="code-panel">
+        <div class="code-title"><span>Python</span><span>collections.deque</span></div>
+<pre><code>from collections import deque
+
+d = deque([2, 3, 4])  # front = 2 e back = 4
+
+d.appendleft(1)        # push_front: insere antes do front
+d.append(5)            # push_back: insere depois do back
+
+esquerda = d.popleft() # pop_front: remove 1
+direita = d.pop()      # pop_back: remove 5
+
+print(esquerda, direita)  # 1 5
+print(list(d))             # [2, 3, 4]</code></pre>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Custos e acesso</h2>
+      <div class="scroll-frame">
+        <table class="comparison-table">
+          <thead><tr><th>Operação em collections.deque</th><th>Custo esperado</th><th>Observação</th></tr></thead>
+          <tbody>
+            <tr><td>append / appendleft</td><td>aproximadamente O(1)</td><td>Inserção nas extremidades.</td></tr>
+            <tr><td>pop / popleft</td><td>aproximadamente O(1)</td><td>Remoção nas extremidades.</td></tr>
+            <tr><td>Acesso nas extremidades</td><td>O(1)</td><td><code>d[0]</code> e <code>d[-1]</code>.</td></tr>
+            <tr><td>Acesso no meio</td><td>O(n)</td><td>Para acesso aleatório frequente, prefira <code>list</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Referências usadas</h2>
+      <ul class="sources">
+        <li><a href="https://xlinux.nist.gov/dads/HTML/deque.html" target="_blank" rel="noopener">NIST — deque</a>: inserção e remoção no head ou tail.</li>
+        <li><a href="https://docs.python.org/3/library/collections.html#collections.deque" target="_blank" rel="noopener">Python — collections.deque</a>: API, custos nas pontas e acesso indexado.</li>
+      </ul>
+    </section>
+
+    <nav class="lesson-nav"><a href="aula_03_fila.html">← Anterior: Fila</a><a href="aula_05_lista_simplesmente_encadeada.html">Próxima: Lista simples →</a></nav>
+  </main>
+  <script src="../assets/visualizador.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 5 - Lista Simplesmente Encadeada</title>
+  <link rel="stylesheet" href="../assets/curso.css">
+  <script src="../../assets/site-shell.js" defer data-edp-shell></script>
+</head>
+<body>
+  <main class="page">
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">Singly linked list</p>
+        <h1>Lista simplesmente encadeada</h1>
+        <p>É uma lista implementada por nós em que cada nó guarda um valor e uma referência para o próximo nó.</p>
+      </div>
+      <span class="badge">head → next → None</span>
+    </header>
+
+    <section class="band two-col">
+      <div>
+        <h2>Componentes</h2>
+        <ul class="concept-list">
+          <li><strong>Node</strong> contém <code>value</code> e <code>next</code>.</li>
+          <li><strong>head</strong> referencia o primeiro nó e dá acesso à lista.</li>
+          <li><strong>tail</strong> é opcional; quando mantido, referencia o último nó.</li>
+          <li>O <strong>next do último nó</strong> vale <code>None</code>.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Consequência da ligação única</h2>
+        <p>É possível avançar seguindo <code>next</code>. Não existe um ponteiro direto para voltar ao nó anterior.</p>
+        <p>Para acessar o elemento da posição <code>i</code>, começamos no head e percorremos até essa posição: O(n) no pior caso.</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Laboratório: IDs e referências</h2>
+      <p>Os IDs deixam visível qual objeto cada <code>next</code> referencia. Após push ou pop, observe quais ligações mudam.</p>
+      <div class="lab" data-structure-lab data-mode="single" data-initial='["2", "3", "4"]'>
+        <div class="lab-head"><h2>Alterações no head e no tail</h2><output data-size></output></div>
+        <div class="controls">
+          <input data-value aria-label="Valor do novo nó" placeholder="valor do nó">
+          <button class="primary" data-action="push-front">push front</button>
+          <button class="primary" data-action="push-back" data-default>push back</button>
+          <button class="danger" data-action="pop-front">pop front</button>
+          <button class="danger" data-action="pop-back">pop back</button>
+          <button class="inspect" data-action="front">ver head</button>
+          <button class="inspect" data-action="back">ver tail</button>
+        </div>
+        <div class="visual-stage"><div class="structure-track" data-track></div></div>
+        <div class="lab-status">
+          <div><strong>Operação</strong><span data-last-action></span></div>
+          <div><strong>Ordem alcançada pelo head</strong><span data-current-state></span></div>
+        </div>
+        <ol class="history" data-history></ol>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Custos com head e tail</h2>
+      <div class="scroll-frame">
+        <table class="comparison-table">
+          <thead><tr><th>Operação</th><th>Custo</th><th>Motivo</th></tr></thead>
+          <tbody>
+            <tr><td>push_front</td><td>O(1)</td><td>O novo nó aponta para o head antigo.</td></tr>
+            <tr><td>pop_front</td><td>O(1)</td><td>Head passa a apontar para head.next.</td></tr>
+            <tr><td>push_back</td><td>O(1) com tail</td><td>Tail.next recebe o novo nó.</td></tr>
+            <tr><td>pop_back</td><td>O(n)</td><td>É necessário encontrar o penúltimo nó.</td></tr>
+            <tr><td>Acessar posição / buscar valor</td><td>O(n)</td><td>O percurso começa no head.</td></tr>
+            <tr><td>Inserir depois de um nó conhecido</td><td>O(1)</td><td>Somente referências locais são atualizadas.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>Representação em Python</h2>
+        <p>O ID usado no HTML não precisa existir como campo do objeto. No código real, a própria referência em <code>next</code> conecta os nós.</p>
+      </div>
+      <div class="code-panel">
+        <div class="code-title"><span>Python</span><span>Node e LinkedList</span></div>
+<pre><code>class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+    def push_front(self, value):
+        node = Node(value)
+        # O novo nó aponta para o head antigo.
+        node.next = self.head
+        self.head = node
+        if self.tail is None:
+            self.tail = node
+
+    def push_back(self, value):
+        node = Node(value)
+        if self.tail is None:
+            self.head = self.tail = node
+            return
+
+        # O tail antigo liga-se ao novo nó, que vira o tail.
+        self.tail.next = node
+        self.tail = node
+
+    def pop_front(self):
+        if self.head is None:
+            raise IndexError("lista vazia")
+
+        value = self.head.value
+        self.head = self.head.next
+        if self.head is None:
+            self.tail = None
+        return value
+
+    def pop_back(self):
+        if self.head is None:
+            raise IndexError("lista vazia")
+
+        if self.head is self.tail:
+            return self.pop_front()
+
+        # Sem referência para trás, precisamos localizar o penúltimo nó.
+        penultimo = self.head
+        while penultimo.next is not self.tail:
+            penultimo = penultimo.next
+
+        value = self.tail.value
+        penultimo.next = None
+        self.tail = penultimo
+        return value</code></pre>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Referências usadas</h2>
+      <ul class="sources">
+        <li><a href="https://xlinux.nist.gov/dads/HTML/list.html" target="_blank" rel="noopener">NIST — list</a>: coleção acessada sequencialmente do head ao tail.</li>
+        <li><a href="https://xlinux.nist.gov/dads/HTML/linkedList.html" target="_blank" rel="noopener">NIST — linked list</a>: cada item possui ligação para o próximo.</li>
+      </ul>
+    </section>
+
+    <nav class="lesson-nav"><a href="aula_04_deque.html">← Anterior: Deque</a><a href="aula_06_lista_duplamente_encadeada.html">Próxima: Lista dupla →</a></nav>
+  </main>
+  <script src="../assets/visualizador.js"></script>
+</body>
+</html>
+

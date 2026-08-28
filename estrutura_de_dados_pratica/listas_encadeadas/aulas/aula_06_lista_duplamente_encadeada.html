@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 6 - Lista Duplamente Encadeada</title>
+  <link rel="stylesheet" href="../assets/curso.css">
+  <script src="../../assets/site-shell.js" defer data-edp-shell></script>
+</head>
+<body>
+  <main class="page">
+
+    <header class="lesson-header">
+      <div>
+        <p class="eyebrow">Doubly linked list</p>
+        <h1>Lista duplamente encadeada</h1>
+        <p>Cada nó guarda duas referências: <code>next</code> para o próximo nó e <code>prev</code> para o nó anterior.</p>
+      </div>
+      <span class="badge">None ← prev · next → None</span>
+    </header>
+
+    <section class="band two-col">
+      <div>
+        <h2>Invariantes das pontas</h2>
+        <ul class="concept-list">
+          <li><strong>head.prev</strong> é <code>None</code>.</li>
+          <li><strong>tail.next</strong> é <code>None</code>.</li>
+          <li>Se <code>A.next</code> aponta para B, então <code>B.prev</code> deve apontar para A.</li>
+          <li>Na lista vazia, head e tail são <code>None</code>.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Vantagem e custo</h2>
+        <p>É possível percorrer nos dois sentidos e remover um nó conhecido sem procurar seu anterior.</p>
+        <p>Em troca, cada nó ocupa espaço para duas referências e cada alteração deve preservar as ligações dos dois lados.</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Laboratório: prev e next</h2>
+      <p>As setas e os campos precisam concordar. Ao remover uma ponta, o novo head ou tail também deve perder a referência para o nó que saiu.</p>
+      <div class="lab" data-structure-lab data-mode="double" data-initial='["2", "3", "4"]'>
+        <div class="lab-head"><h2>Push e pop nas duas pontas</h2><output data-size></output></div>
+        <div class="controls">
+          <input data-value aria-label="Valor do novo nó" placeholder="valor do nó">
+          <button class="primary" data-action="push-front">push front</button>
+          <button class="primary" data-action="push-back" data-default>push back</button>
+          <button class="danger" data-action="pop-front">pop front</button>
+          <button class="danger" data-action="pop-back">pop back</button>
+          <button class="inspect" data-action="front">ver head</button>
+          <button class="inspect" data-action="back">ver tail</button>
+        </div>
+        <div class="visual-stage"><div class="structure-track" data-track></div></div>
+        <div class="lab-status">
+          <div><strong>Operação</strong><span data-last-action></span></div>
+          <div><strong>Ordem do head ao tail</strong><span data-current-state></span></div>
+        </div>
+        <ol class="history" data-history></ol>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Custos com head e tail</h2>
+      <div class="scroll-frame">
+        <table class="comparison-table">
+          <thead><tr><th>Operação</th><th>Custo</th><th>Condição</th></tr></thead>
+          <tbody>
+            <tr><td>push_front / pop_front</td><td>O(1)</td><td>Head é mantido.</td></tr>
+            <tr><td>push_back / pop_back</td><td>O(1)</td><td>Tail é mantido e tail.prev encontra o penúltimo.</td></tr>
+            <tr><td>Remover um nó conhecido</td><td>O(1)</td><td>A referência do nó já foi fornecida.</td></tr>
+            <tr><td>Encontrar o nó por valor ou posição</td><td>O(n)</td><td>É necessário percorrer a lista.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fact-check"><strong>Detalhe importante:</strong> “remoção O(1)” não inclui o custo de procurar o nó. Se primeiro for preciso encontrá-lo, a operação completa continua O(n).</div>
+    </section>
+
+    <section class="band two-col">
+      <div>
+        <h2>Removendo um nó conhecido</h2>
+        <p>Os vizinhos passam a apontar um para o outro. Os casos de head e tail atualizam as referências externas da lista.</p>
+      </div>
+      <div class="code-panel">
+        <div class="code-title"><span>Python</span><span>reconexão dos vizinhos</span></div>
+<pre><code>class Node:
+    def __init__(self, value):
+        self.value = value
+        self.prev = None
+        self.next = None
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+    def push_front(self, value):
+        node = Node(value)
+        node.next = self.head
+
+        if self.head is None:
+            self.tail = node
+        else:
+            # O head antigo passa a reconhecer o novo predecessor.
+            self.head.prev = node
+
+        self.head = node
+
+    def push_back(self, value):
+        node = Node(value)
+        node.prev = self.tail
+
+        if self.tail is None:
+            self.head = node
+        else:
+            self.tail.next = node
+
+        self.tail = node
+
+    def remove(self, node):
+        # Reconecta o vizinho anterior ou move o head.
+        if node.prev is None:
+            self.head = node.next
+        else:
+            node.prev.next = node.next
+
+        # Reconecta o vizinho seguinte ou move o tail.
+        if node.next is None:
+            self.tail = node.prev
+        else:
+            node.next.prev = node.prev
+
+        # O nó removido deixa de pertencer à lista.
+        node.prev = None
+        node.next = None
+        return node.value
+
+    def pop_front(self):
+        if self.head is None:
+            raise IndexError("lista vazia")
+        return self.remove(self.head)
+
+    def pop_back(self):
+        if self.tail is None:
+            raise IndexError("lista vazia")
+        return self.remove(self.tail)</code></pre>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Referências usadas</h2>
+      <ul class="sources">
+        <li><a href="https://xlinux.nist.gov/dads/HTML/doublyLinkedList.html" target="_blank" rel="noopener">NIST — doubly linked list</a>: nós com ligações para sucessor e predecessor.</li>
+        <li><a href="https://xlinux.nist.gov/dads/HTML/linkedList.html" target="_blank" rel="noopener">NIST — linked list</a>: lista encadeada e suas especializações.</li>
+      </ul>
+    </section>
+
+    <nav class="lesson-nav"><a href="aula_05_lista_simplesmente_encadeada.html">← Anterior: Lista simples</a><a href="aula_07_ordenacao.html">Próxima: Ordenação →</a></nav>
+  </main>
+  <script src="../assets/visualizador.js"></script>
+</body>
+</html>
+

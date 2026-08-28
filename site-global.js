@@ -187,7 +187,9 @@
       return `${index ? '<i class="fa-solid fa-chevron-right" aria-hidden="true"></i>' : ""}${content}`;
     }).join("");
     const category = currentCategory(context);
-    const groups = hierarchySections(context).map((section, sectionIndex) => {
+    const sections = hierarchySections(context);
+    const contentCount = sections.reduce((total, section) => total + section.items.length, 0);
+    const groups = sections.map((section, sectionIndex) => {
       const open = section.label === category || (category === "Visão geral" && sectionIndex === 0);
       const items = section.items.map((item) => {
         const active = decodeURIComponent(new URL(item.href).pathname) === currentPath;
@@ -199,14 +201,17 @@
     return `
       <div class="mv-sidebar-overlay" data-sidebar-close aria-hidden="true"></div>
       <aside class="mv-course-sidebar" id="menu-do-curso" aria-label="Hierarquia do curso">
-        <div class="mv-sidebar-toolbar">
+        <div class="mv-sidebar-head">
+          <a class="mv-sidebar-module-link" href="${context.moduleHref}" title="Início de ${escapeHTML(context.module.name)}">
+            <span class="mv-sidebar-module-mark"><i class="fa-solid ${context.module.icon}" aria-hidden="true"></i></span>
+            <span class="mv-sidebar-module-copy"><small>Módulo atual</small><strong>${escapeHTML(context.module.name)}</strong></span>
+          </a>
           <button class="mv-sidebar-collapse" type="button" data-sidebar-collapse aria-label="Recolher menu lateral" title="Recolher menu">
-            <i class="fa-solid fa-angles-left" aria-hidden="true"></i><span>Trilha do curso</span>
+            <i class="fa-solid fa-angles-left" aria-hidden="true"></i>
           </button>
-          <button class="mv-sidebar-mobile-close" type="button" data-sidebar-close aria-label="Fechar menu"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
         </div>
         <div class="mv-sidebar-content">
-          <div class="mv-sidebar-breadcrumb-row">
+          <div class="mv-sidebar-trail">
             <button class="mv-sidebar-back" type="button" data-sidebar-back aria-label="Voltar à página anterior" title="Voltar"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
             <nav class="mv-sidebar-breadcrumb" aria-label="Breadcrumb">${breadcrumb}</nav>
           </div>
@@ -214,16 +219,24 @@
             <a href="${siteHref("index.html")}"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Menu principal</span></a>
             <a href="${context.moduleHref}"><i class="fa-solid ${context.module.icon}" aria-hidden="true"></i><span>Início do módulo</span></a>
           </div>
-          <div class="mv-sidebar-module"><small>Módulo atual</small><strong>${escapeHTML(context.module.name)}</strong></div>
           <nav class="mv-sidebar-tree" aria-label="Conteúdo do módulo">${groups}</nav>
+          <div class="mv-sidebar-page-group">
+            <p class="mv-sidebar-group-title">Nesta página</p>
+            <nav class="mv-sidebar-page-links" aria-label="Seções desta página"></nav>
+          </div>
         </div>
+        <div class="mv-sidebar-foot"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span><strong>${contentCount} conteúdos</strong><small>${sections.length} ${sections.length === 1 ? "grupo" : "grupos"} de aprendizagem</small></span></div>
       </aside>
       <button class="mv-sidebar-slider" type="button" data-sidebar-open aria-controls="menu-do-curso" aria-expanded="false">
-        <i class="fa-solid fa-bars" aria-hidden="true"></i><span>Trilha</span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i><span>Conteúdo</span>
       </button>`;
   }
 
   function headerTemplate(context) {
+    const moduleShortcut = context.module.key === "portal"
+      ? ""
+      : `<a class="mv-header-module" href="${context.moduleHref}" title="Ir para o início de ${escapeHTML(context.module.name)}"><i class="fa-solid ${context.module.icon}" aria-hidden="true"></i><span>${escapeHTML(context.module.short)}</span></a>`;
+
     return `
       <header class="mv-site-header top-navigation" data-global-shell="header">
         <div class="mv-topbar">
@@ -232,8 +245,7 @@
             <span class="mv-brand-copy"><strong>maratona<span>.dev</span></strong><small>Curso de Inverno · Uniube</small></span>
           </a>
           <nav class="mv-topnav" aria-label="Navegação principal">
-            <button class="mv-header-menu" type="button" data-sidebar-open aria-controls="menu-do-curso" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i><span>Menu</span></button>
-            <a class="mv-header-module" href="${context.moduleHref}" title="Ir para o início de ${escapeHTML(context.module.name)}"><i class="fa-solid ${context.module.icon}" aria-hidden="true"></i><span>${escapeHTML(context.module.short)}</span></a>
+            ${moduleShortcut}
             <a href="${siteHref("index.html#modulos")}">Módulos</a>
             <a href="${siteHref("index.html#videoaulas")}">Videoaulas</a>
             <a href="${siteHref("index.html#metodologia")}">Como estudar</a>
@@ -307,10 +319,43 @@
     updateNavigationState();
   }
 
+  function mountPageSectionLinks(sidebar) {
+    const group = sidebar.querySelector(".mv-sidebar-page-group");
+    const target = sidebar.querySelector(".mv-sidebar-page-links");
+    if (!group || !target) return;
+
+    const seen = new Set();
+    const sections = [...document.querySelectorAll("main section[id], main article[id], #app section[id], #app article[id]")]
+      .filter(section => {
+        if (seen.has(section.id)) return false;
+        seen.add(section.id);
+        return section.querySelector("h2, h3");
+      })
+      .slice(0, 12);
+
+    if (!sections.length) {
+      group.hidden = true;
+      return;
+    }
+
+    sections.forEach(section => {
+      const heading = section.querySelector("h2, h3");
+      const link = document.createElement("a");
+      link.href = `#${section.id}`;
+      link.textContent = heading.textContent.trim();
+      target.appendChild(link);
+    });
+  }
+
   function initializeCourseSidebar(sidebar, context) {
-    const mobileQuery = window.matchMedia("(max-width: 820px)");
-    const storedCollapsed = window.localStorage.getItem("maratona-sidebar-collapsed");
-    let desktopExpanded = storedCollapsed === null ? window.innerWidth > 1180 : storedCollapsed !== "true";
+    const mobileQuery = window.matchMedia("(max-width: 900px)");
+    let storedCollapsed = null;
+    try {
+      storedCollapsed = window.localStorage.getItem("maratona-sidebar-collapsed");
+    } catch {
+      storedCollapsed = null;
+    }
+    let desktopExpanded = storedCollapsed !== "true";
 
     function syncSidebar(open) {
       const isMobile = mobileQuery.matches;
@@ -323,8 +368,9 @@
       document.querySelectorAll("[data-sidebar-open]").forEach((button) => button.setAttribute("aria-expanded", String(expanded)));
       const collapseButton = sidebar.querySelector("[data-sidebar-collapse]");
       if (collapseButton) {
-        collapseButton.setAttribute("aria-label", desktopExpanded ? "Recolher menu lateral" : "Expandir menu lateral");
-        collapseButton.querySelector("i").className = `fa-solid ${desktopExpanded ? "fa-angles-left" : "fa-angles-right"}`;
+        collapseButton.setAttribute("aria-expanded", String(expanded));
+        collapseButton.setAttribute("aria-label", isMobile ? "Fechar menu lateral" : desktopExpanded ? "Recolher menu lateral" : "Expandir menu lateral");
+        collapseButton.querySelector("i").className = `fa-solid ${isMobile ? "fa-xmark" : desktopExpanded ? "fa-angles-left" : "fa-angles-right"}`;
       }
     }
 
@@ -332,7 +378,11 @@
       if (mobileQuery.matches) syncSidebar(true);
       else {
         desktopExpanded = true;
-        window.localStorage.setItem("maratona-sidebar-collapsed", "false");
+        try {
+          window.localStorage.setItem("maratona-sidebar-collapsed", "false");
+        } catch {
+          // O menu continua funcional quando o armazenamento está indisponível.
+        }
         syncSidebar(false);
       }
     }));
@@ -340,7 +390,11 @@
     sidebar.querySelector("[data-sidebar-collapse]")?.addEventListener("click", () => {
       if (mobileQuery.matches) return syncSidebar(false);
       desktopExpanded = !desktopExpanded;
-      window.localStorage.setItem("maratona-sidebar-collapsed", String(!desktopExpanded));
+      try {
+        window.localStorage.setItem("maratona-sidebar-collapsed", String(!desktopExpanded));
+      } catch {
+        // O estado permanece válido durante a sessão atual.
+      }
       syncSidebar(false);
     });
     sidebar.querySelector("[data-sidebar-back]")?.addEventListener("click", () => {
@@ -354,7 +408,18 @@
       if (event.key === "Escape" && document.body.classList.contains("mv-sidebar-mobile-open")) syncSidebar(false);
     });
     mobileQuery.addEventListener("change", () => syncSidebar(false));
+    mountPageSectionLinks(sidebar);
     syncSidebar(false);
+
+    function revealCurrentLink() {
+      const currentLink = sidebar.querySelector(".mv-sidebar-group a.is-current");
+      const list = currentLink?.closest("ol");
+      if (!currentLink || !list) return;
+      const relativeTop = currentLink.getBoundingClientRect().top - list.getBoundingClientRect().top + list.scrollTop;
+      list.scrollTop = Math.max(0, relativeTop - (list.clientHeight - currentLink.offsetHeight) / 2);
+    }
+    window.requestAnimationFrame(revealCurrentLink);
+    window.setTimeout(revealCurrentLink, 180);
   }
 
   function initializeMatrix(matrixCanvas) {
@@ -506,11 +571,14 @@
     const globalHeader = headerHost.firstElementChild;
     document.body.insertBefore(globalHeader, contentElement || null);
 
-    const sidebarHost = document.createElement("div");
-    sidebarHost.innerHTML = sidebarTemplate(context).trim();
-    const sidebarElements = [...sidebarHost.children];
-    sidebarElements.forEach((element) => document.body.insertBefore(element, contentElement || null));
-    const courseSidebar = document.querySelector(".mv-course-sidebar");
+    let courseSidebar = null;
+    if (context.module.key !== "portal") {
+      const sidebarHost = document.createElement("div");
+      sidebarHost.innerHTML = sidebarTemplate(context).trim();
+      const sidebarElements = [...sidebarHost.children];
+      sidebarElements.forEach((element) => document.body.insertBefore(element, contentElement || null));
+      courseSidebar = document.querySelector(".mv-course-sidebar");
+    }
 
     const footerHost = document.createElement("div");
     footerHost.innerHTML = footerTemplate().trim();
@@ -524,7 +592,7 @@
     legacyObserver.observe(document.body, { childList: true, subtree: true });
 
     initializeStickyNavigation(globalHeader);
-    initializeCourseSidebar(courseSidebar, context);
+    if (courseSidebar) initializeCourseSidebar(courseSidebar, context);
     initializeMatrix(matrixCanvas);
   }
 

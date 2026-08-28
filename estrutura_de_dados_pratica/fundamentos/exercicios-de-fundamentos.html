@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Laboratório com 10 exercícios progressivos de fundamentos de estruturas de dados em C++17.">
+  <meta name="theme-color" content="#0b1215">
+  <title>Exercícios de Fundamentos · Estruturas de Dados na Prática</title>
+  <link rel="stylesheet" href="../assets/aula.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="../assets/exercicios-fundamentos.css">
+  <script src="../assets/site-shell.js" defer data-edp-shell></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/highlight.min.js" defer></script>
+  <script src="../assets/exercicios-fundamentos.js" defer></script>
+</head>
+<body>
+  <main id="conteudo-pagina">
+    <section class="lesson-hero exercises-hero">
+      <div class="lesson-kicker"><span>Laboratório</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i><span>Fundamentos</span></div>
+      <h1>Exercícios de <span>Fundamentos</span></h1>
+      <p class="lesson-intro">Dez práticas em C++ para transformar os conceitos das aulas em programas: tipos primitivos, coleções, registros, TAD, memória, ponteiros, alocação dinâmica e análise de complexidade.</p>
+
+      <div class="practice-summary">
+        <article><strong>10</strong><span>exercícios progressivos</span></article>
+        <article><strong>C++17</strong><span>soluções completas</span></article>
+        <article><strong>4</strong><span>etapas de aprendizagem</span></article>
+      </div>
+
+      <div class="progress-panel">
+        <div><span>Seu progresso</span><strong id="progress-label">0 de 10 concluídos</strong></div>
+        <div class="progress-track" role="progressbar" aria-label="Progresso nos exercícios" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><span id="progress-fill"></span></div>
+        <button type="button" id="reset-progress"><i class="fa-solid fa-rotate-left"></i>Reiniciar progresso</button>
+      </div>
+
+      <nav class="lesson-jump" aria-label="Nesta prática">
+        <a href="#orientacoes">Como estudar</a><a href="#dados">Dados</a><a href="#abstracao">TAD</a><a href="#memoria">Memória</a><a href="#complexidade">Complexidade</a><a href="#integrador">Desafio final</a>
+      </nav>
+    </section>
+
+    <section class="lesson-section" id="orientacoes">
+      <header class="lesson-heading"><span>00</span><div><p>Antes de programar</p><h2>Use a solução somente depois de tentar</h2></div></header>
+      <div class="study-cycle">
+        <article><span>1</span><div><strong>Entenda</strong><p>Identifique entradas, processamento e saídas.</p></div></article><i class="fa-solid fa-arrow-right"></i>
+        <article><span>2</span><div><strong>Planeje</strong><p>Escolha tipos, registros e operações.</p></div></article><i class="fa-solid fa-arrow-right"></i>
+        <article><span>3</span><div><strong>Implemente</strong><p>Complete, compile e corrija seu código.</p></div></article><i class="fa-solid fa-arrow-right"></i>
+        <article><span>4</span><div><strong>Teste</strong><p>Experimente casos comuns e extremos.</p></div></article>
+      </div>
+      <aside class="practice-rule"><i class="fa-solid fa-terminal"></i><p>Compile com <code>g++ -std=c++17 arquivo.cpp -o programa</code>. Quando funcionar, compare com a resolução e marque o exercício como concluído.</p></aside>
+    </section>
+
+    <section class="lesson-section">
+      <header class="lesson-heading"><span>01</span><div><p>Prática guiada</p><h2>Do valor isolado à estrutura conectada</h2></div></header>
+      <div class="exercise-filters" aria-label="Filtrar exercícios">
+        <button class="is-active" type="button" data-filter="todos">Todos</button>
+        <button type="button" data-filter="dados">Dados e registros</button>
+        <button type="button" data-filter="abstracao">TAD</button>
+        <button type="button" data-filter="memoria">Memória</button>
+        <button type="button" data-filter="complexidade">Complexidade</button>
+      </div>
+
+      <div class="exercise-list">
+        <article class="exercise-card" id="dados" data-category="dados" data-exercise="1">
+          <div class="exercise-topline"><span class="exercise-number">01</span><span class="difficulty easy">Inicial</span><span class="topic">Tipos primitivos</span><label class="done-control"><input type="checkbox"><span><i class="fa-solid fa-check"></i>Concluído</span></label></div>
+          <h3>Ficha de um aluno</h3>
+          <p class="exercise-context">Leia nome, idade e média. Mostre os dados formatados e informe se o aluno é maior de idade e se foi aprovado, considerando média mínima 6,0.</p>
+          <div class="exercise-objectives"><strong>Prática</strong><span><code>string</code></span><span><code>int</code></span><span><code>double</code></span><span><code>bool</code></span><span><code>if</code></span></div>
+          <div class="io-grid"><div><small>Entrada</small><pre>Ana Silva
+19
+8.7</pre></div><div><small>Saída esperada</small><pre>Aluno: Ana Silva
+Idade: 19
+Média: 8.7
+Maior de idade: sim
+Situação: aprovado</pre></div></div>
+          <details class="hint"><summary><i class="fa-solid fa-lightbulb"></i>Ver dica</summary><p>Use <code>getline</code> para o nome e <code>fixed &lt;&lt; setprecision(1)</code> para uma casa decimal.</p></details>
+          <details class="solution"><summary><i class="fa-solid fa-code"></i>Ver resolução comentada</summary><div class="solution-body"><pre class="solution-code"><code>#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main() {
+    std::string nome;
+    int idade;
+    double media;
+
+    std::getline(std::cin, nome);
+    std::cin &gt;&gt; idade &gt;&gt; media;
+
+    bool maiorDeIdade = idade &gt;= 18;
+    bool aprovado = media &gt;= 6.0;
+
+    std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(1);
+    std::cout &lt;&lt; "Aluno: " &lt;&lt; nome &lt;&lt; '\n';
+    std::cout &lt;&lt; "Idade: " &lt;&lt; idade &lt;&lt; '\n';
+    std::cout &lt;&lt; "Média: " &lt;&lt; media &lt;&lt; '\n';
+    std::cout &lt;&lt; "Maior de idade: "
+              &lt;&lt; (maiorDeIdade ? "sim" : "não") &lt;&lt; '\n';
+    std::cout &lt;&lt; "Situação: "
+              &lt;&lt; (aprovado ? "aprovado" : "reprovado") &lt;&lt; '\n';
+}</code></pre><p class="solution-note"><strong>Ideia:</strong> cada variável tem tipo e significado. Os booleanos armazenam resultados lógicos usados nas decisões.</p></div></details>
+        </article>
+
+        <article class="exercise-card" data-category="dados" data-exercise="2">
+          <div class="exercise-topline"><span class="exercise-number">02</span><span class="difficulty easy">Inicial</span><span class="topic">Array</span><label class="done-control"><input type="checkbox"><span><i class="fa-solid fa-check"></i>Concluído</span></label></div>
+          <h3>Cinco notas, uma coleção</h3>
+          <p class="exercise-context">Substitua cinco variáveis numeradas por um <code>std::array</code>. Leia as notas, calcule a média e encontre a maior usando laços.</p>
+          <div class="before-after"><div><small>Evite</small><code>nota1, nota2, nota3...</code></div><i class="fa-solid fa-arrow-right"></i><div><small>Organize</small><code>array&lt;double, 5&gt; notas</code></div></div>
+          <details class="hint"><summary><i class="fa-solid fa-lightbulb"></i>Ver dica</summary><p>Inicialize a maior com <code>notas[0]</code> e percorra a coleção com um <code>for</code>.</p></details>
+          <details class="solution"><summary><i class="fa-solid fa-code"></i>Ver resolução comentada</summary><div class="solution-body"><pre class="solution-code"><code>#include &lt;array&gt;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    std::array&lt;double, 5&gt; notas{};
+    for (double&amp; nota : notas) {
+        std::cin &gt;&gt; nota; // A referência altera a posição original.
+    }
+
+    double soma = 0.0;
+    double maior = notas[0];
+    for (double nota : notas) {
+        soma += nota;
+        if (nota &gt; maior) maior = nota;
+    }
+
+    std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(1);
+    std::cout &lt;&lt; "Média: " &lt;&lt; soma / notas.size() &lt;&lt; '\n';
+    std::cout &lt;&lt; "Maior nota: " &lt;&lt; maior &lt;&lt; '\n';
+}</code></pre><p class="solution-note"><strong>Complexidade:</strong> generalizando para <code>n</code> notas, o percurso custa <code>O(n)</code>.</p></div></details>
+        </article>
+
+        <article class="exercise-card" data-category="dados" data-exercise="3">
+          <div class="exercise-topline"><span class="exercise-number">03</span><span class="difficulty medium">Intermediário</span><span class="topic">Registro e vector</span><label class="done-control"><input type="checkbox"><span><i class="fa-solid fa-check"></i>Concluído</span></label></div>
+          <h3>Turma organizada com <code>struct</code></h3>
+          <p class="exercise-context">Modele um aluno com matrícula, nome e média. Leia três alunos em um <code>vector</code> e mostre o registro com a maior média.</p>
+          <div class="record-diagram"><span>vector&lt;Aluno&gt;</span><div><small>101</small><b>Ana</b><em>8.7</em></div><div><small>205</small><b>Bia</b><em>9.2</em></div><div><small>310</small><b>Caio</b><em>7.4</em></div></div>
+          <details class="hint"><summary><i class="fa-solid fa-lightbulb"></i>Ver dica</summary><p>Crie um <code>Aluno</code> por repetição, use <code>push_back</code> e guarde um ponteiro para o melhor registro.</p></details>
+          <details class="solution"><summary><i class="fa-solid fa-code"></i>Ver resolução comentada</summary><div class="solution-body"><pre class="solution-code"><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+struct Aluno {
+    int matricula;
+    std::string nome;
+    double media;
+};
+
+int main() {
+    std::vector&lt;Aluno&gt; turma;
+    for (int i = 0; i &lt; 3; ++i) {
+        Aluno aluno;
+        std::cin &gt;&gt; aluno.matricula;
+        std::cin &gt;&gt; std::ws;
+        std::getline(std::cin, aluno.nome);
+        std::cin &gt;&gt; aluno.media;
+        turma.push_back(aluno);
+    }
+
+    const Aluno* melhor = &amp;turma[0];
+    for (const Aluno&amp; aluno : turma) {
+        if (aluno.media &gt; melhor-&gt;media) melhor = &amp;aluno;
+    }
+
+    std::cout &lt;&lt; "Maior média: " &lt;&lt; melhor-&gt;nome
+              &lt;&lt; " (" &lt;&lt; melhor-&gt;media &lt;&lt; ")\n";
+}</code></pre><p class="solution-note"><strong>Organização:</strong> a <code>struct</code> reúne os campos da entidade; o <code>vector</code> reúne vários registros.</p></div></details>
+        </article>
+
+        <article class="exercise-card" id="abstracao" data-category="abstracao" data-exercise="4">
+          <div class="exercise-topline"><span class="exercise-number">04</span><span class="difficulty medium">Intermediário</span><span class="topic">TAD e classe</span><label class="done-control"><input type="checkbox"><span><i class="fa-solid fa-check"></i>Concluído</span></label></div>
+          <h3>Projetando o TAD <code>Conta</code></h3>
+          <p class="exercise-context">Implemente uma conta cujo saldo não possa ser alterado diretamente. Depósitos devem ser positivos e saques não podem ultrapassar o saldo.</p>
+          <div class="contract-board"><div><small>Estado privado</small><code>double saldo</code></div><i class="fa-solid fa-shield-halved"></i><div><small>Contrato público</small><code>depositar · sacar · consultar</code></div></div>
+          <details class="hint"><summary><i class="fa-solid fa-lightbulb"></i>Ver dica</summary><p>Mantenha o saldo em <code>private</code>. As operações públicas devem preservar <code>saldo &gt;= 0</code>.</p></details>
+          <details class="solution"><summary><i class="fa-solid fa-code"></i>Ver resolução comentada</summary><div class="solution-body"><pre class="solution-code"><code>#include &lt;iostream&gt;
+
+class Conta {
+private:
+    double saldo = 0.0;
+
+public:
+    bool depositar(double valor) {
+        if (valor &lt;= 0.0) return false;
+        saldo += valor;
+        return true;
+    }
+
+    bool sacar(double valor) {
+        if (valor &lt;= 0.0 || valor &gt; saldo) return false;
+        saldo -= valor;
+        return true;
+    }
+
+    double consultarSaldo() const { return saldo; }
+};
+
+int main() {
+    Conta conta;
+    conta.depositar(150.0);
+    if (!conta.sacar(200.0)) std::cout &lt;&lt; "Saque recusado\n";
+    conta.sacar(40.0);
+    std::cout &lt;&lt; "Saldo: " &lt;&lt; conta.consultarSaldo() &lt;&lt; '\n';
+}</code></pre><p class="solution-note"><strong>TAD:</strong> o cliente conhece as operações, enquanto a representação e o invariante ficam protegidos.</p></div></details>
+        </article>
+
+        <article class="exercise-card" data-category="abstracao" data-exercise="5">
+          <div class="exercise-topline"><span class="exercise-number">05</span><span class="difficulty medium">Intermediário</span><span class="topic">TAD Lista</span><label class="done-control"><input type="checkbox"><span><i class="fa-solid fa-check"></i>Concluído</span></label></div>
+          <h3>Lista de tarefas por operações</h3>
+          <p class="exercise-context">Crie um TAD apoiado por <code>vector&lt;string&gt;</code> com operações para adicionar, remover por posição, contar e listar tarefas.</p>
+          <div class="linear-diagram"><span>Estudar</span><i class="fa-solid fa-arrow-right"></i><span>Compilar</span><i class="fa-solid fa-arrow-right"></i><span>Testar</span></div>
+          <details class="hint"><summary><i class="fa-solid fa-lightbulb"></i>Ver dica</summary><p>O índice é válido quando <code>indice &lt; tarefas.size()</code>. Use <code>erase</code> para remover.</p></details>
+          <details class="solution"><summary><i class="fa-solid fa-code"></i>Ver resolução comentada</summary><div class="solution-body"><pre class="solution-code"><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+class ListaDeTarefas {
+private:
+    std::vector&lt;std::string&gt; tarefas;
+
+public:
+    void adicionar(const std::string&amp; tarefa) {
+        tarefas.push_back(tarefa);
+    }
+
+    bool remover(std::size_t indice) {
+        if (indice &gt;= tarefas.size()) return false;
+        tarefas.erase(tarefas.begin() + indice);
+        return true;
+    }
+
+    std::size_t quantidade() const { return tarefas.size(); }
+
+    void listar() const {
+        for (std::size_t i = 0; i &lt; tarefas.size(); ++i)
+            std::cout &lt;&lt; i &lt;&lt; ": " &lt;&lt; tarefas[i] &lt;&lt; '\n';
+    }
+};
+
+int main() {
+    ListaDeTarefas lista;
+    lista.adicionar("Estudar TAD");
+    lista.adicionar("Compilar");
+    lista.adicionar("Testar");
+    lista.remover(1);
+    lista.listar();
+}</code></pre><p class="solution-note"><strong>Custos:</strong> adicionar no fim é <code>O(1)</code> amortizado; remover no meio é <code>O(n)</code>.</p></div></details>
+        </article>
+
+        <article class="exercise-card" id="memoria" data-category="memoria" data-exercise="6">
+          <div class="exercise-topline"><span class="exercise-number">06</span><span class="difficulty medium">Intermediário</span><span class="topic">Referências e ponteiros</span><label class="done-control"><input type="checkbox"><span><i class="fa-solid fa-check"></i>Concluído</span></label></div>
+          <h3>Alterando o valor original</h3>
+          <p class="exercise-context">Implemente <code>dobrar</code> usando referência e <code>zerar</code> usando ponteiro. A segunda função deve aceitar <code>nullptr</code> com segurança.</p>
+          <div class="memory-diagram"><div><small>endereço 0xA0</small><strong>valor = 21</strong></div><span><i class="fa-solid fa-link"></i><code>int&amp;</code></span><span><i class="fa-solid fa-location-arrow"></i><code>int*</code></span></div>
+          <details class="hint"><summary><i class="fa-solid fa-lightbulb"></i>Ver dica</summary><p>A referência é usada como a variável. O ponteiro deve ser verificado e desreferenciado com <code>*</code>.</p></details>
+          <details class="solution"><summary><i class="fa-solid fa-code"></i>Ver resolução comentada</summary><div class="solution-body"><pre class="solution-code"><code>#include &lt;iostream&gt;
+
+void dobrar(int&amp; numero) {
+    numero *= 2;
+}
+
+bool zerar(int* numero) {
+    if (numero == nullptr) return false;
+    *numero = 0;
+    return true;
+}
+
+int main() {
+    int valor = 21;
+    dobrar(valor);
+    std::cout &lt;&lt; valor &lt;&lt; '\n'; // 42
+
+    zerar(&amp;valor);
+    std::cout &lt;&lt; valor &lt;&lt; '\n'; // 0
+    zerar(nullptr);
+}</code></pre><p class="solution-note"><strong>Diferença:</strong> o ponteiro armazena um endereço e pode ser nulo; a referência funciona como outro nome para um objeto válido.</p></div></details>
+        </article>
+
+        <article class="exercise-card" data-category="memoria" data-exercise="7">
+          <div class="exercise-topline"><span class="exercise-number">07</span><span class="difficulty hard">Avançado</span><span class="topic">Memória dinâmica</span><label class="done-control"><input type="checkbox"><span><i class="fa-solid fa-check"></i>Concluído</span></label></div>
+          <h3>Lista encadeada sem vazamento</h3>
+          <p class="exercise-context">Implemente inserção no início e percurso de uma lista simplesmente encadeada. Use <code>unique_ptr</code> para a desalocação automática.</p>
+          <div class="linked-diagram"><b>início</b><i class="fa-solid fa-arrow-right"></i><span>30</span><i class="fa-solid fa-arrow-right"></i><span>20</span><i class="fa-solid fa-arrow-right"></i><span>10</span><i class="fa-solid fa-arrow-right"></i><small>null</small></div>
+          <details class="hint"><summary><i class="fa-solid fa-lightbulb"></i>Ver dica</summary><p>O novo nó recebe o antigo início com <code>std::move(inicio)</code>; depois, <code>inicio</code> recebe o novo nó.</p></details>
+          <details class="solution"><summary><i class="fa-solid fa-code"></i>Ver resolução comentada</summary><div class="solution-body"><pre class="solution-code"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+struct No {
+    int valor;
+    std::unique_ptr&lt;No&gt; proximo;
+};
+
+class Lista {
+private:
+    std::unique_ptr&lt;No&gt; inicio;
+
+public:
+    void inserirNoInicio(int valor) {
+        auto novo = std::make_unique&lt;No&gt;();
+        novo-&gt;valor = valor;
+        novo-&gt;proximo = std::move(inicio);
+        inicio = std::move(novo);
+    }
+
+    void imprimir() const {
+        const No* atual = inicio.get();
+        while (atual != nullptr) {
+            std::cout &lt;&lt; atual-&gt;valor &lt;&lt; ' ';
+            atual = atual-&gt;proximo.get();
+        }
+        std::cout &lt;&lt; '\n';
+    }
+};
+
+int main() {
+    Lista lista;
+    lista.inserirNoInicio(10);
+    lista.inserirNoInicio(20);
+    lista.inserirNoInicio(30);
+    lista.imprimir();
+} // A cadeia é desalocada automaticamente.</code></pre><p class="solution-note"><strong>RAII:</strong> cada nó possui exclusivamente o próximo. Destruir o início libera toda a cadeia.</p></div></details>
+        </article>
+
+        <article class="exercise-card" data-category="memoria" data-exercise="8">
+          <div class="exercise-topline"><span class="exercise-number">08</span><span class="difficulty medium">Intermediário</span><span class="topic">Estática × dinâmica</span><label class="done-control"><input type="checkbox"><span><i class="fa-solid fa-check"></i>Concluído</span></label></div>
+          <h3>Quantidade conhecida em execução</h3>
+          <p class="exercise-context">Leia <code>n</code> temperaturas e mostre a menor, a maior e quantas ficaram acima da média. Escolha uma coleção redimensionável.</p>
+          <div class="before-after"><div><small>Tamanho fixo</small><code>array&lt;double, 7&gt;</code></div><i class="fa-solid fa-code-compare"></i><div><small>Tamanho em execução</small><code>vector&lt;double&gt;(n)</code></div></div>
+          <details class="hint"><summary><i class="fa-solid fa-lightbulb"></i>Ver dica</summary><p>Leia e some no primeiro percurso; calcule a média; conte os valores acima dela no segundo.</p></details>
+          <details class="solution"><summary><i class="fa-solid fa-code"></i>Ver resolução comentada</summary><div class="solution-body"><pre class="solution-code"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+int main() {
+    std::size_t n;
+    std::cin &gt;&gt; n;
+    if (n == 0) return 0;
+
+    std::vector&lt;double&gt; temperaturas(n);
+    double soma = 0.0;
+    for (double&amp; valor : temperaturas) {
+        std::cin &gt;&gt; valor;
+        soma += valor;
+    }
+
+    double menor = temperaturas[0];
+    double maior = temperaturas[0];
+    double media = soma / n;
+    std::size_t acima = 0;
+
+    for (double valor : temperaturas) {
+        if (valor &lt; menor) menor = valor;
+        if (valor &gt; maior) maior = valor;
+        if (valor &gt; media) ++acima;
+    }
+
+    std::cout &lt;&lt; "Menor: " &lt;&lt; menor &lt;&lt; '\n';
+    std::cout &lt;&lt; "Maior: " &lt;&lt; maior &lt;&lt; '\n';
+    std::cout &lt;&lt; "Acima da média: " &lt;&lt; acima &lt;&lt; '\n';
+}</code></pre><p class="solution-note"><strong>Análise:</strong> tempo <code>O(n)</code> e espaço <code>O(n)</code>. O <code>vector</code> administra a memória dinâmica.</p></div></details>
+        </article>
+
+        <article class="exercise-card" id="complexidade" data-category="complexidade" data-exercise="9">
+          <div class="exercise-topline"><span class="exercise-number">09</span><span class="difficulty medium">Intermediário</span><span class="topic">Big O</span><label class="done-control"><input type="checkbox"><span><i class="fa-solid fa-check"></i>Concluído</span></label></div>
+          <h3>Reconhecendo padrões de crescimento</h3>
+          <p class="exercise-context">Associe cada trecho à complexidade de tempo correspondente.</p>
+          <div class="complexity-quiz">
+            <article><b>A</b><pre><code>cout &lt;&lt; valores[0];</code></pre><select aria-label="Resposta A" data-answer="O(1)"><option value="">Escolha</option><option>O(1)</option><option>O(log n)</option><option>O(n)</option><option>O(n²)</option></select></article>
+            <article><b>B</b><pre><code>for (int i = 0; i &lt; n; ++i)
+    visitar(i);</code></pre><select aria-label="Resposta B" data-answer="O(n)"><option value="">Escolha</option><option>O(1)</option><option>O(log n)</option><option>O(n)</option><option>O(n²)</option></select></article>
+            <article><b>C</b><pre><code>for (int i = 0; i &lt; n; ++i)
+    for (int j = 0; j &lt; n; ++j)
+        comparar(i, j);</code></pre><select aria-label="Resposta C" data-answer="O(n²)"><option value="">Escolha</option><option>O(1)</option><option>O(log n)</option><option>O(n)</option><option>O(n²)</option></select></article>
+            <article><b>D</b><pre><code>while (n &gt; 1)
+    n /= 2;</code></pre><select aria-label="Resposta D" data-answer="O(log n)"><option value="">Escolha</option><option>O(1)</option><option>O(log n)</option><option>O(n)</option><option>O(n²)</option></select></article>
+          </div>
+          <button class="check-quiz" type="button"><i class="fa-solid fa-check-double"></i>Conferir respostas</button><p class="quiz-feedback" aria-live="polite"></p>
+          <details class="solution"><summary><i class="fa-solid fa-chart-line"></i>Ver explicação</summary><div class="solution-body"><div class="answer-grid"><span><strong>A · O(1)</strong>Acesso único.</span><span><strong>B · O(n)</strong>O laço repete n vezes.</span><span><strong>C · O(n²)</strong>n repetições para cada uma das n externas.</span><span><strong>D · O(log n)</strong>O problema é dividido por dois.</span></div></div></details>
+        </article>
+
+        <article class="exercise-card" data-category="complexidade" data-exercise="10">
+          <div class="exercise-topline"><span class="exercise-number">10</span><span class="difficulty hard">Avançado</span><span class="topic">Busca binária</span><label class="done-control"><input type="checkbox"><span><i class="fa-solid fa-check"></i>Concluído</span></label></div>
+          <h3>Busca que reduz o problema pela metade</h3>
+          <p class="exercise-context">Implemente busca binária iterativa em um vetor ordenado. Devolva o índice do alvo ou <code>-1</code>.</p>
+          <div class="binary-diagram"><span>3</span><span>8</span><span>12</span><span class="middle">19<small>meio</small></span><span>27</span><span>34</span><span>51</span></div>
+          <details class="hint"><summary><i class="fa-solid fa-lightbulb"></i>Ver dica</summary><p>Mantenha <code>inicio</code> e <code>fim</code>. Compare o alvo com o meio e descarte metade do intervalo.</p></details>
+          <details class="solution"><summary><i class="fa-solid fa-code"></i>Ver resolução comentada</summary><div class="solution-body"><pre class="solution-code"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+int buscaBinaria(const std::vector&lt;int&gt;&amp; valores, int alvo) {
+    int inicio = 0;
+    int fim = static_cast&lt;int&gt;(valores.size()) - 1;
+
+    while (inicio &lt;= fim) {
+        int meio = inicio + (fim - inicio) / 2;
+        if (valores[meio] == alvo) return meio;
+
+        if (valores[meio] &lt; alvo)
+            inicio = meio + 1;
+        else
+            fim = meio - 1;
+    }
+    return -1;
+}
+
+int main() {
+    std::vector&lt;int&gt; valores{3, 8, 12, 19, 27, 34, 51};
+    int alvo;
+    std::cin &gt;&gt; alvo;
+    std::cout &lt;&lt; "Índice: " &lt;&lt; buscaBinaria(valores, alvo) &lt;&lt; '\n';
+}</code></pre><p class="solution-note"><strong>Complexidade:</strong> tempo <code>O(log n)</code> e espaço auxiliar <code>O(1)</code>.</p></div></details>
+        </article>
+      </div>
+    </section>
+
+    <section class="lesson-section final-challenge" id="integrador">
+      <header class="lesson-heading"><span>02</span><div><p>Depois dos 10 exercícios</p><h2>Desafio integrador: mapa de amizades</h2></div></header>
+      <p class="section-lead">Combine registros, classe, coleção dinâmica, referências e análise de custo em um pequeno grafo social. Este desafio não entra na contagem.</p>
+      <div class="graph-challenge-layout">
+        <div class="challenge-graph"><svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Grafo de amizades entre Ana, Bia, Caio e Davi"><g class="edges"><line x1="85" y1="135" x2="225" y2="65"/><line x1="85" y1="135" x2="225" y2="210"/><line x1="225" y1="65" x2="375" y2="135"/><line x1="225" y1="210" x2="375" y2="135"/></g><g><circle cx="85" cy="135" r="43"/><text x="85" y="140">Ana</text></g><g><circle cx="225" cy="65" r="43"/><text x="225" y="70">Bia</text></g><g><circle cx="225" cy="210" r="43"/><text x="225" y="215">Caio</text></g><g><circle cx="375" cy="135" r="43"/><text x="375" y="140">Davi</text></g></svg></div>
+        <div class="challenge-copy"><h3>Implemente estas operações</h3><ol><li><code>adicionarPessoa(nome)</code></li><li><code>adicionarAmizade(a, b)</code></li><li><code>listarAmigos(pessoa)</code></li><li><code>saoAmigos(a, b)</code></li></ol><p>Use <code>vector&lt;Pessoa&gt;</code> para os registros e <code>vector&lt;vector&lt;int&gt;&gt;</code> como lista de adjacência.</p></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

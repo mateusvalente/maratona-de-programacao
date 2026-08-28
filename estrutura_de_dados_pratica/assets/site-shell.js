@@ -49,10 +49,6 @@
 
           <nav class="edp-topnav" aria-label="Navegação principal">
             <a class="edp-nav-home" href="${projectHref("index.html")}"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Início</span></a>
-            <a href="${projectHref("index.html#diagrama")}">Diagrama</a>
-            <a href="${projectHref("index.html#exemplos")}">Exemplos</a>
-            <a href="${projectHref("tipos-abstratos-de-dados.html")}">TAD</a>
-            <a href="${projectHref("dados-registros-e-estruturas.html")}">Dados</a>
 
             <span class="edp-topnav-contact" aria-label="Contato e repositórios de Mateus Valente">
               <a href="mailto:mateus.sousa.valente@gmail.com" aria-label="Enviar e-mail para Mateus Valente" title="E-mail"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
@@ -65,6 +61,235 @@
           </nav>
         </div>
       </header>`;
+  }
+
+  const moduleCatalog = [
+    {
+      key: "fundamentos",
+      directory: "fundamentos/",
+      name: "Fundamentos",
+      unit: "Unidade 1",
+      icon: "fa-layer-group",
+      indexPath: "index.html#modulos",
+      description: "teoria e prática em C++17",
+      lessons: [
+        { path: "tipos-abstratos-de-dados.html", title: "Tipos Abstratos de Dados", short: "TAD", icon: "fa-file-contract" },
+        { path: "dados-registros-e-estruturas.html", title: "Dados, registros e estruturas", short: "Dados e registros", icon: "fa-address-card" },
+        { path: "estrutura-estatica-dinamica.html", title: "Memória estática × dinâmica", short: "Estática × dinâmica", icon: "fa-memory" },
+        { path: "alocacao-desalocao-dinamica.html", title: "Ponteiros e memória dinâmica", short: "Ponteiros e alocação", icon: "fa-location-dot" },
+        { path: "complexidade-de-algotimo.html", title: "Complexidade de algoritmos", short: "Complexidade", icon: "fa-chart-line" },
+        { path: "exercicios-de-fundamentos.html", title: "Exercícios de fundamentos", short: "Exercícios", icon: "fa-code" },
+      ],
+    },
+    {
+      key: "listas_encadeadas",
+      directory: "listas_encadeadas/",
+      name: "Listas encadeadas",
+      unit: "Unidade 2",
+      icon: "fa-link",
+      indexPath: "listas_encadeadas/index.html",
+      description: "estruturas lineares e prática guiada",
+      lessons: [
+        { path: "index.html", title: "Visão geral do módulo", short: "Visão geral", icon: "fa-table-cells-large" },
+        { path: "aulas/aula_01_fundamentos.html", title: "Fundamentos de estruturas lineares", short: "Fundamentos", icon: "fa-shapes" },
+        { path: "aulas/aula_02_pilha.html", title: "Pilha", short: "Pilha", icon: "fa-layer-group" },
+        { path: "aulas/aula_03_fila.html", title: "Fila", short: "Fila", icon: "fa-people-line" },
+        { path: "aulas/aula_04_deque.html", title: "Deque", short: "Deque", icon: "fa-arrows-left-right" },
+        { path: "aulas/aula_05_lista_simplesmente_encadeada.html", title: "Lista simplesmente encadeada", short: "Lista simples", icon: "fa-link" },
+        { path: "aulas/aula_06_lista_duplamente_encadeada.html", title: "Lista duplamente encadeada", short: "Lista dupla", icon: "fa-code-branch" },
+        { path: "aulas/aula_07_ordenacao.html", title: "Ordenação", short: "Ordenação", icon: "fa-arrow-down-wide-short" },
+        { path: "exercicios.html", title: "Exercícios práticos", short: "Exercícios", icon: "fa-code" },
+      ],
+    },
+  ];
+
+  function normalizedPath(url) {
+    return decodeURIComponent(url.pathname).replace(/\\/g, "/").replace(/\/+$/, "").toLowerCase();
+  }
+
+  function isProjectHomePage() {
+    const current = normalizedPath(window.location);
+    const home = normalizedPath(new URL("index.html", projectRoot));
+    const root = normalizedPath(projectRoot);
+    return current === home || current === root;
+  }
+
+  function relativeProjectPath() {
+    const projectPath = normalizedPath(projectRoot);
+    return normalizedPath(window.location).slice(projectPath.length).replace(/^\//, "") || "index.html";
+  }
+
+  function currentModule() {
+    const relative = relativeProjectPath();
+    return moduleCatalog.find(module => relative.startsWith(module.directory)) || moduleCatalog[0];
+  }
+
+  function sidebarTemplate(module) {
+    const relative = relativeProjectPath();
+    const localPath = relative.slice(module.directory.length) || "index.html";
+    const currentLesson = module.lessons.find(lesson => lesson.path.toLowerCase() === localPath);
+    const currentTitle = currentLesson
+      ? currentLesson.short
+      : document.title.split("·")[0].trim();
+
+    const lessonLinks = module.lessons.map((lesson, index) => {
+      const active = lesson.path.toLowerCase() === localPath;
+      return [
+        '<a class="edp-sidebar-lesson',
+        active ? ' is-active' : '',
+        '" href="',
+        projectHref(module.directory + lesson.path),
+        '"',
+        active ? ' aria-current="page"' : '',
+        ' title="',
+        lesson.title,
+        '"><span class="edp-sidebar-order">',
+        String(index + 1).padStart(2, "0"),
+        '</span><i class="fa-solid ',
+        lesson.icon,
+        '" aria-hidden="true"></i><span class="edp-sidebar-link-copy">',
+        lesson.short,
+        '</span></a>',
+      ].join("");
+    }).join("");
+
+    const moduleHref = projectHref(module.indexPath);
+
+    return [
+      '<aside class="edp-course-sidebar" id="edp-course-sidebar" data-edp-shell-part="sidebar" aria-label="Conteúdo do módulo ', module.name, '">',
+        '<div class="edp-sidebar-head">',
+          '<a class="edp-sidebar-module" href="', moduleHref, '" title="', module.name, '">',
+            '<span class="edp-sidebar-module-mark"><i class="fa-solid ', module.icon, '" aria-hidden="true"></i></span>',
+            '<span class="edp-sidebar-module-copy"><small>', module.unit, '</small><strong>', module.name, '</strong></span>',
+          '</a>',
+          '<button class="edp-sidebar-collapse" type="button" aria-label="Recolher menu lateral" aria-expanded="true"><i class="fa-solid fa-angles-left" aria-hidden="true"></i></button>',
+        '</div>',
+        '<div class="edp-sidebar-content">',
+          '<div class="edp-sidebar-trail">',
+            '<button class="edp-sidebar-back" type="button" aria-label="Voltar para a página anterior" title="Voltar"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>',
+            '<nav class="edp-sidebar-breadcrumb" aria-label="Breadcrumb">',
+              '<a href="', projectHref("index.html"), '">Início</a><i class="fa-solid fa-chevron-right" aria-hidden="true"></i>',
+              '<a href="', moduleHref, '">', module.name, '</a><i class="fa-solid fa-chevron-right" aria-hidden="true"></i>',
+              '<span aria-current="page">', currentTitle, '</span>',
+            '</nav>',
+          '</div>',
+          '<div class="edp-sidebar-shortcuts">',
+            '<a href="', projectHref("index.html"), '" title="Menu principal"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Menu principal</span></a>',
+            '<a href="', moduleHref, '" title="Início do módulo"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>Início do módulo</span></a>',
+          '</div>',
+          '<div class="edp-sidebar-group">',
+            '<p class="edp-sidebar-group-title">', module.unit, ' · ', module.name, '</p>',
+            '<nav class="edp-sidebar-lessons" aria-label="Conteúdos de ', module.name, '">', lessonLinks, '</nav>',
+          '</div>',
+          '<div class="edp-sidebar-group edp-sidebar-page-group">',
+            '<p class="edp-sidebar-group-title">Nesta página</p>',
+            '<nav class="edp-sidebar-page-links" aria-label="Seções desta página"></nav>',
+          '</div>',
+        '</div>',
+        '<div class="edp-sidebar-foot"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span><strong>', module.lessons.length, ' conteúdos</strong><small>', module.description, '</small></span></div>',
+      '</aside>',
+      '<button class="edp-sidebar-mobile-toggle" type="button" aria-controls="edp-course-sidebar" aria-expanded="false"><i class="fa-solid fa-bars-staggered" aria-hidden="true"></i><span>Conteúdo</span></button>',
+      '<button class="edp-sidebar-backdrop" type="button" tabindex="-1" aria-label="Fechar menu lateral"></button>',
+    ].join("");
+  }
+
+  function mountPageSectionLinks(sidebar) {
+    const target = sidebar.querySelector(".edp-sidebar-page-links");
+    const group = sidebar.querySelector(".edp-sidebar-page-group");
+    const sourceLinks = [...document.querySelectorAll(".lesson-jump a[href^='#']")];
+
+    if (!sourceLinks.length) {
+      group.hidden = true;
+      return;
+    }
+
+    sourceLinks.forEach(source => {
+      const link = document.createElement("a");
+      link.href = source.getAttribute("href");
+      link.textContent = source.textContent.trim();
+      target.appendChild(link);
+    });
+  }
+
+  function initializeSidebar(sidebar, module) {
+    const mobileToggle = document.querySelector(".edp-sidebar-mobile-toggle");
+    const backdrop = document.querySelector(".edp-sidebar-backdrop");
+    const collapse = sidebar.querySelector(".edp-sidebar-collapse");
+    const back = sidebar.querySelector(".edp-sidebar-back");
+    const mobileQuery = window.matchMedia("(max-width: 900px)");
+    let collapsed = false;
+
+    try {
+      collapsed = localStorage.getItem("edp-sidebar-collapsed") === "true";
+    } catch {
+      collapsed = false;
+    }
+
+    function setCollapsed(nextCollapsed) {
+      collapsed = nextCollapsed;
+      document.body.classList.toggle("edp-sidebar-collapsed", collapsed);
+      collapse.setAttribute("aria-expanded", String(!collapsed));
+      collapse.setAttribute("aria-label", collapsed ? "Expandir menu lateral" : "Recolher menu lateral");
+      collapse.querySelector("i").className = collapsed
+        ? "fa-solid fa-angles-right"
+        : "fa-solid fa-angles-left";
+      try {
+        localStorage.setItem("edp-sidebar-collapsed", String(collapsed));
+      } catch {
+        // O recolhimento continua funcional sem persistência.
+      }
+    }
+
+    function setMobileOpen(open) {
+      document.body.classList.toggle("edp-sidebar-mobile-open", open);
+      mobileToggle.setAttribute("aria-expanded", String(open));
+      mobileToggle.querySelector("i").className = open
+        ? "fa-solid fa-xmark"
+        : "fa-solid fa-bars-staggered";
+    }
+
+    setCollapsed(collapsed);
+    mountPageSectionLinks(sidebar);
+
+    collapse.addEventListener("click", () => {
+      if (mobileQuery.matches) {
+        setMobileOpen(false);
+      } else {
+        setCollapsed(!collapsed);
+      }
+    });
+
+    mobileToggle.addEventListener("click", () => {
+      setMobileOpen(!document.body.classList.contains("edp-sidebar-mobile-open"));
+    });
+    backdrop.addEventListener("click", () => setMobileOpen(false));
+    sidebar.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        if (mobileQuery.matches) setMobileOpen(false);
+      });
+    });
+    back.addEventListener("click", () => {
+      if (document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = projectHref(module.indexPath);
+      }
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") setMobileOpen(false);
+    });
+    mobileQuery.addEventListener("change", () => setMobileOpen(false));
+  }
+
+  function mountSidebar() {
+    if (isProjectHomePage() || document.querySelector('[data-edp-shell-part="sidebar"]')) return;
+
+    const module = currentModule();
+    const host = document.createElement("div");
+    host.innerHTML = sidebarTemplate(module);
+    [...host.children].forEach(element => document.body.appendChild(element));
+    document.body.classList.add("edp-has-sidebar");
+    initializeSidebar(document.getElementById("edp-course-sidebar"), module);
   }
 
   function footerTemplate() {
@@ -130,6 +355,7 @@
     const header = createElementFromTemplate(headerTemplate());
     document.body.insertBefore(header, main || document.body.firstChild);
     document.body.appendChild(createElementFromTemplate(footerTemplate()));
+    mountSidebar();
     initializeStickyNavigation(header);
   }
 

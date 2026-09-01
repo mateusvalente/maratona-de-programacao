@@ -295,6 +295,7 @@
       "footer:not(.mv-site-footer)",
       "nav.module-nav",
       "a.skip-link",
+      ".shell > aside",
     ].join(",");
     if (root.matches && root.matches(legacySelector)) {
       root.remove();

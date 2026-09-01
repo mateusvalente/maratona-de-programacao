@@ -36,7 +36,7 @@ body.mv-portal-theme {
 body.mv-sidebar-expanded { padding-left: 304px; }
 body.mv-sidebar-collapsed { padding-left: 74px; }
 
-/* O menu global substitui a trilha antiga das páginas geradas do módulo inicial. */
+/* O menu global substitui as navegações antigas incorporadas nas aulas. */
 body[data-lesson] .layout > .sidebar,
 body[data-list] .layout > .sidebar,
 body[data-problem] .layout > .sidebar { display: none !important; }
@@ -47,9 +47,28 @@ body[data-problem] .layout { grid-template-columns: minmax(0, 1fr) !important; }
 body.mv-portal-theme > main,
 body.mv-portal-theme > #app,
 body.mv-portal-theme > .page,
-body.mv-portal-theme > .layout {
+body.mv-portal-theme > .layout,
+body.mv-portal-theme > .shell {
   position: relative;
   z-index: 1;
+}
+
+/* As aulas de grafos usavam um shell próprio com uma segunda barra lateral.
+   O JavaScript remove essa barra; estas regras mantêm o conteúdo estável
+   antes e depois da montagem do shell compartilhado. */
+body.mv-portal-theme > .shell {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+body.mv-portal-theme > .shell > aside { display: none !important; }
+body.mv-portal-theme > .shell > main {
+  width: min(1120px, 100%);
+  min-width: 0;
+  max-width: 100%;
+  margin-inline: auto;
 }
 
 #matrix-background {
@@ -382,6 +401,8 @@ body.mv-portal-theme > .layout {
   left: 14px;
   display: flex;
   width: 276px;
+  height: auto;
+  padding: 0;
   flex-direction: column;
   overflow: hidden;
   border: 1px solid rgba(97, 227, 165, .25);
@@ -391,6 +412,7 @@ body.mv-portal-theme > .layout {
     radial-gradient(circle at 20% 0, rgba(97, 227, 165, .1), transparent 26%),
     rgba(8, 14, 17, .97);
   box-shadow: 18px 0 55px rgba(0, 0, 0, .27);
+  backdrop-filter: none;
   font-family: var(--mv-shell-display);
   transition: width .25s ease, transform .25s ease, box-shadow .25s ease;
 }
@@ -468,6 +490,7 @@ body.mv-portal-theme > .layout {
 
 .mv-sidebar-breadcrumb {
   display: flex;
+  flex-direction: row;
   min-width: 0;
   align-items: center;
   gap: 5px;
@@ -489,7 +512,11 @@ body.mv-portal-theme > .layout {
   text-decoration: none;
 }
 
-.mv-sidebar-breadcrumb a:hover { color: var(--green); }
+.mv-sidebar-breadcrumb a:hover {
+  color: var(--green);
+  background: transparent;
+  transform: none;
+}
 .mv-sidebar-breadcrumb span[aria-current="page"] { overflow: hidden; flex: 1 1 auto; color: #d5dfe2; text-overflow: ellipsis; white-space: nowrap; }
 .mv-sidebar-breadcrumb i { flex: 0 0 auto; color: var(--line-strong); font-size: .45rem; }
 
